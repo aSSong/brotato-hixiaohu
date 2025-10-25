@@ -17,14 +17,15 @@ func _process(delta: float) -> void:
 
 
 func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	print("Collided with: ", body.name, " (type: ", body.get_class(), ")")
-	if body is TileMapLayer:
-		var coords = body.get_coords_for_body_rid(body_rid)
-		var tile_date = body.get_cell_tile_data(coords)
-		if tile_date != null :
-			var isWall = tile_date.get_custom_data("isWall")
-			#if isWall and isWall != null :
-			if isWall :
-				self.queue_free()
+	#if
+	#print("Collided with: ", body.name, " (type: ", body.get_class(), ")")
+	#if body is TileMapLayer:
+		#var coords = body.get_coords_for_body_rid(body_rid)
+		#var tile_date = body.get_cell_tile_data(coords)
+		#if tile_date != null :
+			#var isWall = tile_date.get_custom_data("isWall")
+			##if isWall and isWall != null :
+			#if isWall :
+	self.queue_free()
 		
 	pass # Replace with function body.

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dp3liiyunxhxi"]
 
-[ext_resource type="Script" uid="uid://dhmgi42r24mlb" path="res://scenes/weapons/weapon.gd" id="1_0rtie"]
+[ext_resource type="Script" uid="uid://dhmgi42r24mlb" path="res://Scripts/weapon.gd" id="1_0rtie"]
 [ext_resource type="Texture2D" uid="uid://l614tamylppu" path="res://assets/weapon/weapon1.png" id="1_nqevj"]
 [ext_resource type="Shader" uid="uid://b0mpedodgante" path="res://scenes/weapons/weapon2.gdshader" id="2_0rtie"]
 
@@ -8,7 +8,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_0rtie")
 shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/width = 1.5000000712500001
+shader_parameter/width = 1.50000007125
 shader_parameter/pattern = 2
 shader_parameter/inside = false
 shader_parameter/add_margins = true
