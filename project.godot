@@ -32,6 +32,7 @@ enemy=""
 map=""
 player=""
 camera=""
+drop_item=""
 
 [layer_names]
 
@@ -39,6 +40,7 @@ camera=""
 2d_physics/layer_2="wall"
 2d_physics/layer_3="bullet"
 2d_physics/layer_4="enemy"
+2d_physics/layer_5="item"
 
 [rendering]
 

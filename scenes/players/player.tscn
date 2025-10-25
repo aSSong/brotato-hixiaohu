@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cktxl6bnggc0p"]
+[gd_scene load_steps=11 format=3 uid="uid://cktxl6bnggc0p"]
 
 [ext_resource type="Script" uid="uid://vk8vnqvjt832" path="res://Scripts/players/player.gd" id="1_ldeu4"]
 [ext_resource type="Texture2D" uid="uid://b0jvpfev04c8w" path="res://assets/player/player1-sheet.png" id="1_plyga"]
@@ -44,6 +44,9 @@ animations = [{
 radius = 51.0
 height = 192.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_kc87p"]
+radius = 588.67316
+
 [node name="player" type="CharacterBody2D"]
 z_index = 10
 scale = Vector2(0.6, 0.6)
@@ -75,5 +78,14 @@ shape = SubResource("CapsuleShape2D_sguum")
 
 [node name="now_weapons" parent="." instance=ExtResource("3_kc87p")]
 
+[node name="drop_item_area" type="Area2D" parent="."]
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="drop_item_area"]
+shape = SubResource("CircleShape2D_kc87p")
+debug_color = Color(0.74976915, 0.42916626, 9.62615e-07, 0.41960785)
+
+[connection signal="area_entered" from="stop" to="." method="_on_stop_area_entered"]
 [connection signal="mouse_entered" from="stop" to="." method="_on_stop_mouse_entered"]
 [connection signal="mouse_exited" from="stop" to="." method="_on_stop_mouse_exited"]
+[connection signal="area_entered" from="drop_item_area" to="." method="_on_drop_item_area_area_entered"]

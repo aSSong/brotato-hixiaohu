@@ -248,7 +248,5 @@ script = ExtResource("1_von1t")
 [node name="all_animation" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pyn4g")
 animation = &"enemies_dead"
-frame = 15
-frame_progress = 1.0
 
 [connection signal="animation_finished" from="all_animation" to="." method="_on_all_animation_animation_finished"]

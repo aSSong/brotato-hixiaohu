@@ -37,12 +37,23 @@ func enemy_hurt(hurt):
 	pass
 func enemy_dead():
 	GameMain.duplicate_node.global_position = self.global_position
+	
 	GameMain.animation_scene_obj.run_animation({
 		"box":GameMain.duplicate_node,
 		"ani_name":"enemies_dead",
 		"position":Vector2.ZERO,
 		"scale":Vector2(1,1)
 	})
+	
+	GameMain.drop_item_scene_obj.gen_drop_item({
+	#"box":GameMain.duplicate_node,
+	"ani_name":"gold",
+	"position":Vector2.ZERO,
+	#"position": self.global_position,
+	"scale":Vector2(4,4)
+	})
+	
+	# 振屏
 	CameraShake.shake(shake_duration, shake_amount)
 	# 生成粒子特效
 	if death_particles_scene != null:
