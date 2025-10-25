@@ -4,7 +4,9 @@ var speed = 300
 var target = null
 var enemyHP = 3
 
-
+@export var shake_on_death: bool = true
+@export var shake_duration: float = 0.2
+@export var shake_amount: float = 8.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -39,6 +41,7 @@ func enemy_dead():
 		"position":Vector2.ZERO,
 		"scale":Vector2(1,1)
 	})
+	CameraShake.shake(shake_duration, shake_amount)
 	self.queue_free()
 	pass
 

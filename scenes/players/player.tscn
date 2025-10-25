@@ -62,7 +62,7 @@ frame_progress = 0.98023015
 position = Vector2(-11.666668, -15.33334)
 shape = SubResource("CapsuleShape2D_sguum")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
 zoom = Vector2(0.9, 0.9)
 position_smoothing_enabled = true
 
