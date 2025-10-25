@@ -4,6 +4,8 @@ var speed = 300
 var target = null
 var enemyHP = 3
 
+@export var death_particles_scene: PackedScene  # 在 Inspector 拖入粒子场景
+
 @export var shake_on_death: bool = true
 @export var shake_duration: float = 0.2
 @export var shake_amount: float = 8.0
@@ -42,6 +44,13 @@ func enemy_dead():
 		"scale":Vector2(1,1)
 	})
 	CameraShake.shake(shake_duration, shake_amount)
+	# 生成粒子特效
+	if death_particles_scene != null:
+		var particles = death_particles_scene.instantiate()
+		particles.global_position = global_position
+		# 添加到场景根节点,不随怪物一起消失
+		get_tree().root.add_child(particles)
+	
 	self.queue_free()
 	pass
 

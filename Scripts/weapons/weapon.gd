@@ -5,7 +5,7 @@ extends Node2D
 @onready var bullet  = preload("res://scenes/bullets/bullet.tscn")
 
 
-var bullet_shoot_time = 0.5
+var bullet_shoot_time = 0.2
 var bullet_speed = 2000
 var bullet_hurt = 1
 

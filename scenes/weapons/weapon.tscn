@@ -39,6 +39,7 @@ sprite_frames = SubResource("SpriteFrames_eo7p8")
 position = Vector2(16.142859, 1.1428572)
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
 autostart = true
 
 [node name="Area2D" type="Area2D" parent="."]

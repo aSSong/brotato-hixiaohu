@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4b35vp8k62a"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d15qw"]
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_h7gxk"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.99503314, 0.11553508), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3342k"]
+curve = SubResource("Curve_h7gxk")
+
+[sub_resource type="CurveTexture" id="CurveTexture_dipyg"]
+
+[sub_resource type="Curve" id="Curve_lvlw8"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1.7493713), 0.0, 0.0, 0, 0, Vector2(1, 0.3073485), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_52mmb"]
+curve = SubResource("Curve_lvlw8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_p1lpu"]
+lifetime_randomness = 0.46
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 32.45
+initial_velocity_max = 88.5
+gravity = Vector3(0, 0, 0)
+damping_min = 1.151
+damping_max = 9.328
+damping_curve = SubResource("CurveTexture_dipyg")
+scale_min = 5.0
+scale_max = 15.0
+scale_curve = SubResource("CurveTexture_52mmb")
+color = Color(0.55436885, 1.0627891, 1.0501835, 0.85882354)
+alpha_curve = SubResource("CurveTexture_3342k")
+anim_offset_min = 0.0177
+anim_offset_max = 0.17549999
+
+[node name="GPUParticles2D_enemy_dead" type="GPUParticles2D"]
+material = SubResource("CanvasItemMaterial_d15qw")
+amount = 40
+lifetime = 7.0
+one_shot = true
+speed_scale = 6.15
+explosiveness = 1.0
+randomness = 0.72
+collision_base_size = 0.0
+process_material = SubResource("ParticleProcessMaterial_p1lpu")
