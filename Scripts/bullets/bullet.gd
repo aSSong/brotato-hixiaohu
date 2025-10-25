@@ -21,6 +21,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	print("Collided with: ", body.name, " (type: ", body.get_class(), ")")
+	if body.is_in_group("enemy"):
+		body.enemyHP -= 1
+		print("enemyHP: ", body.enemyHP)
+		if body.enemyHP <= 0 :
+			body.queue_free()
+	
 		#if body is TileMapLayer:
 		#var tile_data := body.get_cell_tile_data(0, body.local_to_map(body.to_local(global_position)))
 		#if tile_data and tile_data.get_custom_data("is_wall"):
