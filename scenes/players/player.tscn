@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=3 uid="uid://cktxl6bnggc0p"]
+
+[ext_resource type="Script" uid="uid://vk8vnqvjt832" path="res://Scripts/players/player.gd" id="1_ldeu4"]
+[ext_resource type="Texture2D" uid="uid://b0jvpfev04c8w" path="res://assets/player/player1-sheet.png" id="1_plyga"]
+[ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_kc87p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldeu4"]
+atlas = ExtResource("1_plyga")
+region = Rect2(0, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kc87p"]
+atlas = ExtResource("1_plyga")
+region = Rect2(240, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_edvpf"]
+atlas = ExtResource("1_plyga")
+region = Rect2(480, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olb2f"]
+atlas = ExtResource("1_plyga")
+region = Rect2(720, 0, 240, 240)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5iv5l"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_ldeu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kc87p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_edvpf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_olb2f")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sguum"]
+radius = 51.0
+height = 192.0
+
+[node name="player" type="CharacterBody2D"]
+z_index = 10
+scale = Vector2(0.6, 0.6)
+collision_mask = 3
+script = ExtResource("1_ldeu4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-10, -24.999989)
+sprite_frames = SubResource("SpriteFrames_5iv5l")
+autoplay = "default"
+frame = 3
+frame_progress = 0.98023015
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-11.666668, -15.33334)
+shape = SubResource("CapsuleShape2D_sguum")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.9, 0.9)
+position_smoothing_enabled = true
+
+[node name="stop" type="Area2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="stop"]
+position = Vector2(-11.666668, -15.333341)
+shape = SubResource("CapsuleShape2D_sguum")
+
+[node name="now_weapons" parent="." instance=ExtResource("3_kc87p")]
+
+[connection signal="mouse_entered" from="stop" to="." method="_on_stop_mouse_entered"]
+[connection signal="mouse_exited" from="stop" to="." method="_on_stop_mouse_exited"]
