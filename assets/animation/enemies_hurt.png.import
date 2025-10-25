@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cosr31aosl581"
-path="res://.godot/imported/enemies_hurt.png-2a7a96cc6a526d01d9147d4fc07702ec.ctex"
+path="res://.godot/imported/enemies_hurt.png-4a718d1013490ed7eb4811d69b4376e3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/others/enemies_hurt.png"
-dest_files=["res://.godot/imported/enemies_hurt.png-2a7a96cc6a526d01d9147d4fc07702ec.ctex"]
+source_file="res://assets/animation/enemies_hurt.png"
+dest_files=["res://.godot/imported/enemies_hurt.png-4a718d1013490ed7eb4811d69b4376e3.ctex"]
 
 [params]
 

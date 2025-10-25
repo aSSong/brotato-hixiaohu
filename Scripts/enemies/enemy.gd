@@ -19,3 +19,31 @@ func _process(delta: float) -> void:
 		velocity = dir * speed
 		move_and_slide()
 	pass
+func enemy_hurt(hurt):
+	self.enemyHP -= hurt
+	enemy_flash()
+	GameMain.animation_scene_obj.run_animation({
+		"box":self,
+		"ani_name":"enemies_hurt",
+		"position":Vector2(0,0),
+		"scale":Vector2(1,1)
+	})
+	if self.enemyHP <= 0:
+		enemy_dead()
+	pass
+func enemy_dead():
+	GameMain.duplicate_node.global_position = self.global_position
+	GameMain.animation_scene_obj.run_animation({
+		"box":GameMain.duplicate_node,
+		"ani_name":"enemies_dead",
+		"position":Vector2.ZERO,
+		"scale":Vector2(1,1)
+	})
+	self.queue_free()
+	pass
+
+func enemy_flash():
+	$AnimatedSprite2D.material.set_shader_parameter("flash_opacity",1)
+	await get_tree().create_timer(0.1).timeout
+	$AnimatedSprite2D.material.set_shader_parameter("flash_opacity",0)
+	pass
