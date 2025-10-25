@@ -38,6 +38,6 @@ func gen_drop_item(options):
 #	all_ani.get_node("CollisionShape2D").set_deferred("disabled", false)
 	all_ani.scale = options.scale if options.has("scale") else Vector2(1,1)
 	#all_ani.position = options.position
-	all_ani.position = Vector2.ZERO
+	all_ani.position = options.position
 	all_ani.get_node("all_animation").play(options.ani_name)
 	pass

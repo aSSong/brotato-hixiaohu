@@ -36,7 +36,7 @@ func enemy_hurt(hurt):
 		enemy_dead()
 	pass
 func enemy_dead():
-	GameMain.duplicate_node.global_position = self.global_position
+	#GameMain.duplicate_node.global_position = self.global_position
 	
 	GameMain.animation_scene_obj.run_animation({
 		"box":GameMain.duplicate_node,
@@ -48,8 +48,8 @@ func enemy_dead():
 	GameMain.drop_item_scene_obj.gen_drop_item({
 	#"box":GameMain.duplicate_node,
 	"ani_name":"gold",
-	"position":Vector2.ZERO,
-	#"position": self.global_position,
+	#"position":Vector2.ZERO,
+	"position": self.global_position,
 	"scale":Vector2(4,4)
 	})
 	
