@@ -1,5 +1,6 @@
-CharacterBody2D
+Area2D
 Node2D
+CharacterBody2D
 CollisionShape2D
 AnimatedSprite2D
 Sprite2D

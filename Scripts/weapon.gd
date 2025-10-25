@@ -32,13 +32,15 @@ func _process(delta: float) -> void:
 		rotation_degrees = 0
 
 func _on_timer_timeout() -> void:
-	if attack_enemies.size() != 0 :
-		var now_bullet = bullet.instantiate()
-		now_bullet.speed = bullet_speed
-		now_bullet.hurt = bullet_hurt
-		now_bullet.position = shoot_pos.global_position
-		now_bullet.dir = (attack_enemies[0].global_position - now_bullet.position).normalized()
-		get_tree().root.add_child(now_bullet)
+	if attack_enemies.is_empty(): return
+	var b = bullet.instantiate()
+	get_tree().root.add_child(b)
+	b.start(
+		shoot_pos.global_position,
+		(attack_enemies[0].global_position - shoot_pos.global_position).normalized(),
+		bullet_speed,
+		bullet_hurt
+	)
 	pass # Replace with function body.
 
 

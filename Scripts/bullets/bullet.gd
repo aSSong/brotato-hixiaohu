@@ -1,31 +1,32 @@
-extends CharacterBody2D
+extends Area2D
 
-var dir = Vector2.ZERO
-var speed = 2000
-var hurt = 1
+@export var speed := 400.0      # 子弹速度
+@export var life_time := 3.0    # 最长存活时间（秒）
+@export var damage := 10        # 伤害值
+var hurt := 1
+var dir: Vector2
+var _velocity := Vector2.ZERO
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+func start(pos: Vector2, _dir: Vector2, _speed: float, _hurt: int) -> void:
+	global_position = pos
+	dir = _dir
+	speed = _speed
+	hurt = _hurt
+	_velocity = dir * speed
+	get_tree().create_timer(3.0).timeout.connect(queue_free)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	velocity = dir * speed
-	move_and_slide()
-	pass
+func _physics_process(delta: float) -> void:
+	global_position += _velocity * delta
 
 
-func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	#if
-	#print("Collided with: ", body.name, " (type: ", body.get_class(), ")")
-	#if body is TileMapLayer:
-		#var coords = body.get_coords_for_body_rid(body_rid)
-		#var tile_date = body.get_cell_tile_data(coords)
-		#if tile_date != null :
-			#var isWall = tile_date.get_custom_data("isWall")
-			##if isWall and isWall != null :
-			#if isWall :
-	self.queue_free()
-		
+func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+		#if body is TileMapLayer:
+		#var tile_data := body.get_cell_tile_data(0, body.local_to_map(body.to_local(global_position)))
+		#if tile_data and tile_data.get_custom_data("is_wall"):
+			#queue_free()
+	## 如果还有静态物体（StaticBody2D）做的箱子、柱子，也可一起判断
+	#elif body is StaticBody2D:
+		#queue_free()
+	queue_free()
 	pass # Replace with function body.

@@ -6,3 +6,4 @@ res://Scripts/enemies/now_enemies.gd
 res://Scripts/enemies/enemy.gd
 res://scenes/bullets/bullet.tscn
 res://scenes/weapons/weapon.tscn
+res://Scripts/weapon.gd
