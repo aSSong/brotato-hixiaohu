@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c44attsrfmghf"]
+[gd_scene load_steps=7 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Texture2D" uid="uid://duevf8vt5afyb" path="res://assets/items/gold.png" id="1_4u50f"]
+[ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
@@ -67,17 +68,22 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
 [node name="game_ui" type="CanvasLayer"]
+script = ExtResource("1_168mx")
 
-[node name="Label" type="Label" parent="."]
+[node name="gold" type="Label" parent="."]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 offset_left = 137.0
 offset_top = 192.0
-offset_right = 583.97
-offset_bottom = 215.0
-theme_override_font_sizes/font_size = 30
-text = "9999"
+offset_right = 487.0
+offset_bottom = 234.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 35
+text = "0"
 
-[node name="Control" type="Control" parent="Label"]
+[node name="Control" type="Control" parent="gold"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -87,7 +93,7 @@ offset_top = -40.0
 offset_right = 35.0
 grow_vertical = 0
 
-[node name="Sprite2D" type="Sprite2D" parent="Label/Control"]
+[node name="Sprite2D" type="Sprite2D" parent="gold/Control"]
 position = Vector2(-33, 17)
 scale = Vector2(3, 5)
 texture = ExtResource("1_4u50f")
@@ -120,6 +126,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="hp_value_bar" type="ProgressBar" parent="status/VBoxContainer/hp_value/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -167,6 +174,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="exp_value_bar" type="ProgressBar" parent="status/VBoxContainer/exp_value/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3

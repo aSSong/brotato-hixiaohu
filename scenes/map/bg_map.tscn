@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://1sc0j7mvwax6"]
+[gd_scene load_steps=7 format=4 uid="uid://1sc0j7mvwax6"]
 
 [ext_resource type="Texture2D" uid="uid://bbt2ogwu3myns" path="res://assets/bg/bg.png" id="1_luqls"]
 [ext_resource type="PackedScene" uid="uid://cktxl6bnggc0p" path="res://scenes/players/player.tscn" id="2_2iyd7"]
 [ext_resource type="PackedScene" uid="uid://d183wuovf50yd" path="res://scenes/enemy/now_enemies.tscn" id="3_y5i8v"]
+[ext_resource type="PackedScene" uid="uid://c44attsrfmghf" path="res://scenes/UI/game_ui.tscn" id="4_asq3l"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2iyd7"]
 texture = ExtResource("1_luqls")
@@ -428,3 +429,5 @@ position = Vector2(1198, 950)
 
 [node name="now_enemies" parent="." instance=ExtResource("3_y5i8v")]
 floor_layer_path = NodePath("../TileMap_BG")
+
+[node name="game_ui" parent="." instance=ExtResource("4_asq3l")]

@@ -7,6 +7,14 @@ var flip =false
 var canMove = true
 var stop = false
 
+var now_hp = 100
+var max_hp = 100
+var max_exp = 5
+var now_exp = 0
+var level = 1
+var gold = 0
+
+
 func _ready() -> void:
 	choosePlayer("player2")
 	pass
@@ -83,5 +91,12 @@ func _on_drop_item_area_area_entered(area: Area2D) -> void:
 func _on_stop_area_entered(area: Area2D) -> void:
 	#print("进入区域")
 	if area.is_in_group("drop_item"):
+		# 添加金币到全局管理器
+		GameMain.add_gold(1)
+		
+		# 播放拾取音效（可选）
+		# $PickupSound.play()
+		
+		# 删除金币
 		area.queue_free()
 	pass # Replace with function body.
