@@ -73,14 +73,15 @@ func _on_stop_mouse_exited() -> void:
 
 
 func _on_drop_item_area_area_entered(area: Area2D) -> void:
-	print("进入区域")
+	
 	if area.is_in_group("drop_item"):
 		area.canMoving = true
-		print("开始移动")
+		#print("开始移动")
 	pass # Replace with function body.
 
 
 func _on_stop_area_entered(area: Area2D) -> void:
+	print("进入区域")
 	if area.is_in_group("drop_item"):
 		area.queue_free()
 	pass # Replace with function body.

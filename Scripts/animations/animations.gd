@@ -19,11 +19,14 @@ options.scale 动画缩放等级
 '''
 
 func run_animation(options):
-	var ani_temp = self.duplicate()
-	options.box.add_child(ani_temp)
-	ani_temp.show()
-	ani_temp.scale = options.scale if options.has("scale") else Vector2(1,1)
-	ani_temp.get_node("all_animation").play(options.ani_name)
+	if !options.has("box"):
+		options.box = GameMain.duplicate_node
+	var all_ani = self.duplicate()
+	options.box.add_child(all_ani)
+	all_ani.show()
+	all_ani.scale = options.scale if options.has("scale") else Vector2(1,1)
+	all_ani.position = options.position
+	all_ani.get_node("all_animation").play(options.ani_name)
 	pass
 
 

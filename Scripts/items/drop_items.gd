@@ -1,6 +1,6 @@
 extends Area2D
 var canMoving = false
-var speed = 300
+var speed = 600
 var player
 var dir = Vector2.ZERO
 
