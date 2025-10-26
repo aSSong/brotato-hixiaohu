@@ -17,8 +17,8 @@ func choosePlayer(type):
 	playerAni.sprite_frames.clear_all()
 	
 	var sprite_frame_custom = SpriteFrames.new()
-	sprite_frame_custom.add_animation("default")
-	sprite_frame_custom.set_animation_loop("default",true)
+	#sprite_frame_custom.add_animation("default")
+	#sprite_frame_custom.set_animation_loop("default",true)
 	var texture_size = Vector2(960,240)
 	var sprite_size = Vector2(240,240)
 	var full_texture : Texture = load(player_path + type + "-sheet.png")
@@ -81,7 +81,7 @@ func _on_drop_item_area_area_entered(area: Area2D) -> void:
 
 
 func _on_stop_area_entered(area: Area2D) -> void:
-	print("进入区域")
+	#print("进入区域")
 	if area.is_in_group("drop_item"):
 		area.queue_free()
 	pass # Replace with function body.
