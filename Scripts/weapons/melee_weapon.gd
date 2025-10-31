@@ -7,11 +7,13 @@ class_name MeleeWeapon
 var rotation_angle: float = 0.0
 var is_attacking: bool = false
 var attack_timer: float = 0.0
+var has_dealt_damage: bool = false  # 标记本次攻击是否已造成伤害
 
 func _on_weapon_initialized() -> void:
 	rotation_angle = 0.0
 	is_attacking = false
 	attack_timer = 0.0
+	has_dealt_damage = false
 
 func _on_weapon_process(delta: float) -> void:
 	if weapon_data == null:
@@ -26,12 +28,10 @@ func _on_weapon_process(delta: float) -> void:
 			rotation_angle += weapon_data.rotation_speed * delta
 			rotation_degrees = rotation_angle
 		
-		# 检测范围内的敌人并造成伤害
-		_check_and_damage_enemies()
-		
 		# 攻击结束
 		if attack_timer <= 0:
 			is_attacking = false
+			has_dealt_damage = false
 			rotation_angle = 0.0
 			rotation_degrees = 0.0
 	else:
@@ -48,8 +48,9 @@ func _perform_attack() -> void:
 	# 开始攻击
 	is_attacking = true
 	attack_timer = weapon_data.attack_speed
+	has_dealt_damage = false  # 重置伤害标记
 	
-	# 立即检查并造成伤害
+	# 立即检查并造成伤害（只造成一次）
 	_check_and_damage_enemies()
 
 ## 检测并伤害范围内的敌人
