@@ -3,12 +3,14 @@ extends CanvasLayer
 @onready var gold: Label = %gold
 @onready var hp_value_bar: ProgressBar = %hp_value_bar
 @onready var exp_value_bar: ProgressBar = %exp_value_bar
+@onready var skill_icon: Control = %SkillIcon
 
 @export var animate_change: bool = true  # 是否播放动画
 @export var show_change_popup: bool = true  # 是否显示 +1 弹窗
 
 var current_tween: Tween = null  # 保存当前动画引用
 var original_scale: Vector2  # 保存原始缩放
+var skill_icon_script: SkillIcon = null
 
 func _ready() -> void:
 	
@@ -20,6 +22,30 @@ func _ready() -> void:
 	
 	# 初始化显示
 	update_display(GameMain.gold, 0)
+	
+	# 初始化技能图标
+	_setup_skill_icon()
+
+## 设置技能图标
+func _setup_skill_icon() -> void:
+	if not skill_icon:
+		return
+	
+	# 等待玩家加载完成
+	await get_tree().create_timer(0.2).timeout
+	
+	# 获取玩家和职业数据
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		if skill_icon.has_method("set_skill_data"):
+			skill_icon.set_skill_data(player.current_class)
+
+func _input(event: InputEvent) -> void:
+	# 检测技能输入
+	if Input.is_action_just_pressed("skill"):
+		var player = get_tree().get_first_node_in_group("player")
+		if player and player.has_method("activate_class_skill"):
+			player.activate_class_skill()
 
 func _on_gold_changed(new_amount: int, change: int) -> void:
 	# 更新文本

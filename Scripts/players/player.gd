@@ -88,10 +88,17 @@ func _process(delta: float) -> void:
 	pass
 	
 func _input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		canMove = false
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and !event.is_pressed():
-		canMove = true
+	# 检查是否是技能输入动作
+	# 如果事件匹配技能输入动作，不处理移动逻辑
+	if event.is_action("skill") or event.is_action_pressed("skill"):
+		return
+	
+	# 处理鼠标左键的移动逻辑
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.is_pressed():
+			canMove = false
+		else:
+			canMove = true
 		
 	
 

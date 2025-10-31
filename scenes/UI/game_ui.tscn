@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://c44attsrfmghf"]
+[gd_scene load_steps=8 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Texture2D" uid="uid://duevf8vt5afyb" path="res://assets/items/gold.png" id="1_4u50f"]
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
+[ext_resource type="Script" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
@@ -203,3 +204,90 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 25
 text = "Lv.999"
 horizontal_alignment = 1
+
+[node name="SkillIcon" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = -50.0
+grow_vertical = 0
+script = ExtResource("1_skill_icon")
+
+[node name="SkillButton" type="Button" parent="SkillIcon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="SkillIcon" type="TextureRect" parent="SkillIcon/SkillButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SkillNameLabel" type="Label" parent="SkillIcon/SkillButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "技能"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CDOverlay" type="ColorRect" parent="SkillIcon/SkillButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+mouse_filter = 2
+
+[node name="CDProgress" type="ProgressBar" parent="SkillIcon/SkillButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 100.0
+value = 0.0
+show_percentage = false
+mouse_filter = 2

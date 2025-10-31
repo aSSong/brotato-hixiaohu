@@ -94,16 +94,22 @@ func activate_skill() -> void:
 	
 	var skill_name = current_class.skill_name
 	var params = current_class.skill_params
+	var cooldown = params.get("cooldown", 0.0)
 	
 	# 检查冷却时间
-	if active_skills.has(skill_name):
-		var remaining_time = active_skills[skill_name]
-		if remaining_time > 0:
+	var cd_key = skill_name + "_cd"
+	if active_skills.has(cd_key):
+		var remaining_cd = active_skills[cd_key]
+		if remaining_cd > 0:
 			return  # 技能还在冷却中
 	
 	# 激活技能
 	var duration = params.get("duration", 0.0)
 	active_skills[skill_name] = duration
+	
+	# 设置冷却时间
+	if cooldown > 0:
+		active_skills[cd_key] = cooldown
 	
 	skill_activated.emit(skill_name)
 	
@@ -147,25 +153,34 @@ func _execute_skill_effect(skill_name: String, params: Dictionary) -> void:
 
 ## 更新技能持续时间
 func _process(delta: float) -> void:
-	for skill_name in active_skills.keys():
-		if skill_name.contains("_"):  # 跳过子效果
+	var keys_to_update = active_skills.keys().duplicate()
+	
+	for key in keys_to_update:
+		var value = active_skills[key]
+		
+		# 只处理数值类型（时间），跳过布尔值等其他类型
+		if typeof(value) != TYPE_FLOAT and typeof(value) != TYPE_INT:
 			continue
 		
-		var remaining_time = active_skills[skill_name]
+		var remaining_time = float(value)
 		if remaining_time > 0:
 			remaining_time -= delta
-			active_skills[skill_name] = remaining_time
+			active_skills[key] = remaining_time
 			
-			if remaining_time <= 0:
-				# 技能结束
-				_deactivate_skill(skill_name)
+			# 如果是技能持续时间（不是CD，也不是子效果），检查是否结束
+			if not key.contains("_cd") and not key.contains("_"):
+				if remaining_time <= 0:
+					# 技能结束
+					_deactivate_skill(key)
 
 ## 取消激活技能
 func _deactivate_skill(skill_name: String) -> void:
-	# 移除所有相关效果
+	# 移除技能持续时间，但保留CD计时器
+	# CD计时器键名是 skill_name + "_cd"，不应该被删除
 	var keys_to_remove = []
 	for key in active_skills.keys():
-		if key.begins_with(skill_name):
+		# 只删除技能效果相关的键，不包括CD键
+		if key.begins_with(skill_name) and not key.ends_with("_cd"):
 			keys_to_remove.append(key)
 	
 	for key in keys_to_remove:

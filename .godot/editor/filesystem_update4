@@ -12,3 +12,7 @@ res://Scripts/data/weapon_database.gd
 res://scenes/weapons/now_weapons.tscn
 res://Scripts/weapons/base_weapon.gd
 res://scenes/weapons/weapon.tscn
+res://scenes/UI/game_ui.tscn
+res://Scripts/UI/game_ui.gd
+res://scenes/map/bg_map.tscn
+res://Scripts/UI/skill_icon.gd
