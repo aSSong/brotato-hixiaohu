@@ -60,4 +60,3 @@ func _init(
 	damage = p_damage
 	attack_speed = p_attack_speed
 	range = p_range
-

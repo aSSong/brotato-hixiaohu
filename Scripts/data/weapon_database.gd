@@ -152,4 +152,3 @@ static func get_weapons_by_type(type: WeaponData.WeaponType) -> Array:
 		if weapon.weapon_type == type:
 			result.append(weapon_id)
 	return result
-

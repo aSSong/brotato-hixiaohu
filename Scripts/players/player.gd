@@ -27,9 +27,12 @@ func _ready() -> void:
 	class_manager.skill_activated.connect(_on_skill_activated)
 	class_manager.skill_deactivated.connect(_on_skill_deactivated)
 	
-	# 默认选择玩家外观和职业
+	# 默认选择玩家外观
 	choosePlayer("player2")
-	chooseClass("balanced")  # 默认选择平衡者职业
+	
+	# 从GameMain读取选择的职业，如果没有则使用默认值
+	var class_id = GameMain.selected_class_id if GameMain.selected_class_id != "" else "balanced"
+	chooseClass(class_id)
 	pass
 
 func choosePlayer(type):

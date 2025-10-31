@@ -4,3 +4,8 @@ res://Scripts/data/class_data.gd
 res://Scripts/data/class_database.gd
 res://Scripts/players/class_manager.gd
 res://scenes/enemy/enemy.tscn
+res://Scripts/GameMain.gd
+res://scenes/UI/start_menu.tscn
+res://Scripts/UI/start_menu.gd
+res://Scripts/data/weapon_data.gd
+res://Scripts/data/weapon_database.gd

@@ -126,4 +126,3 @@ static func get_all_class_ids() -> Array:
 	if classes.is_empty():
 		initialize_classes()
 	return classes.keys()
-

@@ -11,10 +11,15 @@ func _ready() -> void:
 	# 获取玩家引用
 	player_ref = get_tree().get_first_node_in_group("player")
 	
-	# 如果没有预设武器，创建默认测试武器
+	# 如果没有预设武器，从GameMain读取选择的武器
 	if get_child_count() == 0:
-		# 创建测试武器组合
-		create_test_weapons()
+		if GameMain.selected_weapon_ids.size() > 0:
+			# 使用玩家选择的武器
+			for weapon_id in GameMain.selected_weapon_ids:
+				add_weapon(weapon_id)
+		else:
+			# 如果没有选择，使用默认测试武器
+			create_test_weapons()
 	
 	# 排列现有武器
 	arrange_weapons()
@@ -26,8 +31,6 @@ func create_test_weapons() -> void:
 	add_weapon("pistol")
 	add_weapon("sword")
 	add_weapon("fireball")
-	add_weapon("rifle")
-	add_weapon("axe")
 
 ## 添加武器
 func add_weapon(weapon_id: String) -> void:

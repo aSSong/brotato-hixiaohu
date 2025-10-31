@@ -1,0 +1,115 @@
+[gd_scene load_steps=2 format=3 uid="uid://start_menu_001"]
+
+[ext_resource type="Script" path="res://Scripts/UI/start_menu.gd" id="1_start"]
+
+[node name="StartMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_start")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.15, 1)
+
+[node name="MainPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -600.0
+offset_top = -400.0
+offset_right = 600.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+
+[node name="TitleLabel" type="Label" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+text = "选择职业和武器"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClassSection" type="VBoxContainer" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SectionTitle" type="Label" parent="MainPanel/VBoxContainer/ClassSection"]
+layout_mode = 2
+text = "选择职业"
+horizontal_alignment = 1
+
+[node name="SelectedClassLabel" type="Label" parent="MainPanel/VBoxContainer/ClassSection"]
+layout_mode = 2
+text = "已选择职业: 无"
+horizontal_alignment = 1
+
+[node name="HSplitContainer" type="HSplitContainer" parent="MainPanel/VBoxContainer/ClassSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ClassContainer" type="VBoxContainer" parent="MainPanel/VBoxContainer/ClassSection/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ClassDescription" type="RichTextLabel" parent="MainPanel/VBoxContainer/ClassSection/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "选择职业查看详细信息"
+
+[node name="WeaponSection" type="VBoxContainer" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SectionTitle" type="Label" parent="MainPanel/VBoxContainer/WeaponSection"]
+layout_mode = 2
+text = "选择武器（可多选）"
+horizontal_alignment = 1
+
+[node name="SelectedWeaponsLabel" type="Label" parent="MainPanel/VBoxContainer/WeaponSection"]
+layout_mode = 2
+text = "已选择武器: 无"
+horizontal_alignment = 1
+
+[node name="HSplitContainer" type="HSplitContainer" parent="MainPanel/VBoxContainer/WeaponSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="WeaponContainer" type="VBoxContainer" parent="MainPanel/VBoxContainer/WeaponSection/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WeaponDescription" type="RichTextLabel" parent="MainPanel/VBoxContainer/WeaponSection/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "选择武器查看详细信息"
+
+[node name="StartButton" type="Button" parent="MainPanel/VBoxContainer"]
+layout_mode = 2
+text = "开始游戏"
+custom_minimum_size = Vector2(0, 60)
+

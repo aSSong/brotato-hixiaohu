@@ -63,3 +63,7 @@ func reset_game() -> void:
 	gold = 0
 	score = 0
 	level = 1
+
+# 玩家选择的数据
+var selected_class_id: String = "balanced"
+var selected_weapon_ids: Array = []

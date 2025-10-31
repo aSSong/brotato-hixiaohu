@@ -44,4 +44,3 @@ func _init(
 	crit_damage = p_crit_damage
 	skill_name = p_skill_name
 	skill_params = p_skill_params
-
