@@ -17,7 +17,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.RANGED,
 		2,  # damage
 		0.4,  # attack_speed
-		600.0  # range
+		600.0,  # range
+		"res://assets/weapon/WeaponPistol.png",
+		Vector2(1, 1)  # scale
 	)
 	pistol.description = "基础远程武器，发射快速子弹"
 	pistol.bullet_speed = 2000.0
@@ -29,7 +31,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.RANGED,
 		4,  # damage
 		0.6,  # attack_speed
-		800.0  # range
+		800.0,  # range
+		"res://assets/weapon/WeaponShotgun.png",
+		Vector2(1, 1)  # scale (稍大)
 	)
 	rifle.description = "高伤害远程武器，攻击速度较慢"
 	rifle.bullet_speed = 2500.0
@@ -42,7 +46,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.RANGED,
 		1,  # damage
 		0.15,  # attack_speed (很快)
-		500.0  # range
+		500.0,  # range
+		"res://assets/weapon/WeaponSMG.png",
+		Vector2(1, 1)  # scale (稍小)
 	)
 	machine_gun.description = "超高攻击速度的远程武器"
 	machine_gun.bullet_speed = 1800.0
@@ -55,7 +61,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MELEE,
 		3,  # damage
 		0.5,  # attack_speed
-		150.0  # range
+		150.0,  # range
+		"res://assets/weapon/Weapon_sword.png",
+		Vector2(1, 1)  # scale
 	)
 	sword.description = "基础近战武器，旋转攻击"
 	sword.rotation_speed = 360.0
@@ -68,7 +76,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MELEE,
 		6,  # damage
 		0.8,  # attack_speed
-		180.0  # range
+		180.0,  # range
+		"res://assets/weapon/Weapon_axe.png",
+		Vector2(1, 1)  # scale (更大)
 	)
 	axe.description = "高伤害近战武器，攻击速度较慢"
 	axe.rotation_speed = 270.0
@@ -81,7 +91,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MELEE,
 		2,  # damage
 		0.3,  # attack_speed
-		100.0  # range
+		100.0,  # range
+		"res://assets/weapon/Weapon_Punch.png",
+		Vector2(1, 1)  # scale (更小)
 	)
 	dagger.description = "快速攻击的近战武器"
 	dagger.rotation_speed = 540.0
@@ -95,7 +107,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MAGIC,
 		5,  # damage
 		0.7,  # attack_speed
-		600.0  # range
+		600.0,  # range
+		"res://assets/weapon/Weapon_wand.png",
+		Vector2(1, 1)  # scale
 	)
 	fireball.description = "基础魔法武器，造成范围爆炸伤害"
 	fireball.explosion_radius = 150.0
@@ -108,7 +122,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MAGIC,
 		4,  # damage
 		0.5,  # attack_speed
-		500.0  # range
+		500.0,  # range
+		"res://assets/weapon/Weapon_chainsaw.png",
+		Vector2(1, 1)  # scale
 	)
 	ice_shard.description = "快速攻击的魔法武器，较小爆炸范围"
 	ice_shard.explosion_radius = 100.0
@@ -121,7 +137,9 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MAGIC,
 		10,  # damage
 		1.5,  # attack_speed (很慢)
-		700.0  # range
+		700.0,  # range
+		"res://assets/weapon/Weapon_mace.png",
+		Vector2(1, 1)  # scale (最大)
 	)
 	meteor.description = "高伤害魔法武器，超大爆炸范围"
 	meteor.explosion_radius = 250.0

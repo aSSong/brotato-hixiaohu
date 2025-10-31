@@ -14,6 +14,11 @@ enum WeaponType {
 @export var description: String = ""
 @export var weapon_type: WeaponType = WeaponType.RANGED
 
+## 外观设置
+@export var texture_path: String = "res://assets/weapon/weapon1.png"  # 武器贴图路径
+@export var scale: Vector2 = Vector2(7, 7)  # 武器缩放
+@export var sprite_offset: Vector2 = Vector2.ZERO  # 贴图偏移
+
 ## 基础属性
 @export var damage: int = 1
 @export var attack_speed: float = 0.5  # 攻击间隔（秒）
@@ -53,10 +58,14 @@ func _init(
 	p_weapon_type: WeaponType = WeaponType.RANGED,
 	p_damage: int = 1,
 	p_attack_speed: float = 0.5,
-	p_range: float = 500.0
+	p_range: float = 500.0,
+	p_texture_path: String = "res://assets/weapon/weapon1.png",
+	p_scale: Vector2 = Vector2(7, 7)
 ) -> void:
 	weapon_name = p_weapon_name
 	weapon_type = p_weapon_type
 	damage = p_damage
 	attack_speed = p_attack_speed
 	range = p_range
+	texture_path = p_texture_path
+	scale = p_scale

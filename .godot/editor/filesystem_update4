@@ -9,3 +9,6 @@ res://scenes/UI/start_menu.tscn
 res://Scripts/UI/start_menu.gd
 res://Scripts/data/weapon_data.gd
 res://Scripts/data/weapon_database.gd
+res://scenes/weapons/now_weapons.tscn
+res://Scripts/weapons/base_weapon.gd
+res://scenes/weapons/weapon.tscn

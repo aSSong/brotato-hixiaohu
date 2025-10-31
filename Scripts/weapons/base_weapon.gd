@@ -45,6 +45,9 @@ func initialize(data: WeaponData) -> void:
 		if shape is CircleShape2D:
 			shape.radius = weapon_data.range
 	
+	# 设置武器贴图
+	_setup_weapon_appearance()
+	
 	# 设置武器等级颜色（随机）
 	if weaponAni and weaponAni.material:
 		var ran = RandomNumberGenerator.new()
@@ -54,6 +57,32 @@ func initialize(data: WeaponData) -> void:
 	
 	# 调用子类的初始化
 	_on_weapon_initialized()
+
+## 设置武器外观
+func _setup_weapon_appearance() -> void:
+	if weapon_data == null or not weaponAni:
+		return
+	
+	# 设置武器缩放
+	self.scale = weapon_data.scale
+	
+	# 设置武器贴图
+	if weapon_data.texture_path != "":
+		var texture = load(weapon_data.texture_path)
+		if texture:
+			# 创建新的 SpriteFrames
+			var sprite_frames = SpriteFrames.new()
+			sprite_frames.add_animation("default")
+			sprite_frames.set_animation_loop("default", true)
+			sprite_frames.add_frame("default", texture)
+			sprite_frames.set_animation_speed("default", 5.0)
+			
+			weaponAni.sprite_frames = sprite_frames
+			weaponAni.play("default")
+			
+			# 设置偏移
+			if weapon_data.sprite_offset != Vector2.ZERO:
+				weaponAni.position = weapon_data.sprite_offset
 
 func _ready() -> void:
 	# 连接信号
