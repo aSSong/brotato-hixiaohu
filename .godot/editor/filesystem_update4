@@ -1,9 +1,6 @@
-res://scenes/map/bg_map.tscn
-res://Scripts/bullets/bullet.gd
+res://Scripts/players/player.gd
+res://Scripts/weapons/now_weapons.gd
+res://Scripts/data/class_data.gd
+res://Scripts/data/class_database.gd
+res://Scripts/players/class_manager.gd
 res://scenes/enemy/enemy.tscn
-res://scenes/enemy/now_enemies.tscn
-res://Scripts/enemies/now_enemies.gd
-res://Scripts/enemies/enemy.gd
-res://scenes/bullets/bullet.tscn
-res://scenes/weapons/weapon.tscn
-res://Scripts/weapon.gd
