@@ -99,9 +99,12 @@ func activate_skill() -> void:
 	# 检查冷却时间
 	var cd_key = skill_name + "_cd"
 	if active_skills.has(cd_key):
-		var remaining_cd = active_skills[cd_key]
-		if remaining_cd > 0:
-			return  # 技能还在冷却中
+		var remaining_cd_value = active_skills[cd_key]
+		# 确保是数值类型
+		if typeof(remaining_cd_value) == TYPE_FLOAT or typeof(remaining_cd_value) == TYPE_INT:
+			var remaining_cd = float(remaining_cd_value)
+			if remaining_cd > 0:
+				return  # 技能还在冷却中
 	
 	# 激活技能
 	var duration = params.get("duration", 0.0)
@@ -154,8 +157,13 @@ func _execute_skill_effect(skill_name: String, params: Dictionary) -> void:
 ## 更新技能持续时间
 func _process(delta: float) -> void:
 	var keys_to_update = active_skills.keys().duplicate()
+	var skills_to_deactivate = []  # 收集需要取消激活的技能
 	
 	for key in keys_to_update:
+		# 确保: 键仍然存在（可能已被其他代码删除）
+		if not active_skills.has(key):
+			continue
+		
 		var value = active_skills[key]
 		
 		# 只处理数值类型（时间），跳过布尔值等其他类型
@@ -165,28 +173,39 @@ func _process(delta: float) -> void:
 		var remaining_time = float(value)
 		if remaining_time > 0:
 			remaining_time -= delta
-			active_skills[key] = remaining_time
+			# 再次检查键是否存在
+			if active_skills.has(key):
+				active_skills[key] = remaining_time
 			
 			# 如果是技能持续时间（不是CD，也不是子效果），检查是否结束
 			if not key.contains("_cd") and not key.contains("_"):
 				if remaining_time <= 0:
-					# 技能结束
-					_deactivate_skill(key)
+					# 收集需要取消激活的技能，稍后处理
+					skills_to_deactivate.append(key)
+	
+	# 在所有时间更新完成后，再取消激活技能
+	for skill_name in skills_to_deactivate:
+		_deactivate_skill(skill_name)
 
 ## 取消激活技能
 func _deactivate_skill(skill_name: String) -> void:
+	# 先发送信号，通知技能结束
+	skill_deactivated.emit(skill_name)
+	
 	# 移除技能持续时间，但保留CD计时器
 	# CD计时器键名是 skill_name + "_cd"，不应该被删除
 	var keys_to_remove = []
-	for key in active_skills.keys():
+	var keys_copy = active_skills.keys().duplicate()  # 创建键的副本
+	for key in keys_copy:
 		# 只删除技能效果相关的键，不包括CD键
-		if key.begins_with(skill_name) and not key.ends_with("_cd"):
+		# 确保键存在后再检查
+		if active_skills.has(key) and key.begins_with(skill_name) and not key.ends_with("_cd"):
 			keys_to_remove.append(key)
 	
+	# 删除所有相关键
 	for key in keys_to_remove:
-		active_skills.erase(key)
-	
-	skill_deactivated.emit(skill_name)
+		if active_skills.has(key):
+			active_skills.erase(key)
 
 ## 获取被动效果值
 func get_passive_effect(effect_name: String, default_value = 1.0):
@@ -194,8 +213,28 @@ func get_passive_effect(effect_name: String, default_value = 1.0):
 
 ## 获取技能效果值
 func get_skill_effect(effect_name: String, default_value = 0.0):
-	return active_skills.get(effect_name, default_value)
+	# 双重检查：先检查键是否存在
+	if not active_skills.has(effect_name):
+		return default_value
+	
+	# 使用 get() 方法安全获取值，避免键在检查后被删除
+	var value = active_skills.get(effect_name, default_value)
+	
+	# 确保返回数值类型
+	if typeof(value) == TYPE_FLOAT or typeof(value) == TYPE_INT:
+		return float(value)
+	return default_value
 
 ## 检查技能是否激活
 func is_skill_active(skill_name: String) -> bool:
-	return active_skills.has(skill_name) and active_skills[skill_name] > 0
+	# 双重检查：先检查键是否存在
+	if not active_skills.has(skill_name):
+		return false
+	
+	# 使用 get() 方法安全获取值，避免键在检查后被删除
+	var value = active_skills.get(skill_name, 0.0)
+	
+	# 确保是数值类型
+	if typeof(value) == TYPE_FLOAT or typeof(value) == TYPE_INT:
+		return float(value) > 0
+	return false

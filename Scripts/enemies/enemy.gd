@@ -2,7 +2,8 @@ extends CharacterBody2D
 var dir = null
 var speed = 300
 var target = null
-var enemyHP = 3
+var enemyHP = 50  # 增加血量
+var max_enemyHP = 50
 
 @export var death_particles_scene: PackedScene  # 在 Inspector 拖入粒子场景
 
@@ -16,15 +17,44 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
+var attack_cooldown: float = 0.0
+var attack_interval: float = 1.0  # 攻击间隔（秒）
+var attack_damage: int = 5  # 每次攻击造成的伤害
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# 更新攻击冷却时间
+	if attack_cooldown > 0:
+		attack_cooldown -= delta
+	
 	if target:
 		dir = (target.global_position - self.global_position).normalized()
 		velocity = dir * speed
 		move_and_slide()
+		
+		# 检查是否接触到玩家（造成伤害）
+		var player_distance = global_position.distance_to(target.global_position)
+		if player_distance < 60.0:  # 接触距离
+			_attack_player()
 	pass
+
+func _attack_player() -> void:
+	if attack_cooldown > 0:
+		return
+	
+	if target and target.has_method("player_hurt"):
+		target.player_hurt(attack_damage)
+		attack_cooldown = attack_interval
 func enemy_hurt(hurt):
 	self.enemyHP -= hurt
+	
+	# 显示伤害跳字
+	FloatingText.create_floating_text(
+		global_position + Vector2(0, -30),  # 在敌人上方显示
+		"-" + str(hurt),
+		Color(1.0, 0.3, 0.3)  # 红色伤害数字
+	)
+	
 	enemy_flash()
 	GameMain.animation_scene_obj.run_animation({
 		"box":self,

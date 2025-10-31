@@ -78,9 +78,11 @@ func _process(delta: float) -> void:
 		var final_speed = speed
 		if class_manager:
 			final_speed *= class_manager.get_passive_effect("speed_multiplier", 1.0)
-			# 检查技能效果
+			# 检查技能效果（使用安全的访问方式）
 			if class_manager.is_skill_active("全面强化"):
-				final_speed *= class_manager.get_skill_effect("全面强化_multiplier", 1.0)
+				var multiplier = class_manager.get_skill_effect("全面强化_multiplier", 1.0)
+				if multiplier > 0:
+					final_speed *= multiplier
 		
 		velocity = dir * final_speed
 		#移动
@@ -90,15 +92,19 @@ func _process(delta: float) -> void:
 func _input(event):
 	# 检查是否是技能输入动作
 	# 如果事件匹配技能输入动作，不处理移动逻辑
-	if event.is_action("skill") or event.is_action_pressed("skill"):
+	if event.is_action("skill"):
+		# 技能输入不应该影响移动状态
 		return
 	
 	# 处理鼠标左键的移动逻辑
+	# 但需要排除技能输入的情况
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.is_pressed():
-			canMove = false
-		else:
-			canMove = true
+		# 如果这个鼠标事件也是技能输入的一部分，不处理移动逻辑
+		if not event.is_action("skill"):
+			if event.is_pressed():
+				canMove = false
+			else:
+				canMove = true
 		
 	
 
@@ -189,9 +195,11 @@ func get_attack_multiplier() -> float:
 	if class_manager:
 		multiplier *= class_manager.get_passive_effect("all_weapon_damage_multiplier", 1.0)
 		
-		# 检查技能效果
+		# 检查技能效果（使用安全的访问方式）
 		if class_manager.is_skill_active("全面强化"):
-			multiplier *= class_manager.get_skill_effect("全面强化_multiplier", 1.0)
+			var skill_multiplier = class_manager.get_skill_effect("全面强化_multiplier", 1.0)
+			if skill_multiplier > 0:
+				multiplier *= skill_multiplier
 		if class_manager.is_skill_active("狂暴"):
 			multiplier *= class_manager.get_skill_effect("狂暴_damage", 1.0)
 	
@@ -211,3 +219,30 @@ func get_weapon_type_multiplier(weapon_type: WeaponData.WeaponType) -> float:
 			return class_manager.get_passive_effect("magic_damage_multiplier", 1.0)
 	
 	return 1.0
+
+## 玩家受伤
+func player_hurt(damage: int) -> void:
+	# 计算实际伤害（考虑防御）
+	var actual_damage = damage
+	if current_class:
+		actual_damage = max(1, damage - current_class.defense)
+	
+	# 应用技能减伤
+	if class_manager and class_manager.is_skill_active("护盾"):
+		var reduction = class_manager.get_skill_effect("护盾_reduction", 0.0)
+		actual_damage = int(actual_damage * (1.0 - reduction))
+	
+	now_hp -= actual_damage
+	
+	# 显示伤害跳字
+	FloatingText.create_floating_text(
+		global_position + Vector2(0, -30),  # 在玩家上方显示
+		"-" + str(actual_damage),
+		Color(1.0, 0.8, 0.2)  # 黄色伤害数字（区别于敌人）
+	)
+	
+	# 检查是否死亡
+	if now_hp <= 0:
+		now_hp = 0
+		# 可以在这里添加死亡逻辑
+		print("玩家死亡！")

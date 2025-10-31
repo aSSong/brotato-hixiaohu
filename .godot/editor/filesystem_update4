@@ -16,3 +16,5 @@ res://scenes/UI/game_ui.tscn
 res://Scripts/UI/game_ui.gd
 res://scenes/map/bg_map.tscn
 res://Scripts/UI/skill_icon.gd
+res://Scripts/weapons/magic_weapon.gd
+res://Scripts/enemies/enemy.gd
