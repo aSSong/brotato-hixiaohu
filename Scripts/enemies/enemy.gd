@@ -84,7 +84,8 @@ func enemy_dead():
 	})
 	
 	# 振屏
-	CameraShake.shake(shake_duration, shake_amount)
+	if shake_on_death:
+		CameraShake.shake(shake_duration, shake_amount)
 	# 生成粒子特效
 	if death_particles_scene != null:
 		var particles = death_particles_scene.instantiate()

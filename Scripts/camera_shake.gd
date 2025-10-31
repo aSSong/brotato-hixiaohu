@@ -26,23 +26,39 @@ func find_camera_recursive(node: Node) -> Camera2D:
 	return null
 
 func _process(delta: float) -> void:
-	if camera == null or shake_timer <= 0:
+	# 如果摄像机还没有找到，尝试再次查找
+	if camera == null:
+		find_camera()
+		if camera == null:
+			return  # 仍然找不到摄像机，无法执行震动
+	
+	if shake_timer <= 0:
 		return
 	
 	shake_timer -= delta
 	
 	if shake_timer > 0:
-		# 随机偏移
-		camera.offset = Vector2(
-			randf_range(-shake_amount, shake_amount),
-			randf_range(-shake_amount, shake_amount)
-		)
+		# 确保摄像机仍然有效
+		if camera != null and is_instance_valid(camera):
+			# 随机偏移
+			camera.offset = Vector2(
+				randf_range(-shake_amount, shake_amount),
+				randf_range(-shake_amount, shake_amount)
+			)
 	else:
 		# 震动结束,恢复原位
-		camera.offset = Vector2.ZERO
+		if camera != null and is_instance_valid(camera):
+			camera.offset = Vector2.ZERO
 		shake_amount = 0.0
 
 func shake(duration: float = 0.3, amount: float = 10.0) -> void:
+	# 如果摄像机还没有找到，尝试再次查找
+	if camera == null:
+		find_camera()
+		# 如果还是找不到，尝试延迟查找
+		if camera == null:
+			call_deferred("find_camera")
+	
 	shake_duration = duration
 	shake_amount = amount
 	shake_timer = duration
