@@ -5,6 +5,9 @@ extends CanvasLayer
 @onready var exp_value_bar: ProgressBar = %exp_value_bar
 @onready var skill_icon: Control = %SkillIcon
 
+var hp_label: Label = null  # HP标签
+var player_ref: CharacterBody2D = null  # 玩家引用
+
 @export var animate_change: bool = true  # 是否播放动画
 @export var show_change_popup: bool = true  # 是否显示 +1 弹窗
 
@@ -25,6 +28,9 @@ func _ready() -> void:
 	
 	# 初始化技能图标
 	_setup_skill_icon()
+	
+	# 初始化HP显示
+	_setup_hp_display()
 
 ## 设置技能图标
 func _setup_skill_icon() -> void:
@@ -99,3 +105,40 @@ func show_popup(change: int) -> void:
 	
 	# 动画结束后删除
 	tween.finished.connect(popup.queue_free)
+
+## 设置HP显示
+func _setup_hp_display() -> void:
+	if not hp_value_bar:
+		return
+	
+	# 查找HP标签（hp_value_bar的子节点）
+	for child in hp_value_bar.get_children():
+		if child is Label:
+			hp_label = child
+			break
+	
+	# 等待玩家加载完成
+	await get_tree().create_timer(0.2).timeout
+	
+	# 获取玩家引用
+	player_ref = get_tree().get_first_node_in_group("player")
+	if player_ref:
+		# 连接玩家血量变化信号
+		if not player_ref.hp_changed.is_connected(_on_player_hp_changed):
+			player_ref.hp_changed.connect(_on_player_hp_changed)
+		
+		# 初始化HP显示
+		_on_player_hp_changed(player_ref.now_hp, player_ref.max_hp)
+
+## 玩家血量变化回调
+func _on_player_hp_changed(current_hp: int, max_hp: int) -> void:
+	if not hp_value_bar:
+		return
+	
+	# 更新ProgressBar
+	hp_value_bar.max_value = max_hp
+	hp_value_bar.value = current_hp
+	
+	# 更新Label文本
+	if hp_label:
+		hp_label.text = "%d / %d" % [current_hp, max_hp]

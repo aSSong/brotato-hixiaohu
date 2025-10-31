@@ -20,6 +20,9 @@ var gold = 0
 var current_class: ClassData = null
 var class_manager: ClassManager = null
 
+## 信号：血量变化
+signal hp_changed(current_hp: int, max_hp: int)
+
 func _ready() -> void:
 	# 初始化职业管理器
 	class_manager = ClassManager.new()
@@ -166,6 +169,9 @@ func _apply_class_stats() -> void:
 	if now_hp > max_hp:
 		now_hp = max_hp
 	
+	# 发送血量变化信号（初始化时）
+	hp_changed.emit(now_hp, max_hp)
+	
 	# 应用速度
 	speed = base_speed * (current_class.speed / 400.0)  # 相对于基础速度的比例
 	
@@ -233,6 +239,13 @@ func player_hurt(damage: int) -> void:
 		actual_damage = int(actual_damage * (1.0 - reduction))
 	
 	now_hp -= actual_damage
+	
+	# 确保血量不小于0
+	if now_hp < 0:
+		now_hp = 0
+	
+	# 发送血量变化信号
+	hp_changed.emit(now_hp, max_hp)
 	
 	# 显示伤害跳字
 	FloatingText.create_floating_text(

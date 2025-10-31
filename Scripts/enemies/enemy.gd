@@ -33,8 +33,9 @@ func _process(delta: float) -> void:
 		move_and_slide()
 		
 		# 检查是否接触到玩家（造成伤害）
+		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
 		var player_distance = global_position.distance_to(target.global_position)
-		if player_distance < 60.0:  # 接触距离
+		if player_distance < 80.0:  # 接触距离（稍微增大一点确保能触发）
 			_attack_player()
 	pass
 
