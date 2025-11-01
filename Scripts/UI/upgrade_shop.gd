@@ -178,29 +178,21 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 		if upgrade != null and upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
 			new_weapon_count_in_shop += 1
 	
-	# 1. HP上限+50
-	upgrades.append(UpgradeData.new(
-		UpgradeData.UpgradeType.HP_MAX,
-		"HP上限+50",
-		5,
-		"res://assets/items/6.png"
-	))
-	
-	# 2. 移动速度+10
-	upgrades.append(UpgradeData.new(
-		UpgradeData.UpgradeType.MOVE_SPEED,
-		"移动速度+10",
-		5,
-		"res://assets/items/11.png"
-	))
-	
-	# 3. 恢复HP100点
-	upgrades.append(UpgradeData.new(
-		UpgradeData.UpgradeType.HEAL_HP,
-		"恢复HP100点",
-		3,
-		"res://assets/items/5.png"
-	))
+	# 从数据库获取所有基础升级选项
+	var base_upgrades = UpgradeDatabase.get_all_upgrade_ids()
+	for upgrade_id in base_upgrades:
+		var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
+		if upgrade_data:
+			# 创建副本以避免修改原始数据
+			var upgrade_copy = UpgradeData.new(
+				upgrade_data.upgrade_type,
+				upgrade_data.name,
+				upgrade_data.cost,
+				upgrade_data.icon_path,
+				upgrade_data.weapon_id
+			)
+			upgrade_copy.description = upgrade_data.description
+			upgrades.append(upgrade_copy)
 	
 	# 4. New Weapon（根据规则）
 	if weapons_manager and (weapon_count + new_weapon_count_in_shop) < 6:
