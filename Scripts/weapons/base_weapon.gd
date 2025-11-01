@@ -58,14 +58,7 @@ func initialize(data: WeaponData, level: int = 1) -> void:
 	_setup_weapon_appearance()
 	
 	# 设置武器等级颜色和描边
-	if weaponAni and weaponAni.material:
-		# 设置颜色
-		var color_hex = weapon_data.weapon_level_colors['level_' + str(weapon_level)]
-		weaponAni.material.set_shader_parameter("line_color", Color(color_hex))
-		
-		# 设置描边粗细（更粗一些，从默认1.0增加到2.5）
-		#if weaponAni.material.has_shader_parameter("line_thickness"):
-			#weaponAni.material.set_shader_parameter("line_thickness", 2.5)
+	_update_weapon_level_appearance()
 	
 	# 调用子类的初始化
 	_on_weapon_initialized()
@@ -91,12 +84,35 @@ func upgrade_level() -> bool:
 		if shape is CircleShape2D:
 			shape.radius = weapon_data.range * multipliers.range_multiplier
 	
-	# 更新颜色
-	if weaponAni and weaponAni.material:
-		var color_hex = weapon_data.weapon_level_colors['level_' + str(weapon_level)]
-		weaponAni.material.set_shader_parameter("line_color", Color(color_hex))
+	# 更新颜色和描边
+	_update_weapon_level_appearance()
 	
 	return true
+
+## 更新武器等级外观（颜色和描边）
+func _update_weapon_level_appearance() -> void:
+	if not weaponAni:
+		return
+	
+	var material = weaponAni.material
+	if not material:
+		return
+	
+	# 检查材质类型
+	if not material is ShaderMaterial:
+		return
+	
+	var shader_material = material as ShaderMaterial
+	if not shader_material:
+		return
+	
+	# 获取颜色（使用 WeaponData 的静态常量）
+	var color_hex = WeaponData.weapon_level_colors['level_' + str(weapon_level)]
+	var color = Color(color_hex)
+	
+	# 直接设置 shader 参数（如果参数不存在，set_shader_parameter 不会报错）
+	shader_material.set_shader_parameter("color", color)
+	#shader_material.set_shader_parameter("line_thickness", 2.5)
 
 ## 获取实际伤害（考虑等级倍数）
 func get_actual_damage() -> int:

@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Texture2D" uid="uid://duevf8vt5afyb" path="res://assets/items/gold.png" id="1_4u50f"]
-[ext_resource type="Texture2D" path="res://assets/items/masterkey.png" id="3_masterkey"]
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 [ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
+[ext_resource type="Texture2D" uid="uid://b71hdqjlbl54a" path="res://assets/items/masterkey.png" id="3_masterkey"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
@@ -85,19 +85,6 @@ theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 35
 text = "0"
 
-[node name="master_key" type="Label" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
-offset_left = 137.0
-offset_top = 250.0
-offset_right = 487.0
-offset_bottom = 292.0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 35
-text = "0"
-
 [node name="Control" type="Control" parent="gold"]
 layout_mode = 1
 anchors_preset = 2
@@ -112,6 +99,19 @@ grow_vertical = 0
 position = Vector2(-33, 17)
 scale = Vector2(3, 5)
 texture = ExtResource("1_4u50f")
+
+[node name="master_key" type="Label" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+offset_left = 137.0
+offset_top = 250.0
+offset_right = 487.0
+offset_bottom = 292.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 35
+text = "0"
 
 [node name="Control" type="Control" parent="master_key"]
 layout_mode = 1
