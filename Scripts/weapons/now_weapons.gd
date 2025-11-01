@@ -8,6 +8,10 @@ var player_ref: Node2D = null  # 玩家引用，用于获取职业加成
 var base_weapon_scene = preload("res://scenes/weapons/weapon.tscn")
 
 func _ready() -> void:
+	# 添加到组中以便查找
+	add_to_group("weapons_manager")
+	add_to_group("weapons")
+	
 	# 获取玩家引用
 	player_ref = get_tree().get_first_node_in_group("player")
 	
@@ -33,10 +37,15 @@ func create_test_weapons() -> void:
 	add_weapon("fireball")
 
 ## 添加武器
-func add_weapon(weapon_id: String) -> void:
+func add_weapon(weapon_id: String, level: int = 1) -> void:
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
 	if weapon_data == null:
 		push_error("武器不存在: " + weapon_id)
+		return
+	
+	# 检查武器数量限制
+	if get_child_count() >= 6:
+		push_warning("武器数量已达上限（6把）")
 		return
 	
 	# 创建武器实例
@@ -50,13 +59,91 @@ func add_weapon(weapon_id: String) -> void:
 	await get_tree().process_frame
 	if is_instance_valid(weapon_instance) and weapon_instance.has_method("initialize"):
 		var stored_data = weapon_instance.get_meta("weapon_data", null)
+		var stored_level = weapon_instance.get_meta("weapon_level", 1)
 		if stored_data:
-			weapon_instance.initialize(stored_data)
+			weapon_instance.initialize(stored_data, stored_level)
 			weapon_instance.remove_meta("weapon_data")
+			if weapon_instance.has_meta("weapon_level"):
+				weapon_instance.remove_meta("weapon_level")
 			# 应用职业加成
 			_apply_class_bonuses(weapon_instance, stored_data)
 	
 	arrange_weapons()
+
+## 获取所有武器
+func get_all_weapons() -> Array:
+	var weapons = []
+	for child in get_children():
+		if child is BaseWeapon:
+			weapons.append(child)
+	return weapons
+
+## 获取武器数量
+func get_weapon_count() -> int:
+	return get_all_weapons().size()
+
+## 获取指定类型的最低级武器
+func get_lowest_level_weapon_of_type(weapon_id: String) -> BaseWeapon:
+	var target_data = WeaponDatabase.get_weapon(weapon_id)
+	if target_data == null:
+		return null
+	
+	var candidates = []
+	for weapon in get_all_weapons():
+		if weapon.weapon_data.weapon_name == target_data.weapon_name:
+			candidates.append(weapon)
+	
+	if candidates.is_empty():
+		return null
+	
+	# 找到等级最低的（如果有多把相同等级，随机选择）
+	candidates.sort_custom(func(a, b): return a.weapon_level < b.weapon_level)
+	var min_level = candidates[0].weapon_level
+	
+	# 收集所有最低级的武器
+	var lowest_level_weapons = []
+	for weapon in candidates:
+		if weapon.weapon_level == min_level:
+			lowest_level_weapons.append(weapon)
+	
+	# 随机选择一个
+	if lowest_level_weapons.size() > 0:
+		var rng = RandomNumberGenerator.new()
+		rng.randomize()
+		return lowest_level_weapons[rng.randi_range(0, lowest_level_weapons.size() - 1)]
+	
+	return null
+
+## 检查是否有武器达到最高等级
+func has_all_weapons_max_level() -> bool:
+	var weapons = get_all_weapons()
+	if weapons.is_empty():
+		return true
+	
+	for weapon in weapons:
+		if weapon.weapon_level < 5:
+			return false
+	
+	return true
+
+## 获取所有可升级的武器类型
+func get_upgradeable_weapon_types() -> Array:
+	var types = {}
+	for weapon in get_all_weapons():
+		if weapon.weapon_level < 5:
+			var weapon_id = _get_weapon_id(weapon.weapon_data)
+			if not types.has(weapon_id):
+				types[weapon_id] = weapon.weapon_data.weapon_name
+	return types.keys()
+
+## 辅助函数：从weapon_data获取weapon_id
+func _get_weapon_id(weapon_data: WeaponData) -> String:
+	# 通过weapon_name匹配
+	for weapon_id in WeaponDatabase.get_all_weapon_ids():
+		var data = WeaponDatabase.get_weapon(weapon_id)
+		if data and data.weapon_name == weapon_data.weapon_name:
+			return weapon_id
+	return ""
 
 ## 根据武器数据创建武器实例
 func _create_weapon_instance(weapon_data: WeaponData) -> Node2D:
@@ -84,8 +171,9 @@ func _create_weapon_instance(weapon_data: WeaponData) -> Node2D:
 	
 	# 添加到场景树后才能访问@onready变量
 	# 所以初始化会在_ready中延迟执行
-	# 存储weapon_data以便在_ready后初始化
+	# 存储weapon_data和等级以便在_ready后初始化
 	weapon_scene.set_meta("weapon_data", weapon_data)
+	weapon_scene.set_meta("weapon_level", 1)  # 默认1级
 	
 	return weapon_scene
 

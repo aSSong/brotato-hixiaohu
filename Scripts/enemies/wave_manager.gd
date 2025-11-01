@@ -115,8 +115,56 @@ func _end_current_wave() -> void:
 	wave_ended.emit(current_wave)
 	print("第 ", current_wave, " 波结束！击杀: ", enemies_killed_this_wave, "/", enemies_total_this_wave)
 	
-	# 等待5秒后开始下一波
+	# 弹出升级商店
+	_show_upgrade_shop()
+	
+	# 等待商店关闭后再继续（商店关闭后会继续下一波）
+	await shop_closed
+	await get_tree().create_timer(0.5).timeout  # 短暂延迟
+	
+	# 开始下一波
 	if current_wave < wave_configs.size():
 		is_waiting_for_next_wave = true
-		await get_tree().create_timer(5.0).timeout
 		start_next_wave()
+
+## 信号：商店关闭
+signal shop_closed
+
+## 显示升级商店
+func _show_upgrade_shop() -> void:
+	# 尝试多次查找商店（可能场景还没完全加载）
+	var upgrade_shop = null
+	for i in range(5):
+		upgrade_shop = get_tree().get_first_node_in_group("upgrade_shop")
+		if upgrade_shop:
+			break
+		await get_tree().create_timer(0.1).timeout
+	
+	if upgrade_shop and upgrade_shop.has_method("open_shop"):
+		print("找到升级商店，正在打开...")
+		upgrade_shop.open_shop()
+		# 等待商店关闭
+		if upgrade_shop.has_signal("shop_closed"):
+			if not upgrade_shop.shop_closed.is_connected(_on_shop_closed):
+				upgrade_shop.shop_closed.connect(_on_shop_closed)
+	else:
+		# 如果找不到商店，直接继续
+		push_warning("未找到升级商店！尝试查找所有节点...")
+		# 尝试查找所有节点
+		var all_nodes = get_tree().root.get_children()
+		for node in all_nodes:
+			print("根节点子节点: ", node.name)
+			if node.has_method("get_children"):
+				for child in node.get_children():
+					if child.name == "upgrade_shop" or child.is_in_group("upgrade_shop"):
+						print("找到升级商店节点: ", child)
+						if child.has_method("open_shop"):
+							child.open_shop()
+							if child.has_signal("shop_closed"):
+								if not child.shop_closed.is_connected(_on_shop_closed):
+									child.shop_closed.connect(_on_shop_closed)
+							return
+		shop_closed.emit()
+
+func _on_shop_closed() -> void:
+	shop_closed.emit()

@@ -43,14 +43,46 @@ enum WeaponType {
 @export var knockback_force: float = 0.0  # 击退力度
 @export var special_effects: Dictionary = {}  # 特殊效果参数
 
-## 武器等级颜色（复用现有系统）
+## 武器等级颜色（白、绿、蓝、紫、红）
 const weapon_level_colors = {
-	level_1 = "#b0c3d9",
-	level_2 = "#4b69ff",
-	level_3 = "#d32ce6",
-	level_4 = "#8847ff",
-	level_5 = "#eb4b4b",
+	level_1 = "#FFFFFF",  # 白色
+	level_2 = "#00FF00",  # 绿色
+	level_3 = "#0000FF",  # 蓝色
+	level_4 = "#FF00FF",  # 紫色
+	level_5 = "#FF0000",  # 红色
 }
+
+## 获取指定等级的参数倍数
+## 返回字典：{"damage_multiplier": 1.0, "attack_speed_multiplier": 1.0, ...}
+static func get_level_multipliers(level: int) -> Dictionary:
+	level = clamp(level, 1, 5)
+	var multipliers = {
+		"damage_multiplier": 1.0,
+		"attack_speed_multiplier": 1.0,
+		"range_multiplier": 1.0,
+	}
+	match level:
+		1:
+			multipliers.damage_multiplier = 1.0
+			multipliers.attack_speed_multiplier = 1.0
+			multipliers.range_multiplier = 1.0
+		2:
+			multipliers.damage_multiplier = 1.3
+			multipliers.attack_speed_multiplier = 1.1
+			multipliers.range_multiplier = 1.1
+		3:
+			multipliers.damage_multiplier = 1.6
+			multipliers.attack_speed_multiplier = 1.2
+			multipliers.range_multiplier = 1.2
+		4:
+			multipliers.damage_multiplier = 2.0
+			multipliers.attack_speed_multiplier = 1.3
+			multipliers.range_multiplier = 1.3
+		5:
+			multipliers.damage_multiplier = 2.5
+			multipliers.attack_speed_multiplier = 1.5
+			multipliers.range_multiplier = 1.5
+	return multipliers
 
 ## 初始化函数
 func _init(
