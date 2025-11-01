@@ -11,7 +11,7 @@ var ghost_data: GhostData = null
 var death_manager: Node = null
 
 ## 救援范围
-const RESCUE_RANGE: float = 100.0
+const RESCUE_RANGE: float = 400.0
 
 ## 读条相关
 var is_in_range: bool = false
@@ -22,7 +22,7 @@ var is_reading: bool = false
 ## UI元素
 var progress_bar: ProgressBar = null
 var range_circle: Sprite2D = null
-var rescue_ui: Control = null
+var rescue_ui: CanvasLayer = null  # GraveRescueUI是CanvasLayer类型
 
 func _ready() -> void:
 	# 创建进度条UI
@@ -32,7 +32,10 @@ func _ready() -> void:
 	_create_range_circle()
 
 func _process(delta: float) -> void:
-	if not player or not grave_sprite or not is_instance_valid(grave_sprite):
+	if not player or not is_instance_valid(player):
+		return
+	
+	if not grave_sprite or not is_instance_valid(grave_sprite):
 		return
 	
 	# 检查玩家是否在范围内
@@ -63,6 +66,11 @@ func _process(delta: float) -> void:
 
 ## 检查是否可以开始读条
 func _can_start_reading() -> bool:
+	# 检查玩家引用
+	if not player or not is_instance_valid(player):
+		print("[GraveRescue] 无法读条：玩家引用无效")
+		return false
+	
 	# 玩家死亡不能读条
 	if player.now_hp <= 0:
 		return false
@@ -80,7 +88,7 @@ func _can_start_reading() -> bool:
 ## 范围状态变化
 func _on_range_changed(entered: bool) -> void:
 	if entered:
-		print("[GraveRescue] 进入救援范围")
+		print("[GraveRescue] 进入救援范围 | 玩家HP:", player.now_hp if player else "null", " | 范围:", RESCUE_RANGE)
 		if range_circle:
 			range_circle.visible = true
 	else:
@@ -301,6 +309,7 @@ func cleanup() -> void:
 ## 设置引用
 func set_player(p: CharacterBody2D) -> void:
 	player = p
+	print("[GraveRescue] 设置玩家引用:", player)
 
 func set_grave(g: Sprite2D) -> void:
 	grave_sprite = g
@@ -326,10 +335,23 @@ func update_position() -> void:
 
 ## 强制停止读条（玩家死亡或其他中断）
 func force_stop_reading() -> void:
+	print("[GraveRescue] 强制停止读条")
+	
 	if is_reading:
 		_stop_reading()
+	
+	# 重置所有状态
+	is_in_range = false
+	rescue_progress = 0.0
+	is_reading = false
 	
 	# 隐藏救援UI
 	if rescue_ui and rescue_ui.visible:
 		rescue_ui.hide_dialog()
 		get_tree().paused = false
+	
+	# 隐藏范围圈和进度条
+	if range_circle:
+		range_circle.visible = false
+	if progress_bar:
+		progress_bar.visible = false
