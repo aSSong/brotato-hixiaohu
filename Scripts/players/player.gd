@@ -23,6 +23,12 @@ var class_manager: ClassManager = null
 ## Ghost管理器
 var ghost_manager: GhostManager = null
 
+## 路径记录（用于Ghost跟随）
+var path_history: Array = []
+var path_record_distance: float = 3.0  # 路径记录间隔（减小以获得更平滑的跟随）
+var last_recorded_position: Vector2 = Vector2.ZERO
+var max_path_points: int = 300  # 最多记录的路径点数量（增加以支持更多Ghost）
+
 ## 信号：血量变化
 signal hp_changed(current_hp: int, max_hp: int)
 
@@ -37,6 +43,10 @@ func _ready() -> void:
 	ghost_manager = GhostManager.new()
 	add_child(ghost_manager)
 	ghost_manager.set_player(self)
+	
+	# 初始化路径记录
+	last_recorded_position = global_position
+	path_history.append(global_position)
 	
 	# 默认选择玩家外观
 	choosePlayer("player2")
@@ -97,7 +107,10 @@ func _process(delta: float) -> void:
 		
 		velocity = dir * final_speed
 		#移动
-		move_and_slide()	
+		move_and_slide()
+		
+		# 记录路径点（用于Ghost跟随）
+		_record_path_point()
 	pass
 	
 func _input(event):
@@ -284,3 +297,18 @@ func player_hurt(damage: int) -> void:
 		now_hp = 0
 		# 可以在这里添加死亡逻辑
 		print("玩家死亡！")
+
+## 记录路径点（用于Ghost跟随）
+func _record_path_point() -> void:
+	# 如果移动距离超过记录间隔，记录新的路径点
+	if global_position.distance_to(last_recorded_position) >= path_record_distance:
+		path_history.append(global_position)
+		last_recorded_position = global_position
+		
+		# 限制路径点数量，删除最旧的路径点
+		if path_history.size() > max_path_points:
+			path_history.pop_front()
+
+## 获取路径历史（供Ghost使用）
+func get_path_history() -> Array:
+	return path_history
