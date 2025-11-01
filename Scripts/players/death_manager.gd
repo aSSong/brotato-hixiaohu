@@ -185,7 +185,7 @@ func _remove_old_grave() -> void:
 	if grave_sprite and is_instance_valid(grave_sprite):
 		grave_sprite.queue_free()
 		grave_sprite = null
-		grave_ghost_data = null
+		# 注意：不清除grave_ghost_data，因为新的数据已经在_trigger_death()中创建
 		print("[DeathManager] 旧墓碑已移除")
 
 ## 显示死亡UI

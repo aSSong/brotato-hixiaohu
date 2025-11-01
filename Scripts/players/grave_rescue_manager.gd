@@ -73,14 +73,17 @@ func _can_start_reading() -> bool:
 	
 	# 玩家死亡不能读条
 	if player.now_hp <= 0:
+		print("[GraveRescue] 无法读条：玩家已死亡 HP:", player.now_hp)
 		return false
 	
 	# 游戏暂停不能读条（商店打开等）
 	if get_tree().paused:
+		print("[GraveRescue] 无法读条：游戏已暂停")
 		return false
 	
 	# 救援界面打开时不能读条
 	if rescue_ui and rescue_ui.visible:
+		print("[GraveRescue] 无法读条：救援界面已打开")
 		return false
 	
 	return true
