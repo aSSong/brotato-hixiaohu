@@ -4,10 +4,12 @@ extends CanvasLayer
 @onready var hp_value_bar: ProgressBar = %hp_value_bar
 @onready var exp_value_bar: ProgressBar = %exp_value_bar
 @onready var skill_icon: Control = %SkillIcon
+@onready var wave_label: Label = %WaveLabel
 
 var hp_label: Label = null  # HP标签
 var player_ref: CharacterBody2D = null  # 玩家引用
 var victory_triggered: bool = false  # 是否已触发胜利
+var wave_manager_ref = null  # 波次管理器引用（避免类型检查错误）
 
 @export var animate_change: bool = true  # 是否播放动画
 @export var show_change_popup: bool = true  # 是否显示 +1 弹窗
@@ -16,7 +18,7 @@ var current_tween: Tween = null  # 保存当前动画引用
 var original_scale: Vector2  # 保存原始缩放
 var skill_icon_script: SkillIcon = null
 
-var goalkeys = 20 # 获得胜利的目标钥匙数目
+var goalkeys = 200 # 获得胜利的目标钥匙数目
 
 func _ready() -> void:
 	
@@ -34,6 +36,9 @@ func _ready() -> void:
 	
 	# 初始化HP显示
 	_setup_hp_display()
+	
+	# 初始化波次显示
+	_setup_wave_display()
 
 ## 设置技能图标
 func _setup_skill_icon() -> void:
@@ -162,3 +167,78 @@ func _trigger_victory() -> void:
 		get_tree().change_scene_to_packed(victory_scene)
 	else:
 		push_error("无法加载胜利UI场景！")
+
+## 设置波次显示
+func _setup_wave_display() -> void:
+	if not wave_label:
+		return
+	
+	# 等待场景加载完成
+	await get_tree().create_timer(0.3).timeout
+	
+	# 查找波次管理器
+	var now_enemies = get_tree().get_first_node_in_group("enemy_spawner")
+	if now_enemies and now_enemies.has_method("get_wave_manager"):
+		wave_manager_ref = now_enemies.get_wave_manager()
+	elif now_enemies:
+		# 尝试直接访问wave_manager
+		if now_enemies.has("wave_manager"):
+			wave_manager_ref = now_enemies.wave_manager
+	
+	# 如果没找到，尝试在场景中查找WaveManager节点
+	if wave_manager_ref == null:
+		wave_manager_ref = get_tree().get_first_node_in_group("wave_manager")
+	
+	if wave_manager_ref:
+		# 连接信号
+		if wave_manager_ref.has_signal("enemy_killed"):
+			if not wave_manager_ref.enemy_killed.is_connected(_on_wave_enemy_killed):
+				wave_manager_ref.enemy_killed.connect(_on_wave_enemy_killed)
+		if wave_manager_ref.has_signal("wave_started"):
+			if not wave_manager_ref.wave_started.is_connected(_on_wave_started):
+				wave_manager_ref.wave_started.connect(_on_wave_started)
+		
+		# 初始化显示
+		_update_wave_display()
+	else:
+		# 如果找不到，定期查找
+		_find_wave_manager_periodically()
+
+## 定期查找波次管理器
+func _find_wave_manager_periodically() -> void:
+	var attempts = 0
+	while wave_manager_ref == null and attempts < 10:
+		await get_tree().create_timer(0.5).timeout
+		var now_enemies = get_tree().get_first_node_in_group("enemy_spawner")
+		if now_enemies and now_enemies.has("wave_manager"):
+			wave_manager_ref = now_enemies.wave_manager
+			if wave_manager_ref:
+				# 连接信号
+				if wave_manager_ref.has_signal("enemy_killed"):
+					if not wave_manager_ref.enemy_killed.is_connected(_on_wave_enemy_killed):
+						wave_manager_ref.enemy_killed.connect(_on_wave_enemy_killed)
+				if wave_manager_ref.has_signal("wave_started"):
+					if not wave_manager_ref.wave_started.is_connected(_on_wave_started):
+						wave_manager_ref.wave_started.connect(_on_wave_started)
+				_update_wave_display()
+				return
+		attempts += 1
+
+## 波次开始回调
+func _on_wave_started(_wave_number: int) -> void:
+	_update_wave_display()
+
+## 波次敌人击杀回调
+func _on_wave_enemy_killed(_wave_number: int, _killed: int, _total: int) -> void:
+	_update_wave_display()
+
+## 更新波次显示
+func _update_wave_display() -> void:
+	if not wave_label or not wave_manager_ref:
+		return
+	
+	var wave_num = wave_manager_ref.current_wave
+	var killed = wave_manager_ref.enemies_killed_this_wave
+	var total = wave_manager_ref.enemies_total_this_wave
+	
+	wave_label.text = "Wave: %d    (%d/%d)" % [wave_num, killed, total]

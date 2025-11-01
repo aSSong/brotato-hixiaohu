@@ -109,6 +109,19 @@ offset_bottom = 241.0
 layout_mode = 2
 theme_override_constants/separation = 20
 
+[node name="wave_info" type="MarginContainer" parent="status/VBoxContainer"]
+layout_mode = 2
+
+[node name="WaveLabel" type="Label" parent="status/VBoxContainer/wave_info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 35
+text = "Wave: 0 (0/0)"
+horizontal_alignment = 2
+
 [node name="hp_value" type="MarginContainer" parent="status/VBoxContainer"]
 layout_mode = 2
 
