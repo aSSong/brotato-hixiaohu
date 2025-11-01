@@ -38,6 +38,17 @@ func _process(delta: float) -> void:
 	if not grave_sprite or not is_instance_valid(grave_sprite):
 		return
 	
+	# 如果玩家死亡，隐藏所有UI并停止读条
+	if player.now_hp <= 0:
+		if is_reading:
+			_stop_reading()
+		if range_circle and range_circle.visible:
+			range_circle.visible = false
+		# 重置范围状态，这样复活后重新进入范围会触发_on_range_changed
+		if is_in_range:
+			is_in_range = false
+		return
+	
 	# 检查玩家是否在范围内
 	var distance = player.global_position.distance_to(grave_sprite.global_position)
 	var in_range_now = distance <= RESCUE_RANGE
@@ -68,22 +79,18 @@ func _process(delta: float) -> void:
 func _can_start_reading() -> bool:
 	# 检查玩家引用
 	if not player or not is_instance_valid(player):
-		print("[GraveRescue] 无法读条：玩家引用无效")
 		return false
 	
-	# 玩家死亡不能读条
+	# 玩家死亡不能读条（不打印日志，因为每帧都会检查）
 	if player.now_hp <= 0:
-		print("[GraveRescue] 无法读条：玩家已死亡 HP:", player.now_hp)
 		return false
 	
 	# 游戏暂停不能读条（商店打开等）
 	if get_tree().paused:
-		print("[GraveRescue] 无法读条：游戏已暂停")
 		return false
 	
 	# 救援界面打开时不能读条
 	if rescue_ui and rescue_ui.visible:
-		print("[GraveRescue] 无法读条：救援界面已打开")
 		return false
 	
 	return true
