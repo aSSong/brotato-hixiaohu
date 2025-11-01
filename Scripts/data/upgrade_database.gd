@@ -36,7 +36,7 @@ static func initialize_upgrades() -> void:
 		UpgradeData.UpgradeType.HEAL_HP,
 		"恢复HP100点",
 		3,
-		"res://assets/items/5.png"
+		"res://assets/skillicon/5.png"
 	)
 	heal_hp_upgrade.description = "立即恢复100点生命值"
 	upgrades["heal_hp"] = heal_hp_upgrade
