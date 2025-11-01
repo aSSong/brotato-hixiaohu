@@ -14,10 +14,13 @@ var player: CharacterBody2D = null
 var death_ui: DeathUI = null
 var floor_layer: TileMapLayer = null
 var grave_sprite: Sprite2D = null  # 墓碑精灵
+var grave_ghost_data: GhostData = null  # 墓碑关联的Ghost数据
+var grave_rescue_manager: GraveRescueManager = null  # 墓碑救援管理器
 
 ## 状态
 var is_dead: bool = false
-var revive_count: int = 0
+var revive_count: int = 0  # 本局累计复活次数
+var death_count: int = 0  # 本局累计死亡次数（包括已复活的）
 var death_timer: float = 0.0
 var death_delay: float = 3.0  # 死亡延迟时间
 var death_position: Vector2 = Vector2.ZERO  # 记录死亡位置
@@ -80,12 +83,25 @@ func _trigger_death() -> void:
 	
 	is_dead = true
 	death_timer = death_delay
+	death_count += 1  # 增加死亡次数
 	
 	# 记录死亡位置
 	if player:
 		death_position = player.global_position
 	
-	# 创建墓碑
+	# 强制停止之前的救援读条（如果有）
+	if grave_rescue_manager and is_instance_valid(grave_rescue_manager):
+		grave_rescue_manager.force_stop_reading()
+	
+	# 创建Ghost数据（用于救援）
+	if player:
+		grave_ghost_data = GhostData.from_player(player, death_count)
+		print("[DeathManager] 创建Ghost数据 | 职业:", grave_ghost_data.class_id, " 武器数:", grave_ghost_data.weapons.size())
+	
+	# 移除旧墓碑（如果有）
+	_remove_old_grave()
+	
+	# 创建新墓碑
 	_create_grave()
 	
 	# 禁止玩家移动
@@ -94,7 +110,7 @@ func _trigger_death() -> void:
 	
 	player_died.emit()
 	print("[DeathManager] 玩家死亡！", death_delay, "秒后显示死亡界面...")
-	print("[DeathManager] 当前复活次数:", revive_count)
+	print("[DeathManager] 当前复活次数:", revive_count, " 死亡次数:", death_count)
 
 ## 创建墓碑
 func _create_grave() -> void:
@@ -116,15 +132,61 @@ func _create_grave() -> void:
 	if player and player.get_parent():
 		player.get_parent().add_child(grave_sprite)
 		print("[DeathManager] 墓碑已创建于:", death_position)
+		
+		# 创建救援管理器
+		_create_rescue_manager()
 	else:
 		push_warning("[DeathManager] 无法找到合适的父节点放置墓碑")
 
+## 创建救援管理器
+func _create_rescue_manager() -> void:
+	if not grave_sprite or not grave_ghost_data:
+		return
+	
+	# 创建救援管理器
+	grave_rescue_manager = GraveRescueManager.new()
+	
+	# 添加到场景
+	if player and player.get_parent():
+		player.get_parent().add_child(grave_rescue_manager)
+	
+	# 设置引用
+	grave_rescue_manager.set_player(player)
+	grave_rescue_manager.set_grave(grave_sprite)
+	grave_rescue_manager.set_ghost_data(grave_ghost_data)
+	grave_rescue_manager.set_death_manager(self)
+	
+	# 初始化位置
+	grave_rescue_manager.update_position()
+	
+	print("[DeathManager] 救援管理器已创建")
+
 ## 移除墓碑
 func _remove_grave() -> void:
+	# 移除救援管理器
+	if grave_rescue_manager and is_instance_valid(grave_rescue_manager):
+		grave_rescue_manager.cleanup()
+		grave_rescue_manager = null
+	
+	# 移除墓碑精灵
 	if grave_sprite and is_instance_valid(grave_sprite):
 		grave_sprite.queue_free()
 		grave_sprite = null
 		print("[DeathManager] 墓碑已移除")
+
+## 移除旧墓碑（再次死亡时清除上一个墓碑）
+func _remove_old_grave() -> void:
+	# 移除救援管理器
+	if grave_rescue_manager and is_instance_valid(grave_rescue_manager):
+		grave_rescue_manager.cleanup()
+		grave_rescue_manager = null
+	
+	# 移除墓碑精灵
+	if grave_sprite and is_instance_valid(grave_sprite):
+		grave_sprite.queue_free()
+		grave_sprite = null
+		grave_ghost_data = null
+		print("[DeathManager] 旧墓碑已移除")
 
 ## 显示死亡UI
 func _show_death_ui() -> void:
@@ -186,8 +248,7 @@ func _revive_player() -> void:
 	if not player:
 		return
 	
-	# 移除墓碑
-	_remove_grave()
+	# 注意：不移除墓碑！墓碑保留用于救援
 	
 	# 恢复HP
 	player.now_hp = player.max_hp
@@ -218,6 +279,7 @@ func _revive_player() -> void:
 	player_revived.emit()
 	
 	print("[DeathManager] 玩家已复活 | HP:", player.now_hp, "/", player.max_hp, " 位置:", player.global_position)
+	print("[DeathManager] 墓碑保留用于救援")
 
 ## 在随机位置复活玩家
 func _respawn_player_at_random_position() -> void:
@@ -247,8 +309,13 @@ func _respawn_player_at_random_position() -> void:
 ## 重置游戏数据（仅在放弃时调用）
 func _reset_game_data() -> void:
 	revive_count = 0
+	death_count = 0
 	is_dead = false
 	death_timer = 0.0
+	
+	# 清除墓碑和Ghost数据
+	_remove_grave()
+	grave_ghost_data = null
 	
 	# 重置GameMain中的数据
 	GameMain.reset_game()

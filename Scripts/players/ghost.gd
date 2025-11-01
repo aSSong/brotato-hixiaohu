@@ -125,7 +125,7 @@ func update_path_points(points: Array) -> void:
 		current_path_index = max(0, target_path_points.size() - 1)
 
 ## 初始化Ghost
-func initialize(target: Node2D, index: int, player_speed: float) -> void:
+func initialize(target: Node2D, index: int, player_speed: float, use_existing_data: bool = false) -> void:
 	follow_target = target
 	queue_index = index
 	follow_speed = player_speed
@@ -134,8 +134,10 @@ func initialize(target: Node2D, index: int, player_speed: float) -> void:
 	if target:
 		global_position = target.global_position
 	
-	# 生成随机数据
-	_generate_random_data()
+	# 如果不使用现有数据，则生成随机数据
+	if not use_existing_data:
+		_generate_random_data()
+	# 否则，假设class_id和ghost_weapons已经被外部设置
 	
 	# 设置外观
 	_setup_appearance()
@@ -175,10 +177,17 @@ func _generate_random_data() -> void:
 
 ## 设置外观
 func _setup_appearance() -> void:
-	# 根据职业选择玩家外观
-	# 使用player1或player2的随机选择
-	var player_types = ["player1", "player2"]
-	var player_type = player_types[randi() % player_types.size()]
+	# 根据职业ID获取职业数据
+	var class_data = ClassDatabase.get_class_data(class_id)
+	
+	# 获取职业的外观类型（player1或player2）
+	var player_type = "player1"  # 默认
+	if class_data and "player_type" in class_data:
+		player_type = class_data.player_type
+	else:
+		# 如果职业数据中没有player_type，使用随机选择
+		var player_types = ["player1", "player2"]
+		player_type = player_types[randi() % player_types.size()]
 	
 	var player_path = "res://assets/player/"
 	

@@ -1,0 +1,85 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3vkp8yqm7abc"]
+
+[ext_resource type="Script" path="res://Scripts/UI/grave_rescue_ui.gd" id="1"]
+
+[node name="GraveRescueUI" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -180.0
+offset_right = 250.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "复活队友？"
+horizontal_alignment = 1
+
+[node name="ClassLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "职业：战士"
+horizontal_alignment = 1
+
+[node name="WeaponsLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "武器：剑 Lv.3, 盾 Lv.2"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="DeathLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "死亡次数：第 1 次"
+horizontal_alignment = 1
+
+[node name="CostLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "费用：1个 Master Key (当前：5个)"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="RescueButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(120, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "同意救援"
+
+[node name="TranscendButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(120, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "超度"
+
+[node name="CancelButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(120, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "取消"
+
