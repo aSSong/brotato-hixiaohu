@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cktxl6bnggc0p" path="res://scenes/players/player.tscn" id="2_2iyd7"]
 [ext_resource type="PackedScene" uid="uid://d183wuovf50yd" path="res://scenes/enemy/now_enemies.tscn" id="3_y5i8v"]
 [ext_resource type="PackedScene" uid="uid://c44attsrfmghf" path="res://scenes/UI/game_ui.tscn" id="4_asq3l"]
-[ext_resource type="Script" path="res://Scripts/enemies/bg_map_extension.gd" id="5_bg_map_extension"]
+[ext_resource type="Script" uid="uid://45qkrvqmncpf" path="res://Scripts/enemies/bg_map_extension.gd" id="5_bg_map_extension"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2iyd7"]
 texture = ExtResource("1_luqls")

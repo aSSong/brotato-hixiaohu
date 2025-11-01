@@ -28,6 +28,8 @@ signal enemy_killed(enemy_ref: Enemy)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# 注意：不再手动加入enemy组，V3系统会直接追踪实例
+	
 	target = get_tree().get_first_node_in_group("player")
 	# 如果已经设置了敌人数据，应用它
 	if enemy_data != null:

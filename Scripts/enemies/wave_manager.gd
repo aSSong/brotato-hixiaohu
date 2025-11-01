@@ -14,10 +14,12 @@ var current_wave: int = 0
 var enemies_killed_this_wave: int = 0
 var enemies_total_this_wave: int = 0
 var enemies_spawned_this_wave: int = 0
+var enemies_alive_this_wave: int = 0  # 当前场上存活的敌人数量
 
 ## 状态
 var is_wave_in_progress: bool = false
 var is_waiting_for_next_wave: bool = false
+var is_shop_open: bool = false  # 商店是否打开
 
 ## 信号
 signal wave_started(wave_number: int)
@@ -55,6 +57,16 @@ func _initialize_test_waves() -> void:
 
 ## 开始下一波
 func start_next_wave() -> void:
+	# 防护：如果商店还在开着，不允许开始新波次
+	if is_shop_open:
+		push_warning("商店还在开着，不能开始新波次！")
+		return
+	
+	# 防护：如果已经有波次在进行，不允许开始新波次
+	if is_wave_in_progress:
+		push_warning("已有波次在进行，不能开始新波次！")
+		return
+	
 	if current_wave >= wave_configs.size():
 		# 所有波次完成
 		all_waves_completed.emit()
@@ -63,6 +75,7 @@ func start_next_wave() -> void:
 	current_wave += 1
 	enemies_killed_this_wave = 0
 	enemies_spawned_this_wave = 0
+	enemies_alive_this_wave = 0  # 重置存活数
 	
 	# 计算本波总敌人数
 	var config = wave_configs[current_wave - 1]
@@ -76,7 +89,15 @@ func start_next_wave() -> void:
 	is_waiting_for_next_wave = false
 	
 	wave_started.emit(current_wave)
-	print("开始第 ", current_wave, " 波，共 ", enemies_total_this_wave, " 个敌人")
+	print("=== 开始第 ", current_wave, " 波 ===")
+	print("目标击杀数: ", enemies_total_this_wave)
+	print("当前击杀: 0, 已生成: 0, 存活: 0")
+
+## 敌人成功生成（由生成器调用）
+func on_enemy_spawned() -> void:
+	enemies_spawned_this_wave += 1
+	enemies_alive_this_wave += 1
+	print("敌人生成: ", enemies_spawned_this_wave, "/", enemies_total_this_wave, " (存活:", enemies_alive_this_wave, ")")
 
 ## 获取当前波的生成列表
 func get_current_wave_spawn_list() -> Array:
@@ -103,29 +124,82 @@ func on_enemy_killed() -> void:
 		return
 	
 	enemies_killed_this_wave += 1
+	enemies_alive_this_wave = max(0, enemies_alive_this_wave - 1)  # 减少存活数
+	
+	# 实时查询场上真实的敌人数量
+	var actual_enemy_count = get_tree().get_nodes_in_group("enemy").size()
+	
+	print("敌人击杀: ", enemies_killed_this_wave, "/", enemies_total_this_wave, 
+		  " (已生成:", enemies_spawned_this_wave, " 存活计数:", enemies_alive_this_wave, " 实际场上:", actual_enemy_count, ")")
+	
 	enemy_killed.emit(current_wave, enemies_killed_this_wave, enemies_total_this_wave)
 	
-	# 检查是否杀光本波所有敌人
+	# 波次结束条件：
+	# 1. 击杀数达到总数
+	# 2. 场上没有存活的敌人 (使用实际场上敌人数量作为最终判断！)
 	if enemies_killed_this_wave >= enemies_total_this_wave:
-		_end_current_wave()
+		# 击杀数达标后，检查场上是否还有敌人
+		if actual_enemy_count <= 0:
+			print("波次结束条件满足！(击杀数达标且场上无存活敌人)")
+			_end_current_wave()
+		else:
+			print("击杀数达标但场上还有 ", actual_enemy_count, " 个敌人，等待击杀完毕...")
+	elif enemies_alive_this_wave <= 0 and enemies_spawned_this_wave < enemies_total_this_wave:
+		# 特殊情况：场上没敌人了但还没达到击杀目标，可能是生成失败
+		print("警告: 场上无敌人但击杀数未达标 (", enemies_killed_this_wave, "/", enemies_total_this_wave, ")")
+		print("已生成:", enemies_spawned_this_wave, " 可能有敌人生成失败")
+		# 等待一下，如果还在生成过程中，给生成器一点时间
+		if enemies_spawned_this_wave < enemies_total_this_wave:
+			print("等待剩余敌人生成...")
+		else:
+			# 所有应该生成的都生成了，但击杀数不够，强制结束
+			print("强制结束波次（可能有生成失败）")
+			_end_current_wave()
 
 ## 结束当前波
 func _end_current_wave() -> void:
+	if not is_wave_in_progress:
+		print("警告: 波次已经结束，忽略重复调用")
+		return
+	
 	is_wave_in_progress = false
+	is_shop_open = true  # 标记商店即将打开
+	
 	wave_ended.emit(current_wave)
-	print("第 ", current_wave, " 波结束！击杀: ", enemies_killed_this_wave, "/", enemies_total_this_wave)
+	print("=== 第 ", current_wave, " 波结束 ===")
+	print("击杀: ", enemies_killed_this_wave, "/", enemies_total_this_wave)
+	print("已生成: ", enemies_spawned_this_wave, " 存活: ", enemies_alive_this_wave)
+	print("准备打开商店...")
+	
+	# 暂停游戏（在打开商店前）
+	print("暂停游戏")
+	get_tree().paused = true
 	
 	# 弹出升级商店（异步调用）
 	await _show_upgrade_shop()
 	
-	# 等待商店关闭后再继续（商店关闭后会继续下一波）
+	print("等待商店关闭...")
+	# 等待商店关闭后再继续
+	# 使用信号等待而不是轮询
 	await shop_closed
-	await get_tree().create_timer(0.5).timeout  # 短暂延迟
+	
+	print("商店已关闭，准备开始下一波...")
+	is_shop_open = false
+	
+	# 确保游戏已恢复（商店关闭时应该已经恢复了）
+	if get_tree().paused:
+		print("恢复游戏")
+		get_tree().paused = false
+	
+	await get_tree().create_timer(1.0).timeout  # 延迟1秒再开始下一波
 	
 	# 开始下一波
 	if current_wave < wave_configs.size():
+		print("准备开始下一波...")
 		is_waiting_for_next_wave = true
 		start_next_wave()
+	else:
+		print("所有波次已完成！")
 
 ## 信号：商店关闭
 signal shop_closed
@@ -185,4 +259,6 @@ func _print_all_nodes(node: Node, depth: int) -> void:
 		_print_all_nodes(child, depth + 1)
 
 func _on_shop_closed() -> void:
+	is_shop_open = false
+	print("收到商店关闭信号")
 	shop_closed.emit()
