@@ -77,7 +77,7 @@ static func initialize_classes() -> void:
 	# 平衡者 - 均衡属性
 	var balanced = ClassData.new(
 		"平衡者",
-		100,  # max_hp
+		10,  # max_hp
 		400.0,  # speed
 		1.0,  # attack_multiplier
 		2,  # defense

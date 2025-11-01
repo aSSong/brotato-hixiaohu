@@ -295,8 +295,38 @@ func player_hurt(damage: int) -> void:
 	# 检查是否死亡
 	if now_hp <= 0:
 		now_hp = 0
-		# 可以在这里添加死亡逻辑
-		print("玩家死亡！")
+		# 立即禁用玩家控制和显示
+		canMove = false
+		stop = true
+		
+		# 禁用武器（彻底停止攻击）
+		_disable_weapons()
+		
+		# 隐藏玩家
+		visible = false
+		
+		# 死亡逻辑由DeathManager处理
+		# hp_changed信号会通知DeathManager
+
+## 禁用所有武器（彻底停止攻击）
+func _disable_weapons() -> void:
+	var weapons_node = get_node_or_null("now_weapons")
+	if weapons_node:
+		# 停止武器处理（不再攻击）
+		weapons_node.process_mode = Node.PROCESS_MODE_DISABLED
+		# 隐藏武器
+		weapons_node.visible = false
+		print("[Player] 武器已禁用")
+
+## 启用所有武器（复活时调用）
+func enable_weapons() -> void:
+	var weapons_node = get_node_or_null("now_weapons")
+	if weapons_node:
+		# 恢复武器处理
+		weapons_node.process_mode = Node.PROCESS_MODE_INHERIT
+		# 显示武器
+		weapons_node.visible = true
+		print("[Player] 武器已启用")
 
 ## 记录路径点（用于Ghost跟随）
 func _record_path_point() -> void:

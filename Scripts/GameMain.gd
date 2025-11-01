@@ -53,6 +53,7 @@ var master_key: int = 0:
 
 var score: int = 0
 var level: int = 1
+var revive_count: int = 0  # 本局游戏累计复活次数
 
 # 添加金币
 func add_gold(amount: int) -> void:
@@ -86,6 +87,8 @@ func reset_game() -> void:
 	master_key = 0
 	score = 0
 	level = 1
+	revive_count = 0
+	print("[GameMain] 游戏数据已重置")
 
 # 玩家选择的数据
 var selected_class_id: String = "balanced"

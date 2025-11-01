@@ -234,14 +234,29 @@ func _show_shop() -> void:
 	if current_state != WaveState.WAVE_COMPLETE:
 		return
 	
+	# 延迟2秒再打开商店
+	print("[WaveSystem V3] 波次完成，2秒后打开商店...")
+	
+	# 使用安全的方式等待（避免场景切换时出错）
+	var tree = get_tree()
+	if tree == null:
+		return
+	
+	await tree.create_timer(2.0).timeout
+	
+	# await后再次检查tree（可能在等待期间场景被切换了）
+	tree = get_tree()
+	if tree == null:
+		return
+	
 	_change_state(WaveState.SHOP_OPEN)
 	print("[WaveSystem V3] ========== 打开商店 ==========")
 	
 	# 暂停游戏
-	get_tree().paused = true
+	tree.paused = true
 	
 	# 查找商店
-	var shop = get_tree().get_first_node_in_group("upgrade_shop")
+	var shop = tree.get_first_node_in_group("upgrade_shop")
 	if shop and shop.has_method("open_shop"):
 		# 连接商店关闭信号
 		if shop.has_signal("shop_closed"):
@@ -261,13 +276,23 @@ func _on_shop_closed() -> void:
 	print("[WaveSystem V3] ========== 商店关闭 ==========")
 	
 	# 恢复游戏
-	if get_tree().paused:
-		get_tree().paused = false
+	var tree = get_tree()
+	if tree and tree.paused:
+		tree.paused = false
 	
 	_change_state(WaveState.IDLE)
 	
 	# 延迟开始下一波
-	await get_tree().create_timer(1.0).timeout
+	tree = get_tree()
+	if tree == null:
+		return
+	
+	await tree.create_timer(1.0).timeout
+	
+	# await后再次检查
+	tree = get_tree()
+	if tree == null:
+		return
 	
 	if current_wave < wave_configs.size():
 		start_next_wave()
@@ -330,4 +355,3 @@ func force_end_wave() -> void:
 	print("[WaveSystem V3] 强制结束当前波")
 	active_enemies.clear()
 	_check_wave_complete()
-
