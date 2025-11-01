@@ -162,17 +162,21 @@ func _create_range_circle() -> void:
 	# 创建一个简单的圆形精灵作为范围指示
 	range_circle = Sprite2D.new()
 	
-	# 创建圆形纹理（用简单的方式）
-	var image = Image.create(200, 200, false, Image.FORMAT_RGBA8)
+	# 根据RESCUE_RANGE创建对应大小的圆形纹理
+	var circle_diameter = int(RESCUE_RANGE * 2)  # 直径 = 范围 * 2
+	var image = Image.create(circle_diameter, circle_diameter, false, Image.FORMAT_RGBA8)
 	image.fill(Color.TRANSPARENT)
 	
+	var center = circle_diameter / 2
+	var ring_thickness = 4  # 圆环厚度
+	
 	# 绘制圆环
-	for x in range(200):
-		for y in range(200):
-			var dx = x - 100
-			var dy = y - 100
+	for x in range(circle_diameter):
+		for y in range(circle_diameter):
+			var dx = x - center
+			var dy = y - center
 			var dist = sqrt(dx * dx + dy * dy)
-			if dist >= 98 and dist <= 102:  # 圆环边缘
+			if dist >= RESCUE_RANGE - ring_thickness and dist <= RESCUE_RANGE + ring_thickness:
 				image.set_pixel(x, y, Color(1, 1, 0, 0.5))  # 半透明黄色
 	
 	var texture = ImageTexture.create_from_image(image)
@@ -250,6 +254,11 @@ func _create_ghost_from_data() -> void:
 		push_error("[GraveRescue] Ghost数据为空")
 		return
 	
+	print("[GraveRescue] 开始创建Ghost，职业:", ghost_data.class_id, " 武器数:", ghost_data.weapons.size())
+	for i in range(ghost_data.weapons.size()):
+		var w = ghost_data.weapons[i]
+		print("[GraveRescue] 武器", i+1, ":", w.id, " Lv.", w.level)
+	
 	# 获取GhostManager
 	var ghost_manager = get_tree().get_first_node_in_group("ghost_manager")
 	if not ghost_manager:
@@ -260,25 +269,27 @@ func _create_ghost_from_data() -> void:
 	var ghost_scene = load("res://scenes/players/ghost.tscn")
 	var new_ghost = ghost_scene.instantiate()
 	
-	# 设置Ghost数据（在初始化之前）
+	# 设置Ghost数据（在add_child之前）
 	new_ghost.class_id = ghost_data.class_id
 	new_ghost.ghost_weapons = ghost_data.weapons.duplicate()  # 复制数组
 	
-	# 添加到场景
-	get_tree().root.add_child(new_ghost)
+	print("[GraveRescue] Ghost数据已设置，class_id:", new_ghost.class_id, " ghost_weapons数量:", new_ghost.ghost_weapons.size())
 	
-	# 设置初始位置（在墓碑位置）
+	# 设置初始位置（在add_child之前）
 	if grave_sprite and is_instance_valid(grave_sprite):
 		new_ghost.global_position = grave_sprite.global_position
 	
-	# 初始化Ghost（使用现有数据，不生成随机数据）
-	if player:
-		var queue_index = ghost_manager.ghosts.size()
-		var player_speed = ghost_manager._get_player_speed() if ghost_manager.has_method("_get_player_speed") else 400.0
-		new_ghost.initialize(player, queue_index, player_speed, true)  # use_existing_data = true
+	# 先添加到场景（这样_ready会触发，@onready变量会被赋值）
+	get_tree().root.add_child(new_ghost)
 	
 	# 添加到GhostManager
 	ghost_manager.ghosts.append(new_ghost)
+	
+	# 延迟初始化Ghost（等待_ready完成后）
+	if player:
+		var queue_index = ghost_manager.ghosts.size() - 1
+		var player_speed = ghost_manager._get_player_speed() if ghost_manager.has_method("_get_player_speed") else 400.0
+		new_ghost.call_deferred("initialize", player, queue_index, player_speed, true)  # use_existing_data = true
 	
 	print("[GraveRescue] Ghost创建成功！职业:", ghost_data.class_id, " 武器数:", ghost_data.weapons.size())
 
@@ -325,9 +336,9 @@ func update_position() -> void:
 	if grave_sprite and is_instance_valid(grave_sprite):
 		global_position = grave_sprite.global_position
 		
-		# 更新进度条位置（墓碑上方）
+		# 更新进度条位置（墓碑上方，向上50）
 		if progress_bar:
-			progress_bar.position = Vector2(-50, -40)
+			progress_bar.position = Vector2(-50, -90)
 		
 		# 更新范围圈位置
 		if range_circle:

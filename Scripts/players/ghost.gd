@@ -54,6 +54,9 @@ func _ready() -> void:
 	# 初始化路径记录
 	last_recorded_position = global_position
 	path_history.append(global_position)
+	
+	# 监听玩家死亡和复活信号
+	call_deferred("_connect_death_signals")
 
 func _process(delta: float) -> void:
 	if follow_target == null or not is_instance_valid(follow_target):
@@ -219,8 +222,16 @@ func _create_weapons() -> void:
 	if weapons_node == null:
 		return
 	
+	# 清除weapons_node中可能已经存在的武器（避免_ready自动添加的武器干扰）
+	for child in weapons_node.get_children():
+		child.queue_free()
+	
+	print("[Ghost] 创建武器，ghost_weapons数量:", ghost_weapons.size())
+	
 	# 添加所有随机生成的武器，并在创建后设置透明度
-	for weapon_data in ghost_weapons:
+	for i in range(ghost_weapons.size()):
+		var weapon_data = ghost_weapons[i]
+		print("[Ghost] 添加武器", i+1, ":", weapon_data["id"], " Lv.", weapon_data["level"])
 		_add_weapon_with_alpha(weapon_data["id"], weapon_data["level"])
 
 ## 添加武器并设置透明度
@@ -261,10 +272,26 @@ func _set_single_weapon_alpha(weapon: Node) -> void:
 		weapon_sprite = weapon.weaponAni
 	
 	if weapon_sprite:
-		weapon_sprite.modulate = Color(1, 1, 1, 0.7)
-		print("成功设置武器透明度: ", weapon.name)
+		# 不使用modulate（会覆盖shader颜色），而是直接修改shader的alpha
+		if weapon_sprite.material and weapon_sprite.material is ShaderMaterial:
+			var shader_mat = weapon_sprite.material as ShaderMaterial
+			# 获取当前颜色
+			var current_color = shader_mat.get_shader_parameter("color")
+			if current_color:
+				# 只修改alpha通道，保持颜色不变
+				current_color.a = 0.7
+				shader_mat.set_shader_parameter("color", current_color)
+				print("[Ghost] 设置武器透明度（shader）: ", weapon.name, " 颜色:", current_color)
+			else:
+				# 如果shader没有颜色参数，使用modulate
+				weapon_sprite.modulate = Color(1, 1, 1, 0.7)
+				print("[Ghost] 设置武器透明度（modulate）: ", weapon.name)
+		else:
+			# 没有shader材质，使用modulate
+			weapon_sprite.modulate = Color(1, 1, 1, 0.7)
+			print("[Ghost] 设置武器透明度（modulate，无shader）: ", weapon.name)
 	else:
-		print("警告：无法找到武器精灵: ", weapon.name)
+		print("[Ghost] 警告：无法找到武器精灵: ", weapon.name)
 
 ## 应用透明度到最新添加的武器
 func _apply_alpha_to_latest_weapon() -> void:
@@ -294,3 +321,35 @@ func _record_path_point() -> void:
 		# 限制路径点数量，删除最旧的路径点
 		if path_history.size() > max_path_points:
 			path_history.pop_front()
+
+## 连接死亡管理器的信号
+func _connect_death_signals() -> void:
+	var death_manager = get_tree().get_first_node_in_group("death_manager")
+	if death_manager:
+		if death_manager.has_signal("player_died"):
+			death_manager.player_died.connect(_on_player_died)
+		if death_manager.has_signal("player_revived"):
+			death_manager.player_revived.connect(_on_player_revived)
+		print("[Ghost] 已连接死亡管理器信号")
+
+## 玩家死亡时回调
+func _on_player_died() -> void:
+	print("[Ghost] 玩家死亡，禁用武器")
+	_disable_weapons()
+
+## 玩家复活时回调
+func _on_player_revived() -> void:
+	print("[Ghost] 玩家复活，启用武器")
+	_enable_weapons()
+
+## 禁用武器
+func _disable_weapons() -> void:
+	if weapons_node:
+		weapons_node.process_mode = Node.PROCESS_MODE_DISABLED
+		weapons_node.visible = false
+
+## 启用武器
+func _enable_weapons() -> void:
+	if weapons_node:
+		weapons_node.process_mode = Node.PROCESS_MODE_INHERIT
+		weapons_node.visible = true

@@ -107,6 +107,25 @@ func start_next_wave() -> void:
 		push_warning("[WaveSystem V3] 商店开启中，不能开始新波次")
 		return
 	
+	# 检查玩家是否死亡
+	var tree = get_tree()
+	if tree == null:
+		return
+	
+	var death_manager = tree.get_first_node_in_group("death_manager")
+	if death_manager and death_manager.get("is_dead"):
+		print("[WaveSystem V3] 玩家死亡，暂停开始新波次")
+		# 等待玩家复活
+		if death_manager.has_signal("player_revived"):
+			await death_manager.player_revived
+		
+		# await后重新检查tree
+		tree = get_tree()
+		if tree == null:
+			return
+		
+		print("[WaveSystem V3] 玩家已复活，继续开始新波次")
+	
 	# 检查是否还有波次
 	if current_wave >= wave_configs.size():
 		_change_state(WaveState.IDLE)
@@ -248,6 +267,21 @@ func _show_shop() -> void:
 	tree = get_tree()
 	if tree == null:
 		return
+	
+	# 检查玩家是否死亡（如果死亡则不打开商店）
+	var death_manager = tree.get_first_node_in_group("death_manager")
+	if death_manager and death_manager.get("is_dead"):
+		print("[WaveSystem V3] 玩家死亡，延迟打开商店")
+		# 等待玩家复活
+		if death_manager.has_signal("player_revived"):
+			await death_manager.player_revived
+		
+		# 再次检查tree
+		tree = get_tree()
+		if tree == null:
+			return
+		
+		print("[WaveSystem V3] 玩家已复活，继续打开商店")
 	
 	_change_state(WaveState.SHOP_OPEN)
 	print("[WaveSystem V3] ========== 打开商店 ==========")
