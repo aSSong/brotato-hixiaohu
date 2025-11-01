@@ -90,8 +90,9 @@ func _spawn_enemies_async(spawn_list: Array) -> void:
 		else:
 			push_warning("[EnemySpawner V3] 敌人生成失败：", enemy_id)
 		
-		# 等待间隔
-		await get_tree().create_timer(spawn_delay).timeout
+		# 等待间隔（受游戏暂停影响）
+		# 第二个参数为false表示当游戏暂停时，计时器也暂停
+		await get_tree().create_timer(spawn_delay, false).timeout
 		index += 1
 	
 	is_spawning = false

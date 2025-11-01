@@ -48,8 +48,8 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 		push_warning("武器数量已达上限（6把）")
 		return
 	
-	# 创建武器实例
-	var weapon_instance = _create_weapon_instance(weapon_data)
+	# 创建武器实例，传入等级
+	var weapon_instance = _create_weapon_instance(weapon_data, level)
 	if weapon_instance == null:
 		return
 	
@@ -146,7 +146,7 @@ func _get_weapon_id(weapon_data: WeaponData) -> String:
 	return ""
 
 ## 根据武器数据创建武器实例
-func _create_weapon_instance(weapon_data: WeaponData) -> Node2D:
+func _create_weapon_instance(weapon_data: WeaponData, level: int = 1) -> Node2D:
 	# 加载基础场景
 	var weapon_scene = base_weapon_scene.instantiate()
 	
@@ -173,7 +173,7 @@ func _create_weapon_instance(weapon_data: WeaponData) -> Node2D:
 	# 所以初始化会在_ready中延迟执行
 	# 存储weapon_data和等级以便在_ready后初始化
 	weapon_scene.set_meta("weapon_data", weapon_data)
-	weapon_scene.set_meta("weapon_level", 1)  # 默认1级
+	weapon_scene.set_meta("weapon_level", level)  # 使用传入的等级
 	
 	return weapon_scene
 

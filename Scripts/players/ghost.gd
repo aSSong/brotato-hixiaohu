@@ -55,6 +55,9 @@ func _ready() -> void:
 	last_recorded_position = global_position
 	path_history.append(global_position)
 	
+	# 调试：检查_ready时ghost_weapons的状态
+	print("[Ghost _ready] ghost_weapons数量:", ghost_weapons.size(), " class_id:", class_id)
+	
 	# 监听玩家死亡和复活信号
 	call_deferred("_connect_death_signals")
 
@@ -129,6 +132,8 @@ func update_path_points(points: Array) -> void:
 
 ## 初始化Ghost
 func initialize(target: Node2D, index: int, player_speed: float, use_existing_data: bool = false) -> void:
+	print("[Ghost initialize] 开始 | use_existing_data:", use_existing_data, " ghost_weapons数量:", ghost_weapons.size(), " class_id:", class_id)
+	
 	follow_target = target
 	queue_index = index
 	follow_speed = player_speed
@@ -139,7 +144,10 @@ func initialize(target: Node2D, index: int, player_speed: float, use_existing_da
 	
 	# 如果不使用现有数据，则生成随机数据
 	if not use_existing_data:
+		print("[Ghost initialize] 生成随机数据")
 		_generate_random_data()
+	else:
+		print("[Ghost initialize] 使用现有数据 | ghost_weapons数量:", ghost_weapons.size())
 	# 否则，假设class_id和ghost_weapons已经被外部设置
 	
 	# 设置外观
@@ -147,9 +155,6 @@ func initialize(target: Node2D, index: int, player_speed: float, use_existing_da
 	
 	# 创建武器
 	_create_weapons()
-	
-	# 使用call_deferred延迟设置武器透明度，确保武器完全创建完成
-	call_deferred("_set_weapons_alpha_deferred")
 
 ## 更新跟随速度（与玩家同步）
 func update_speed(new_speed: float) -> void:
@@ -180,19 +185,12 @@ func _generate_random_data() -> void:
 
 ## 设置外观
 func _setup_appearance() -> void:
-	# 根据职业ID获取职业数据
-	var class_data = ClassDatabase.get_class_data(class_id)
-	
-	# 获取职业的外观类型（player1或player2）
-	var player_type = "player1"  # 默认
-	if class_data and "player_type" in class_data:
-		player_type = class_data.player_type
-	else:
-		# 如果职业数据中没有player_type，使用随机选择
-		var player_types = ["player1", "player2"]
-		player_type = player_types[randi() % player_types.size()]
-	
+	# 直接使用player2外观（与玩家一致）
+	# 职业数据中没有player_type字段，所以统一使用player2
+	var player_type = "player2"
 	var player_path = "res://assets/player/"
+	
+	print("[Ghost] 设置外观，职业ID:", class_id, " 使用外观:", player_type)
 	
 	ghostAni.sprite_frames.clear_all()
 	
@@ -222,94 +220,31 @@ func _create_weapons() -> void:
 	if weapons_node == null:
 		return
 	
-	# 清除weapons_node中可能已经存在的武器（避免_ready自动添加的武器干扰）
-	for child in weapons_node.get_children():
+	# 立即清除weapons_node中可能已经存在的武器
+	var children_to_remove = weapons_node.get_children()
+	print("[Ghost] 准备清除已有武器，数量:", children_to_remove.size())
+	for child in children_to_remove:
+		weapons_node.remove_child(child)
 		child.queue_free()
+	
+	# 等待一帧确保清除完成
+	await get_tree().process_frame
 	
 	print("[Ghost] 创建武器，ghost_weapons数量:", ghost_weapons.size())
 	
-	# 添加所有随机生成的武器，并在创建后设置透明度
+	# 逐个添加武器并等待初始化完成
 	for i in range(ghost_weapons.size()):
 		var weapon_data = ghost_weapons[i]
 		print("[Ghost] 添加武器", i+1, ":", weapon_data["id"], " Lv.", weapon_data["level"])
-		_add_weapon_with_alpha(weapon_data["id"], weapon_data["level"])
-
-## 添加武器并设置透明度
-func _add_weapon_with_alpha(weapon_id: String, weapon_level: int) -> void:
-	# 调用weapons_node的add_weapon方法
-	if weapons_node and weapons_node.has_method("add_weapon"):
-		# 先添加武器
-		weapons_node.add_weapon(weapon_id, weapon_level)
 		
-		# 延迟设置透明度
-		await get_tree().create_timer(0.2).timeout
-		_apply_alpha_to_latest_weapon()
-
-## 设置武器透明度
-func _set_weapons_alpha() -> void:
-	if weapons_node == null:
-		return
+		if weapons_node and weapons_node.has_method("add_weapon"):
+			# 调用add_weapon，这是一个异步方法
+			weapons_node.add_weapon(weapon_data["id"], weapon_data["level"])
+			# 等待2帧确保武器完全初始化（add_weapon内部有await）
+			await get_tree().process_frame
+			await get_tree().process_frame
 	
-	# 遍历所有武器子节点
-	for weapon in weapons_node.get_children():
-		if weapon is BaseWeapon:
-			# 设置武器的透明度
-			_set_single_weapon_alpha(weapon)
-
-## 设置单个武器的透明度
-func _set_single_weapon_alpha(weapon: Node) -> void:
-	if weapon == null:
-		return
-	
-	# 尝试多种方式获取武器精灵
-	var weapon_sprite = null
-	
-	# 方式1：直接查找AnimatedSprite2D
-	if weapon.has_node("AnimatedSprite2D"):
-		weapon_sprite = weapon.get_node("AnimatedSprite2D")
-	# 方式2：通过weaponAni属性
-	elif "weaponAni" in weapon:
-		weapon_sprite = weapon.weaponAni
-	
-	if weapon_sprite:
-		# 不使用modulate（会覆盖shader颜色），而是直接修改shader的alpha
-		if weapon_sprite.material and weapon_sprite.material is ShaderMaterial:
-			var shader_mat = weapon_sprite.material as ShaderMaterial
-			# 获取当前颜色
-			var current_color = shader_mat.get_shader_parameter("color")
-			if current_color:
-				# 只修改alpha通道，保持颜色不变
-				current_color.a = 0.7
-				shader_mat.set_shader_parameter("color", current_color)
-				print("[Ghost] 设置武器透明度（shader）: ", weapon.name, " 颜色:", current_color)
-			else:
-				# 如果shader没有颜色参数，使用modulate
-				weapon_sprite.modulate = Color(1, 1, 1, 0.7)
-				print("[Ghost] 设置武器透明度（modulate）: ", weapon.name)
-		else:
-			# 没有shader材质，使用modulate
-			weapon_sprite.modulate = Color(1, 1, 1, 0.7)
-			print("[Ghost] 设置武器透明度（modulate，无shader）: ", weapon.name)
-	else:
-		print("[Ghost] 警告：无法找到武器精灵: ", weapon.name)
-
-## 应用透明度到最新添加的武器
-func _apply_alpha_to_latest_weapon() -> void:
-	if weapons_node == null:
-		return
-	
-	var weapons = weapons_node.get_children()
-	if weapons.size() > 0:
-		var latest_weapon = weapons[weapons.size() - 1]
-		if latest_weapon is BaseWeapon:
-			_set_single_weapon_alpha(latest_weapon)
-
-## 延迟设置武器透明度（确保武器完全创建）
-func _set_weapons_alpha_deferred() -> void:
-	# 等待多帧确保所有武器完全初始化
-	for i in range(5):
-		await get_tree().process_frame
-	_set_weapons_alpha()
+	print("[Ghost] 武器创建完成，weapons_node子节点数:", weapons_node.get_child_count())
 
 ## 记录路径点（用于后续Ghost跟随）
 func _record_path_point() -> void:

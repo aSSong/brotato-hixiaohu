@@ -188,6 +188,12 @@ func _create_range_circle() -> void:
 
 ## 显示救援界面
 func _show_rescue_ui() -> void:
+	# 检查是否有商店或其他UI已经打开
+	var tree = get_tree()
+	if tree and tree.paused:
+		print("[GraveRescue] 游戏已暂停（可能商店已打开），取消显示救援界面")
+		return
+	
 	if not rescue_ui:
 		# 创建救援UI
 		var rescue_ui_scene = load("res://scenes/UI/grave_rescue_ui.tscn")
