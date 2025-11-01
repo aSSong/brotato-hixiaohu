@@ -28,6 +28,11 @@ func _ready() -> void:
 	
 	print("[DeathManager] 初始化")
 
+## 节点被移除时清理墓碑
+func _exit_tree() -> void:
+	_remove_grave()
+	print("[DeathManager] 已清理")
+
 ## 设置玩家引用
 func set_player(p: CharacterBody2D) -> void:
 	player = p
@@ -107,10 +112,12 @@ func _create_grave() -> void:
 	# 设置层级（在玩家上方）
 	grave_sprite.z_index = 10
 	
-	# 添加到场景
-	get_tree().root.add_child(grave_sprite)
-	
-	print("[DeathManager] 墓碑已创建于:", death_position)
+	# 添加到当前场景而不是root（避免场景切换后残留）
+	if player and player.get_parent():
+		player.get_parent().add_child(grave_sprite)
+		print("[DeathManager] 墓碑已创建于:", death_position)
+	else:
+		push_warning("[DeathManager] 无法找到合适的父节点放置墓碑")
 
 ## 移除墓碑
 func _remove_grave() -> void:
