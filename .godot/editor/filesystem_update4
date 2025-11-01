@@ -16,3 +16,6 @@ res://scenes/UI/upgrade_option.tscn
 res://Scripts/enemies/bg_map_extension.gd
 res://Scripts/UI/upgrade_option.gd
 res://Scripts/UI/upgrade_shop.gd
+res://Scripts/data/upgrade_data.gd
+res://Scripts/data/upgrade_database.gd
+res://scenes/weapons/weapon.tscn
