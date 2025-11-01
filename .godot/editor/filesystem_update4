@@ -24,3 +24,11 @@ res://Scripts/enemies/ghost_manager.gd
 res://Scripts/players/ghost.gd
 res://scenes/new_38f/new_38f.tscn
 res://Scripts/players/ghost_manager.gd
+res://scenes/map/bg_map.tscn
+res://Scripts/enemies/wave_system_v3.gd
+res://Scripts/data/class_database.gd
+res://Scripts/game_initializer.gd
+res://Scripts/players/death_manager.gd
+res://Scripts/enemies/enemy_spawner_v3.gd
+res://Scripts/data/ghost_data.gd
+res://Scripts/players/grave_rescue_manager.gd
