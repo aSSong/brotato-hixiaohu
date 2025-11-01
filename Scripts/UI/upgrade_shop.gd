@@ -29,13 +29,34 @@ func _ready() -> void:
 	# 等待一帧确保所有@onready变量都已初始化
 	await get_tree().process_frame
 	
+	# 验证@onready变量是否初始化
+	if not upgrade_container:
+		push_error("upgrade_container 未初始化！")
+		# 尝试手动查找
+		upgrade_container = get_node_or_null("%UpgradeContainer")
+		if upgrade_container:
+			print("手动找到 upgrade_container: ", upgrade_container.get_path())
+		else:
+			push_error("无法找到 UpgradeContainer 节点！")
+	
 	if refresh_button:
 		refresh_button.pressed.connect(_on_refresh_button_pressed)
+	else:
+		refresh_button = get_node_or_null("%RefreshButton")
+		if refresh_button:
+			refresh_button.pressed.connect(_on_refresh_button_pressed)
+	
 	if close_button:
 		close_button.pressed.connect(_on_close_button_pressed)
+	else:
+		close_button = get_node_or_null("%CloseButton")
+		if close_button:
+			close_button.pressed.connect(_on_close_button_pressed)
+	
 	_update_refresh_cost_display()
 	hide()  # 初始隐藏
 	print("升级商店 _ready() 完成，节点路径: ", get_path(), " 组: ", get_groups())
+	print("upgrade_container: ", upgrade_container, " refresh_button: ", refresh_button, " close_button: ", close_button)
 
 ## 打开商店
 func open_shop() -> void:
@@ -63,9 +84,23 @@ func open_shop() -> void:
 	# 重置刷新费用
 	refresh_cost = 2
 	_update_refresh_cost_display()
+	
+	# 确保容器可用
+	if not upgrade_container:
+		upgrade_container = get_node_or_null("%UpgradeContainer")
+		if upgrade_container:
+			print("在open_shop中找到upgrade_container: ", upgrade_container.get_path())
+		else:
+			push_error("无法找到 UpgradeContainer 节点！")
+			return
+	
+	print("容器子节点数（生成前）: ", upgrade_container.get_child_count())
+	
 	# 生成初始升级选项
 	generate_upgrades()
+	
 	print("升级商店已打开，选项数量: ", current_upgrades.size())
+	print("容器子节点数（生成后）: ", upgrade_container.get_child_count())
 	print("打开后可见性: ", visible, " process_mode: ", process_mode)
 
 ## 关闭商店
@@ -221,13 +256,29 @@ func _create_upgrade_option_ui(upgrade: UpgradeData) -> void:
 	
 	if upgrade_container:
 		upgrade_container.add_child(option_ui)
+		print("升级选项已添加到容器: ", upgrade.name, " 容器子节点数: ", upgrade_container.get_child_count())
+		# 确保选项可见
+		option_ui.visible = true
+		option_ui.show()
 	else:
 		push_error("升级容器未找到！")
+		print("升级容器查找失败，尝试手动查找...")
+		# 尝试手动查找
+		var container = get_node_or_null("%UpgradeContainer")
+		if container:
+			container.add_child(option_ui)
+			option_ui.visible = true
+			option_ui.show()
+			print("通过手动查找找到容器并添加选项")
+		else:
+			push_error("无法找到升级容器节点！")
 
 ## 清除所有升级选项UI
 func _clear_upgrades() -> void:
-	for child in upgrade_container.get_children():
-		child.queue_free()
+	if upgrade_container:
+		for child in upgrade_container.get_children():
+			child.queue_free()
+		print("清除升级选项，容器子节点数: ", upgrade_container.get_child_count())
 	current_upgrades.clear()
 
 ## 购买升级

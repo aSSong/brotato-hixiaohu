@@ -4,3 +4,15 @@ res://Scripts/items/drop_items.gd
 res://Scripts/enemies/enemy.gd
 res://Scripts/enemies/now_enemies.gd
 res://Scripts/enemies/wave_manager.gd
+res://scenes/items/drop_items.tscn
+res://Scripts/GameMain.gd
+res://Scripts/players/player.gd
+res://Scripts/data/enemy_database.gd
+res://Scripts/UI/floating_text.gd
+res://Scripts/data/weapon_data.gd
+res://Scripts/weapons/base_weapon.gd
+res://Scripts/weapons/now_weapons.gd
+res://scenes/UI/upgrade_option.tscn
+res://Scripts/enemies/bg_map_extension.gd
+res://Scripts/UI/upgrade_option.gd
+res://Scripts/UI/upgrade_shop.gd
