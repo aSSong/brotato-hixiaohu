@@ -21,6 +21,11 @@ signal shop_closed()
 var upgrade_option_scene = preload("res://scenes/UI/upgrade_option.tscn")
 
 func _ready() -> void:
+	# 确保在组中
+	if not is_in_group("upgrade_shop"):
+		add_to_group("upgrade_shop")
+		print("升级商店手动添加到组: upgrade_shop")
+	
 	# 等待一帧确保所有@onready变量都已初始化
 	await get_tree().process_frame
 	
@@ -30,24 +35,38 @@ func _ready() -> void:
 		close_button.pressed.connect(_on_close_button_pressed)
 	_update_refresh_cost_display()
 	hide()  # 初始隐藏
-	print("升级商店 _ready() 完成，节点组: upgrade_shop")
+	print("升级商店 _ready() 完成，节点路径: ", get_path(), " 组: ", get_groups())
 
 ## 打开商店
 func open_shop() -> void:
 	print("升级商店 open_shop() 被调用")
-	show()
+	print("当前可见性: ", visible, " 是否在树中: ", is_inside_tree())
+	
 	# 确保所有@onready变量都已初始化
 	if not is_inside_tree():
 		await get_tree().process_frame
 	
+	# 设置进程模式为始终处理（即使在暂停时）
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# 暂停游戏
 	get_tree().paused = true
+	
+	# 显示商店（必须在暂停后）
+	show()
+	visible = true
+	
+	# 确保节点可见
+	set_process(true)
+	set_process_input(true)
+	
 	# 重置刷新费用
 	refresh_cost = 2
 	_update_refresh_cost_display()
 	# 生成初始升级选项
 	generate_upgrades()
 	print("升级商店已打开，选项数量: ", current_upgrades.size())
+	print("打开后可见性: ", visible, " process_mode: ", process_mode)
 
 ## 关闭商店
 func close_shop() -> void:
@@ -73,7 +92,7 @@ func generate_upgrades() -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	
-	var selected = []
+	var selected: Array[UpgradeData] = []
 	var used_indices = {}
 	var attempts = 0
 	while selected.size() < 3 and attempts < 100 and available_upgrades.size() > 0:
@@ -110,8 +129,8 @@ func generate_upgrades() -> void:
 	current_upgrades = selected
 
 ## 获取所有可用的升级选项
-func _get_available_upgrades(weapons_manager) -> Array:
-	var upgrades = []
+func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
+	var upgrades: Array[UpgradeData] = []
 	var weapon_count = 0
 	var new_weapon_count_in_shop = 0
 	
@@ -247,7 +266,7 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 		var available = _get_available_upgrades(weapons_manager)
 		
 		# 过滤掉已存在的选项
-		var filtered_available = []
+		var filtered_available: Array[UpgradeData] = []
 		for candidate in available:
 			var exists = false
 			for existing in current_upgrades:
@@ -341,4 +360,3 @@ func _on_close_button_pressed() -> void:
 func _update_refresh_cost_display() -> void:
 	if refresh_cost_label:
 		refresh_cost_label.text = "刷新: %d 金币" % refresh_cost
-

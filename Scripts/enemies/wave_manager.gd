@@ -115,8 +115,8 @@ func _end_current_wave() -> void:
 	wave_ended.emit(current_wave)
 	print("第 ", current_wave, " 波结束！击杀: ", enemies_killed_this_wave, "/", enemies_total_this_wave)
 	
-	# 弹出升级商店
-	_show_upgrade_shop()
+	# 弹出升级商店（异步调用）
+	await _show_upgrade_shop()
 	
 	# 等待商店关闭后再继续（商店关闭后会继续下一波）
 	await shop_closed
@@ -134,11 +134,19 @@ signal shop_closed
 func _show_upgrade_shop() -> void:
 	# 尝试多次查找商店（可能场景还没完全加载）
 	var upgrade_shop = null
-	for i in range(5):
+	
+	# 先尝试通过组查找
+	for i in range(20):
 		upgrade_shop = get_tree().get_first_node_in_group("upgrade_shop")
 		if upgrade_shop:
+			print("通过组找到升级商店: ", upgrade_shop.get_path())
 			break
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.05).timeout
+	
+	# 如果通过组找不到，尝试递归查找
+	if not upgrade_shop:
+		print("通过组未找到，尝试递归查找...")
+		upgrade_shop = _find_upgrade_shop_recursive(get_tree().root)
 	
 	if upgrade_shop and upgrade_shop.has_method("open_shop"):
 		print("找到升级商店，正在打开...")
@@ -148,23 +156,33 @@ func _show_upgrade_shop() -> void:
 			if not upgrade_shop.shop_closed.is_connected(_on_shop_closed):
 				upgrade_shop.shop_closed.connect(_on_shop_closed)
 	else:
-		# 如果找不到商店，直接继续
-		push_warning("未找到升级商店！尝试查找所有节点...")
-		# 尝试查找所有节点
-		var all_nodes = get_tree().root.get_children()
-		for node in all_nodes:
-			print("根节点子节点: ", node.name)
-			if node.has_method("get_children"):
-				for child in node.get_children():
-					if child.name == "upgrade_shop" or child.is_in_group("upgrade_shop"):
-						print("找到升级商店节点: ", child)
-						if child.has_method("open_shop"):
-							child.open_shop()
-							if child.has_signal("shop_closed"):
-								if not child.shop_closed.is_connected(_on_shop_closed):
-									child.shop_closed.connect(_on_shop_closed)
-							return
-		shop_closed.emit()
+		# 如果找不到商店，输出调试信息但继续游戏
+		push_warning("未找到升级商店！")
+		print("尝试查找所有节点...")
+		_print_all_nodes(get_tree().root, 0)
+		# 直接发出关闭信号，继续游戏（不等待）
+		call_deferred("emit_signal", "shop_closed")
+
+## 递归查找升级商店
+func _find_upgrade_shop_recursive(node: Node) -> Node:
+	if node.name == "upgrade_shop" or node.is_in_group("upgrade_shop"):
+		print("找到升级商店节点: ", node.get_path())
+		return node
+	
+	for child in node.get_children():
+		var result = _find_upgrade_shop_recursive(child)
+		if result:
+			return result
+	
+	return null
+
+## 打印所有节点（调试用）
+func _print_all_nodes(node: Node, depth: int) -> void:
+	#var indent = "  " * depth
+	var indent = 1 * depth
+	print(indent, "- ", node.name, " (", node.get_class(), ")", " 组: ", node.get_groups())
+	for child in node.get_children():
+		_print_all_nodes(child, depth + 1)
 
 func _on_shop_closed() -> void:
 	shop_closed.emit()
