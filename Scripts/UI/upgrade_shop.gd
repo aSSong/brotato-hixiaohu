@@ -96,8 +96,8 @@ func open_shop() -> void:
 	
 	print("容器子节点数（生成前）: ", upgrade_container.get_child_count())
 	
-	# 生成初始升级选项
-	generate_upgrades()
+	# 生成初始升级选项（异步，需要等待）
+	await generate_upgrades()
 	
 	print("升级商店已打开，选项数量: ", current_upgrades.size())
 	print("容器子节点数（生成后）: ", upgrade_container.get_child_count())
@@ -112,6 +112,7 @@ func close_shop() -> void:
 
 ## 生成升级选项（3个）
 func generate_upgrades() -> void:
+	# 注意：这是一个异步函数，会等待所有选项创建完成
 	# 清除现有选项
 	_clear_upgrades()
 	
@@ -157,9 +158,9 @@ func generate_upgrades() -> void:
 		
 		attempts += 1
 	
-	# 创建UI选项
+	# 创建UI选项（需要等待每个选项完全创建）
 	for upgrade in selected:
-		_create_upgrade_option_ui(upgrade)
+		await _create_upgrade_option_ui(upgrade)
 	
 	current_upgrades = selected
 
@@ -248,30 +249,35 @@ func _create_upgrade_option_ui(upgrade: UpgradeData) -> void:
 		push_error("无法实例化升级选项！")
 		return
 	
-	if option_ui.has_method("set_upgrade_data"):
-		option_ui.set_upgrade_data(upgrade)
-	
-	if option_ui.has_signal("purchased"):
-		option_ui.purchased.connect(_on_upgrade_purchased)
-	
+	# 先添加到场景树，确保@onready变量初始化
 	if upgrade_container:
 		upgrade_container.add_child(option_ui)
-		print("升级选项已添加到容器: ", upgrade.name, " 容器子节点数: ", upgrade_container.get_child_count())
-		# 确保选项可见
-		option_ui.visible = true
-		option_ui.show()
 	else:
-		push_error("升级容器未找到！")
-		print("升级容器查找失败，尝试手动查找...")
 		# 尝试手动查找
 		var container = get_node_or_null("%UpgradeContainer")
 		if container:
+			upgrade_container = container
 			container.add_child(option_ui)
-			option_ui.visible = true
-			option_ui.show()
-			print("通过手动查找找到容器并添加选项")
 		else:
 			push_error("无法找到升级容器节点！")
+			return
+	
+	# 等待一帧确保@onready变量已初始化
+	await get_tree().process_frame
+	
+	# 现在设置数据（此时@onready变量已经初始化）
+	if option_ui.has_method("set_upgrade_data"):
+		option_ui.set_upgrade_data(upgrade)
+	
+	# 连接信号
+	if option_ui.has_signal("purchased"):
+		option_ui.purchased.connect(_on_upgrade_purchased)
+	
+	# 确保选项可见
+	option_ui.visible = true
+	option_ui.show()
+	
+	print("升级选项已添加到容器: ", upgrade.name, " 容器子节点数: ", upgrade_container.get_child_count())
 
 ## 清除所有升级选项UI
 func _clear_upgrades() -> void:
@@ -337,7 +343,7 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 			rng.randomize()
 			var new_upgrade = filtered_available[rng.randi_range(0, filtered_available.size() - 1)]
 			current_upgrades.append(new_upgrade)
-			_create_upgrade_option_ui(new_upgrade)
+			await _create_upgrade_option_ui(new_upgrade)
 
 ## 应用升级效果
 func _apply_upgrade(upgrade: UpgradeData) -> void:
@@ -401,7 +407,7 @@ func _on_refresh_button_pressed() -> void:
 	GameMain.remove_gold(refresh_cost)
 	refresh_cost *= 2  # 下次刷新费用x2
 	_update_refresh_cost_display()
-	generate_upgrades()
+	await generate_upgrades()
 
 ## 关闭按钮
 func _on_close_button_pressed() -> void:

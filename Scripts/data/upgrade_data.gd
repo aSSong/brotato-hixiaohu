@@ -30,4 +30,3 @@ func _init(
 	cost = p_cost
 	icon_path = p_icon_path
 	weapon_id = p_weapon_id
-

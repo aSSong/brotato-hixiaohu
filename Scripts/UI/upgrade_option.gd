@@ -21,22 +21,33 @@ func _ready() -> void:
 func set_upgrade_data(data: UpgradeData) -> void:
 	upgrade_data = data
 	
-	if upgrade_data:
-		# 设置名称
-		if name_label:
-			name_label.text = upgrade_data.name
-		
-		# 设置图标
-		if icon_texture and upgrade_data.icon_path != "":
-			var texture = load(upgrade_data.icon_path)
-			if texture:
-				icon_texture.texture = texture
-		
-		# 设置描述
-		if description_label:
-			description_label.text = upgrade_data.description if upgrade_data.description != "" else ""
-		
-		_update_cost_display()
+	if not upgrade_data:
+		return
+	
+	# 如果@onready变量还没初始化，等待一帧
+	if not name_label or not cost_label or not description_label:
+		await get_tree().process_frame
+	
+	# 设置名称
+	if name_label:
+		name_label.text = upgrade_data.name
+		print("设置升级名称: ", upgrade_data.name)
+	
+	# 设置图标
+	if icon_texture and upgrade_data.icon_path != "":
+		var texture = load(upgrade_data.icon_path)
+		if texture:
+			icon_texture.texture = texture
+		else:
+			print("无法加载图标: ", upgrade_data.icon_path)
+	
+	# 设置描述
+	if description_label:
+		var desc_text = upgrade_data.description if upgrade_data.description != "" else ""
+		description_label.text = desc_text
+		print("设置升级描述: ", desc_text)
+	
+	_update_cost_display()
 
 func get_upgrade_data() -> UpgradeData:
 	return upgrade_data
