@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://duevf8vt5afyb" path="res://assets/items/gold.png" id="1_4u50f"]
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
-[ext_resource type="Script" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
+[ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
@@ -207,16 +207,15 @@ horizontal_alignment = 1
 
 [node name="SkillIcon" type="Control" parent="."]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 0.0
+layout_mode = 3
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.0
 anchor_bottom = 1.0
 offset_left = 50.0
 offset_top = -150.0
 offset_right = 150.0
 offset_bottom = -50.0
+grow_horizontal = 0
 grow_vertical = 0
 script = ExtResource("1_skill_icon")
 
@@ -230,7 +229,6 @@ grow_vertical = 2
 flat = true
 
 [node name="SkillIcon" type="TextureRect" parent="SkillIcon/SkillButton"]
-unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -249,11 +247,9 @@ stretch_mode = 5
 [node name="SkillNameLabel" type="Label" parent="SkillIcon/SkillButton"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 6
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.0
 anchor_right = 0.5
-anchor_bottom = 0.0
 offset_left = -50.0
 offset_top = -60.0
 offset_right = 50.0
@@ -276,8 +272,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.6)
 mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
 
 [node name="CDProgress" type="ProgressBar" parent="SkillIcon/SkillButton"]
 unique_name_in_owner = true
@@ -287,7 +283,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-max_value = 100.0
-value = 0.0
-show_percentage = false
 mouse_filter = 2
+show_percentage = false

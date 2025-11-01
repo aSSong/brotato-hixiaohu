@@ -17,9 +17,19 @@ func _ready() -> void:
 	pass
 func _physics_process(delta: float) -> void:
 	if canMoving:
-		dir = (player.global_position- self.global_position).normalized()
-		#self.position += dir * speed
-		global_position += dir * speed * delta
+		# 检查玩家引用是否有效
+		if player == null or not is_instance_valid(player):
+			# 尝试重新获取玩家引用
+			player = get_tree().get_first_node_in_group("player")
+			if player == null or not is_instance_valid(player):
+				# 如果找不到玩家，停止移动
+				canMoving = false
+				return
+		
+		# 确保玩家引用有效后再访问
+		if is_instance_valid(player):
+			dir = (player.global_position - self.global_position).normalized()
+			global_position += dir * speed * delta
 	pass
 '''
 options.box 动画父级
