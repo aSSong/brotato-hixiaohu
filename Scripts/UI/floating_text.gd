@@ -79,4 +79,3 @@ static func create_floating_text(world_pos: Vector2, damage_text: String, color:
 			# 如果没有找到CanvasLayer，添加到根节点
 			tree.root.add_child(floating_text)
 			floating_text.position = world_pos
-

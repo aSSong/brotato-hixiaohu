@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://djo6cmm2lfb4x"]
+[gd_scene load_steps=6 format=3 uid="uid://djo6cmm2lfb4x"]
 
 [ext_resource type="Script" uid="uid://crg1xvjajunv5" path="res://Scripts/items/drop_items.gd" id="1_65e0c"]
 [ext_resource type="Texture2D" uid="uid://duevf8vt5afyb" path="res://assets/items/gold.png" id="1_lyloc"]
+[ext_resource type="Texture2D" path="res://assets/items/masterkey.png" id="2_masterkey"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_65e0c"]
 resource_local_to_scene = true
@@ -12,6 +13,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"gold",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_masterkey")
+}],
+"loop": true,
+"name": &"masterkey",
 "speed": 5.0
 }]
 

@@ -49,5 +49,12 @@ func gen_drop_item(options):
 	all_ani.scale = options.scale if options.has("scale") else Vector2(1,1)
 	#all_ani.position = options.position
 	all_ani.position = options.position
-	all_ani.get_node("all_animation").play(options.ani_name)
+	
+	# 获取动画名称（gold或masterkey）
+	var ani_name = options.ani_name if options.has("ani_name") else "gold"
+	
+	# 设置物品类型（用于拾取时判断）
+	all_ani.set_meta("item_type", ani_name)
+	
+	all_ani.get_node("all_animation").play(ani_name)
 	pass

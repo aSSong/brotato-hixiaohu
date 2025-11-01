@@ -63,15 +63,19 @@ func _start_spawning_wave() -> void:
 	is_spawning = true
 	
 	# 依次生成敌人
+	var spawn_index = 0
+	var total_enemies = current_spawn_queue.size()
 	for enemy_id in current_spawn_queue:
-		spawn_enemy(enemy_id)
+		var is_last = (spawn_index == total_enemies - 1)
+		spawn_enemy(enemy_id, is_last)
 		await get_tree().create_timer(spawn_delay).timeout
+		spawn_index += 1
 	
 	is_spawning = false
 	current_spawn_queue.clear()
 
 ## 生成指定类型的敌人
-func spawn_enemy(enemy_id: String) -> void:
+func spawn_enemy(enemy_id: String, is_last_in_wave: bool = false) -> void:
 	var used := floor_layer.get_used_cells()
 	if used.is_empty():
 		return
@@ -100,6 +104,9 @@ func spawn_enemy(enemy_id: String) -> void:
 				enemy.enemy_data = enemy_data
 				if enemy.has_method("_apply_enemy_data"):
 					enemy._apply_enemy_data()
+			
+			# 标记是否为最后一个敌人
+			enemy.is_last_enemy_in_wave = is_last_in_wave
 			
 			# 连接死亡信号
 			if enemy.has_signal("enemy_killed"):

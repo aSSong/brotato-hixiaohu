@@ -71,4 +71,3 @@ static func get_all_enemy_ids() -> Array:
 	if enemies.is_empty():
 		initialize_enemies()
 	return enemies.keys()
-

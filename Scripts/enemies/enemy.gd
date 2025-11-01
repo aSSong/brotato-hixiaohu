@@ -20,6 +20,9 @@ var attack_cooldown: float = 0.0
 var attack_interval: float = 1.0  # 攻击间隔（秒）
 var attack_damage: int = 5  # 每次攻击造成的伤害
 
+## 是否为本波最后一个敌人（用于掉落masterKey）
+var is_last_enemy_in_wave: bool = false
+
 ## 信号：敌人死亡
 signal enemy_killed(enemy_ref: Enemy)
 
@@ -133,9 +136,12 @@ func enemy_dead():
 		"scale":Vector2(1,1)
 	})
 	
+	# 判断掉落物品类型：最后一个敌人掉落masterKey，其他掉落gold
+	var item_name = "masterkey" if is_last_enemy_in_wave else "gold"
+	
 	GameMain.drop_item_scene_obj.gen_drop_item({
 		#"box":GameMain.duplicate_node,
-		"ani_name":"gold",
+		"ani_name": item_name,
 		#"position":Vector2.ZERO,
 		"position": self.global_position,
 		"scale":Vector2(4,4)

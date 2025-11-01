@@ -32,6 +32,8 @@ func init_duplicate_node():
 
 # 信号：当金币数量改变时发出
 signal gold_changed(new_amount: int, change: int)
+# 信号：当主钥数量改变时发出
+signal master_key_changed(new_amount: int, change: int)
 signal item_collected(item_type: String)
 
 # 游戏数据
@@ -41,6 +43,13 @@ var gold: int = 0:
 		gold = max(0, value)  # 确保不小于 0
 		var change = gold - old_gold
 		gold_changed.emit(gold, change)  # 发送信号
+
+var master_key: int = 0:
+	set(value):
+		var old_key = master_key
+		master_key = max(0, value)  # 确保不小于 0
+		var change = master_key - old_key
+		master_key_changed.emit(master_key, change)  # 发送信号
 
 var score: int = 0
 var level: int = 1
@@ -58,9 +67,23 @@ func remove_gold(amount: int) -> bool:
 		return true
 	return false
 
+# 添加主钥
+func add_master_key(amount: int) -> void:
+	master_key += amount
+	item_collected.emit("master_key")
+	print("获得主钥: +%d (总计: %d)" % [amount, master_key])
+
+# 扣除主钥
+func remove_master_key(amount: int) -> bool:
+	if master_key >= amount:
+		master_key -= amount
+		return true
+	return false
+
 # 重置游戏数据
 func reset_game() -> void:
 	gold = 0
+	master_key = 0
 	score = 0
 	level = 1
 

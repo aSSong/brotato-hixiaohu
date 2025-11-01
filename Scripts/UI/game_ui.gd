@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 @onready var gold: Label = %gold
+@onready var master_key: Label = %master_key
 @onready var hp_value_bar: ProgressBar = %hp_value_bar
 @onready var exp_value_bar: ProgressBar = %exp_value_bar
 @onready var skill_icon: Control = %SkillIcon
@@ -27,9 +28,11 @@ func _ready() -> void:
 	
 	# 连接信号
 	GameMain.gold_changed.connect(_on_gold_changed)
+	GameMain.master_key_changed.connect(_on_master_key_changed)
 	
 	# 初始化显示
 	update_display(GameMain.gold, 0)
+	update_master_key_display(GameMain.master_key, 0)
 	
 	# 初始化技能图标
 	_setup_skill_icon()
@@ -242,3 +245,62 @@ func _update_wave_display() -> void:
 	var total = wave_manager_ref.enemies_total_this_wave
 	
 	wave_label.text = "Wave: %d    (%d/%d)" % [wave_num, killed, total]
+
+## 主钥数量改变回调
+func _on_master_key_changed(new_amount: int, change: int) -> void:
+	update_master_key_display(new_amount, change)
+	
+	# 播放动画
+	if animate_change and change != 0:
+		play_master_key_change_animation(change)
+	
+	# 显示变化弹窗
+	if show_change_popup and change > 0:
+		show_master_key_popup(change)
+
+## 更新主钥显示
+func update_master_key_display(amount: int, _change: int) -> void:
+	if master_key:
+		master_key.text = "%d" % amount
+
+## 主钥变化动画
+func play_master_key_change_animation(change: int) -> void:
+	if not master_key:
+		return
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_ELASTIC)
+	
+	var original_scale_mk = master_key.scale if master_key else Vector2.ONE
+	
+	# 放大 -> 缩回
+	tween.tween_property(master_key, "scale", original_scale_mk * 1.1, 0.1)
+	tween.tween_property(master_key, "scale", original_scale_mk, 0.2)
+	
+	# 可选：颜色闪烁
+	if change > 0:
+		master_key.modulate = Color.CYAN
+		tween.tween_property(master_key, "modulate", Color.WHITE, 0.2)
+
+## 显示主钥弹窗
+func show_master_key_popup(change: int) -> void:
+	if not master_key:
+		return
+	# 创建飘字效果 "+1"
+	var popup = Label.new()
+	popup.text = "+%d" % change
+	popup.add_theme_font_size_override("font_size", 25)
+	popup.modulate = Color.CYAN
+	
+	# 添加到场景中（相对于主钥 UI）
+	master_key.add_child(popup)
+	popup.position = Vector2(0, -15)  # 在主钥数字旁边
+	
+	# 动画：向上飘 + 淡出
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(popup, "position:y", popup.position.y - 50, 1.0)
+	tween.tween_property(popup, "modulate:a", 0.0, 1.0)
+	
+	# 动画结束后删除
+	tween.finished.connect(popup.queue_free)
