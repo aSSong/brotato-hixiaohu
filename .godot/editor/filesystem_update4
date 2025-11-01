@@ -19,3 +19,8 @@ res://Scripts/UI/upgrade_shop.gd
 res://Scripts/data/upgrade_data.gd
 res://Scripts/data/upgrade_database.gd
 res://scenes/weapons/weapon.tscn
+res://scenes/players/ghost.tscn
+res://Scripts/enemies/ghost_manager.gd
+res://Scripts/players/ghost.gd
+res://scenes/new_38f/new_38f.tscn
+res://Scripts/players/ghost_manager.gd

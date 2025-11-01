@@ -1,0 +1,67 @@
+[gd_scene load_steps=11 format=3 uid="uid://ghost_scene_001"]
+
+[ext_resource type="Script" path="res://Scripts/players/ghost.gd" id="1_ghost"]
+[ext_resource type="Texture2D" uid="uid://b0jvpfev04c8w" path="res://assets/player/player1-sheet.png" id="2_ghost"]
+[ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_ghost"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ghost1"]
+atlas = ExtResource("2_ghost")
+region = Rect2(0, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ghost2"]
+atlas = ExtResource("2_ghost")
+region = Rect2(240, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ghost3"]
+atlas = ExtResource("2_ghost")
+region = Rect2(480, 0, 240, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ghost4"]
+atlas = ExtResource("2_ghost")
+region = Rect2(720, 0, 240, 240)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ghost"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": SubResource("AtlasTexture_ghost1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ghost2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ghost3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ghost4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ghost"]
+radius = 51.0
+height = 192.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ghost"]
+radius = 588.67316
+
+[node name="ghost" type="CharacterBody2D" groups=["ghost"]]
+z_index = 9
+scale = Vector2(0.6, 0.6)
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_ghost")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-10, -24.999989)
+sprite_frames = SubResource("SpriteFrames_ghost")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-11.666668, -15.33334)
+shape = SubResource("CapsuleShape2D_ghost")
+
+[node name="now_weapons" parent="." instance=ExtResource("3_ghost")]
+

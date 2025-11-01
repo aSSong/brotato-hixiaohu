@@ -20,6 +20,9 @@ var gold = 0
 var current_class: ClassData = null
 var class_manager: ClassManager = null
 
+## Ghost管理器
+var ghost_manager: GhostManager = null
+
 ## 信号：血量变化
 signal hp_changed(current_hp: int, max_hp: int)
 
@@ -29,6 +32,11 @@ func _ready() -> void:
 	add_child(class_manager)
 	class_manager.skill_activated.connect(_on_skill_activated)
 	class_manager.skill_deactivated.connect(_on_skill_deactivated)
+	
+	# 初始化Ghost管理器
+	ghost_manager = GhostManager.new()
+	add_child(ghost_manager)
+	ghost_manager.set_player(self)
 	
 	# 默认选择玩家外观
 	choosePlayer("player2")
@@ -97,6 +105,13 @@ func _input(event):
 	# 如果事件匹配技能输入动作，不处理移动逻辑
 	if event.is_action("skill"):
 		# 技能输入不应该影响移动状态
+		return
+	
+	# 检查是否是添加Ghost的输入动作
+	if event.is_action_pressed("Add_ghost"):
+		# 创建Ghost
+		if ghost_manager:
+			ghost_manager.spawn_ghost()
 		return
 	
 	# 处理鼠标左键的移动逻辑
