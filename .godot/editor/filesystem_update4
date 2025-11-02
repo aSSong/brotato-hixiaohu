@@ -32,3 +32,10 @@ res://Scripts/players/death_manager.gd
 res://Scripts/enemies/enemy_spawner_v3.gd
 res://Scripts/data/ghost_data.gd
 res://Scripts/players/grave_rescue_manager.gd
+res://scenes/players/player.tscn
+res://Scripts/UI/hello_ui.gd
+res://scenes/UI/Hello_ui.tscn
+res://scenes/UI/main_title.tscn
+res://Scripts/UI/main_title.gd
+res://scenes/UI/cutscene_1.tscn
+res://Scripts/UI/cutscene_1.gd

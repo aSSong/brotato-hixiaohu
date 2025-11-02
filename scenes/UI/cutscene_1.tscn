@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=3 uid="uid://bn6xtfxrcaon"]
+
+[ext_resource type="Script" uid="uid://dqbe40akqpv4e" path="res://Scripts/UI/cutscene_1.gd" id="1_noght"]
+[ext_resource type="Texture2D" uid="uid://bgvt2g3y1g5pe" path="res://assets/cutscene/cutscene_00.png" id="2_eb661"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l5735"]
+bg_color = Color(0.17330971, 0.64435536, 0.34610808, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="Cutscene1" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_noght")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_eb661")
+
+[node name="btn_start" type="Button" parent="."]
+custom_minimum_size = Vector2(400, 150)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -514.0
+offset_top = -284.0
+offset_right = -114.0
+offset_bottom = -134.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_l5735")
+text = "开战！"
+
+[connection signal="pressed" from="btn_start" to="." method="_on_btn_start_pressed"]

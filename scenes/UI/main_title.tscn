@@ -1,0 +1,103 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnt2sd4mt6yw8"]
+
+[ext_resource type="Script" uid="uid://dfrk5jfj3ogys" path="res://Scripts/UI/main_title.gd" id="1_3tovs"]
+[ext_resource type="Texture2D" uid="uid://quwu684esq2e" path="res://assets/UI/maintitle_bg.png" id="1_5xvm6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xvm6"]
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="MainTitle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3tovs")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_5xvm6")
+
+[node name="title" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -960.0
+offset_top = 100.0
+offset_right = 960.0
+offset_bottom = 500.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="title"]
+layout_mode = 2
+
+[node name="title_cn" type="Label" parent="title/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 120
+text = "关 键 一 战"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="title_en" type="Label" parent="title/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "The Key Battle of Garena"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="menu" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -124.0
+offset_right = 676.0
+offset_bottom = 476.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="menu"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="btn_single_play" type="Button" parent="menu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_5xvm6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xvm6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5xvm6")
+text = "Keep Every You - 单人模式"
+
+[node name="btn_multi_play" type="Button" parent="menu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_5xvm6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xvm6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5xvm6")
+disabled = true
+text = "Keep Everyone Yell - 联网模式"
+
+[node name="btn_Quit" type="Button" parent="menu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_5xvm6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xvm6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5xvm6")
+text = "Q U I T"
+
+[connection signal="pressed" from="menu/VBoxContainer/btn_single_play" to="." method="_on_btn_single_play_pressed"]
+[connection signal="pressed" from="menu/VBoxContainer/btn_Quit" to="." method="_on_btn_quit_pressed"]
