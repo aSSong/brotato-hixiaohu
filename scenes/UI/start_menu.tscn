@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.1, 0.15, 1)
+color = Color(0.08, 0.08, 0.12, 1)
 
 [node name="MainPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -27,10 +27,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -600.0
-offset_top = -400.0
-offset_right = 600.0
-offset_bottom = 400.0
+offset_left = -800.0
+offset_top = -450.0
+offset_right = 800.0
+offset_bottom = 450.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -39,76 +39,116 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 20
 
 [node name="TitleLabel" type="Label" parent="MainPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-text = "选择职业和武器"
+theme_override_font_sizes/font_size = 42
+text = "请选择1个职业和2把武器"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ClassSection" type="VBoxContainer" parent="MainPanel/VBoxContainer"]
+[node name="ContentContainer" type="HBoxContainer" parent="MainPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 20
 
-[node name="SectionTitle" type="Label" parent="MainPanel/VBoxContainer/ClassSection"]
+[node name="ClassSection" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentContainer"]
+custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
-text = "选择职业"
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ClassTitle" type="Label" parent="MainPanel/VBoxContainer/ContentContainer/ClassSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "职业选择"
 horizontal_alignment = 1
 
-[node name="SelectedClassLabel" type="Label" parent="MainPanel/VBoxContainer/ClassSection"]
-layout_mode = 2
-text = "已选择职业: 无"
-horizontal_alignment = 1
-
-[node name="HSplitContainer" type="HSplitContainer" parent="MainPanel/VBoxContainer/ClassSection"]
+[node name="ClassList" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentContainer/ClassSection"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 12
 
-[node name="ClassContainer" type="VBoxContainer" parent="MainPanel/VBoxContainer/ClassSection/HSplitContainer"]
+[node name="ClassDescSection" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
 
-[node name="ClassDescription" type="RichTextLabel" parent="MainPanel/VBoxContainer/ClassSection/HSplitContainer"]
+[node name="ClassDescTitle" type="Label" parent="MainPanel/VBoxContainer/ContentContainer/ClassDescSection"]
 layout_mode = 2
-size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "职业说明"
+horizontal_alignment = 1
+
+[node name="ClassDescription" type="RichTextLabel" parent="MainPanel/VBoxContainer/ContentContainer/ClassDescSection"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 18
 bbcode_enabled = true
-text = "选择职业查看详细信息"
+text = "[center][color=#888888]请选择一个职业[/color][/center]"
+fit_content = true
+scroll_active = false
 
-[node name="WeaponSection" type="VBoxContainer" parent="MainPanel/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="SectionTitle" type="Label" parent="MainPanel/VBoxContainer/WeaponSection"]
-layout_mode = 2
-text = "选择武器（可多选）"
-horizontal_alignment = 1
-
-[node name="SelectedWeaponsLabel" type="Label" parent="MainPanel/VBoxContainer/WeaponSection"]
-layout_mode = 2
-text = "已选择武器: 无"
-horizontal_alignment = 1
-
-[node name="HSplitContainer" type="HSplitContainer" parent="MainPanel/VBoxContainer/WeaponSection"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="WeaponContainer" type="VBoxContainer" parent="MainPanel/VBoxContainer/WeaponSection/HSplitContainer"]
+[node name="WeaponSection" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentContainer"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
 
-[node name="WeaponDescription" type="RichTextLabel" parent="MainPanel/VBoxContainer/WeaponSection/HSplitContainer"]
+[node name="WeaponTitle" type="Label" parent="MainPanel/VBoxContainer/ContentContainer/WeaponSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "武器选择"
+horizontal_alignment = 1
+
+[node name="WeaponList" type="GridContainer" parent="MainPanel/VBoxContainer/ContentContainer/WeaponSection"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+
+[node name="WeaponDescSection" type="VBoxContainer" parent="MainPanel/VBoxContainer/ContentContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="WeaponDescTitle" type="Label" parent="MainPanel/VBoxContainer/ContentContainer/WeaponDescSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "武器说明"
+horizontal_alignment = 1
+
+[node name="WeaponDescription" type="RichTextLabel" parent="MainPanel/VBoxContainer/ContentContainer/WeaponDescSection"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 18
 bbcode_enabled = true
-text = "选择武器查看详细信息"
+text = "[center][color=#888888]请选择2把武器[/color][/center]"
+fit_content = true
+scroll_active = false
 
-[node name="StartButton" type="Button" parent="MainPanel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+[node name="BottomSection" type="VBoxContainer" parent="MainPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-text = "开始游戏"
+
+[node name="StartButton" type="Button" parent="MainPanel/VBoxContainer/BottomSection"]
+custom_minimum_size = Vector2(400, 90)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 36
+text = "开战！"

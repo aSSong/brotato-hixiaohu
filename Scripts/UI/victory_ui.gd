@@ -10,14 +10,7 @@ class_name VictoryUI
 @onready var return_button: Button = $MainPanel/VBoxContainer/ReturnButton
 
 func _ready() -> void:
-	# 设置标题和消息
-	if title_label:
-		title_label.text = "胜利！"
-	
-	if message_label:
-		message_label.text = "恭喜你收集了足够的金币！"
-	
-	# 显示获得的金币数量
+	# 显示获得的金币数量（动态内容）
 	if gold_label:
 		gold_label.text = "收集金币: %d" % GameMain.gold
 	

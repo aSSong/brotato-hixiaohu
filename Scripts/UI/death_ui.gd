@@ -5,7 +5,7 @@ class_name DeathUI
 ## 显示死亡界面，提供放弃和复活选项
 
 @onready var death_panel: Panel = $Panel
-@onready var title_label: Label = $Panel/VBoxContainer/TitleLabel
+@onready var title_label: Label = $Panel/TitleLabel
 @onready var info_label: Label = $Panel/VBoxContainer/InfoLabel
 @onready var revive_button: Button = $Panel/VBoxContainer/ButtonContainer/ReviveButton
 @onready var give_up_button: Button = $Panel/VBoxContainer/ButtonContainer/GiveUpButton
@@ -32,25 +32,21 @@ func show_death_screen(revive_count: int, current_gold: int) -> void:
 	revive_cost = 5 * (revive_count + 1)
 	can_afford = current_gold >= revive_cost
 	
-	# 更新UI文本
-	title_label.text = "你死了！"
-	info_label.text = "选择复活继续游戏，或放弃本局游戏"
-	cost_label.text = "复活费用：%d 金币" % revive_cost
+	# 更新动态文本（金币数量和按钮状态）
+	cost_label.text = "复活费用：%d 钥匙" % revive_cost
 	
 	# 更新复活按钮状态
 	if can_afford:
 		revive_button.disabled = false
-		revive_button.text = "复活 (-%d金币)" % revive_cost
+		revive_button.text = "复活 (-%d钥匙)" % revive_cost
 	else:
 		revive_button.disabled = true
-		revive_button.text = "金币不足"
-	
-	give_up_button.text = "放弃"
+		revive_button.text = "钥匙不足"
 	
 	# 显示界面
 	show()
 	
-	print("[DeathUI] 显示死亡界面 | 复活次数:", revive_count, " 费用:", revive_cost, " 当前金币:", current_gold)
+	print("[DeathUI] 显示死亡界面 | 复活次数:", revive_count, " 费用:", revive_cost, " 当前钥匙:", current_gold)
 
 ## 复活按钮按下
 func _on_revive_pressed() -> void:

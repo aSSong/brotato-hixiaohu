@@ -4,16 +4,18 @@ class_name StartMenu
 ## 开始菜单
 ## 让用户选择职业和武器
 
-@onready var class_container: VBoxContainer = $MainPanel/VBoxContainer/ClassSection/HSplitContainer/ClassContainer
-@onready var weapon_container: VBoxContainer = $MainPanel/VBoxContainer/WeaponSection/HSplitContainer/WeaponContainer
-@onready var selected_class_label: Label = $MainPanel/VBoxContainer/ClassSection/SelectedClassLabel
-@onready var selected_weapons_label: Label = $MainPanel/VBoxContainer/WeaponSection/SelectedWeaponsLabel
-@onready var start_button: Button = $MainPanel/VBoxContainer/StartButton
-@onready var class_description: RichTextLabel = $MainPanel/VBoxContainer/ClassSection/HSplitContainer/ClassDescription
-@onready var weapon_description: RichTextLabel = $MainPanel/VBoxContainer/WeaponSection/HSplitContainer/WeaponDescription
+@onready var class_container: VBoxContainer = $MainPanel/VBoxContainer/ContentContainer/ClassSection/ClassList
+@onready var class_description: RichTextLabel = $MainPanel/VBoxContainer/ContentContainer/ClassDescSection/ClassDescription
+@onready var weapon_container: GridContainer = $MainPanel/VBoxContainer/ContentContainer/WeaponSection/WeaponList
+@onready var weapon_description: RichTextLabel = $MainPanel/VBoxContainer/ContentContainer/WeaponDescSection/WeaponDescription
+@onready var start_button: Button = $MainPanel/VBoxContainer/BottomSection/StartButton
 
-var selected_class_id: String = "balanced"
+var selected_class_id: String = ""
 var selected_weapon_ids: Array = []
+var class_buttons: Dictionary = {}
+var weapon_buttons: Dictionary = {}
+
+const MAX_WEAPONS = 2
 
 ## 预定义的武器列表（用于选择）
 var available_weapons: Array = [
@@ -27,13 +29,8 @@ func _ready() -> void:
 	_populate_classes()
 	_populate_weapons()
 	
-	# 默认选择平衡者职业
-	_select_class("balanced")
-	
-	# 默认选择一些武器
-	_select_weapon("pistol")
-	_select_weapon("sword")
-	_select_weapon("fireball")
+	# 初始状态：按钮灰色不可点击
+	_update_start_button()
 	
 	# 连接按钮信号
 	start_button.pressed.connect(_on_start_button_pressed)
@@ -47,17 +44,38 @@ func _populate_classes() -> void:
 		if class_data == null:
 			continue
 		
-		# 创建职业按钮
-		var button = Button.new()
-		button.text = class_data.name
-		button.custom_minimum_size = Vector2(200, 50)
-		button.pressed.connect(_on_class_button_pressed.bind(class_id))
+		# 创建职业面板（矩形+文字）
+		var panel = Panel.new()
+		panel.custom_minimum_size = Vector2(150, 60)
 		
-		# 如果是当前选择的职业，高亮显示并勾选
-		if class_id == selected_class_id:
-			button.modulate = Color(0.8, 1.0, 0.8)
+		# 创建样式 - 默认无边框
+		var style_normal = StyleBoxFlat.new()
+		style_normal.bg_color = Color(0.2, 0.2, 0.25, 1)
+		style_normal.border_width_left = 0
+		style_normal.border_width_right = 0
+		style_normal.border_width_top = 0
+		style_normal.border_width_bottom = 0
 		
-		class_container.add_child(button)
+		panel.add_theme_stylebox_override("panel", style_normal)
+		
+		# 创建标签显示职业名称
+		var label = Label.new()
+		label.text = class_data.name
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.anchor_left = 0
+		label.anchor_right = 1
+		label.anchor_top = 0
+		label.anchor_bottom = 1
+		
+		panel.add_child(label)
+		
+		# 让面板可点击
+		panel.gui_input.connect(_on_class_panel_clicked.bind(class_id))
+		panel.mouse_filter = Control.MOUSE_FILTER_STOP
+		
+		class_container.add_child(panel)
+		class_buttons[class_id] = panel
 
 ## 填充武器列表
 func _populate_weapons() -> void:
@@ -66,47 +84,50 @@ func _populate_weapons() -> void:
 		if weapon_data == null:
 			continue
 		
-		# 创建水平容器
-		var hbox = HBoxContainer.new()
+		# 创建武器面板容器
+		var panel = Panel.new()
+		panel.custom_minimum_size = Vector2(120, 120)  # 增大尺寸
 		
-		# 创建武器复选框
-		var check_box = CheckBox.new()
-		check_box.text = weapon_data.weapon_name
-		check_box.custom_minimum_size = Vector2(200, 30)
-		check_box.toggled.connect(_on_weapon_checkbox_toggled.bind(weapon_id))
+		# 创建样式 - 默认无边框
+		var style_normal = StyleBoxFlat.new()
+		style_normal.bg_color = Color(0.15, 0.15, 0.2, 1)
+		style_normal.border_width_left = 0
+		style_normal.border_width_right = 0
+		style_normal.border_width_top = 0
+		style_normal.border_width_bottom = 0
 		
-		# 添加类型标签
-		var type_label = Label.new()
-		var type_text = ""
-		match weapon_data.weapon_type:
-			WeaponData.WeaponType.RANGED:
-				type_text = "[远程]"
-			WeaponData.WeaponType.MELEE:
-				type_text = "[近战]"
-			WeaponData.WeaponType.MAGIC:
-				type_text = "[魔法]"
-		type_label.text = type_text
-		type_label.custom_minimum_size = Vector2(60, 30)
+		panel.add_theme_stylebox_override("panel", style_normal)
 		
-		hbox.add_child(check_box)
-		hbox.add_child(type_label)
+		# 创建武器图标
+		var texture_rect = TextureRect.new()
+		texture_rect.texture = load(weapon_data.texture_path)
+		texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		texture_rect.custom_minimum_size = Vector2(100, 100)
+		texture_rect.anchor_left = 0
+		texture_rect.anchor_right = 1
+		texture_rect.anchor_top = 0
+		texture_rect.anchor_bottom = 1
+		texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
-		weapon_container.add_child(hbox)
+		panel.add_child(texture_rect)
 		
-		# 存储weapon_id到check_box的metadata中，方便后续查找
-		check_box.set_meta("weapon_id", weapon_id)
+		# 让面板可点击
+		panel.gui_input.connect(_on_weapon_panel_clicked.bind(weapon_id))
+		panel.mouse_filter = Control.MOUSE_FILTER_STOP
+		
+		weapon_container.add_child(panel)
+		weapon_buttons[weapon_id] = panel
 
-## 职业按钮被按下
-func _on_class_button_pressed(class_id: String) -> void:
-	_select_class(class_id)
-	
-	# 更新按钮高亮
-	for child in class_container.get_children():
-		if child is Button:
-			if child.text == ClassDatabase.get_class_data(class_id).name:
-				child.modulate = Color(0.8, 1.0, 0.8)
-			else:
-				child.modulate = Color.WHITE
+## 职业面板被点击
+func _on_class_panel_clicked(event: InputEvent, class_id: String) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_select_class(class_id)
+
+## 武器面板被点击
+func _on_weapon_panel_clicked(event: InputEvent, weapon_id: String) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_toggle_weapon(weapon_id)
 
 ## 选择职业
 func _select_class(class_id: String) -> void:
@@ -116,103 +137,175 @@ func _select_class(class_id: String) -> void:
 	if class_data == null:
 		return
 	
-	# 更新显示
-	selected_class_label.text = "已选择职业: " + class_data.name
-	
-	# 更新职业描述
-	var description_text = "[b]" + class_data.name + "[/b]\n\n"
-	description_text += class_data.description + "\n\n"
-	description_text += "[b]基础属性:[/b]\n"
-	description_text += "血量: " + str(class_data.max_hp) + "\n"
-	description_text += "速度: " + str(int(class_data.speed)) + "\n"
-	description_text += "攻击倍数: " + str(class_data.attack_multiplier) + "x\n"
-	description_text += "防御: " + str(class_data.defense) + "\n"
-	description_text += "暴击率: " + str(int(class_data.crit_chance * 100)) + "%\n\n"
-	
-	if class_data.skill_name != "":
-		description_text += "[b]技能: " + class_data.skill_name + "[/b]\n"
-		if class_data.skill_description != "":
-			description_text += class_data.skill_description + "\n"
-	
-	if class_data.traits.size() > 0:
-		description_text += "\n[b]特性:[/b]\n"
-		for trait_value in class_data.traits:
-			description_text += "• " + str(trait_value) + "\n"
-	
-	class_description.text = description_text
-
-## 武器复选框切换
-func _on_weapon_checkbox_toggled(toggled_on: bool, weapon_id: String) -> void:
-	if toggled_on:
-		_select_weapon(weapon_id)
-	else:
-		_deselect_weapon(weapon_id)
-
-## 选择武器
-func _select_weapon(weapon_id: String) -> void:
-	if not selected_weapon_ids.has(weapon_id):
-		selected_weapon_ids.append(weapon_id)
-		_update_weapon_display()
-
-## 取消选择武器
-func _deselect_weapon(weapon_id: String) -> void:
-	var index = selected_weapon_ids.find(weapon_id)
-	if index >= 0:
-		selected_weapon_ids.remove_at(index)
-		_update_weapon_display()
-
-## 更新武器复选框状态
-func _update_weapon_checkbox(weapon_id: String, checked: bool) -> void:
-	for child in weapon_container.get_children():
-		if child is HBoxContainer:
-			var check_box = child.get_child(0)
-			if check_box is CheckBox and check_box.get_meta("weapon_id", "") == weapon_id:
-				check_box.button_pressed = checked
-				break
-
-## 更新武器显示
-func _update_weapon_display() -> void:
-	if selected_weapon_ids.size() == 0:
-		selected_weapons_label.text = "已选择武器: 无"
-		weapon_description.text = ""
-		return
-	
-	var weapon_names = []
-	var description_text = "[b]已选择武器:[/b]\n\n"
-	
-	for weapon_id in selected_weapon_ids:
-		var weapon_data = WeaponDatabase.get_weapon(weapon_id)
-		if weapon_data == null:
-			continue
+	# 更新所有职业面板的边框
+	for cid in class_buttons.keys():
+		var panel = class_buttons[cid]
+		var style = StyleBoxFlat.new()
+		style.bg_color = Color(0.2, 0.2, 0.25, 1)
 		
-		weapon_names.append(weapon_data.weapon_name)
+		if cid == class_id:
+			# 选中：绿色粗边框
+			style.border_width_left = 4
+			style.border_width_right = 4
+			style.border_width_top = 4
+			style.border_width_bottom = 4
+			style.border_color = Color(0.2, 0.8, 0.2, 1)
+		else:
+			# 未选中：无边框
+			style.border_width_left = 0
+			style.border_width_right = 0
+			style.border_width_top = 0
+			style.border_width_bottom = 0
 		
-		description_text += "[b]" + weapon_data.weapon_name + "[/b]\n"
-		description_text += weapon_data.description + "\n"
-		
-		var type_text = ""
-		match weapon_data.weapon_type:
-			WeaponData.WeaponType.RANGED:
-				type_text = "远程武器"
-			WeaponData.WeaponType.MELEE:
-				type_text = "近战武器"
-			WeaponData.WeaponType.MAGIC:
-				type_text = "魔法武器"
-		
-		description_text += "类型: " + type_text + "\n"
-		description_text += "伤害: " + str(weapon_data.damage) + "\n"
-		description_text += "攻击速度: " + str(weapon_data.attack_speed) + "秒\n"
-		description_text += "范围: " + str(int(weapon_data.range)) + "\n\n"
+		panel.add_theme_stylebox_override("panel", style)
 	
-	selected_weapons_label.text = "已选择武器: " + ", ".join(weapon_names)
-	weapon_description.text = description_text
+	# 更新职业说明显示
+	_update_class_description()
 	
 	# 更新开始按钮状态
-	start_button.disabled = selected_weapon_ids.size() == 0
+	_update_start_button()
+
+## 切换武器选择
+func _toggle_weapon(weapon_id: String) -> void:
+	if selected_weapon_ids.has(weapon_id):
+		# 取消选择
+		selected_weapon_ids.erase(weapon_id)
+	else:
+		# 选择武器（最多2个）
+		if selected_weapon_ids.size() < MAX_WEAPONS:
+			selected_weapon_ids.append(weapon_id)
+		else:
+			return  # 已达上限，不做处理
+	
+	# 更新所有武器面板的边框
+	for wid in weapon_buttons.keys():
+		var panel = weapon_buttons[wid]
+		var style = StyleBoxFlat.new()
+		style.bg_color = Color(0.15, 0.15, 0.2, 1)
+		
+		if selected_weapon_ids.has(wid):
+			# 选中：绿色粗边框
+			style.border_width_left = 4
+			style.border_width_right = 4
+			style.border_width_top = 4
+			style.border_width_bottom = 4
+			style.border_color = Color(0.2, 0.8, 0.2, 1)
+		else:
+			# 未选中：无边框
+			style.border_width_left = 0
+			style.border_width_right = 0
+			style.border_width_top = 0
+			style.border_width_bottom = 0
+		
+		panel.add_theme_stylebox_override("panel", style)
+	
+	# 更新武器说明显示
+	_update_weapon_description()
+	
+	# 更新开始按钮状态
+	_update_start_button()
+
+## 更新职业说明显示
+func _update_class_description() -> void:
+	var text = ""
+	
+	# 显示职业信息
+	if selected_class_id != "":
+		var class_data = ClassDatabase.get_class_data(selected_class_id)
+		if class_data:
+			text += "[b][color=#4CAF50]" + class_data.name + "[/color][/b]\n\n"
+			text += class_data.description + "\n\n"
+			text += "[b]基础属性:[/b]\n"
+			text += "• 血量: " + str(class_data.max_hp) + "\n"
+			text += "• 速度: " + str(int(class_data.speed)) + "\n"
+			text += "• 攻击倍数: " + str(class_data.attack_multiplier) + "x\n"
+			text += "• 防御: " + str(class_data.defense) + "\n"
+			text += "• 暴击率: " + str(int(class_data.crit_chance * 100)) + "%\n\n"
+			
+			if class_data.traits.size() > 0:
+				text += "[b]特性:[/b]\n"
+				for trait_value in class_data.traits:
+					text += "• " + str(trait_value) + "\n"
+	else:
+		text = "[center][color=#888888]请选择一个职业[/color][/center]"
+	
+	class_description.text = text
+
+## 更新武器说明显示
+func _update_weapon_description() -> void:
+	var text = ""
+	
+	# 显示武器信息
+	if selected_weapon_ids.size() > 0:
+		text += "[b][color=#4CAF50]已选武器 (" + str(selected_weapon_ids.size()) + "/" + str(MAX_WEAPONS) + "):[/color][/b]\n\n"
+		
+		for weapon_id in selected_weapon_ids:
+			var weapon_data = WeaponDatabase.get_weapon(weapon_id)
+			if weapon_data:
+				text += "[b]" + weapon_data.weapon_name + "[/b]\n"
+				text += weapon_data.description + "\n"
+				
+				var type_text = ""
+				match weapon_data.weapon_type:
+					WeaponData.WeaponType.RANGED:
+						type_text = "远程"
+					WeaponData.WeaponType.MELEE:
+						type_text = "近战"
+					WeaponData.WeaponType.MAGIC:
+						type_text = "魔法"
+				
+				text += "类型: " + type_text + " | "
+				text += "伤害: " + str(weapon_data.damage) + " | "
+				text += "攻速: " + str(weapon_data.attack_speed) + "s\n\n"
+	else:
+		text = "[center][color=#888888]请选择2把武器[/color][/center]"
+	
+	weapon_description.text = text
+
+## 更新开始按钮状态
+func _update_start_button() -> void:
+	var can_start = selected_class_id != "" and selected_weapon_ids.size() == MAX_WEAPONS
+	
+	start_button.disabled = not can_start
+	
+	# 创建按钮样式
+	var style_box = StyleBoxFlat.new()
+	
+	if can_start:
+		# 绿色可点击 - 明亮的绿色背景 + 白色边框
+		style_box.bg_color = Color(0.2, 0.8, 0.2, 1)  # 亮绿色背景
+		style_box.border_width_left = 5
+		style_box.border_width_right = 5
+		style_box.border_width_top = 5
+		style_box.border_width_bottom = 5
+		style_box.border_color = Color(1, 1, 1, 1)  # 白色边框
+		style_box.corner_radius_top_left = 8
+		style_box.corner_radius_top_right = 8
+		style_box.corner_radius_bottom_left = 8
+		style_box.corner_radius_bottom_right = 8
+		start_button.modulate = Color(1, 1, 1, 1)  # 正常颜色
+	else:
+		# 灰色不可点击 - 暗灰色背景 + 深灰边框
+		style_box.bg_color = Color(0.2, 0.2, 0.2, 1)  # 深灰色背景
+		style_box.border_width_left = 3
+		style_box.border_width_right = 3
+		style_box.border_width_top = 3
+		style_box.border_width_bottom = 3
+		style_box.border_color = Color(0.4, 0.4, 0.4, 1)  # 深灰边框
+		style_box.corner_radius_top_left = 8
+		style_box.corner_radius_top_right = 8
+		style_box.corner_radius_bottom_left = 8
+		style_box.corner_radius_bottom_right = 8
+		start_button.modulate = Color(0.6, 0.6, 0.6, 1)  # 变暗
+	
+	start_button.add_theme_stylebox_override("normal", style_box)
+	start_button.add_theme_stylebox_override("hover", style_box)
+	start_button.add_theme_stylebox_override("pressed", style_box)
+	start_button.add_theme_stylebox_override("disabled", style_box)
 
 ## 开始游戏按钮被按下
 func _on_start_button_pressed() -> void:
-	if selected_weapon_ids.size() == 0:
+	if selected_class_id == "" or selected_weapon_ids.size() != MAX_WEAPONS:
 		return
 	
 	# 保存选择到GameMain
