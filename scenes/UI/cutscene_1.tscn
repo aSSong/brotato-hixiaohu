@@ -280,7 +280,7 @@ tracks/0/path = NodePath("comic/1:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -292,7 +292,7 @@ tracks/1/path = NodePath("comic/2:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1.6),
+"times": PackedFloat32Array(0, 2.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -304,7 +304,7 @@ tracks/2/path = NodePath("comic/3:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 4),
+"times": PackedFloat32Array(0, 5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -316,7 +316,7 @@ tracks/3/path = NodePath("comic/4:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 6),
+"times": PackedFloat32Array(0, 14.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -328,7 +328,7 @@ tracks/4/path = NodePath("comic/5:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 8),
+"times": PackedFloat32Array(0, 17),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -340,7 +340,7 @@ tracks/5/path = NodePath("comic/6:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 9.6),
+"times": PackedFloat32Array(0, 19.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -352,7 +352,7 @@ tracks/6/path = NodePath("comic/1Pop:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.6),
+"times": PackedFloat32Array(0, 1.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -364,7 +364,7 @@ tracks/7/path = NodePath("comic/3Pop2:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 4),
+"times": PackedFloat32Array(0, 9.6),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -376,7 +376,7 @@ tracks/8/path = NodePath("comic/3Pop:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 2.4),
+"times": PackedFloat32Array(0, 6.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -388,7 +388,7 @@ tracks/9/path = NodePath("comic/3Pop3:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 7.4),
+"times": PackedFloat32Array(0, 15.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -400,7 +400,7 @@ tracks/10/path = NodePath("comic/6Pop2:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 11.2),
+"times": PackedFloat32Array(0, 20.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -412,7 +412,7 @@ tracks/11/path = NodePath("comic/6Pop1:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 12.4),
+"times": PackedFloat32Array(0, 21.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -424,7 +424,7 @@ tracks/12/path = NodePath("comic/1PopText:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 0.8),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -436,7 +436,7 @@ tracks/13/path = NodePath("comic/3Pop2Text2:visible")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 4.4),
+"times": PackedFloat32Array(0, 10.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -448,7 +448,7 @@ tracks/14/path = NodePath("comic/3PopText:visible")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0, 2.6),
+"times": PackedFloat32Array(0, 7),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -460,7 +460,7 @@ tracks/15/path = NodePath("comic/4PopText:visible")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
-"times": PackedFloat32Array(0, 7.4),
+"times": PackedFloat32Array(0, 15.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -472,7 +472,7 @@ tracks/16/path = NodePath("comic/6Pop1Text1:visible")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0, 13.2),
+"times": PackedFloat32Array(0, 22.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -484,7 +484,7 @@ tracks/17/path = NodePath("comic/6Pop2Text2:visible")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
-"times": PackedFloat32Array(0, 12),
+"times": PackedFloat32Array(0, 20.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -496,7 +496,7 @@ tracks/18/path = NodePath("Camera2D:position")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
-"times": PackedFloat32Array(0, 2.6, 4.8, 6.8, 9.8),
+"times": PackedFloat32Array(0, 4.2, 10.4, 14.4, 19),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(962, 534), Vector2(962, 950), Vector2(962, 1100), Vector2(962, 1600), Vector2(962, 2100)]
@@ -508,7 +508,7 @@ tracks/19/path = NodePath("CanvasLayer/btn_start:visible")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
-"times": PackedFloat32Array(0, 13.2),
+"times": PackedFloat32Array(0, 23.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -540,16 +540,15 @@ color = Color(0.14901961, 0.14901961, 0.14901961, 1)
 [node name="btn_start" type="Button" parent="CanvasLayer"]
 visible = false
 custom_minimum_size = Vector2(200, 50)
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -335.0
-offset_top = -139.0
-offset_right = -35.0
-offset_bottom = -39.0
-grow_horizontal = 0
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_l5735")
@@ -659,13 +658,13 @@ texture = ExtResource("13_07uu0")
 visible = false
 z_index = 3
 position = Vector2(549.0001, 1240)
-scale = Vector2(0.6, 0.6)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("14_qxlus")
 
 [node name="3PopText" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 3
-position = Vector2(1580, 653)
+position = Vector2(1592.0002, 681)
 rotation = 0.35081118
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("15_h1vrd")
