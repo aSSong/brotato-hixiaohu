@@ -1,6 +1,0 @@
-res://Scripts/UI/game_ui.gd
-res://scenes/UI/game_ui.tscn
-res://Scripts/items/drop_items.gd
-res://Scripts/enemies/enemy.gd
-res://Scripts/enemies/now_enemies.gd
-res://Scripts/enemies/wave_manager.gd
