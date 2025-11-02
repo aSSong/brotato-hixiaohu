@@ -9,7 +9,13 @@ class_name EnemyData
 
 ## 外观设置
 @export var texture_path: String = "res://assets/enemy/enemy-sheet.png"  # 敌人贴图路径
-@export var sprite_frames_region: Rect2 = Rect2(0, 0, 240, 240)  # 贴图区域（用于AtlasTexture）
+
+## 动画帧配置（单行排列）
+@export var frame_width: int = 240  # 每帧宽度
+@export var frame_height: int = 240  # 每帧高度
+@export var frame_count: int = 5  # 帧数量（横向排列，全用上）
+@export var animation_speed: float = 8.0  # 动画速度（FPS）
+
 @export var scale: Vector2 = Vector2(0.6, 0.6)  # 敌人缩放
 
 ## 属性
@@ -31,12 +37,16 @@ func _init(
 	p_attack_damage: int = 5,
 	p_move_speed: float = 300.0,
 	p_texture_path: String = "res://assets/enemy/enemy-sheet.png",
-	p_sprite_frames_region: Rect2 = Rect2(0, 0, 240, 240)
+	p_frame_width: int = 240,
+	p_frame_height: int = 240,
+	p_frame_count: int = 5
 ) -> void:
 	enemy_name = p_enemy_name
 	max_hp = p_max_hp
 	attack_damage = p_attack_damage
 	move_speed = p_move_speed
 	texture_path = p_texture_path
-	sprite_frames_region = p_sprite_frames_region
+	frame_width = p_frame_width
+	frame_height = p_frame_height
+	frame_count = p_frame_count
 

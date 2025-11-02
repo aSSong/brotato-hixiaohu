@@ -1,9 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://ck1hpfp1alqx7"]
+[gd_scene load_steps=13 format=3 uid="uid://ck1hpfp1alqx7"]
 
-[ext_resource type="Texture2D" uid="uid://clauswxxvvkes" path="res://assets/enemy/enemy-sheet.png" id="1_4a83h"]
 [ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_a3pup"]
 [ext_resource type="Shader" uid="uid://dsun82e56sau7" path="res://Shaders/flash.gdshader" id="2_40wdo"]
 [ext_resource type="PackedScene" uid="uid://c4b35vp8k62a" path="res://FX/gpu_particles_2d_enemy_dead.tscn" id="2_tjssy"]
+[ext_resource type="Texture2D" uid="uid://kjiuodwlmfxa" path="res://assets/enemy/enemy1-sheet.png" id="4_tjssy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tjssy"]
 resource_local_to_scene = true
@@ -11,36 +11,43 @@ shader = ExtResource("2_40wdo")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_opacity = 0.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_a3pup"]
-atlas = ExtResource("1_4a83h")
-region = Rect2(0, 0, 240, 240)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_40wdo"]
-atlas = ExtResource("1_4a83h")
-region = Rect2(240, 0, 240, 240)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tjssy"]
-atlas = ExtResource("1_4a83h")
-region = Rect2(480, 0, 240, 240)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_gl05p"]
-atlas = ExtResource("1_4a83h")
-region = Rect2(720, 0, 240, 240)
+atlas = ExtResource("4_tjssy")
+region = Rect2(0, 0, 357, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cwlon"]
+atlas = ExtResource("4_tjssy")
+region = Rect2(357, 0, 357, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nbhyu"]
+atlas = ExtResource("4_tjssy")
+region = Rect2(714, 0, 357, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_13gj6"]
+atlas = ExtResource("4_tjssy")
+region = Rect2(1071, 0, 357, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4efjx"]
+atlas = ExtResource("4_tjssy")
+region = Rect2(1428, 0, 357, 240)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_cwlon"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_a3pup")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_40wdo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tjssy")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_gl05p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cwlon")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nbhyu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_13gj6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4efjx")
 }],
 "loop": true,
 "name": &"default",
@@ -48,7 +55,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nbhyu"]
-size = Vector2(190, 202)
+size = Vector2(313.3333, 225)
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
 z_index = 14
@@ -61,7 +68,8 @@ death_particles_scene = ExtResource("2_tjssy")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_tjssy")
 sprite_frames = SubResource("SpriteFrames_cwlon")
+frame_progress = 0.01654145
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 9)
+position = Vector2(-11.666666, -5.833333)
 shape = SubResource("RectangleShape2D_nbhyu")

@@ -62,7 +62,7 @@ func _apply_enemy_data() -> void:
 	# 应用外观
 	self.scale = enemy_data.scale
 	
-	# 设置贴图
+	# 设置动画贴图（支持多帧）
 	if $AnimatedSprite2D and enemy_data.texture_path != "":
 		var texture = load(enemy_data.texture_path)
 		if texture:
@@ -71,16 +71,25 @@ func _apply_enemy_data() -> void:
 			sprite_frames.add_animation("default")
 			sprite_frames.set_animation_loop("default", true)
 			
-			# 创建AtlasTexture
-			var atlas_texture = AtlasTexture.new()
-			atlas_texture.atlas = texture
-			atlas_texture.region = enemy_data.sprite_frames_region
+			# 添加所有帧（单行横向排列）
+			for i in range(enemy_data.frame_count):
+				var x = i * enemy_data.frame_width
+				var y = 0  # 单行，y始终为0
+				
+				# 创建AtlasTexture
+				var atlas_texture = AtlasTexture.new()
+				atlas_texture.atlas = texture
+				atlas_texture.region = Rect2(x, y, enemy_data.frame_width, enemy_data.frame_height)
+				
+				sprite_frames.add_frame("default", atlas_texture)
 			
-			sprite_frames.add_frame("default", atlas_texture)
-			sprite_frames.set_animation_speed("default", 8.0)
+			# 设置动画速度
+			sprite_frames.set_animation_speed("default", enemy_data.animation_speed)
 			
 			$AnimatedSprite2D.sprite_frames = sprite_frames
 			$AnimatedSprite2D.play("default")
+			
+			print("[Enemy] 加载动画: ", enemy_data.enemy_name, " 帧数:", enemy_data.frame_count, " FPS:", enemy_data.animation_speed)
 	
 	# 应用震动设置
 	shake_on_death = enemy_data.shake_on_death
