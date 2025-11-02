@@ -12,6 +12,10 @@ func _ready() -> void:
 	# 等待场景完全加载
 	await get_tree().process_frame
 	
+	# 播放战斗BGM
+	BGMManager.play_bgm("fight")
+	print("[GameInitializer] 开始播放战斗BGM")
+	
 	# 查找玩家
 	player = get_tree().get_first_node_in_group("player")
 	if not player:

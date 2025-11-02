@@ -25,6 +25,10 @@ var available_weapons: Array = [
 ]
 
 func _ready() -> void:
+	# 播放标题BGM（如果还未播放）
+	BGMManager.play_bgm("title")
+	print("[StartMenu] 确保标题BGM播放中")
+	
 	# 初始化界面
 	_populate_classes()
 	_populate_weapons()

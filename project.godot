@@ -23,6 +23,7 @@ config/icon="uid://crbqv7f80wmix"
 
 GameMain="*res://Scripts/GameMain.gd"
 CameraShake="*res://Scripts/camera_shake.gd"
+BGMManager="*res://Scripts/managers/bgm_manager.gd"
 
 [display]
 
