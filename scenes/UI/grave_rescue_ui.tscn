@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3vkp8yqm7abc"]
+[gd_scene load_steps=5 format=3 uid="uid://yjtcj0iybywp"]
 
-[ext_resource type="Script" path="res://Scripts/UI/grave_rescue_ui.gd" id="1"]
+[ext_resource type="Script" uid="uid://c8tqf4himll6k" path="res://Scripts/UI/grave_rescue_ui.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://g6gjrtdtayij" path="res://assets/others/grave.png" id="2_4afqu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r03xt"]
+bg_color = Color(0.16663587, 0.064476065, 1.8049032e-08, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4afqu"]
+bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
 
 [node name="GraveRescueUI" type="CanvasLayer"]
 layer = 100
@@ -12,12 +23,82 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -180.0
-offset_right = 250.0
-offset_bottom = 180.0
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r03xt")
+
+[node name="Grave" type="Sprite2D" parent="Panel"]
+position = Vector2(664, 296)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("2_4afqu")
+
+[node name="TitleLabel" type="Label" parent="Panel"]
+visible = false
+layout_mode = 0
+offset_top = 45.0
+offset_right = 800.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 50
+text = "Keep Every You ？"
+horizontal_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "[b][font_size=70][color=#FFD700]K[/color][/font_size][/b]eep [b][font_size=70][color=#FFD700]E[/color][/font_size][/b]very [b][font_size=70][color=#FFD700]Y[/color][/font_size][/b]ou[b][font_size=70][color=#FFD700] ?[/color][/font_size][/b]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_top = 477.0
+offset_right = 800.0
+offset_bottom = 527.0
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="RescueButton" type="Button" parent="Panel/ButtonContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_4afqu")
+text = "救援"
+
+[node name="CostLabel" type="Label" parent="Panel/ButtonContainer/RescueButton"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = -73.0
+offset_right = 400.0
+offset_bottom = -8.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 22
+text = "费用：1个 Master Key 
+(当前：5个)"
+horizontal_alignment = 1
+
+[node name="TranscendButton" type="Button" parent="Panel/ButtonContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "超度"
+
+[node name="CancelButton" type="Button" parent="Panel/ButtonContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "关闭"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
@@ -29,57 +110,21 @@ grow_vertical = 2
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "复活队友？"
-horizontal_alignment = 1
-
 [node name="ClassLabel" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 25
 text = "职业：战士"
 horizontal_alignment = 1
 
 [node name="WeaponsLabel" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 text = "武器：剑 Lv.3, 盾 Lv.2"
 horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="DeathLabel" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 text = "死亡次数：第 1 次"
 horizontal_alignment = 1
-
-[node name="CostLabel" type="Label" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "费用：1个 Master Key (当前：5个)"
-horizontal_alignment = 1
-
-[node name="ButtonContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="RescueButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(120, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "同意救援"
-
-[node name="TranscendButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(120, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "超度"
-
-[node name="CancelButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(120, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "取消"
-
