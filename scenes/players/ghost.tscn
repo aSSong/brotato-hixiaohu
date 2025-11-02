@@ -1,39 +1,41 @@
-[gd_scene load_steps=11 format=3 uid="uid://ghost_scene_001"]
+[gd_scene load_steps=10 format=3 uid="uid://cmcv1hguonesw"]
 
-[ext_resource type="Script" path="res://Scripts/players/ghost.gd" id="1_ghost"]
-[ext_resource type="Texture2D" uid="uid://b0jvpfev04c8w" path="res://assets/player/player1-sheet.png" id="2_ghost"]
+[ext_resource type="Script" uid="uid://bqq462we7v53t" path="res://Scripts/players/ghost.gd" id="1_ghost"]
 [ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_ghost"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ghost1"]
-atlas = ExtResource("2_ghost")
-region = Rect2(0, 0, 240, 240)
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kc87p"]
+load_path = "res://.godot/imported/player1-sheet.png-57d31d2b924831737743db6eecd0d6e7.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ghost2"]
-atlas = ExtResource("2_ghost")
-region = Rect2(240, 0, 240, 240)
+[sub_resource type="AtlasTexture" id="AtlasTexture_iwvnj"]
+atlas = SubResource("CompressedTexture2D_kc87p")
+region = Rect2(0, 0, 130, 240)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ghost3"]
-atlas = ExtResource("2_ghost")
-region = Rect2(480, 0, 240, 240)
+[sub_resource type="AtlasTexture" id="AtlasTexture_4uf6r"]
+atlas = SubResource("CompressedTexture2D_kc87p")
+region = Rect2(130, 0, 130, 240)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ghost4"]
-atlas = ExtResource("2_ghost")
-region = Rect2(720, 0, 240, 240)
+[sub_resource type="AtlasTexture" id="AtlasTexture_rj5wx"]
+atlas = SubResource("CompressedTexture2D_kc87p")
+region = Rect2(260, 0, 130, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3pipo"]
+atlas = SubResource("CompressedTexture2D_kc87p")
+region = Rect2(390, 0, 130, 240)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ghost"]
 animations = [{
 "frames": [{
-"duration": 0.5,
-"texture": SubResource("AtlasTexture_ghost1")
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iwvnj")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ghost2")
+"texture": SubResource("AtlasTexture_4uf6r")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ghost3")
+"texture": SubResource("AtlasTexture_rj5wx")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ghost4")
+"texture": SubResource("AtlasTexture_3pipo")
 }],
 "loop": true,
 "name": &"default",
@@ -43,9 +45,6 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ghost"]
 radius = 51.0
 height = 192.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_ghost"]
-radius = 588.67316
 
 [node name="ghost" type="CharacterBody2D" groups=["ghost"]]
 z_index = 9
@@ -64,4 +63,3 @@ position = Vector2(-11.666668, -15.33334)
 shape = SubResource("CapsuleShape2D_ghost")
 
 [node name="now_weapons" parent="." instance=ExtResource("3_ghost")]
-

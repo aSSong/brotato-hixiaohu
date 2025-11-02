@@ -86,9 +86,9 @@ func _process(delta: float) -> void:
 	var self_pos = position
 	
 	if mouse_pos.x > self_pos.x:
-		flip = false
-	else:
 		flip = true
+	else:
+		flip = false
 	
 	playerAni.flip_h = flip
 	

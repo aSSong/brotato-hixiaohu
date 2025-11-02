@@ -102,9 +102,9 @@ func _snake_follow(delta: float) -> void:
 	
 	# 根据移动方向翻转精灵
 	if direction.x > 0:
-		ghostAni.flip_h = false
-	else:
 		ghostAni.flip_h = true
+	else:
+		ghostAni.flip_h = false
 
 ## 直接跟随逻辑（作为备用）
 func _direct_follow() -> void:

@@ -435,7 +435,6 @@ tile_map_data = PackedByteArray("AAAIAA8AAAAOAAAAAAAHAA8AAAAOAAAAAAAGAA8AAAAOAAA
 tile_set = SubResource("TileSet_iyoqw")
 
 [node name="38F" type="Node2D" parent="."]
-modulate = Color(1, 1, 1, 0.2509804)
 
 [node name="Floor" type="Sprite2D" parent="38F"]
 position = Vector2(1282, -659.5)
@@ -503,7 +502,6 @@ position = Vector2(1198, 950)
 floor_layer_path = NodePath("../TileMap_BG")
 
 [node name="game_ui" parent="." instance=ExtResource("4_asq3l")]
-visible = false
 
 [node name="GameInitializer" type="Node2D" parent="."]
 script = ExtResource("6_game_initializer")

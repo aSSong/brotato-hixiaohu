@@ -10,13 +10,13 @@ config_version=5
 
 [application]
 
-config/name="Brotato_hixiaohu"
+config/name="KeyBattle"
 run/main_scene="uid://w2e2jg7hadx"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-config/icon="res://icon.svg"
+config/icon="uid://crbqv7f80wmix"
 
 [autoload]
 
