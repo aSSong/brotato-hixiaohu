@@ -14,7 +14,7 @@ static func initialize_enemies() -> void:
 	# 基础敌人 - 标准属性
 	var basic_enemy = EnemyData.new(
 		"基础敌人",
-		50,  # max_hp
+		40,  # max_hp (降低难度)
 		5,  # attack_damage
 		300.0,  # move_speed
 		"res://assets/enemy/enemy-sheet.png",

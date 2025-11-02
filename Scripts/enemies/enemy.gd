@@ -23,6 +23,9 @@ var attack_damage: int = 5  # 每次攻击造成的伤害
 ## 是否为本波最后一个敌人（用于掉落masterKey）
 var is_last_enemy_in_wave: bool = false
 
+## 当前波次号（用于判断掉落类型）
+var current_wave_number: int = 1
+
 ## 是否已经死亡（防止重复掉落）
 var is_dead: bool = false
 
@@ -155,10 +158,17 @@ func enemy_dead():
 		"scale":Vector2(1,1)
 	})
 	
-	# 判断掉落物品类型：最后一个敌人掉落masterKey，其他掉落gold
-	var item_name = "masterkey" if is_last_enemy_in_wave else "gold"
+	# 判断掉落物品类型
+	var item_name = "gold"  # 默认掉落金币
 	
-	print("[Enemy] 准备掉落物品 | 类型:", item_name, " 位置:", self.global_position)
+	if is_last_enemy_in_wave:
+		# 最后一只敌人：单数波掉Master Key，双数波掉Gold
+		if current_wave_number % 2 == 1:  # 单数波次
+			item_name = "masterkey"
+		else:  # 双数波次
+			item_name = "gold"
+	
+	print("[Enemy] 准备掉落物品 | 类型:", item_name, " 波次:", current_wave_number, " 位置:", self.global_position)
 	GameMain.drop_item_scene_obj.gen_drop_item({
 		#"box":GameMain.duplicate_node,
 		"ani_name": item_name,

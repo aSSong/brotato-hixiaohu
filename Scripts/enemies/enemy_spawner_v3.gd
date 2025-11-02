@@ -47,13 +47,14 @@ func spawn_wave(wave_config: Dictionary) -> void:
 		push_error("[EnemySpawner V3] 波次系统未设置")
 		return
 	
-	print("[EnemySpawner V3] 开始生成第 ", wave_config.wave_number, " 波")
+	var wave_number = wave_config.wave_number
+	print("[EnemySpawner V3] 开始生成第 ", wave_number, " 波")
 	
 	# 构建生成列表
 	var spawn_list = _build_spawn_list(wave_config)
 	
-	# 开始异步生成
-	_spawn_enemies_async(spawn_list)
+	# 开始异步生成（传入波次号用于HP计算）
+	_spawn_enemies_async(spawn_list, wave_number)
 
 ## 构建生成列表
 func _build_spawn_list(config: Dictionary) -> Array:
@@ -74,15 +75,15 @@ func _build_spawn_list(config: Dictionary) -> Array:
 	return list
 
 ## 异步生成敌人列表
-func _spawn_enemies_async(spawn_list: Array) -> void:
+func _spawn_enemies_async(spawn_list: Array, wave_number: int) -> void:
 	is_spawning = true
 	
 	var index = 0
 	for enemy_id in spawn_list:
 		var is_last = (index == spawn_list.size() - 1)
 		
-		# 生成敌人
-		var enemy = _spawn_single_enemy(enemy_id, is_last)
+		# 生成敌人（传入波次号）
+		var enemy = _spawn_single_enemy(enemy_id, is_last, wave_number)
 		
 		# 通知波次系统
 		if enemy and wave_system:
@@ -99,7 +100,7 @@ func _spawn_enemies_async(spawn_list: Array) -> void:
 	print("[EnemySpawner V3] 生成完成")
 
 ## 生成单个敌人
-func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false) -> Node:
+func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_number: int = 1) -> Node:
 	if not floor_layer:
 		push_error("[EnemySpawner V3] floor_layer未设置")
 		return null
@@ -114,6 +115,9 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false) -> Nod
 	if enemy_data == null:
 		push_error("[EnemySpawner V3] 敌人数据不存在：", enemy_id)
 		return null
+	
+	# 计算HP增长倍数（每5波增加10%）
+	var hp_multiplier = 1.0 + (floor(wave_number / 5.0) * 0.1)
 	
 	# 尝试多次找合适的位置
 	for attempt in max_spawn_attempts:
@@ -135,13 +139,20 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false) -> Nod
 				if enemy.has_method("_apply_enemy_data"):
 					enemy._apply_enemy_data()
 			
+			# 应用HP增长倍数
+			enemy.max_enemyHP = int(enemy.max_enemyHP * hp_multiplier)
+			enemy.enemyHP = enemy.max_enemyHP
+			
+			# 设置波次号（用于掉落判断）
+			enemy.current_wave_number = wave_number
+			
 			# 标记是否为最后一个敌人（掉落钥匙）
 			enemy.is_last_enemy_in_wave = is_last_in_wave
 			
 			# 添加到场景树
 			add_child(enemy)
 			
-			print("[EnemySpawner V3] 生成敌人：", enemy_id, " 位置：", world_pos)
+			print("[EnemySpawner V3] 生成敌人：", enemy_id, " 波次:", wave_number, " HP倍数:", hp_multiplier, " 实际HP:", enemy.max_enemyHP)
 			return enemy
 	
 	# 尝试多次后仍失败

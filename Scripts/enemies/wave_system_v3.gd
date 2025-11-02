@@ -58,25 +58,40 @@ func _ready() -> void:
 func _initialize_waves() -> void:
 	wave_configs.clear()
 	
-	# 20波，每波10个敌人
-	for wave in range(20):
+	# 200波，每波比上一波多2个敌人
+	# 第1波: 10个敌人 (7 basic + 2 fast + 1 last)
+	# 第2波: 12个敌人
+	# ...
+	# 第200波: 408个敌人
+	
+	for wave in range(200):
+		var wave_number = wave + 1
+		
+		# 计算本波普通敌人数量（不含最后一只）
+		# 第1波: 9个普通 + 1个last = 10个
+		# 第2波: 11个普通 + 1个last = 12个
+		var normal_enemy_count = 9 + (wave * 2)
+		
+		# 基础配比：7 basic, 2 fast
+		var basic_count = int(normal_enemy_count * 0.78)  # 约78%
+		var fast_count = normal_enemy_count - basic_count
+		
 		var config = {
-			"wave_number": wave + 1,
+			"wave_number": wave_number,
 			"enemies": [
-				{"id": "basic", "count": 7},
-				{"id": "fast", "count": 2},
+				{"id": "basic", "count": basic_count},
+				{"id": "fast", "count": fast_count},
 			],
 			"last_enemy": {"id": "last_enemy", "count": 1}  # 使用专门的last_enemy类型
 		}
 		
-		# 每5波增加难度
-		if wave > 0 and wave % 5 == 0:
+		# 每5波增加1个坦克（替换掉1个basic）
+		if wave_number % 5 == 0 and basic_count > 0:
 			config.enemies = [
-				{"id": "basic", "count": 5},
-				{"id": "fast", "count": 2},
+				{"id": "basic", "count": basic_count - 1},
+				{"id": "fast", "count": fast_count},
 				{"id": "tank", "count": 1}
 			]
-			config.last_enemy = {"id": "last_enemy", "count": 1}  # 仍然使用last_enemy
 		
 		wave_configs.append(config)
 	
