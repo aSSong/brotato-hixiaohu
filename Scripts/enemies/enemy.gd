@@ -23,6 +23,9 @@ var attack_damage: int = 5  # 每次攻击造成的伤害
 ## 是否为本波最后一个敌人（用于掉落masterKey）
 var is_last_enemy_in_wave: bool = false
 
+## 是否已经死亡（防止重复掉落）
+var is_dead: bool = false
+
 ## 信号：敌人死亡
 signal enemy_killed(enemy_ref: Enemy)
 
@@ -109,6 +112,11 @@ func _attack_player() -> void:
 		target.player_hurt(attack_damage)
 		attack_cooldown = attack_interval
 func enemy_hurt(hurt):
+	# 如果已经死亡，忽略后续伤害
+	if is_dead:
+		return
+	
+	print("[Enemy] 受伤 | HP:", self.enemyHP, " 伤害:", hurt, " 位置:", global_position)
 	self.enemyHP -= hurt
 	
 	# 显示伤害跳字
@@ -126,9 +134,18 @@ func enemy_hurt(hurt):
 		"scale":Vector2(1,1)
 	})
 	if self.enemyHP <= 0:
+		print("[Enemy] 死亡 | 位置:", global_position)
 		enemy_dead()
 	pass
 func enemy_dead():
+	# 防止重复调用
+	if is_dead:
+		print("[Enemy] 已经死亡，忽略重复调用 | 位置:", global_position)
+		return
+	
+	is_dead = true
+	print("[Enemy] enemy_dead() 被调用 | 位置:", global_position)
+	
 	#GameMain.duplicate_node.global_position = self.global_position
 	
 	GameMain.animation_scene_obj.run_animation({
@@ -141,6 +158,7 @@ func enemy_dead():
 	# 判断掉落物品类型：最后一个敌人掉落masterKey，其他掉落gold
 	var item_name = "masterkey" if is_last_enemy_in_wave else "gold"
 	
+	print("[Enemy] 准备掉落物品 | 类型:", item_name, " 位置:", self.global_position)
 	GameMain.drop_item_scene_obj.gen_drop_item({
 		#"box":GameMain.duplicate_node,
 		"ani_name": item_name,
@@ -148,6 +166,7 @@ func enemy_dead():
 		"position": self.global_position,
 		"scale":Vector2(4,4)
 	})
+	print("[Enemy] 掉落物品完成")
 	
 	# 发送敌人死亡信号（在queue_free之前）
 	enemy_killed.emit(self)
@@ -162,6 +181,7 @@ func enemy_dead():
 		# 添加到场景根节点,不随怪物一起消失
 		get_tree().root.add_child(particles)
 	
+	print("[Enemy] 准备 queue_free | 位置:", global_position)
 	self.queue_free()
 	pass
 

@@ -66,7 +66,7 @@ func _initialize_waves() -> void:
 				{"id": "basic", "count": 7},
 				{"id": "fast", "count": 2},
 			],
-			"last_enemy": {"id": "basic", "count": 1}
+			"last_enemy": {"id": "last_enemy", "count": 1}  # 使用专门的last_enemy类型
 		}
 		
 		# 每5波增加难度
@@ -76,7 +76,7 @@ func _initialize_waves() -> void:
 				{"id": "fast", "count": 2},
 				{"id": "tank", "count": 1}
 			]
-			config.last_enemy = {"id": "elite", "count": 1}
+			config.last_enemy = {"id": "last_enemy", "count": 1}  # 仍然使用last_enemy
 		
 		wave_configs.append(config)
 	

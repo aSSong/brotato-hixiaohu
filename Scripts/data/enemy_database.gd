@@ -59,6 +59,20 @@ static func initialize_enemies() -> void:
 	elite_enemy.description = "强化的精英敌人"
 	elite_enemy.shake_amount = 12.0  # 更强的震动
 	enemies["elite"] = elite_enemy
+	
+	# 波次Boss敌人 - 每波最后一个，掉落Master Key
+	var last_enemy = EnemyData.new(
+		"波次首领",
+		80,  # max_hp
+		8,  # attack_damage
+		320.0,  # move_speed
+		"res://assets/enemy/enemy2-sheet.png",  # 特殊外观
+		Rect2(0, 0, 240, 240)  # 使用enemy2的第一帧
+	)
+	last_enemy.description = "每波最后的首领，掉落Master Key"
+	last_enemy.shake_amount = 15.0  # 强震动
+	last_enemy.scale = Vector2(1.5, 1.5)  # 1.5倍大小
+	enemies["last_enemy"] = last_enemy
 
 ## 获取敌人数据
 static func get_enemy_data(enemy_id: String) -> EnemyData:

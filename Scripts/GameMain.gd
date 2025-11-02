@@ -36,20 +36,38 @@ signal gold_changed(new_amount: int, change: int)
 signal master_key_changed(new_amount: int, change: int)
 signal item_collected(item_type: String)
 
-# 游戏数据
+# 游戏数据 - 使用私有变量和setter避免递归
+var _gold_internal: int = 0
 var gold: int = 0:
+	get:
+		return _gold_internal
 	set(value):
-		var old_gold = gold
-		gold = max(0, value)  # 确保不小于 0
-		var change = gold - old_gold
-		gold_changed.emit(gold, change)  # 发送信号
+		print("[GameMain gold setter] 被调用 | 当前值:", _gold_internal, " 新值:", value)
+		var old_gold = _gold_internal
+		var new_gold = max(0, value)
+		if new_gold != old_gold:
+			_gold_internal = new_gold
+			var change = new_gold - old_gold
+			print("[GameMain gold setter] 值改变 | 旧值:", old_gold, " 新值:", new_gold, " 变化:", change)
+			gold_changed.emit(new_gold, change)  # 发送信号
+		else:
+			print("[GameMain gold setter] 值未改变，不发送信号")
 
+var _master_key_internal: int = 0
 var master_key: int = 0:
+	get:
+		return _master_key_internal
 	set(value):
-		var old_key = master_key
-		master_key = max(0, value)  # 确保不小于 0
-		var change = master_key - old_key
-		master_key_changed.emit(master_key, change)  # 发送信号
+		print("[GameMain master_key setter] 被调用 | 当前值:", _master_key_internal, " 新值:", value)
+		var old_key = _master_key_internal
+		var new_key = max(0, value)
+		if new_key != old_key:
+			_master_key_internal = new_key
+			var change = new_key - old_key
+			print("[GameMain master_key setter] 值改变 | 旧值:", old_key, " 新值:", new_key, " 变化:", change)
+			master_key_changed.emit(new_key, change)  # 发送信号
+		else:
+			print("[GameMain master_key setter] 值未改变，不发送信号")
 
 var score: int = 0
 var level: int = 1

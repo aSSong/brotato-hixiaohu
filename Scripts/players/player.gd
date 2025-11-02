@@ -157,13 +157,25 @@ func _on_drop_item_area_area_entered(area: Area2D) -> void:
 
 
 func _on_stop_area_entered(area: Area2D) -> void:
-	#print("进入区域")
 	if area.is_in_group("drop_item"):
+		# 检查是否已经被拾取（防止重复计数）
+		if "is_collected" in area and area.is_collected:
+			print("[Player] 物品已被拾取，忽略: ", area)
+			return
+		
+		print("[Player] 拾取物品: ", area)
+		
+		# 立即标记为已拾取，并停止移动
+		if "is_collected" in area:
+			area.is_collected = true
+		if "canMoving" in area:
+			area.canMoving = false
+		
 		# 获取物品类型（从元数据或属性）
 		var item_type = "gold"  # 默认
 		if area.has_meta("item_type"):
 			item_type = area.get_meta("item_type")
-		elif area.has("item_type"):
+		elif "item_type" in area:
 			item_type = area.item_type
 		
 		# 根据类型添加对应的物品
@@ -175,8 +187,8 @@ func _on_stop_area_entered(area: Area2D) -> void:
 		# 播放拾取音效（可选）
 		# $PickupSound.play()
 		
-		# 删除物品
-		area.queue_free()
+		# 延迟删除物品，避免在碰撞检测期间删除
+		area.call_deferred("queue_free")
 	pass # Replace with function body.
 
 ## 选择职业
