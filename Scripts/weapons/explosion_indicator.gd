@@ -19,6 +19,12 @@ var indicator_color: Color = Color(1.0, 0.5, 0.0, 0.3)  # 橙色，30%透明度
 ## 显示持续时间（秒）
 var display_duration: float = 0.3
 
+## 是否为持续显示模式
+var is_persistent: bool = false
+
+## 目标引用（用于持续跟随）
+var follow_target: Node2D = null
+
 func _ready() -> void:
 	# 确保共享纹理已创建
 	if shared_circle_texture == null:
@@ -26,6 +32,11 @@ func _ready() -> void:
 	
 	# 创建圆形精灵
 	_create_circle_sprite()
+
+func _process(_delta: float) -> void:
+	# 如果是持续显示且有目标，跟随目标移动
+	if is_persistent and follow_target and is_instance_valid(follow_target):
+		global_position = follow_target.global_position
 
 ## 创建共享纹理（静态，只执行一次）
 static func _create_shared_texture() -> void:
@@ -64,7 +75,7 @@ func _create_circle_sprite() -> void:
 	circle_sprite.modulate = indicator_color
 	circle_sprite.modulate.a = 0  # 初始完全透明
 
-## 在指定位置显示指示器
+## 在指定位置显示指示器（短暂模式）
 ## position: 目标位置（世界坐标）
 ## radius: 爆炸半径
 ## color: 指示器颜色（可选）
@@ -72,6 +83,9 @@ func _create_circle_sprite() -> void:
 func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 0.5, 0.0, 0.3), duration: float = 0.3) -> void:
 	if not circle_sprite:
 		return
+	
+	is_persistent = false
+	follow_target = null
 	
 	# 设置位置
 	global_position = position
@@ -90,7 +104,34 @@ func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 0.5, 0.
 	# 播放淡入淡出动画
 	_play_animation()
 
-## 播放淡入淡出动画
+## 持续显示指示器（跟随目标）
+## target: 跟随的目标节点
+## radius: 爆炸半径
+## color: 指示器颜色
+## duration: 持续显示时间（0表示无限）
+func show_persistent(target: Node2D, radius: float, color: Color, duration: float = 0.0) -> void:
+	if not circle_sprite or not is_instance_valid(target):
+		return
+	
+	is_persistent = true
+	follow_target = target
+	display_duration = duration
+	
+	# 设置初始位置
+	global_position = target.global_position
+	
+	# 设置缩放
+	var scale_factor = radius / 256.0
+	circle_sprite.scale = Vector2(scale_factor, scale_factor)
+	
+	# 设置颜色
+	indicator_color = color
+	circle_sprite.modulate = indicator_color
+	
+	# 播放持续显示动画
+	_play_persistent_animation()
+
+## 播放淡入淡出动画（短暂显示）
 func _play_animation() -> void:
 	# 停止之前的动画
 	if tween and tween.is_valid():
@@ -111,9 +152,36 @@ func _play_animation() -> void:
 	# 动画结束后删除自己
 	tween.tween_callback(queue_free)
 
+## 播放持续显示动画
+func _play_persistent_animation() -> void:
+	# 停止之前的动画
+	if tween and tween.is_valid():
+		tween.kill()
+	
+	tween = create_tween()
+	
+	# 淡入
+	circle_sprite.modulate.a = 0
+	tween.tween_property(circle_sprite, "modulate:a", indicator_color.a, 0.1)
+	
+	# 如果有持续时间限制
+	if display_duration > 0:
+		tween.tween_interval(display_duration - 0.15)
+		tween.tween_property(circle_sprite, "modulate:a", 0.0, 0.05)
+		tween.tween_callback(queue_free)
+
 ## 立即隐藏并删除
 func hide_and_remove() -> void:
 	if tween and tween.is_valid():
 		tween.kill()
 	queue_free()
+
+## 淡出并删除（用于提前取消）
+func fade_out_and_remove(fade_time: float = 0.1) -> void:
+	if tween and tween.is_valid():
+		tween.kill()
+	
+	tween = create_tween()
+	tween.tween_property(circle_sprite, "modulate:a", 0.0, fade_time)
+	tween.tween_callback(queue_free)
 

@@ -39,3 +39,6 @@ res://scenes/UI/main_title.tscn
 res://Scripts/UI/main_title.gd
 res://scenes/UI/cutscene_1.tscn
 res://Scripts/UI/cutscene_1.gd
+res://Scripts/weapons/magic_weapon.gd
+res://Scripts/weapons/explosion_indicator.gd
+res://Scripts/data/weapon_database.gd

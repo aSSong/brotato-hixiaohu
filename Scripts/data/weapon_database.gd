@@ -114,7 +114,9 @@ static func initialize_weapons() -> void:
 	fireball.description = "基础魔法武器，造成范围爆炸伤害"
 	fireball.explosion_radius = 150.0
 	fireball.explosion_damage_multiplier = 1.0
-	fireball.max_targets = 3
+	fireball.max_targets = 1  # 只攻击1个目标，避免太多圈
+	fireball.has_explosion_damage = true  # 有爆炸伤害
+	fireball.attack_cast_delay = 0.5  # 0.5秒延迟
 	weapons["fireball"] = fireball
 	
 	var ice_shard = WeaponData.new(
@@ -129,7 +131,9 @@ static func initialize_weapons() -> void:
 	ice_shard.description = "快速攻击的魔法武器，较小爆炸范围"
 	ice_shard.explosion_radius = 100.0
 	ice_shard.explosion_damage_multiplier = 0.8
-	ice_shard.max_targets = 2
+	ice_shard.max_targets = 1
+	ice_shard.has_explosion_damage = true
+	ice_shard.attack_cast_delay = 0.3  # 0.3秒延迟，更快
 	weapons["ice_shard"] = ice_shard
 	
 	var meteor = WeaponData.new(
@@ -144,7 +148,9 @@ static func initialize_weapons() -> void:
 	meteor.description = "高伤害魔法武器，超大爆炸范围"
 	meteor.explosion_radius = 250.0
 	meteor.explosion_damage_multiplier = 1.5
-	meteor.max_targets = 8
+	meteor.max_targets = 1
+	meteor.has_explosion_damage = true
+	meteor.attack_cast_delay = 1.0  # 1秒延迟，更有冲击感
 	weapons["meteor"] = meteor
 
 ## 获取武器
