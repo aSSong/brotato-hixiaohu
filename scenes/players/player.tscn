@@ -1,31 +1,29 @@
-[gd_scene load_steps=11 format=3 uid="uid://cktxl6bnggc0p"]
+[gd_scene load_steps=12 format=3 uid="uid://cktxl6bnggc0p"]
 
 [ext_resource type="Script" uid="uid://vk8vnqvjt832" path="res://Scripts/players/player.gd" id="1_ldeu4"]
-[ext_resource type="Texture2D" uid="uid://b0jvpfev04c8w" path="res://assets/player/player1-sheet.png" id="1_plyga"]
+[ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_edvpf"]
+[ext_resource type="Texture2D" uid="uid://ch4ap7servpot" path="res://assets/player/player1-Sheet.png" id="2_kc87p"]
 [ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_kc87p"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ldeu4"]
-atlas = ExtResource("1_plyga")
-region = Rect2(0, 0, 240, 240)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_kc87p"]
-atlas = ExtResource("1_plyga")
-region = Rect2(240, 0, 240, 240)
+atlas = ExtResource("2_kc87p")
+region = Rect2(0, 0, 130, 240)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_edvpf"]
-atlas = ExtResource("1_plyga")
-region = Rect2(480, 0, 240, 240)
+atlas = ExtResource("2_kc87p")
+region = Rect2(130, 0, 130, 240)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_olb2f"]
-atlas = ExtResource("1_plyga")
-region = Rect2(720, 0, 240, 240)
+atlas = ExtResource("2_kc87p")
+region = Rect2(260, 0, 130, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sguum"]
+atlas = ExtResource("2_kc87p")
+region = Rect2(390, 0, 130, 240)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5iv5l"]
 animations = [{
 "frames": [{
-"duration": 0.5,
-"texture": SubResource("AtlasTexture_ldeu4")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kc87p")
 }, {
@@ -34,6 +32,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_olb2f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sguum")
 }],
 "loop": true,
 "name": &"default",
@@ -53,13 +54,19 @@ scale = Vector2(0.6, 0.6)
 collision_mask = 3
 script = ExtResource("1_ldeu4")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.11372549, 0.11372549, 0.11372549, 0.7254902)
+position = Vector2(-10.000001, 91.666664)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_edvpf")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
+z_index = 5
 position = Vector2(-10, -24.999989)
 sprite_frames = SubResource("SpriteFrames_5iv5l")
 autoplay = "default"
-frame = 3
-frame_progress = 0.98023015
+frame_progress = 0.7645962
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-11.666668, -15.33334)

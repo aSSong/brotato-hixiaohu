@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c3e5k7m8oap2q"]
+[gd_scene load_steps=2 format=3 uid="uid://u4r0uw2dcgyv"]
 
-[ext_resource type="Script" path="res://Scripts/UI/esc_menu.gd" id="1_esc"]
+[ext_resource type="Script" uid="uid://dei6vpqivimfx" path="res://Scripts/UI/esc_menu.gd" id="1_esc"]
 
 [node name="ESCMenu" type="CanvasLayer"]
 process_mode = 3
@@ -82,4 +82,3 @@ horizontal_alignment = 1
 
 [connection signal="pressed" from="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/ResumeButton" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton" to="." method="_on_main_menu_pressed"]
-

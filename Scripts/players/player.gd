@@ -64,8 +64,8 @@ func choosePlayer(type):
 	var sprite_frame_custom = SpriteFrames.new()
 	#sprite_frame_custom.add_animation("default")
 	#sprite_frame_custom.set_animation_loop("default",true)
-	var texture_size = Vector2(960,240)
-	var sprite_size = Vector2(240,240)
+	var texture_size = Vector2(520,240)
+	var sprite_size = Vector2(130,240)
 	var full_texture : Texture = load(player_path + type + "-sheet.png")
 	
 	var num_columns = int(texture_size.x / sprite_size.x )
