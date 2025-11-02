@@ -17,7 +17,7 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.RANGED,
 		2,  # damage
 		0.4,  # attack_speed
-		600.0,  # range
+		800.0,  # range
 		"res://assets/weapon/WeaponPistol.png",
 		Vector2(1, 1)  # scale
 	)
@@ -31,7 +31,7 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.RANGED,
 		4,  # damage
 		0.6,  # attack_speed
-		800.0,  # range
+		900.0,  # range
 		"res://assets/weapon/WeaponShotgun.png",
 		Vector2(1, 1)  # scale (稍大)
 	)
@@ -46,7 +46,7 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.RANGED,
 		1,  # damage
 		0.15,  # attack_speed (很快)
-		500.0,  # range
+		800.0,  # range
 		"res://assets/weapon/WeaponSMG.png",
 		Vector2(1, 1)  # scale (稍小)
 	)
@@ -107,7 +107,7 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MAGIC,
 		5,  # damage
 		0.7,  # attack_speed
-		600.0,  # range
+		800.0,  # range
 		"res://assets/weapon/Weapon_fire.png",
 		Vector2(1, 1)  # scale
 	)
@@ -126,7 +126,7 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MAGIC,
 		4,  # damage
 		0.5,  # attack_speed
-		500.0,  # range
+		900.0,  # range
 		"res://assets/weapon/Weapon_ice.png",
 		Vector2(1, 1)  # scale
 	)
