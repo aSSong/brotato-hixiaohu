@@ -27,9 +27,8 @@ func _ready() -> void:
 
 ## 返回主菜单
 func _on_return_button_pressed() -> void:
-	var start_menu_scene = load("res://scenes/UI/start_menu.tscn")
+	var start_menu_scene = load("res://scenes/UI/main_title.tscn")
 	if start_menu_scene:
 		get_tree().change_scene_to_packed(start_menu_scene)
 		# 重置游戏数据
 		GameMain.reset_game()
-
