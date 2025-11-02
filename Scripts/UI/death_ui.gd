@@ -32,7 +32,7 @@ func show_death_screen(revive_count: int, current_gold: int) -> void:
 	revive_cost = 5 * (revive_count + 1)
 	can_afford = current_gold >= revive_cost
 	
-	# 更新动态文本（金币数量和按钮状态）
+	# 更新动态文本（钥匙数量和按钮状态）
 	cost_label.text = "复活费用：%d 钥匙" % revive_cost
 	
 	# 更新复活按钮状态

@@ -109,9 +109,9 @@ func show_popup(change: int) -> void:
 	popup.add_theme_font_size_override("font_size", 25)
 	popup.modulate = Color.YELLOW
 	
-	# 添加到场景中（相对于金币 UI）
+	# 添加到场景中（相对于钥匙 UI）
 	self.gold.add_child(popup)
-	popup.position = Vector2(0, -15)  # 在金币数字旁边
+	popup.position = Vector2(0, -15)  # 在钥匙数字旁边
 	
 	# 动画：向上飘 + 淡出
 	var tween = create_tween()

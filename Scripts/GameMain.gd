@@ -30,7 +30,7 @@ func init_duplicate_node():
 	duplicate_node = node2d
 	pass
 
-# 信号：当金币数量改变时发出
+# 信号：当钥匙数量改变时发出
 signal gold_changed(new_amount: int, change: int)
 # 信号：当主钥数量改变时发出
 signal master_key_changed(new_amount: int, change: int)
@@ -73,13 +73,13 @@ var score: int = 0
 var level: int = 1
 var revive_count: int = 0  # 本局游戏累计复活次数
 
-# 添加金币
+# 添加钥匙
 func add_gold(amount: int) -> void:
 	gold += amount
 	item_collected.emit("gold")
-	print("获得金币: +%d (总计: %d)" % [amount, gold])
+	print("获得钥匙: +%d (总计: %d)" % [amount, gold])
 
-# 扣除金币
+# 扣除钥匙
 func remove_gold(amount: int) -> bool:
 	if gold >= amount:
 		gold -= amount

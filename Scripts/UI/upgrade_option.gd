@@ -54,7 +54,7 @@ func get_upgrade_data() -> UpgradeData:
 
 func _update_cost_display() -> void:
 	if cost_label and upgrade_data:
-		cost_label.text = "%d 金币" % upgrade_data.cost
+		cost_label.text = "%d 钥匙" % upgrade_data.cost
 	_update_buy_button()
 
 func _update_buy_button() -> void:
@@ -74,7 +74,7 @@ func _on_buy_button_pressed() -> void:
 		purchased.emit(upgrade_data)
 
 func _process(_delta: float) -> void:
-	# 实时更新购买按钮状态（金币变化时）
+	# 实时更新购买按钮状态（钥匙变化时）
 	if upgrade_data:
 		_update_buy_button()
 

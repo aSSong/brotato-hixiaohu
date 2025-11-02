@@ -201,18 +201,18 @@ func _show_death_ui() -> void:
 	var current_gold = GameMain.gold
 	death_ui.show_death_screen(revive_count, current_gold)
 	
-	print("[DeathManager] 显示死亡UI | 金币:", current_gold, " 复活费用:", 5 * (revive_count + 1))
+	print("[DeathManager] 显示死亡UI | 钥匙:", current_gold, " 复活费用:", 5 * (revive_count + 1))
 
 ## 复活请求
 func _on_revive_requested() -> void:
 	var cost = 5 * (revive_count + 1)
 	
-	# 检查金币是否足够
+	# 检查钥匙是否足够
 	if GameMain.gold < cost:
-		push_warning("[DeathManager] 金币不足，无法复活")
+		push_warning("[DeathManager] 钥匙不足，无法复活")
 		return
 	
-	# 扣除金币
+	# 扣除钥匙
 	GameMain.remove_gold(cost)
 	
 	# 增加复活次数
@@ -221,7 +221,7 @@ func _on_revive_requested() -> void:
 	# 复活玩家
 	_revive_player()
 	
-	print("[DeathManager] 玩家复活！花费:", cost, " 剩余金币:", GameMain.gold, " 累计复活次数:", revive_count)
+	print("[DeathManager] 玩家复活！花费:", cost, " 剩余钥匙:", GameMain.gold, " 累计复活次数:", revive_count)
 
 ## 放弃请求
 func _on_give_up_requested() -> void:

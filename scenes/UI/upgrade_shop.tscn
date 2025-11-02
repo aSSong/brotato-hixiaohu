@@ -78,7 +78,7 @@ offset_top = -20.0
 offset_right = -5.0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 12
-text = "刷新: 2 金币"
+text = "刷新: 2 钥匙"
 
 [node name="CloseButton" type="Button" parent="MainPanel/VBoxContainer/ButtonContainer"]
 unique_name_in_owner = true

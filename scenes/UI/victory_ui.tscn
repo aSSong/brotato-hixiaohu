@@ -64,7 +64,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
-text = "恭喜你收集了足够的金币！"
+text = "恭喜你收集了足够的钥匙！"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -73,7 +73,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
 theme_override_font_sizes/font_size = 40
-text = "收集金币: 200"
+text = "收集钥匙: 200"
 horizontal_alignment = 1
 vertical_alignment = 1
 

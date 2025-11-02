@@ -282,10 +282,10 @@ func _clear_upgrades() -> void:
 ## 购买升级
 func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	if GameMain.gold < upgrade.cost:
-		print("金币不足！")
+		print("钥匙不足！")
 		return
 	
-	# 扣除金币
+	# 扣除钥匙
 	GameMain.remove_gold(upgrade.cost)
 	
 	# 应用升级效果
@@ -391,7 +391,7 @@ func _apply_weapon_level_upgrade(weapon_id: String) -> void:
 ## 刷新按钮
 func _on_refresh_button_pressed() -> void:
 	if GameMain.gold < refresh_cost:
-		print("金币不足！")
+		print("钥匙不足！")
 		return
 	
 	GameMain.remove_gold(refresh_cost)
@@ -406,4 +406,4 @@ func _on_close_button_pressed() -> void:
 ## 更新刷新费用显示
 func _update_refresh_cost_display() -> void:
 	if refresh_cost_label:
-		refresh_cost_label.text = "刷新: %d 金币" % refresh_cost
+		refresh_cost_label.text = "刷新: %d 钥匙" % refresh_cost
