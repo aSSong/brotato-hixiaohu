@@ -195,8 +195,8 @@ func _setup_appearance() -> void:
 	ghostAni.sprite_frames.clear_all()
 	
 	var sprite_frame_custom = SpriteFrames.new()
-	var texture_size = Vector2(960, 240)
-	var sprite_size = Vector2(240, 240)
+	var texture_size = Vector2(520, 240)
+	var sprite_size = Vector2(130, 240)
 	var full_texture: Texture = load(player_path + player_type + "-sheet.png")
 	
 	var num_columns = int(texture_size.x / sprite_size.x)
