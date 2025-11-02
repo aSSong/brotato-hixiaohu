@@ -29,6 +29,9 @@ func _ready() -> void:
 	# 创建死亡管理器
 	_create_death_manager()
 	
+	# 创建ESC菜单管理器
+	_create_esc_menu_manager()
+	
 	print("[GameInitializer] 游戏初始化完成")
 
 ## 创建死亡UI
@@ -60,4 +63,12 @@ func _create_death_manager() -> void:
 		death_manager.set_floor_layer(floor_layer)
 	
 	print("[GameInitializer] 死亡管理器已创建")
+
+## 创建ESC菜单管理器
+func _create_esc_menu_manager() -> void:
+	var esc_manager = Node.new()
+	esc_manager.name = "ESCMenuManager"
+	esc_manager.set_script(load("res://Scripts/UI/esc_menu_manager.gd"))
+	add_child(esc_manager)
+	print("[GameInitializer] ESC菜单管理器已创建")
 
