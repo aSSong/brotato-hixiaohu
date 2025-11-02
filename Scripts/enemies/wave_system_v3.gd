@@ -59,43 +59,65 @@ func _initialize_waves() -> void:
 	wave_configs.clear()
 	
 	# 200波，每波比上一波多2个敌人
-	# 第1波: 10个敌人 (7 basic + 2 fast + 1 last)
-	# 第2波: 12个敌人
+	# 第1波: 10个敌人 (9个普通 + 1个BOSS)
+	# 第2波: 12个敌人 (11个普通 + 1个BOSS)
 	# ...
 	# 第200波: 408个敌人
+	
+	# 敌人配比：50%基础，20%快速，20%坦克，10%精英
 	
 	for wave in range(200):
 		var wave_number = wave + 1
 		
-		# 计算本波普通敌人数量（不含最后一只）
-		# 第1波: 9个普通 + 1个last = 10个
-		# 第2波: 11个普通 + 1个last = 12个
+		# 计算本波普通敌人数量（不含BOSS）
+		# 第1波: 9个普通 + 1个BOSS = 10个
+		# 第2波: 11个普通 + 1个BOSS = 12个
 		var normal_enemy_count = 9 + (wave * 2)
 		
-		# 基础配比：7 basic, 2 fast
-		var basic_count = int(normal_enemy_count * 0.78)  # 约78%
-		var fast_count = normal_enemy_count - basic_count
+		# 按照配比分配敌人数量
+		var basic_count = int(normal_enemy_count * 0.5)   # 50%基础敌人
+		var fast_count = int(normal_enemy_count * 0.2)    # 20%快速敌人
+		var tank_count = int(normal_enemy_count * 0.2)    # 20%坦克敌人
+		var elite_count = int(normal_enemy_count * 0.1)   # 10%精英敌人
+		
+		# 确保总数正确（处理取整误差）
+		var total = basic_count + fast_count + tank_count + elite_count
+		var diff = normal_enemy_count - total
+		if diff > 0:
+			basic_count += diff  # 余数加到基础敌人
+		
+		# 确保每种敌人至少有1个（从第1波开始）
+		if basic_count == 0:
+			basic_count = 1
+		if fast_count == 0:
+			fast_count = 1
+		if tank_count == 0:
+			tank_count = 1
+		if elite_count == 0:
+			elite_count = 1
+		
+		# 重新平衡（如果强制添加后超出）
+		total = basic_count + fast_count + tank_count + elite_count
+		if total > normal_enemy_count:
+			var excess = total - normal_enemy_count
+			basic_count = max(1, basic_count - excess)
 		
 		var config = {
 			"wave_number": wave_number,
 			"enemies": [
 				{"id": "basic", "count": basic_count},
 				{"id": "fast", "count": fast_count},
+				{"id": "tank", "count": tank_count},
+				{"id": "elite", "count": elite_count}
 			],
-			"last_enemy": {"id": "last_enemy", "count": 1}  # 使用专门的last_enemy类型
+			"last_enemy": {"id": "last_enemy", "count": 1}  # BOSS
 		}
-		
-		# 每5波增加1个坦克（替换掉1个basic）
-		if wave_number % 5 == 0 and basic_count > 0:
-			config.enemies = [
-				{"id": "basic", "count": basic_count - 1},
-				{"id": "fast", "count": fast_count},
-				{"id": "tank", "count": 1}
-			]
 		
 		wave_configs.append(config)
 	
 	print("[WaveSystem V3] 初始化完成：", wave_configs.size(), "波")
+	print("[WaveSystem V3] 第1波配置：", wave_configs[0])
+	print("[WaveSystem V3] 第10波配置：", wave_configs[9])
 
 ## 设置敌人生成器
 func set_enemy_spawner(spawner: Node) -> void:
