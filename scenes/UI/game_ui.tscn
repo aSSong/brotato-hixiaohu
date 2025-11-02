@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://c44attsrfmghf"]
 
-[ext_resource type="Texture2D" uid="uid://duevf8vt5afyb" path="res://assets/items/gold.png" id="1_4u50f"]
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 [ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
-[ext_resource type="Texture2D" uid="uid://b71hdqjlbl54a" path="res://assets/items/masterkey.png" id="3_masterkey"]
+[ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="2_yr8ot"]
+[ext_resource type="Texture2D" uid="uid://d0y4qqnoa48r2" path="res://assets/items/mkey.png" id="3_5b3ti"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
@@ -117,16 +117,16 @@ grow_vertical = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="gold/Control"]
 position = Vector2(-33, 17)
-scale = Vector2(3, 5)
-texture = ExtResource("1_4u50f")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_yr8ot")
 
 [node name="master_key" type="Label" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 offset_left = 352.0
-offset_top = 137.0
+offset_top = 135.0
 offset_right = 702.0
-offset_bottom = 186.0
+offset_bottom = 184.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
@@ -144,9 +144,9 @@ offset_right = 35.0
 grow_vertical = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="master_key/Control"]
-position = Vector2(-33, 18)
-scale = Vector2(2, 2)
-texture = ExtResource("3_masterkey")
+position = Vector2(-33, 17)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_5b3ti")
 
 [node name="status" type="MarginContainer" parent="."]
 offset_left = 50.0

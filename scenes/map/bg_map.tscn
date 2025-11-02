@@ -485,7 +485,6 @@ position = Vector2(1198, 950)
 floor_layer_path = NodePath("../TileMap_BG")
 
 [node name="game_ui" parent="." instance=ExtResource("4_asq3l")]
-visible = false
 
 [node name="GameInitializer" type="Node2D" parent="."]
 script = ExtResource("6_game_initializer")
