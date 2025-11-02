@@ -62,7 +62,7 @@ static func initialize_weapons() -> void:
 		3,  # damage
 		0.5,  # attack_speed
 		150.0,  # range
-		"res://assets/weapon/Weapon_sword.png",
+		"res://assets/weapon/Weapon_lasersword.png",
 		Vector2(1, 1)  # scale
 	)
 	sword.description = "基础近战武器，旋转攻击"
@@ -92,7 +92,7 @@ static func initialize_weapons() -> void:
 		2,  # damage
 		0.3,  # attack_speed
 		100.0,  # range
-		"res://assets/weapon/Weapon_Punch.png",
+		"res://assets/weapon/Weapon_sword.png",
 		Vector2(1, 1)  # scale (更小)
 	)
 	dagger.description = "快速攻击的近战武器"
@@ -108,7 +108,7 @@ static func initialize_weapons() -> void:
 		5,  # damage
 		0.7,  # attack_speed
 		600.0,  # range
-		"res://assets/weapon/Weapon_wand.png",
+		"res://assets/weapon/Weapon_fire.png",
 		Vector2(1, 1)  # scale
 	)
 	fireball.description = "基础魔法武器，造成范围爆炸伤害"
@@ -127,7 +127,7 @@ static func initialize_weapons() -> void:
 		4,  # damage
 		0.5,  # attack_speed
 		500.0,  # range
-		"res://assets/weapon/Weapon_chainsaw.png",
+		"res://assets/weapon/Weapon_ice.png",
 		Vector2(1, 1)  # scale
 	)
 	ice_shard.description = "快速攻击的魔法武器，较小爆炸范围"
@@ -146,7 +146,7 @@ static func initialize_weapons() -> void:
 		10,  # damage
 		1.5,  # attack_speed (很慢)
 		700.0,  # range
-		"res://assets/weapon/Weapon_mace.png",
+		"res://assets/weapon/Weapon_stone.png",
 		Vector2(1, 1)  # scale (最大)
 	)
 	meteor.description = "高伤害魔法武器，超大爆炸范围"
