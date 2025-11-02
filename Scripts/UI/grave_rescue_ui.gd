@@ -86,4 +86,3 @@ func _on_cancel_pressed() -> void:
 ## 隐藏界面
 func hide_dialog() -> void:
 	hide()
-

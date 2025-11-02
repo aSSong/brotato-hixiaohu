@@ -68,4 +68,3 @@ func _on_give_up_pressed() -> void:
 ## 隐藏界面
 func hide_death_screen() -> void:
 	hide()
-

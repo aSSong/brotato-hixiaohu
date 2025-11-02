@@ -241,7 +241,7 @@ func _on_give_up_requested() -> void:
 	
 	# 返回主菜单
 	await get_tree().create_timer(0.1).timeout
-	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/main_title.tscn")
 
 ## 复活玩家
 func _revive_player() -> void:
@@ -329,4 +329,3 @@ func get_revive_count() -> int:
 ## 获取下次复活费用
 func get_next_revive_cost() -> int:
 	return 5 * (revive_count + 1)
-

@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8vxp8yqm7kqw"]
+[gd_scene load_steps=2 format=3 uid="uid://poo5j107el5u"]
 
-[ext_resource type="Script" path="res://Scripts/UI/death_ui.gd" id="1"]
+[ext_resource type="Script" uid="uid://d170ibjmyne1" path="res://Scripts/UI/death_ui.gd" id="1"]
 
 [node name="DeathUI" type="CanvasLayer"]
 layer = 100
@@ -64,4 +64,3 @@ custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "放弃"
-
