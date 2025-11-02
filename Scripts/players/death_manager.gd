@@ -22,7 +22,7 @@ var is_dead: bool = false
 var revive_count: int = 0  # 本局累计复活次数
 var death_count: int = 0  # 本局累计死亡次数（包括已复活的）
 var death_timer: float = 0.0
-var death_delay: float = 3.0  # 死亡延迟时间
+var death_delay: float = 1.5  # 死亡延迟时间
 var death_position: Vector2 = Vector2.ZERO  # 记录死亡位置
 
 func _ready() -> void:

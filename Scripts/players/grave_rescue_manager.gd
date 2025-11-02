@@ -16,7 +16,7 @@ const RESCUE_RANGE: float = 400.0
 ## 读条相关
 var is_in_range: bool = false
 var rescue_progress: float = 0.0
-const RESCUE_TIME: float = 5.0
+const RESCUE_TIME: float = 2.0
 var is_reading: bool = false
 
 ## UI元素
