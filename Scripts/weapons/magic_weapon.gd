@@ -122,6 +122,9 @@ func _execute_cast(cast_data: Dictionary) -> void:
 		if weapon_data.has_explosion_damage and explosion_radius > 0:
 			_explode_at_position(explosion_position, explosion_radius, damage, null)
 	
+	# 播放爆炸粒子效果
+	_create_explosion_effect(explosion_position)
+	
 	# 清理指示器
 	if cast_data.indicator and is_instance_valid(cast_data.indicator):
 		cast_data.indicator.hide_and_remove()
@@ -181,10 +184,16 @@ func _execute_immediate_attack(target: Node2D, damage: int, radius: float, show_
 		# 爆炸范围伤害（排除主目标）
 		if weapon_data.has_explosion_damage and radius > 0:
 			_explode_at_position(target.global_position, radius, damage, target)
+		
+		# 播放爆炸粒子效果
+		_create_explosion_effect(target.global_position)
 	else:
 		# 非锁敌模式：只有爆炸伤害
 		if weapon_data.has_explosion_damage and radius > 0:
 			_explode_at_position(target.global_position, radius, damage, null)
+		
+		# 播放爆炸粒子效果
+		_create_explosion_effect(target.global_position)
 
 ## 开始施法
 func _start_cast(target: Node2D, damage: int, radius: float, delay: float, show_indicator: bool) -> void:
@@ -282,11 +291,56 @@ func _explode_at_position(pos: Vector2, radius: float, base_damage: int, exclude
 			if enemy.has_method("enemy_hurt"):
 				enemy.enemy_hurt(final_damage)
 
-## 创建爆炸特效（可选）
-func _create_explosion_effect(_pos: Vector2) -> void:
-	# 这里可以添加粒子效果或其他视觉特效
-	# 例如：GameMain.animation_scene_obj.run_animation({...})
-	pass
+## 创建爆炸特效
+func _create_explosion_effect(pos: Vector2) -> void:
+	# 检查是否配置了粒子效果
+	if weapon_data == null or weapon_data.explosion_particle_path == "":
+		return
+	
+	# 加载粒子场景
+	var particle_scene = load(weapon_data.explosion_particle_path)
+	if particle_scene == null:
+		push_error("[MagicWeapon] 无法加载粒子场景: " + weapon_data.explosion_particle_path)
+		return
+	
+	# 实例化粒子效果
+	var particle_instance = particle_scene.instantiate()
+	if particle_instance == null:
+		return
+	
+	# 设置位置
+	particle_instance.global_position = pos
+	
+	# 添加到场景树
+	get_tree().root.add_child(particle_instance)
+	
+	# 启动所有粒子发射器
+	for child in particle_instance.get_children():
+		if child is CPUParticles2D or child is GPUParticles2D:
+			child.emitting = true
+	
+	# 等待粒子播放完毕后自动删除
+	# 找到最长的粒子生命周期
+	var max_lifetime = 0.0
+	for child in particle_instance.get_children():
+		if child is CPUParticles2D:
+			var total_time = child.lifetime + child.explosiveness
+			if total_time > max_lifetime:
+				max_lifetime = total_time
+		elif child is GPUParticles2D:
+			if child.lifetime > max_lifetime:
+				max_lifetime = child.lifetime
+	
+	# 延迟删除
+	if max_lifetime > 0:
+		await get_tree().create_timer(max_lifetime + 0.5).timeout
+		if is_instance_valid(particle_instance):
+			particle_instance.queue_free()
+	else:
+		# 默认2秒后删除
+		await get_tree().create_timer(2.0).timeout
+		if is_instance_valid(particle_instance):
+			particle_instance.queue_free()
 
 ## 显示爆炸范围指示器（短暂显示，用于无延迟攻击）
 func _show_explosion_indicator(pos: Vector2, radius: float) -> void:

@@ -118,6 +118,7 @@ static func initialize_weapons() -> void:
 	fireball.has_explosion_damage = true  # 有爆炸伤害
 	fireball.attack_cast_delay = 0.5  # 0.5秒延迟
 	fireball.is_target_locked = true  # 锁定目标（跟随）
+	fireball.explosion_particle_path = "res://scenes/effects/fireball_explosion.tscn"
 	weapons["fireball"] = fireball
 	
 	var ice_shard = WeaponData.new(
@@ -136,6 +137,7 @@ static func initialize_weapons() -> void:
 	ice_shard.has_explosion_damage = true
 	ice_shard.attack_cast_delay = 0.3  # 0.3秒延迟，更快
 	ice_shard.is_target_locked = false  # 不锁定目标（固定位置）
+	ice_shard.explosion_particle_path = "res://scenes/effects/ice_explosion.tscn"
 	weapons["ice_shard"] = ice_shard
 	
 	var meteor = WeaponData.new(
@@ -154,6 +156,7 @@ static func initialize_weapons() -> void:
 	meteor.has_explosion_damage = true
 	meteor.attack_cast_delay = 1.0  # 1秒延迟，更有冲击感
 	meteor.is_target_locked = false  # 不锁定目标（范围攻击）
+	meteor.explosion_particle_path = "res://scenes/effects/meteor_explosion.tscn"
 	weapons["meteor"] = meteor
 
 ## 获取武器
