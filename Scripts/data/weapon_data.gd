@@ -39,6 +39,7 @@ enum WeaponType {
 @export var max_targets: int = 5  # 最大目标数量
 @export var has_explosion_damage: bool = true  # 是否有爆炸伤害（false则只有主伤害）
 @export var attack_cast_delay: float = 0.0  # 攻击延迟（秒）- 索敌到实际攻击的延迟
+@export var is_target_locked: bool = true  # 是否锁定目标（true=跟随目标，false=固定位置）
 
 ## 特殊效果
 @export var pierce_count: int = 0  # 穿透数量（0=不穿透）

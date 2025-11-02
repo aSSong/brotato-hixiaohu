@@ -14,7 +14,7 @@ var explosion_indicator_script = preload("res://Scripts/weapons/explosion_indica
 var indicator_duration: float = 0.3  # 显示持续时间
 
 ## 当前正在施法的攻击列表
-var casting_attacks: Array = []  # [{target, indicator, timer, damage}]
+var casting_attacks: Array = []  # [{target, target_position, indicator, timer, damage, is_locked}]
 
 ## 获取指示器颜色（根据武器类型）
 func _get_indicator_color() -> Color:
@@ -51,19 +51,22 @@ func _update_casting_attacks(delta: float) -> void:
 	for i in range(casting_attacks.size()):
 		var cast_data = casting_attacks[i]
 		
-		# 检查目标是否仍然有效
-		if not is_instance_valid(cast_data.target) or cast_data.target.get("is_dead"):
-			# 目标无效，取消攻击
-			_cancel_cast(cast_data)
-			attacks_to_remove.append(i)
-			continue
-		
-		# 检查目标是否还在范围内
-		if not attack_enemies.has(cast_data.target):
-			# 目标离开范围，取消攻击
-			_cancel_cast(cast_data)
-			attacks_to_remove.append(i)
-			continue
+		# 如果是锁敌模式，需要检查目标有效性
+		if cast_data.is_locked:
+			# 检查目标是否仍然有效
+			if not is_instance_valid(cast_data.target) or cast_data.target.get("is_dead"):
+				# 目标无效，取消攻击
+				_cancel_cast(cast_data)
+				attacks_to_remove.append(i)
+				continue
+			
+			# 检查目标是否还在范围内
+			if not attack_enemies.has(cast_data.target):
+				# 目标离开范围，取消攻击
+				_cancel_cast(cast_data)
+				attacks_to_remove.append(i)
+				continue
+		# 非锁敌模式不需要检查目标，只在固定位置爆炸
 		
 		# 更新倒计时
 		cast_data.timer -= delta
@@ -87,28 +90,39 @@ func _cancel_cast(cast_data: Dictionary) -> void:
 
 ## 执行施法
 func _execute_cast(cast_data: Dictionary) -> void:
-	var target = cast_data.target
 	var damage = cast_data.damage
-	
-	if not is_instance_valid(target):
-		# 清理指示器
-		if cast_data.indicator and is_instance_valid(cast_data.indicator):
-			cast_data.indicator.hide_and_remove()
-		return
-	
 	var explosion_radius = weapon_data.explosion_radius if weapon_data else 150.0
 	
-	# 对目标造成直接伤害
-	if target.has_method("enemy_hurt"):
-		var final_damage = int(damage * weapon_data.explosion_damage_multiplier)
-		target.enemy_hurt(final_damage)
+	# 确定爆炸位置
+	var explosion_position: Vector2
 	
-	# 爆炸范围伤害（如果启用）
-	if weapon_data.has_explosion_damage and explosion_radius > 0:
-		_explode_at_position(target.global_position, explosion_radius, damage, target)
+	if cast_data.is_locked:
+		# 锁敌模式：在目标当前位置爆炸
+		var target = cast_data.target
+		if not is_instance_valid(target):
+			# 目标无效，清理指示器
+			if cast_data.indicator and is_instance_valid(cast_data.indicator):
+				cast_data.indicator.hide_and_remove()
+			return
+		explosion_position = target.global_position
+		
+		# 对目标造成直接伤害
+		if target.has_method("enemy_hurt"):
+			var final_damage = int(damage * weapon_data.explosion_damage_multiplier)
+			target.enemy_hurt(final_damage)
+		
+		# 爆炸范围伤害（如果启用，排除主目标）
+		if weapon_data.has_explosion_damage and explosion_radius > 0:
+			_explode_at_position(explosion_position, explosion_radius, damage, target)
+	else:
+		# 非锁敌模式：在锁定的位置爆炸
+		explosion_position = cast_data.target_position
+		
+		# 只有爆炸伤害，没有直接伤害
+		if weapon_data.has_explosion_damage and explosion_radius > 0:
+			_explode_at_position(explosion_position, explosion_radius, damage, null)
 	
-	# 指示器会自动淡出删除（持续时间到）
-	# 但我们可以立即删除以同步攻击时机
+	# 清理指示器
 	if cast_data.indicator and is_instance_valid(cast_data.indicator):
 		cast_data.indicator.hide_and_remove()
 
@@ -128,12 +142,15 @@ func _perform_attack() -> void:
 	if targets.is_empty():
 		return
 	
+	# 调试：打印攻击信息
+	print("[MagicWeapon] %s 攻击 | 目标数:%d 延迟:%.1fs" % [weapon_data.weapon_name, targets.size(), weapon_data.attack_cast_delay])
+	
 	# 获取延迟时间
 	var cast_delay = weapon_data.attack_cast_delay if weapon_data else 0.0
 	var damage = get_damage()
 	var explosion_radius = weapon_data.explosion_radius
 	
-	# 只对第一个目标显示指示器（避免太多圈）
+	# 为每个目标显示指示器（现在全部显示）
 	for i in range(targets.size()):
 		var target = targets[i]
 		if not is_instance_valid(target):
@@ -141,38 +158,60 @@ func _perform_attack() -> void:
 		
 		# 如果有延迟，创建施法攻击
 		if cast_delay > 0:
-			_start_cast(target, damage, explosion_radius, cast_delay, i == 0)
+			# 现在每个目标都显示指示器
+			_start_cast(target, damage, explosion_radius, cast_delay, true)
 		else:
-			# 无延迟，立即攻击（只显示第一个目标的指示器）
-			if i == 0 and explosion_radius > 0:
-				_show_explosion_indicator(target.global_position, explosion_radius)
-			
-			# 直接伤害
-			if target.has_method("enemy_hurt"):
-				var final_damage = int(damage * weapon_data.explosion_damage_multiplier)
-				target.enemy_hurt(final_damage)
-			
-			# 爆炸范围伤害
-			if weapon_data.has_explosion_damage and explosion_radius > 0:
-				_explode_at_position(target.global_position, explosion_radius, damage, target)
+			# 无延迟，立即攻击
+			_execute_immediate_attack(target, damage, explosion_radius, true)
+
+## 立即执行攻击（无延迟）
+func _execute_immediate_attack(target: Node2D, damage: int, radius: float, show_indicator: bool) -> void:
+	var is_locked = weapon_data.is_target_locked if weapon_data else true
+	
+	# 只显示第一个目标的指示器
+	if show_indicator and radius > 0:
+		_show_explosion_indicator(target.global_position, radius)
+	
+	if is_locked:
+		# 锁敌模式：直接伤害 + 爆炸伤害
+		if target.has_method("enemy_hurt"):
+			var final_damage = int(damage * weapon_data.explosion_damage_multiplier)
+			target.enemy_hurt(final_damage)
+		
+		# 爆炸范围伤害（排除主目标）
+		if weapon_data.has_explosion_damage and radius > 0:
+			_explode_at_position(target.global_position, radius, damage, target)
+	else:
+		# 非锁敌模式：只有爆炸伤害
+		if weapon_data.has_explosion_damage and radius > 0:
+			_explode_at_position(target.global_position, radius, damage, null)
 
 ## 开始施法
 func _start_cast(target: Node2D, damage: int, radius: float, delay: float, show_indicator: bool) -> void:
+	var is_locked = weapon_data.is_target_locked if weapon_data else true
 	var indicator = null
+	var target_position = target.global_position  # 记录初始位置
 	
 	# 只为主要目标显示指示器
 	if show_indicator and radius > 0:
-		indicator = _create_persistent_indicator(target, radius, delay)
+		if is_locked:
+			# 锁敌模式：指示器跟随目标
+			indicator = _create_persistent_indicator(target, radius, delay)
+		else:
+			# 非锁敌模式：指示器固定在位置
+			indicator = _create_fixed_indicator(target_position, radius, delay)
 	
 	# 添加到施法列表
 	casting_attacks.append({
 		"target": target,
+		"target_position": target_position,  # 记录初始位置
 		"indicator": indicator,
 		"timer": delay,
-		"damage": damage
+		"damage": damage,
+		"is_locked": is_locked
 	})
 
-## 创建持续指示器
+## 创建持续指示器（跟随目标）
 func _create_persistent_indicator(target: Node2D, radius: float, duration: float) -> Node2D:
 	var indicator = Node2D.new()
 	indicator.set_script(explosion_indicator_script)
@@ -186,9 +225,37 @@ func _create_persistent_indicator(target: Node2D, radius: float, duration: float
 	# 获取颜色
 	var indicator_color = _get_indicator_color()
 	
-	# 显示持续指示器
+	# 显示持续指示器（跟随模式）
 	if indicator.has_method("show_persistent"):
 		indicator.show_persistent(target, radius, indicator_color, duration)
+	
+	print("[MagicWeapon] 创建跟随指示器 | 武器:%s 目标位置:(%.0f, %.0f) 颜色:%s" % [weapon_data.weapon_name, target.global_position.x, target.global_position.y, indicator_color])
+	
+	return indicator
+
+## 创建固定位置指示器（不跟随目标）
+func _create_fixed_indicator(position: Vector2, radius: float, duration: float) -> Node2D:
+	var indicator = Node2D.new()
+	indicator.set_script(explosion_indicator_script)
+	
+	# 先设置位置（在添加到场景树之前）
+	indicator.global_position = position
+	
+	# 添加到场景树
+	get_tree().root.add_child(indicator)
+	
+	# 初始化
+	indicator._ready()
+	
+	# 获取颜色
+	var indicator_color = _get_indicator_color()
+	
+	# 显示持续指示器（固定位置模式）
+	# 传null作为target，指示器会保持在当前位置
+	if indicator.has_method("show_persistent"):
+		indicator.show_persistent(null, radius, indicator_color, duration)
+	
+	print("[MagicWeapon] 创建固定位置指示器 | 武器:%s 位置:(%.0f, %.0f) 颜色:%s" % [weapon_data.weapon_name, position.x, position.y, indicator_color])
 	
 	return indicator
 

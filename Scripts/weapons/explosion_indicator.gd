@@ -37,6 +37,7 @@ func _process(_delta: float) -> void:
 	# 如果是持续显示且有目标，跟随目标移动
 	if is_persistent and follow_target and is_instance_valid(follow_target):
 		global_position = follow_target.global_position
+	# 如果没有目标，保持在原位置（固定位置模式）
 
 ## 创建共享纹理（静态，只执行一次）
 static func _create_shared_texture() -> void:
@@ -104,21 +105,23 @@ func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 0.5, 0.
 	# 播放淡入淡出动画
 	_play_animation()
 
-## 持续显示指示器（跟随目标）
-## target: 跟随的目标节点
+## 持续显示指示器（跟随目标或固定位置）
+## target: 跟随的目标节点（可以为null，表示固定位置）
 ## radius: 爆炸半径
 ## color: 指示器颜色
 ## duration: 持续显示时间（0表示无限）
 func show_persistent(target: Node2D, radius: float, color: Color, duration: float = 0.0) -> void:
-	if not circle_sprite or not is_instance_valid(target):
+	if not circle_sprite:
 		return
 	
 	is_persistent = true
-	follow_target = target
+	follow_target = target  # 可以是null
 	display_duration = duration
 	
 	# 设置初始位置
-	global_position = target.global_position
+	if target and is_instance_valid(target):
+		global_position = target.global_position
+	# 如果target为null，保持当前位置（由调用者设置）
 	
 	# 设置缩放
 	var scale_factor = radius / 256.0
