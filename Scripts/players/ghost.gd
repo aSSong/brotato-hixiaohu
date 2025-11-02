@@ -238,11 +238,8 @@ func _create_weapons() -> void:
 		print("[Ghost] 添加武器", i+1, ":", weapon_data["id"], " Lv.", weapon_data["level"])
 		
 		if weapons_node and weapons_node.has_method("add_weapon"):
-			# 调用add_weapon，这是一个异步方法
-			weapons_node.add_weapon(weapon_data["id"], weapon_data["level"])
-			# 等待2帧确保武器完全初始化（add_weapon内部有await）
-			await get_tree().process_frame
-			await get_tree().process_frame
+			# 调用add_weapon，这是一个异步方法，必须等待它完成
+			await weapons_node.add_weapon(weapon_data["id"], weapon_data["level"])
 	
 	print("[Ghost] 武器创建完成，weapons_node子节点数:", weapons_node.get_child_count())
 

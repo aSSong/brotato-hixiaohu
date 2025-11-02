@@ -376,9 +376,7 @@ func _apply_new_weapon_upgrade(weapon_id: String) -> void:
 		weapons_manager = get_tree().get_first_node_in_group("weapons")
 	
 	if weapons_manager and weapons_manager.has_method("add_weapon"):
-		weapons_manager.add_weapon(weapon_id, 1)  # 新武器固定1级
-		# 等待武器添加完成
-		await get_tree().process_frame
+		await weapons_manager.add_weapon(weapon_id, 1)  # 新武器固定1级，必须等待完成
 
 func _apply_weapon_level_upgrade(weapon_id: String) -> void:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")

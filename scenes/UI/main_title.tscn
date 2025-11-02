@@ -1,13 +1,102 @@
-[gd_scene load_steps=4 format=3 uid="uid://dnt2sd4mt6yw8"]
+[gd_scene load_steps=11 format=3 uid="uid://dnt2sd4mt6yw8"]
 
 [ext_resource type="Script" uid="uid://dfrk5jfj3ogys" path="res://Scripts/UI/main_title.gd" id="1_3tovs"]
-[ext_resource type="Texture2D" uid="uid://quwu684esq2e" path="res://assets/UI/maintitle_bg.png" id="1_5xvm6"]
+[ext_resource type="Texture2D" uid="uid://8u7fpyh5r02f" path="res://assets/UI/maintitle/bg.png" id="2_um0kg"]
+[ext_resource type="Texture2D" uid="uid://b1dqjv2lw154v" path="res://assets/UI/maintitle/title-1.png" id="3_va1ok"]
+[ext_resource type="Texture2D" uid="uid://dslocqmem63dh" path="res://assets/UI/maintitle/title-2.png" id="4_phujf"]
+[ext_resource type="Texture2D" uid="uid://dxp6xkay5gvjc" path="res://assets/UI/maintitle/text-03.png" id="5_r3xu7"]
+[ext_resource type="Texture2D" uid="uid://lijt3pr5dbop" path="res://assets/UI/maintitle/图层 1.png" id="6_yr50f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xvm6"]
 corner_radius_top_left = 30
 corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
+
+[sub_resource type="Animation" id="Animation_fraxl"]
+resource_name = "kkey"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Text03:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.9666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("图层1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.53333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Text03:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(2, 2.3, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.4, 0.4), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nb8ff"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Text03:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("图层1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Text03:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_adb34"]
+_data = {
+&"RESET": SubResource("Animation_nb8ff"),
+&"kkey": SubResource("Animation_fraxl")
+}
 
 [node name="MainTitle" type="Control"]
 layout_mode = 3
@@ -25,46 +114,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_5xvm6")
-
-[node name="title" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -960.0
-offset_top = 100.0
-offset_right = 960.0
-offset_bottom = 500.0
-grow_horizontal = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="title"]
-layout_mode = 2
-
-[node name="title_cn" type="Label" parent="title/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 120
-text = "关 键 一 战"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="title_en" type="Label" parent="title/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 80
-text = "The Key Battle of Garena"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("2_um0kg")
 
 [node name="menu" type="MarginContainer" parent="."]
 custom_minimum_size = Vector2(600, 600)
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 76.0
-offset_top = -124.0
-offset_right = 676.0
-offset_bottom = 476.0
+offset_left = -506.0
+offset_top = 72.0
+offset_right = 94.0
+offset_bottom = 672.0
+grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="menu"]
@@ -98,6 +162,31 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_5xvm6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_5xvm6")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5xvm6")
 text = "Q U I T"
+
+[node name="Title1" type="Sprite2D" parent="."]
+position = Vector2(488, 376)
+texture = ExtResource("3_va1ok")
+
+[node name="Title2" type="Sprite2D" parent="."]
+position = Vector2(1050, 283)
+texture = ExtResource("4_phujf")
+
+[node name="Text03" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1238, 476)
+texture = ExtResource("5_r3xu7")
+
+[node name="图层1" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1090.9999, 282)
+rotation = -0.7295476
+scale = Vector2(0.72, 0.72)
+texture = ExtResource("6_yr50f")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_adb34")
+}
 
 [connection signal="pressed" from="menu/VBoxContainer/btn_single_play" to="." method="_on_btn_single_play_pressed"]
 [connection signal="pressed" from="menu/VBoxContainer/btn_Quit" to="." method="_on_btn_quit_pressed"]
