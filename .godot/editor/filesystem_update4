@@ -42,3 +42,6 @@ res://Scripts/UI/cutscene_1.gd
 res://Scripts/weapons/magic_weapon.gd
 res://Scripts/weapons/explosion_indicator.gd
 res://Scripts/data/weapon_database.gd
+res://scenes/UI/esc_menu.tscn
+res://Scripts/UI/esc_menu.gd
+res://scenes/UI/start_menu.tscn
