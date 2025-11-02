@@ -1,7 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://bn6xtfxrcaon"]
+[gd_scene load_steps=23 format=3 uid="uid://bn6xtfxrcaon"]
 
 [ext_resource type="Script" uid="uid://dqbe40akqpv4e" path="res://Scripts/UI/cutscene_1.gd" id="1_noght"]
-[ext_resource type="Texture2D" uid="uid://bgvt2g3y1g5pe" path="res://assets/cutscene/cutscene_00.png" id="2_eb661"]
+[ext_resource type="Texture2D" uid="uid://bmid8ntlnwjek" path="res://assets/cutscene/frames/1.png" id="3_g22yg"]
+[ext_resource type="Texture2D" uid="uid://1m5davvctb7f" path="res://assets/cutscene/frames/2.png" id="4_wjw2t"]
+[ext_resource type="Texture2D" uid="uid://b164pvj30ss03" path="res://assets/cutscene/frames/3.png" id="5_m3rxv"]
+[ext_resource type="Texture2D" uid="uid://bjnyatqs23vx0" path="res://assets/cutscene/frames/4.png" id="6_lot02"]
+[ext_resource type="Texture2D" uid="uid://mpk1r50fyn7i" path="res://assets/cutscene/frames/5.png" id="7_dxmb1"]
+[ext_resource type="Texture2D" uid="uid://cojbpbuxfcx76" path="res://assets/cutscene/frames/6.png" id="7_xkyjr"]
+[ext_resource type="Texture2D" uid="uid://bq0xrvyjebdw6" path="res://assets/cutscene/bubbles/1_pop.png" id="8_nijxb"]
+[ext_resource type="Texture2D" uid="uid://csfjgo3ikay7p" path="res://assets/cutscene/bubbles/3_pop2.png" id="9_gn20c"]
+[ext_resource type="Texture2D" uid="uid://clrf2pgr458os" path="res://assets/cutscene/bubbles/3_pop.png" id="10_c24b6"]
+[ext_resource type="Texture2D" uid="uid://bjrbaq7c6pwbf" path="res://assets/cutscene/bubbles/6-pop2.png" id="11_xd2mq"]
+[ext_resource type="Texture2D" uid="uid://bc6q7iwfodn1d" path="res://assets/cutscene/bubbles/6_pop1.png" id="12_gvvye"]
+[ext_resource type="Texture2D" uid="uid://dhrlh17d5w6kq" path="res://assets/cutscene/subs/1_pop_text.png" id="13_07uu0"]
+[ext_resource type="Texture2D" uid="uid://dwms1s7a1i4v4" path="res://assets/cutscene/subs/3_pop2_text2.png" id="14_qxlus"]
+[ext_resource type="Texture2D" uid="uid://ctqxho5726fni" path="res://assets/cutscene/subs/3_pop_text.png" id="15_h1vrd"]
+[ext_resource type="Texture2D" uid="uid://bmi4b2rhewseq" path="res://assets/cutscene/subs/4_pop_text.png" id="16_tcgdo"]
+[ext_resource type="Texture2D" uid="uid://bqftneg3tkb2q" path="res://assets/cutscene/subs/6_pop1-text1.png" id="17_lkrw6"]
+[ext_resource type="Texture2D" uid="uid://ba10k11725bpb" path="res://assets/cutscene/subs/6_pop2_text2.png" id="18_g0yil"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l5735"]
 bg_color = Color(0.17330971, 0.64435536, 0.34610808, 1)
@@ -10,48 +26,672 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="Cutscene1" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="Animation" id="Animation_xkyjr"]
+resource_name = "default"
+length = 30.0
+step = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("comic/1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("comic/2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("comic/3:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("comic/4:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("comic/5:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 6.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("comic/6:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 7.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("comic/1Pop:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("comic/3Pop2:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 3.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("comic/3Pop:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 2.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("comic/3Pop3:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 5.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("comic/6Pop2:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 8.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("comic/6Pop1:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 9.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("comic/1PopText:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("comic/3Pop2Text2:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 3.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("comic/3PopText:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 2.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("comic/4PopText:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0, 5.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("comic/6Pop1Text1:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 9.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("comic/6Pop2Text2:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0, 8.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Camera2D:position")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 1.8, 2.8, 4.6, 7.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(962, 534), Vector2(962, 950), Vector2(962, 1100), Vector2(962, 1600), Vector2(962, 2100)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("CanvasLayer/btn_start:visible")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0, 11),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_nijxb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("comic/1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("comic/2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("comic/3:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("comic/4:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("comic/5:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("comic/6:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("comic/1Pop:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("comic/3Pop2:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("comic/3Pop:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("comic/3Pop3:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("comic/6Pop2:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("comic/6Pop1:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("comic/1PopText:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("comic/3Pop2Text2:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("comic/3PopText:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("comic/4PopText:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("comic/6Pop1Text1:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("comic/6Pop2Text2:visible")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Camera2D:position")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(962, 534)]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("CanvasLayer/btn_start:visible")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v2ngq"]
+_data = {
+&"RESET": SubResource("Animation_nijxb"),
+&"default": SubResource("Animation_xkyjr")
+}
+
+[node name="Cutscene1" type="Node2D"]
 script = ExtResource("1_noght")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(962, 534)
+
 [node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 1
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.14901961, 0.14901961, 0.14901961, 1)
 
-[node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_eb661")
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="btn_start" type="Button" parent="."]
-custom_minimum_size = Vector2(400, 150)
-layout_mode = 1
+[node name="btn_start" type="Button" parent="CanvasLayer"]
+visible = false
+custom_minimum_size = Vector2(200, 50)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -514.0
-offset_top = -284.0
-offset_right = -114.0
-offset_bottom = -134.0
+offset_left = -335.0
+offset_top = -139.0
+offset_right = -35.0
+offset_bottom = -39.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_l5735")
 text = "开战！"
 
-[connection signal="pressed" from="btn_start" to="." method="_on_btn_start_pressed"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_v2ngq")
+}
+autoplay = "default"
+
+[node name="comic" type="OpenXRCompositionLayerCylinder" parent="."]
+
+[node name="1" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 1
+position = Vector2(552, 479)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_g22yg")
+
+[node name="2" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 1
+position = Vector2(1410, 464)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_wjw2t")
+
+[node name="3" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 1
+position = Vector2(973, 1136)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_m3rxv")
+
+[node name="4" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 1
+position = Vector2(563, 1702)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_lot02")
+
+[node name="5" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 1
+position = Vector2(1364, 1840)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_dxmb1")
+
+[node name="6" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 1
+position = Vector2(972, 2212)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_xkyjr")
+
+[node name="1Pop" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 2
+position = Vector2(919, 474)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_nijxb")
+
+[node name="3Pop2" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 2
+position = Vector2(611, 1277)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_gn20c")
+
+[node name="3Pop" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 2
+position = Vector2(1556, 716)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("10_c24b6")
+
+[node name="3Pop3" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 2
+position = Vector2(995, 1490)
+rotation = 0.23387411
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("10_c24b6")
+
+[node name="6Pop2" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 2
+position = Vector2(1389, 2272)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("11_xd2mq")
+
+[node name="6Pop1" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 2
+position = Vector2(763, 2187)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("12_gvvye")
+
+[node name="1PopText" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 3
+position = Vector2(1020, 426)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("13_07uu0")
+
+[node name="3Pop2Text2" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 3
+position = Vector2(549.0001, 1240)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("14_qxlus")
+
+[node name="3PopText" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 3
+position = Vector2(1580, 653)
+rotation = 0.35081118
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("15_h1vrd")
+
+[node name="4PopText" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 3
+position = Vector2(1046, 1459)
+rotation = -0.23387411
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("16_tcgdo")
+
+[node name="6Pop1Text1" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 3
+position = Vector2(776, 2175)
+rotation = 0.5846853
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("17_lkrw6")
+
+[node name="6Pop2Text2" type="Sprite2D" parent="comic"]
+visible = false
+z_index = 3
+position = Vector2(1392, 2260)
+rotation = -0.116937056
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("18_g0yil")
+
+[connection signal="pressed" from="CanvasLayer/btn_start" to="." method="_on_btn_start_pressed"]
