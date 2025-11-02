@@ -1,0 +1,119 @@
+extends Node2D
+class_name ExplosionIndicator
+
+## 魔法武器爆炸范围指示器
+## 显示一个半透明的圆形区域，标识攻击目标位置和范围
+
+## 静态共享纹理（所有指示器共用，只创建一次）
+static var shared_circle_texture: Texture2D = null
+
+## 圆形精灵
+var circle_sprite: Sprite2D = null
+
+## 淡入淡出动画
+var tween: Tween = null
+
+## 指示器颜色
+var indicator_color: Color = Color(1.0, 0.5, 0.0, 0.3)  # 橙色，30%透明度
+
+## 显示持续时间（秒）
+var display_duration: float = 0.3
+
+func _ready() -> void:
+	# 确保共享纹理已创建
+	if shared_circle_texture == null:
+		_create_shared_texture()
+	
+	# 创建圆形精灵
+	_create_circle_sprite()
+
+## 创建共享纹理（静态，只执行一次）
+static func _create_shared_texture() -> void:
+	if shared_circle_texture != null:
+		return
+	
+	var size = 512
+	var image = Image.create(size, size, false, Image.FORMAT_RGBA8)
+	
+	# 绘制实心圆
+	var center = Vector2(size / 2, size / 2)
+	var radius = size / 2
+	
+	for x in range(size):
+		for y in range(size):
+			var distance = Vector2(x, y).distance_to(center)
+			if distance <= radius:
+				# 添加边缘软化效果
+				var alpha = 1.0
+				if distance > radius - 20:
+					alpha = (radius - distance) / 20.0
+				image.set_pixel(x, y, Color(1, 1, 1, alpha))
+	
+	# 创建纹理并保存为静态共享资源
+	shared_circle_texture = ImageTexture.create_from_image(image)
+
+## 创建圆形精灵
+func _create_circle_sprite() -> void:
+	circle_sprite = Sprite2D.new()
+	add_child(circle_sprite)
+	
+	# 使用共享纹理
+	circle_sprite.texture = shared_circle_texture
+	
+	# 设置颜色和初始透明度
+	circle_sprite.modulate = indicator_color
+	circle_sprite.modulate.a = 0  # 初始完全透明
+
+## 在指定位置显示指示器
+## position: 目标位置（世界坐标）
+## radius: 爆炸半径
+## color: 指示器颜色（可选）
+## duration: 显示持续时间（可选）
+func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 0.5, 0.0, 0.3), duration: float = 0.3) -> void:
+	if not circle_sprite:
+		return
+	
+	# 设置位置
+	global_position = position
+	
+	# 设置缩放（根据半径）
+	var scale_factor = radius / 256.0  # 256是纹理半径
+	circle_sprite.scale = Vector2(scale_factor, scale_factor)
+	
+	# 设置颜色
+	indicator_color = color
+	circle_sprite.modulate = indicator_color
+	
+	# 设置持续时间
+	display_duration = duration
+	
+	# 播放淡入淡出动画
+	_play_animation()
+
+## 播放淡入淡出动画
+func _play_animation() -> void:
+	# 停止之前的动画
+	if tween and tween.is_valid():
+		tween.kill()
+	
+	tween = create_tween()
+	
+	# 淡入（快速）
+	circle_sprite.modulate.a = 0
+	tween.tween_property(circle_sprite, "modulate:a", indicator_color.a, 0.05)
+	
+	# 保持
+	tween.tween_interval(display_duration - 0.1)
+	
+	# 淡出
+	tween.tween_property(circle_sprite, "modulate:a", 0.0, 0.05)
+	
+	# 动画结束后删除自己
+	tween.tween_callback(queue_free)
+
+## 立即隐藏并删除
+func hide_and_remove() -> void:
+	if tween and tween.is_valid():
+		tween.kill()
+	queue_free()
+
