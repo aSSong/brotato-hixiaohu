@@ -220,7 +220,11 @@ func _create_weapons() -> void:
 	if weapons_node == null:
 		return
 	
-	# 立即清除weapons_node中可能已经存在的武器
+	# 等待一帧，确保weapons_node的_ready()已经执行完毕
+	# 这样可以避免在now_weapons自动加载GameMain.selected_weapon_ids之前就开始清除
+	await get_tree().process_frame
+	
+	# 清除weapons_node中可能已经存在的武器（包括自动加载的）
 	var children_to_remove = weapons_node.get_children()
 	print("[Ghost] 准备清除已有武器，数量:", children_to_remove.size())
 	for child in children_to_remove:
