@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://poo5j107el5u"]
+[gd_scene load_steps=5 format=3 uid="uid://poo5j107el5u"]
 
 [ext_resource type="Script" uid="uid://d170ibjmyne1" path="res://Scripts/UI/death_ui.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ed48d421fl2b" path="res://assets/UI/deadkey.png" id="2_rryu8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rryu8"]
+bg_color = Color(0.16663587, 0.064476065, 1.8049032e-08, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xgq7h"]
+bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
 
 [node name="DeathUI" type="CanvasLayer"]
 layer = 100
@@ -12,28 +23,39 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rryu8")
+
+[node name="TitleLabel" type="Label" parent="Panel"]
+layout_mode = 0
+offset_top = 46.0
+offset_right = 800.0
+offset_bottom = 113.0
+theme_override_font_sizes/font_size = 48
+text = "你钥匙翘翘了！"
+horizontal_alignment = 1
+
+[node name="Deadkey" type="Sprite2D" parent="Panel/TitleLabel"]
+position = Vector2(394, 210)
+texture = ExtResource("2_rryu8")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -191.0
+offset_bottom = -29.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 theme_override_constants/separation = 20
 alignment = 1
-
-[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "你死了！"
-horizontal_alignment = 1
 
 [node name="InfoLabel" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -45,7 +67,7 @@ autowrap_mode = 2
 [node name="CostLabel" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "复活费用：5 金币"
+text = "复活费用：5 钥匙"
 horizontal_alignment = 1
 
 [node name="ButtonContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
@@ -57,6 +79,7 @@ alignment = 1
 custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_xgq7h")
 text = "复活"
 
 [node name="GiveUpButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
