@@ -71,7 +71,7 @@ static func initialize_enemies() -> void:
 	)
 	last_enemy.description = "每波最后的首领，掉落Master Key"
 	last_enemy.shake_amount = 15.0  # 强震动
-	last_enemy.scale = Vector2(1.5, 1.5)  # 1.5倍大小
+	last_enemy.scale = Vector2(1.2, 1.2)  # 1.2倍大小
 	enemies["last_enemy"] = last_enemy
 
 ## 获取敌人数据
