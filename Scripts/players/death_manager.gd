@@ -125,8 +125,8 @@ func _create_grave() -> void:
 	grave_sprite.texture = grave_texture
 	grave_sprite.global_position = death_position
 	
-	# 设置层级（在玩家上方）
-	grave_sprite.z_index = 10
+	# 设置层级（高于玩家和怪物）
+	grave_sprite.z_index = 20
 	
 	# 添加到当前场景而不是root（避免场景切换后残留）
 	if player and player.get_parent():
