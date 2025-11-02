@@ -1,17 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://upgrade_shop"]
+[gd_scene load_steps=3 format=3 uid="uid://cmru2nlk6bx6s"]
 
-[ext_resource type="Script" path="res://Scripts/UI/upgrade_shop.gd" id="1_upgrade_shop"]
+[ext_resource type="Script" uid="uid://d204d6lsfq0ob" path="res://Scripts/UI/upgrade_shop.gd" id="1_upgrade_shop"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fqrne"]
+bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
 
 [node name="UpgradeShop" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-process_mode = 3
 script = ExtResource("1_upgrade_shop")
-groups = ["upgrade_shop"]
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -54,8 +56,8 @@ horizontal_alignment = 1
 [node name="UpgradeContainer" type="VBoxContainer" parent="MainPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 10
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
 [node name="ButtonContainer" type="HBoxContainer" parent="MainPanel/VBoxContainer"]
 layout_mode = 2
@@ -65,6 +67,7 @@ theme_override_constants/separation = 20
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_fqrne")
 text = "刷新"
 
 [node name="RefreshCostLabel" type="Label" parent="MainPanel/VBoxContainer/ButtonContainer/RefreshButton"]
@@ -85,4 +88,3 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "关闭"
-

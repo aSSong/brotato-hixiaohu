@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ba1fb173u5k7q"]
+[gd_scene load_steps=3 format=3 uid="uid://ba1fb173u5k7q"]
 
 [ext_resource type="Script" uid="uid://c51kw72w3a0re" path="res://Scripts/UI/upgrade_option.gd" id="1_upgrade_option"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3bqk"]
+bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
 
 [node name="UpgradeOption" type="Panel"]
 custom_minimum_size = Vector2(300, 150)
@@ -30,6 +33,7 @@ theme_override_constants/separation = 5
 [node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.26666668, 0.8509804, 0.26666668, 1)
 theme_override_font_sizes/font_size = 20
 text = "升级名称"
 
@@ -56,4 +60,5 @@ text = "0 钥匙"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_s3bqk")
 text = "购买"
