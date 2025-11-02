@@ -108,6 +108,9 @@ func _process(delta: float) -> void:
 		velocity = dir * speed
 		move_and_slide()
 		
+		# 朝向修正：图片默认向左，当玩家在右侧时翻转
+		_update_facing_direction()
+		
 		# 检查是否接触到玩家（造成伤害）
 		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
 		var player_distance = global_position.distance_to(target.global_position)
@@ -115,6 +118,21 @@ func _process(delta: float) -> void:
 		if player_distance < attack_range_value:  # 接触距离
 			_attack_player()
 	pass
+
+## 更新敌人朝向
+func _update_facing_direction() -> void:
+	if not target or not $AnimatedSprite2D:
+		return
+	
+	# 计算玩家相对于敌人的位置
+	var direction_to_player = target.global_position.x - global_position.x
+	
+	# 图片默认向左（flip_h = false）
+	# 当玩家在右侧时（direction_to_player > 0），翻转图片
+	if direction_to_player > 0:
+		$AnimatedSprite2D.flip_h = true  # 翻转，朝右
+	else:
+		$AnimatedSprite2D.flip_h = false  # 不翻转，朝左（默认）
 
 func _attack_player() -> void:
 	if attack_cooldown > 0:

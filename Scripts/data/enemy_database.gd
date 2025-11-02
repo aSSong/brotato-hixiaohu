@@ -33,7 +33,7 @@ static func initialize_enemies() -> void:
 		30,  # max_hp
 		3,  # attack_damage
 		500.0,  # move_speed（更快）
-		"res://assets/enemy/enemy-red-sheet.png",
+		"res://assets/enemy/enemy-puerple-sheet.png",
 		357,
 		240,
 		5
@@ -63,7 +63,7 @@ static func initialize_enemies() -> void:
 		100,  # max_hp
 		10,  # attack_damage
 		350.0,  # move_speed
-		"res://assets/enemy/enemy-puerple-sheet.png",
+		"res://assets/enemy/enemy-red-sheet.png",
 		357,
 		240,
 		5
@@ -79,10 +79,10 @@ static func initialize_enemies() -> void:
 		80,  # max_hp
 		8,  # attack_damage
 		320.0,  # move_speed
-		"res://assets/enemy/enemy-red-sheet.png",  # 特殊外观
-		357,  # frame_width（根据boss的实际尺寸修改）
+		"res://assets/enemy/boss01-sheet.png",  # 特殊外观
+		360,  # frame_width（根据boss的实际尺寸修改）
 		240,  # frame_height
-		5     # frame_count（根据boss的实际帧数修改）
+		4     # frame_count（根据boss的实际帧数修改）
 	)
 	last_enemy.description = "每波最后的首领，掉落Master Key"
 	last_enemy.shake_amount = 15.0  # 强震动
