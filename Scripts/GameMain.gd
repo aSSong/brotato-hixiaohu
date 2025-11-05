@@ -1,5 +1,8 @@
 extends Node
 
+## 全局游戏管理器
+## 持有当前游戏会话，提供全局访问点
+
 var animation_scene = preload("res://scenes/animations/animations.tscn")
 var animation_scene_obj = null
 var drop_item_scene = preload("res://scenes/items/drop_items.tscn")
@@ -7,13 +10,26 @@ var drop_item_scene_obj = null
 
 var duplicate_node = null
 
+## 当前游戏会话
+var current_session: GameSession = null
+
 func _ready():
 	init_duplicate_node()
 	animation_scene_obj = animation_scene.instantiate()
 	#add_child(animation_scene_obj)
 	drop_item_scene_obj = drop_item_scene.instantiate()
 	#add_child(drop_item_scene_obj)
-	pass # Replace with function body.
+	
+	# 创建默认会话（用于向后兼容）
+	if current_session == null:
+		current_session = GameSession.new()
+		add_child(current_session)
+		
+		# 转发session信号到GameMain（向后兼容）
+		current_session.gold_changed.connect(func(amount, change): gold_changed.emit(amount, change))
+		current_session.master_key_changed.connect(func(amount, change): master_key_changed.emit(amount, change))
+	
+	print("[GameMain] 游戏管理器初始化完成")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,48 +46,42 @@ func init_duplicate_node():
 	duplicate_node = node2d
 	pass
 
-# 信号：当钥匙数量改变时发出
+# 信号：当钥匙数量改变时发出（转发自session）
 signal gold_changed(new_amount: int, change: int)
-# 信号：当主钥数量改变时发出
+# 信号：当主钥数量改变时发出（转发自session）
 signal master_key_changed(new_amount: int, change: int)
 signal item_collected(item_type: String)
 
-# 游戏数据 - 使用私有变量和setter避免递归
-var _gold_internal: int = 0
-var gold: int = 0:
+# ========== 向后兼容属性（代理到current_session）==========
+var gold: int:
 	get:
-		return _gold_internal
+		return current_session.gold if current_session else 0
 	set(value):
-		print("[GameMain gold setter] 被调用 | 当前值:", _gold_internal, " 新值:", value)
-		var old_gold = _gold_internal
-		var new_gold = max(0, value)
-		if new_gold != old_gold:
-			_gold_internal = new_gold
-			var change = new_gold - old_gold
-			print("[GameMain gold setter] 值改变 | 旧值:", old_gold, " 新值:", new_gold, " 变化:", change)
-			gold_changed.emit(new_gold, change)  # 发送信号
-		else:
-			print("[GameMain gold setter] 值未改变，不发送信号")
+		if current_session:
+			current_session.gold = value
 
-var _master_key_internal: int = 0
-var master_key: int = 0:
+var master_key: int:
 	get:
-		return _master_key_internal
+		return current_session.master_key if current_session else 0
 	set(value):
-		print("[GameMain master_key setter] 被调用 | 当前值:", _master_key_internal, " 新值:", value)
-		var old_key = _master_key_internal
-		var new_key = max(0, value)
-		if new_key != old_key:
-			_master_key_internal = new_key
-			var change = new_key - old_key
-			print("[GameMain master_key setter] 值改变 | 旧值:", old_key, " 新值:", new_key, " 变化:", change)
-			master_key_changed.emit(new_key, change)  # 发送信号
-		else:
-			print("[GameMain master_key setter] 值未改变，不发送信号")
+		if current_session:
+			current_session.master_key = value
 
-var score: int = 0
+var score: int:
+	get:
+		return current_session.score if current_session else 0
+	set(value):
+		if current_session:
+			current_session.score = value
+
 var level: int = 1
-var revive_count: int = 0  # 本局游戏累计复活次数
+
+var revive_count: int:
+	get:
+		return current_session.revive_count if current_session else 0
+	set(value):
+		if current_session:
+			current_session.revive_count = value
 
 # 添加钥匙
 func add_gold(amount: int) -> void:
@@ -101,13 +111,22 @@ func remove_master_key(amount: int) -> bool:
 
 # 重置游戏数据
 func reset_game() -> void:
-	gold = 0
-	master_key = 0
-	score = 0
+	if current_session:
+		current_session.reset()
 	level = 1
-	revive_count = 0
 	print("[GameMain] 游戏数据已重置")
 
-# 玩家选择的数据
-var selected_class_id: String = "balanced"
-var selected_weapon_ids: Array = []
+# 玩家选择的数据（代理到session）
+var selected_class_id: String:
+	get:
+		return current_session.selected_class_id if current_session else "balanced"
+	set(value):
+		if current_session:
+			current_session.selected_class_id = value
+
+var selected_weapon_ids: Array:
+	get:
+		return current_session.selected_weapon_ids if current_session else []
+	set(value):
+		if current_session:
+			current_session.selected_weapon_ids = value

@@ -22,7 +22,7 @@ var is_dead: bool = false
 var revive_count: int = 0  # 本局累计复活次数
 var death_count: int = 0  # 本局累计死亡次数（包括已复活的）
 var death_timer: float = 0.0
-var death_delay: float = 1.5  # 死亡延迟时间
+var death_delay: float = GameConfig.death_delay  # 死亡延迟时间
 var death_position: Vector2 = Vector2.ZERO  # 记录死亡位置
 
 func _ready() -> void:
@@ -201,11 +201,11 @@ func _show_death_ui() -> void:
 	var current_gold = GameMain.gold
 	death_ui.show_death_screen(revive_count, current_gold)
 	
-	print("[DeathManager] 显示死亡UI | 钥匙:", current_gold, " 复活费用:", 5 * (revive_count + 1))
+	print("[DeathManager] 显示死亡UI | 钥匙:", current_gold, " 复活费用:", GameConfig.revive_base_cost * (revive_count + 1))
 
 ## 复活请求
 func _on_revive_requested() -> void:
-	var cost = 5 * (revive_count + 1)
+	var cost = GameConfig.revive_base_cost * (revive_count + 1)
 	
 	# 检查钥匙是否足够
 	if GameMain.gold < cost:
@@ -328,4 +328,4 @@ func get_revive_count() -> int:
 
 ## 获取下次复活费用
 func get_next_revive_cost() -> int:
-	return 5 * (revive_count + 1)
+	return GameConfig.revive_base_cost * (revive_count + 1)

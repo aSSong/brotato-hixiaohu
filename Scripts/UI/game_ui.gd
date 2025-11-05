@@ -9,7 +9,6 @@ extends CanvasLayer
 
 var hp_label: Label = null  # HP标签
 var player_ref: CharacterBody2D = null  # 玩家引用
-var victory_triggered: bool = false  # 是否已触发胜利
 var wave_manager_ref = null  # 波次管理器引用（避免类型检查错误）
 
 @export var animate_change: bool = true  # 是否播放动画
@@ -18,8 +17,6 @@ var wave_manager_ref = null  # 波次管理器引用（避免类型检查错误�
 var current_tween: Tween = null  # 保存当前动画引用
 var original_scale: Vector2  # 保存原始缩放
 var skill_icon_script: SkillIcon = null
-
-var goalkeys = 200 # 获得胜利的目标钥匙数目
 
 func _ready() -> void:
 	
@@ -75,11 +72,6 @@ func _on_gold_changed(new_amount: int, change: int) -> void:
 	# 显示变化弹窗
 	if show_change_popup and change > 0:
 		show_popup(change)
-	
-	# 检查是否达到胜利条件
-	if new_amount >= goalkeys and not victory_triggered:
-		victory_triggered = true
-		_trigger_victory()
 
 func update_display(amount: int, _change: int) -> void:
 	self.gold.text = "%d" % amount
@@ -158,18 +150,6 @@ func _on_player_hp_changed(current_hp: int, max_hp: int) -> void:
 	# 更新Label文本
 	if hp_label:
 		hp_label.text = "%d / %d" % [current_hp, max_hp]
-
-## 触发胜利
-func _trigger_victory() -> void:
-	# 延迟一下再跳转
-	await get_tree().create_timer(1.0).timeout
-	
-	# 加载胜利UI场景
-	var victory_scene = load("res://scenes/UI/victory_ui.tscn")
-	if victory_scene:
-		get_tree().change_scene_to_packed(victory_scene)
-	else:
-		push_error("无法加载胜利UI场景！")
 
 ## 设置波次显示
 func _setup_wave_display() -> void:
