@@ -12,16 +12,16 @@ class_name Ghost
 var follow_target: Node2D = null
 
 ## 路径记录间隔（像素）
-var path_record_distance: float = GameConfig.ghost_path_record_distance
+var path_record_distance: float = 5.0
 
 ## 目标路径点队列（贪吃蛇式跟随）
 var target_path_points: Array = []
 
 ## 跟随距离（用于确定路径点队列长度）
-var follow_distance: float = GameConfig.ghost_follow_distance
+var follow_distance: float = 5.0
 
 ## 跟随速度（与玩家速度同步）
-var follow_speed: float = GameConfig.ghost_follow_speed
+var follow_speed: float = 400.0
 
 ## 职业ID（用于外观）
 var class_id: String = ""
@@ -38,7 +38,7 @@ var current_path_index: int = 0
 ## Ghost自己的路径历史（供后续Ghost使用）
 var path_history: Array = []
 var last_recorded_position: Vector2 = Vector2.ZERO
-var max_path_points: int = GameConfig.max_path_points  # 最多记录的路径点数量
+var max_path_points: int = 300  # 最多记录的路径点数量
 
 func _ready() -> void:
 	# Ghost不会与其他物体碰撞（只是视觉效果）
@@ -215,12 +215,13 @@ func _setup_appearance() -> void:
 	# 设置半透明效果，表示这是Ghost
 	ghostAni.modulate = Color(1, 1, 1, 0.7)
 
-## 创建武器（使用WeaponFactory简化流程）
+## 创建武器
 func _create_weapons() -> void:
 	if weapons_node == null:
 		return
 	
 	# 等待一帧，确保weapons_node的_ready()已经执行完毕
+	# 这样可以避免在now_weapons自动加载GameMain.selected_weapon_ids之前就开始清除
 	await get_tree().process_frame
 	
 	# 清除weapons_node中可能已经存在的武器（包括自动加载的）
@@ -235,7 +236,7 @@ func _create_weapons() -> void:
 	
 	print("[Ghost] 创建武器，ghost_weapons数量:", ghost_weapons.size())
 	
-	# 逐个添加武器（使用now_weapons的add_weapon，内部已使用WeaponFactory）
+	# 逐个添加武器并等待初始化完成
 	for i in range(ghost_weapons.size()):
 		var weapon_data = ghost_weapons[i]
 		print("[Ghost] 添加武器", i+1, ":", weapon_data["id"], " Lv.", weapon_data["level"])

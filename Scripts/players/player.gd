@@ -2,16 +2,16 @@ extends CharacterBody2D
 @onready var playerAni: AnimatedSprite2D = %AnimatedSprite2D
 
 var dir = Vector2.ZERO
-var base_speed: float = GameConfig.base_speed  # 基础速度
-var speed: float = GameConfig.base_speed
+var base_speed = 400  # 基础速度
+var speed = 400
 var flip =false
 var canMove = true
 var stop = false
 
-var now_hp: int = GameConfig.base_max_hp
-var base_max_hp: int = GameConfig.base_max_hp  # 基础最大血量
-var max_hp: int = GameConfig.base_max_hp
-var max_exp: int = GameConfig.base_max_exp
+var now_hp = 100
+var base_max_hp = 100  # 基础最大血量
+var max_hp = 100
+var max_exp = 5
 var now_exp = 0
 var level = 1
 var gold = 0
@@ -25,9 +25,9 @@ var ghost_manager: GhostManager = null
 
 ## 路径记录（用于Ghost跟随）
 var path_history: Array = []
-var path_record_distance: float = GameConfig.ghost_path_record_distance  # 路径记录间隔
+var path_record_distance: float = 3.0  # 路径记录间隔（减小以获得更平滑的跟随）
 var last_recorded_position: Vector2 = Vector2.ZERO
-var max_path_points: int = GameConfig.max_path_points  # 最多记录的路径点数量
+var max_path_points: int = 300  # 最多记录的路径点数量（增加以支持更多Ghost）
 
 ## 信号：血量变化
 signal hp_changed(current_hp: int, max_hp: int)

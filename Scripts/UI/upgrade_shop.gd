@@ -11,7 +11,7 @@ class_name UpgradeShop
 
 ## 当前显示的升级选项（最多3个）
 var current_upgrades: Array[UpgradeData] = []
-var refresh_cost: int = GameConfig.shop_refresh_base_cost  # 刷新费用，每次x2
+var refresh_cost: int = 2  # 刷新费用，每次x2
 
 ## 信号
 signal upgrade_purchased(upgrade: UpgradeData)
@@ -82,7 +82,7 @@ func open_shop() -> void:
 	set_process_input(true)
 	
 	# 重置刷新费用
-	refresh_cost = GameConfig.shop_refresh_base_cost
+	refresh_cost = 2
 	_update_refresh_cost_display()
 	
 	# 确保容器可用

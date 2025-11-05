@@ -14,10 +14,10 @@ var ghosts: Array = []
 var player: Node2D = null
 
 ## ghost之间间隔的路径点数目
-var ghost_Interval: int = GameConfig.ghost_interval
+var ghost_Interval = 8
 
 ## 每个Ghost保留的路径点数量（用于跟随）
-var ghost_path_length: int = GameConfig.ghost_path_length  # 每个Ghost使用最近的N个路径点
+var ghost_path_length = 30  # 每个Ghost使用最近的30个路径点
 
 func _ready() -> void:
 	# 添加到组中以便查找
@@ -103,13 +103,13 @@ func spawn_ghost() -> void:
 ## 获取玩家速度
 func _get_player_speed() -> float:
 	if player == null or not is_instance_valid(player):
-		return GameConfig.base_speed  # 默认速度
+		return 400.0  # 默认速度
 	
 	# 尝试获取玩家的speed属性
 	if "speed" in player:
 		return player.speed
 	
-	return GameConfig.base_speed  # 默认速度
+	return 400.0  # 默认速度
 
 ## 清除所有Ghost
 func clear_all_ghosts() -> void:

@@ -21,9 +21,6 @@ config/icon="uid://crbqv7f80wmix"
 
 [autoload]
 
-GameConfig="*res://Scripts/core/game_config.gd"
-InitManager="*res://Scripts/core/initialization_manager.gd"
-GameState="*res://Scripts/core/game_state_machine.gd"
 GameMain="*res://Scripts/GameMain.gd"
 CameraShake="*res://Scripts/camera_shake.gd"
 BGMManager="*res://Scripts/managers/bgm_manager.gd"
