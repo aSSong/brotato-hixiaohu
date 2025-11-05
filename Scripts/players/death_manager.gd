@@ -236,12 +236,11 @@ func _on_give_up_requested() -> void:
 	# 发出游戏结束信号
 	game_over.emit()
 	
-	# 重置游戏数据
-	_reset_game_data()
-	
-	# 返回主菜单
+	# 等待一下再切换场景
 	await get_tree().create_timer(0.1).timeout
-	get_tree().change_scene_to_file("res://scenes/UI/main_title.tscn")
+	
+	# 使用安全的场景切换（带清理）
+	await SceneCleanupManager.change_scene_safely("res://scenes/UI/main_title.tscn")
 
 ## 复活玩家
 func _revive_player() -> void:
@@ -317,10 +316,7 @@ func _reset_game_data() -> void:
 	_remove_grave()
 	grave_ghost_data = null
 	
-	# 重置GameMain中的数据
-	GameMain.reset_game()
-	
-	print("[DeathManager] 游戏数据已重置")
+	print("[DeathManager] 死亡管理器数据已重置")
 
 ## 获取当前复活次数
 func get_revive_count() -> int:

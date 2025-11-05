@@ -66,14 +66,11 @@ func _process(delta: float) -> void:
 func set_player(p: Node2D) -> void:
 	player = p
 
-## 创建新的Ghost
+## 创建新的Ghost（使用GhostFactory）
 func spawn_ghost() -> void:
 	if player == null or not is_instance_valid(player):
 		push_error("玩家引用无效，无法创建Ghost")
 		return
-	
-	# 实例化Ghost
-	var new_ghost = ghost_scene.instantiate()
 	
 	# 确定跟随目标（最后一个Ghost或玩家）
 	var follow_target = player
@@ -89,11 +86,14 @@ func spawn_ghost() -> void:
 	# 获取玩家速度
 	var player_speed = _get_player_speed()
 	
+	# 使用GhostFactory创建Ghost
+	var new_ghost = GhostFactory.create_ghost(follow_target, queue_index, player_speed, null)
+	if not new_ghost:
+		push_error("[GhostManager] Ghost创建失败")
+		return
+	
 	# 添加到场景树
 	get_tree().root.add_child(new_ghost)
-	
-	# 初始化Ghost
-	new_ghost.initialize(follow_target, queue_index, player_speed)
 	
 	# 添加到列表
 	ghosts.append(new_ghost)

@@ -167,7 +167,8 @@ func _trigger_victory() -> void:
 	# 加载胜利UI场景
 	var victory_scene = load("res://scenes/UI/victory_ui.tscn")
 	if victory_scene:
-		get_tree().change_scene_to_packed(victory_scene)
+		# 使用安全的场景切换（带清理）
+		await SceneCleanupManager.change_scene_to_packed_safely(victory_scene)
 	else:
 		push_error("无法加载胜利UI场景！")
 

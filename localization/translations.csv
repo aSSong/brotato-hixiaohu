@@ -1,0 +1,33 @@
+keys,zh_CN,en
+GAME_TITLE,钥匙之战,Key Battle
+MAIN_MENU,主菜单,Main Menu
+START_GAME,开始游戏,Start Game
+SETTINGS,设置,Settings
+QUIT,退出,Quit
+CHARACTER_SELECT,选择角色,Select Character
+BALANCED,平衡,Balanced
+TANKY,坦克,Tanky
+GLASS_CANNON,玻璃大炮,Glass Cannon
+WAVE,波次,Wave
+HP,生命值,HP
+GOLD,金币,Gold
+KEYS,钥匙,Keys
+SCORE,分数,Score
+SHOP_TITLE,升级商店,Upgrade Shop
+REFRESH_SHOP,刷新,Refresh
+WEAPON,武器,Weapon
+LEVEL,等级,Level
+BUY,购买,Buy
+CLOSE,关闭,Close
+REVIVE,复活,Revive
+GIVE_UP,放弃,Give Up
+COST,花费,Cost
+VICTORY,胜利！,Victory!
+DEFEAT,失败,Defeat
+GAME_OVER,游戏结束,Game Over
+CONTINUE,继续,Continue
+RETRY,重试,Retry
+RETURN_TO_MENU,返回菜单,Return to Menu
+PAUSED,已暂停,Paused
+RESUME,继续,Resume
+
