@@ -53,7 +53,7 @@ func check_defeat_condition() -> bool:
 	if not player or not is_instance_valid(player):
 		return false
 	
-	if player.has("is_dead") and player.is_dead:
+	if "is_dead" in player and player.is_dead:
 		var revive_cost = GameConfig.revive_base_cost * (GameMain.revive_count + 1)
 		if GameMain.gold < revive_cost:
 			return true

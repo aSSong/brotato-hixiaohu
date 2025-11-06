@@ -19,7 +19,10 @@ var current_tween: Tween = null  # 保存当前动画引用
 var original_scale: Vector2  # 保存原始缩放
 var skill_icon_script: SkillIcon = null
 
-var goalkeys = 200 # 获得胜利的目标钥匙数目
+# 胜利条件 - 从 GameConfig 读取
+var goalkeys: int:
+	get:
+		return GameConfig.keys_required
 
 func _ready() -> void:
 	
@@ -186,7 +189,7 @@ func _setup_wave_display() -> void:
 		wave_manager_ref = now_enemies.get_wave_manager()
 	elif now_enemies:
 		# 尝试直接访问wave_manager
-		if now_enemies.has("wave_manager"):
+		if "wave_manager" in now_enemies:
 			wave_manager_ref = now_enemies.wave_manager
 	
 	# 如果没找到，尝试在场景中查找WaveManager节点
@@ -214,7 +217,7 @@ func _find_wave_manager_periodically() -> void:
 	while wave_manager_ref == null and attempts < 10:
 		await get_tree().create_timer(0.5).timeout
 		var now_enemies = get_tree().get_first_node_in_group("enemy_spawner")
-		if now_enemies and now_enemies.has("wave_manager"):
+		if now_enemies and "wave_manager" in now_enemies:
 			wave_manager_ref = now_enemies.wave_manager
 			if wave_manager_ref:
 				# 连接信号

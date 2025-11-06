@@ -86,7 +86,7 @@ static func _reset_game_data() -> void:
 		GameMain.reset_game()
 	
 	# 如果有会话系统，也重置会话
-	if GameMain and GameMain.has("current_session") and GameMain.current_session:
+	if GameMain and "current_session" in GameMain and GameMain.current_session:
 		GameMain.current_session.reset()
 
 ## 安全的场景切换（带清理）
@@ -128,4 +128,3 @@ static func change_scene_to_packed_safely(packed_scene: PackedScene) -> void:
 	var error = tree.change_scene_to_packed(packed_scene)
 	if error != OK:
 		push_error("[SceneCleanup] 场景切换失败: %d" % error)
-
