@@ -7,7 +7,7 @@ signal locale_changed(new_locale: String)
 const TRANSLATION_CSV_PATH = "res://localization/translations.csv"
 
 var current_locale: String = "zh_CN"
-var available_locales: Array[String] = ["zh_CN", "en"]
+var available_locales: Array = ["zh_CN", "en"]
 
 func _ready() -> void:
 	_load_translations()
@@ -55,7 +55,7 @@ func get_current_locale() -> String:
 	return current_locale
 
 ## 获取可用语言列表
-func get_available_locales() -> Array[String]:
+func get_available_locales() -> Array:
 	return available_locales.duplicate()
 
 ## 获取翻译文本（辅助函数）

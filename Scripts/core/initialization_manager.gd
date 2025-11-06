@@ -19,7 +19,7 @@ signal initialization_complete()
 
 var current_phase: InitPhase = InitPhase.NONE
 var is_initializing: bool = false
-var completed_phases: Array[InitPhase] = []
+var completed_phases: Array = []
 
 func _ready() -> void:
 	print("[InitManager] 初始化管理器就绪")

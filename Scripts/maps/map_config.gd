@@ -25,7 +25,7 @@ class_name MapConfig
 @export var is_enclosed: bool = true  # 是否有边界墙
 
 ## 支持的游戏模式
-@export var supported_modes: Array[String] = ["survival"]
+@export var supported_modes: Array = ["survival"]
 
 func _init(_id: String = "", _name: String = "", _scene: String = "") -> void:
 	map_id = _id

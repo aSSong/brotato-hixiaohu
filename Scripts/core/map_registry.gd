@@ -49,15 +49,15 @@ func set_current_map(map_id: String) -> bool:
 	return true
 
 ## 获取所有地图
-func get_all_maps() -> Array[MapConfig]:
-	var maps: Array[MapConfig] = []
+func get_all_maps() -> Array:
+	var maps: Array = []
 	for map_cfg in _maps.values():
 		maps.append(map_cfg)
 	return maps
 
 ## 获取支持指定模式的地图
-func get_maps_for_mode(mode_id: String) -> Array[MapConfig]:
-	var compatible_maps: Array[MapConfig] = []
+func get_maps_for_mode(mode_id: String) -> Array:
+	var compatible_maps: Array = []
 	for map_cfg in _maps.values():
 		if map_cfg.is_mode_supported(mode_id):
 			compatible_maps.append(map_cfg)

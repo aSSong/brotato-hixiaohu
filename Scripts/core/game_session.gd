@@ -2,6 +2,7 @@ extends Node
 class_name GameSession
 
 ## 游戏会话管理器 - 管理单次游戏的运行时数据
+## 注意：不作为自动加载，由 GameMain 创建和管理
 
 signal gold_changed(new_amount: int, change: int)
 signal master_key_changed(new_amount: int, change: int)

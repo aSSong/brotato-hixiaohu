@@ -1,7 +1,7 @@
 extends Node
-class_name GameConfig
 
 ## 游戏配置系统 - 集中管理所有硬编码配置
+## 自动加载为 GameConfig，全局可访问
 
 # 玩家配置
 var base_speed: float = 400.0

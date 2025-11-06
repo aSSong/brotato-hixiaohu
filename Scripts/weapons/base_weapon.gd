@@ -137,13 +137,15 @@ func _setup_weapon_appearance() -> void:
 	if weapon_data.texture_path != "":
 		var texture = load(weapon_data.texture_path)
 		if texture:
-			# 创建新的 SpriteFrames
+			# 【关键修复】每个武器实例都创建独立的 SpriteFrames
+			# 避免多个武器实例共享同一个 SpriteFrames 导致显示错误
 			var sprite_frames = SpriteFrames.new()
 			sprite_frames.add_animation("default")
 			sprite_frames.set_animation_loop("default", true)
 			sprite_frames.add_frame("default", texture)
 			sprite_frames.set_animation_speed("default", 5.0)
 			
+			# 设置独立的 SpriteFrames 到这个武器
 			weaponAni.sprite_frames = sprite_frames
 			weaponAni.play("default")
 			

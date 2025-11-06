@@ -23,7 +23,7 @@ signal state_exited(state: State)
 
 var current_state: State = State.NONE
 var previous_state: State = State.NONE
-var state_history: Array[State] = []
+var state_history: Array = []
 
 func _ready() -> void:
 	print("[GameState] 状态机就绪")
@@ -83,7 +83,7 @@ func is_in_state(state: State) -> bool:
 	return current_state == state
 
 ## 检查是否在任意指定状态中
-func is_in_any_state(states: Array[State]) -> bool:
+func is_in_any_state(states: Array) -> bool:
 	return current_state in states
 
 ## 返回上一个状态

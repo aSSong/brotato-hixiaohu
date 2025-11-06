@@ -43,15 +43,15 @@ func set_current_mode(mode_id: String) -> bool:
 	return true
 
 ## 获取所有模式
-func get_all_modes() -> Array[BaseGameMode]:
-	var modes: Array[BaseGameMode] = []
+func get_all_modes() -> Array:
+	var modes: Array = []
 	for mode in _modes.values():
 		modes.append(mode)
 	return modes
 
 ## 获取所有模式信息
-func get_all_mode_info() -> Array[Dictionary]:
-	var info_list: Array[Dictionary] = []
+func get_all_mode_info() -> Array:
+	var info_list: Array = []
 	for mode in _modes.values():
 		info_list.append(mode.get_mode_info())
 	return info_list

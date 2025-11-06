@@ -61,9 +61,16 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 	# 等待一帧以确保_ready执行完毕
 	await get_tree().process_frame
 	
-	# 应用职业加成
-	if weapon_instance.weapon_data:
+	# 检查武器实例是否仍然有效
+	if not is_instance_valid(weapon_instance):
+		push_error("[NowWeapons] 武器实例在添加后变为无效: " + weapon_id)
+		return
+	
+	# 应用职业加成（检查weapon_data是否存在）
+	if "weapon_data" in weapon_instance and weapon_instance.weapon_data:
 		_apply_class_bonuses(weapon_instance, weapon_instance.weapon_data)
+	else:
+		push_warning("[NowWeapons] 武器实例的weapon_data未初始化: " + weapon_id)
 	
 	# 排列武器
 	arrange_weapons()
