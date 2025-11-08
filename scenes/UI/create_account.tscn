@@ -1,0 +1,113 @@
+[gd_scene load_steps=6 format=3 uid="uid://12l6g124p1sl"]
+
+[ext_resource type="Texture2D" uid="uid://db6toshm4s2io" path="res://assets/UI/creataccount.png" id="1_anvro"]
+[ext_resource type="Script" uid="uid://s4cnvlajgtbw" path="res://Scripts/UI/create_account.gd" id="1_lj4q7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anvro"]
+bg_color = Color(0.3529412, 0.3529412, 0.3529412, 0.7882353)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.5064346, 0.03284102, 0, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="Theme" id="Theme_lj4q7"]
+PopupMenu/font_sizes/font_size = 80
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lj4q7"]
+bg_color = Color(0.27233937, 0.59633976, 0.29343227, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[node name="create_account" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lj4q7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_anvro")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 920.0
+offset_top = 406.0
+offset_right = 1920.0
+offset_bottom = 520.0
+theme_override_colors/font_shadow_color = Color(0.23921569, 0, 0, 0.7921569)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
+theme_override_font_sizes/font_size = 80
+text = "哦对了，你是谁来着？"
+
+[node name="Label" type="Label" parent="Label"]
+layout_mode = 0
+offset_left = 89.0
+offset_top = 143.0
+offset_right = 714.0
+offset_bottom = 200.0
+theme_override_font_sizes/font_size = 40
+text = "(涉及到奖品信息，请尽量如实填写)"
+
+[node name="name_input" type="LineEdit" parent="Label"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1000.0
+offset_top = 153.0
+offset_right = -200.0
+offset_bottom = 283.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 70
+theme_override_styles/normal = SubResource("StyleBoxFlat_anvro")
+placeholder_text = "填入本名"
+alignment = 1
+caret_blink = true
+
+[node name="floor_choose" type="MenuButton" parent="Label"]
+custom_minimum_size = Vector2(800, 130)
+layout_mode = 1
+offset_top = 370.57
+offset_right = 800.0
+offset_bottom = 500.57
+theme = SubResource("Theme_lj4q7")
+theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 0.6627451)
+theme_override_font_sizes/font_size = 70
+theme_override_styles/normal = SubResource("StyleBoxFlat_anvro")
+text = "你在哪个楼层"
+flat = false
+
+[node name="fight" type="Button" parent="Label/floor_choose"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = 37.429993
+offset_right = 150.0
+offset_bottom = 137.43
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_lj4q7")
+text = "NEXT"
+
+[connection signal="pressed" from="Label/floor_choose/fight" to="." method="_on_fight_pressed"]
