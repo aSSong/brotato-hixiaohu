@@ -16,3 +16,7 @@ func _process(delta: float) -> void:
 func _on_btn_start_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
 	pass # Replace with function body.
+
+
+func _on_skip_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
