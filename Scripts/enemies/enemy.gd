@@ -75,7 +75,7 @@ func _apply_enemy_data() -> void:
 		if texture:
 			# 创建SpriteFrames
 			var sprite_frames = SpriteFrames.new()
-			sprite_frames.add_animation("default")
+			#sprite_frames.add_animation("default")
 			sprite_frames.set_animation_loop("default", true)
 			
 			# 添加所有帧（单行横向排列）

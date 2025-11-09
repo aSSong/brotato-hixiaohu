@@ -57,4 +57,3 @@ func _exit_tree() -> void:
 	if esc_menu and is_instance_valid(esc_menu):
 		esc_menu.queue_free()
 		print("[ESC Manager] ESC菜单已清理")
-
