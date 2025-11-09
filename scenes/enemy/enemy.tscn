@@ -55,10 +55,11 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tjssy"]
-radius = 88.33333
+radius = 110.05048
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
 z_index = 8
+position = Vector2(22, 0)
 scale = Vector2(0.6, 0.6)
 collision_layer = 8
 collision_mask = 10
@@ -67,6 +68,7 @@ death_particles_scene = ExtResource("2_tjssy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_tjssy")
+position = Vector2(-10, 0)
 sprite_frames = SubResource("SpriteFrames_cwlon")
 frame_progress = 0.01654145
 

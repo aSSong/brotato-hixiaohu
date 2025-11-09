@@ -76,13 +76,13 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MELEE,
 		6,  # damage
 		0.8,  # attack_speed
-		180.0,  # range
+		280.0,  # range
 		"res://assets/weapon/Weapon_axe.png",
 		Vector2(1, 1)  # scale (更大)
 	)
 	axe.description = "高伤害近战武器，攻击速度较慢"
 	axe.rotation_speed = 270.0
-	axe.hit_range = 150.0
+	axe.hit_range = 250.0
 	axe.knockback_force = 200.0
 	weapons["axe"] = axe
 	
@@ -91,7 +91,7 @@ static func initialize_weapons() -> void:
 		WeaponData.WeaponType.MELEE,
 		2,  # damage
 		0.3,  # attack_speed
-		100.0,  # range
+		200.0,  # range
 		"res://assets/weapon/Weapon_sword.png",
 		Vector2(1, 1)  # scale (更小)
 	)
