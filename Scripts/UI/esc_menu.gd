@@ -118,3 +118,20 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and visible:
 		_on_resume_pressed()
 		get_viewport().set_input_as_handled()
+
+
+func _on_restart_pressed() -> void:
+		# 恢复游戏（必须在切换场景前）
+	get_tree().paused = false
+	
+	# 重置游戏数据
+	GameMain.reset_game()
+	
+	# 发送信号
+	main_menu_requested.emit()
+	
+	print("[ESC Menu] 正在返回主菜单...")
+	
+	# 切换到主菜单场景
+	await get_tree().create_timer(0.1).timeout
+	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
