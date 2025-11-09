@@ -84,7 +84,10 @@ func _trigger_death() -> void:
 	
 	is_dead = true
 	death_timer = death_delay
-	death_count += 1  # 增加死亡次数
+	death_count += 1  # 增加本局死亡次数
+	
+	# 增加存档中的总死亡次数
+	SaveManager.increment_death_count()
 	
 	# 记录死亡位置
 	if player:

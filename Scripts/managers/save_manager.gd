@@ -9,7 +9,8 @@ const SAVE_FILE_PATH = "user://user_save.dat"
 var user_data: Dictionary = {
 	"player_name": "",
 	"floor_id": -1,  # -1 表示未选择，0-38 对应楼层选项
-	"floor_name": ""
+	"floor_name": "",
+	"total_death_count": 0  # 累计死亡次数
 }
 
 ## 初始化
@@ -55,6 +56,9 @@ func load_user_data() -> bool:
 	var loaded_data = json.data
 	if loaded_data is Dictionary:
 		user_data = loaded_data
+		# 确保旧存档也有 total_death_count 字段
+		if not user_data.has("total_death_count"):
+			user_data["total_death_count"] = 0
 		print("[SaveManager] 用户数据已加载: %s" % user_data)
 		return true
 	else:
@@ -93,8 +97,20 @@ func clear_save_data() -> void:
 	user_data = {
 		"player_name": "",
 		"floor_id": -1,
-		"floor_name": ""
+		"floor_name": "",
+		"total_death_count": 0
 	}
 	if FileAccess.file_exists(SAVE_FILE_PATH):
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
 	print("[SaveManager] 存档数据已清除")
+
+## 增加死亡次数
+func increment_death_count() -> void:
+	var current_count = user_data.get("total_death_count", 0)
+	user_data["total_death_count"] = current_count + 1
+	save_user_data()
+	print("[SaveManager] 死亡次数已增加，当前总死亡次数:", user_data["total_death_count"])
+
+## 获取总死亡次数
+func get_total_death_count() -> int:
+	return user_data.get("total_death_count", 0)
