@@ -11,8 +11,8 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+#func _process(delta: float) -> void:
+	#pass
 
 
 # 处理输入事件
@@ -26,7 +26,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _on_btn_single_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/UI/cutscene_1.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/cutscene_0.tscn")
 	pass # Replace with function body.
 
 

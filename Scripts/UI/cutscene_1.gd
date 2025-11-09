@@ -9,14 +9,14 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+#func _process(delta: float) -> void:
+	#pass
 
 
 func _on_btn_start_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/create_account.tscn")
 	pass # Replace with function body.
 
 
 func _on_skip_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/create_account.tscn")
