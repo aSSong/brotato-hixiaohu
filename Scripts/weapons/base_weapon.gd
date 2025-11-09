@@ -50,9 +50,11 @@ func initialize(data: WeaponData, level: int = 1) -> void:
 	
 	# 设置检测范围（考虑等级倍数）
 	if detection_area and detection_area.get_child(0) is CollisionShape2D:
-		var shape = detection_area.get_child(0).shape
-		if shape is CircleShape2D:
-			shape.radius = weapon_data.range * multipliers.range_multiplier
+		var collision_shape = detection_area.get_child(0) as CollisionShape2D
+		# 创建新的独立 CircleShape2D 资源，避免多个武器实例共享同一个 shape
+		var new_shape = CircleShape2D.new()
+		new_shape.radius = weapon_data.range * multipliers.range_multiplier
+		collision_shape.shape = new_shape
 	
 	# 设置武器贴图
 	_setup_weapon_appearance()
@@ -80,7 +82,8 @@ func upgrade_level() -> bool:
 	
 	# 更新检测范围
 	if detection_area and detection_area.get_child(0) is CollisionShape2D:
-		var shape = detection_area.get_child(0).shape
+		var collision_shape = detection_area.get_child(0) as CollisionShape2D
+		var shape = collision_shape.shape
 		if shape is CircleShape2D:
 			shape.radius = weapon_data.range * multipliers.range_multiplier
 	
