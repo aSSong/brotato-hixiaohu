@@ -82,4 +82,3 @@ func _check_and_damage_enemies() -> void:
 				var knockback_dir = (enemy.global_position - global_position).normalized()
 				if enemy is CharacterBody2D:
 					enemy.velocity += knockback_dir * weapon_data.knockback_force
-

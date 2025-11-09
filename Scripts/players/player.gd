@@ -85,16 +85,18 @@ func _process(delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
 	var self_pos = position
 	
-	if mouse_pos.x > self_pos.x:
-		flip = true
-	else:
-		flip = false
-	
-	playerAni.flip_h = flip
-	
-	dir = (mouse_pos - self_pos).normalized()
+
 	
 	if canMove and !stop:
+		if mouse_pos.x > self_pos.x:
+			flip = true
+		else:
+			flip = false
+	
+		playerAni.flip_h = flip
+	
+		dir = (mouse_pos - self_pos).normalized()
+		
 		# 应用速度加成
 		var final_speed = speed
 		if class_manager:
@@ -142,10 +144,12 @@ func _input(event):
 
 func _on_stop_mouse_entered() -> void:
 	stop = true
+	print("STOP = TRUE")
 	
 
 func _on_stop_mouse_exited() -> void:
 	stop = false
+	print("STOP = FALSE")
 
 
 func _on_drop_item_area_area_entered(area: Area2D) -> void:
