@@ -81,4 +81,12 @@ func _check_and_damage_enemies() -> void:
 			if weapon_data.knockback_force > 0:
 				var knockback_dir = (enemy.global_position - global_position).normalized()
 				if enemy is CharacterBody2D:
-					enemy.velocity += knockback_dir * weapon_data.knockback_force
+					# 使用敌人的击退速度变量
+					if enemy.has_method("apply_knockback"):
+						enemy.apply_knockback(knockback_dir * weapon_data.knockback_force)
+					else:
+						# 兼容旧代码：直接设置 knockback_velocity（如果存在）
+						if "knockback_velocity" in enemy:
+							enemy.knockback_velocity += knockback_dir * weapon_data.knockback_force
+						else:
+							enemy.velocity += knockback_dir * weapon_data.knockback_force

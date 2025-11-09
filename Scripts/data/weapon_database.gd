@@ -68,7 +68,7 @@ static func initialize_weapons() -> void:
 	sword.description = "基础近战武器，旋转攻击"
 	sword.rotation_speed = 360.0
 	sword.hit_range = 120.0
-	sword.knockback_force = 100.0
+	sword.knockback_force = 800.0
 	weapons["sword"] = sword
 	
 	var axe = WeaponData.new(
@@ -83,7 +83,7 @@ static func initialize_weapons() -> void:
 	axe.description = "高伤害近战武器，攻击速度较慢"
 	axe.rotation_speed = 270.0
 	axe.hit_range = 250.0
-	axe.knockback_force = 200.0
+	axe.knockback_force = 1200.0
 	weapons["axe"] = axe
 	
 	var dagger = WeaponData.new(
@@ -98,7 +98,7 @@ static func initialize_weapons() -> void:
 	dagger.description = "快速攻击的近战武器"
 	dagger.rotation_speed = 540.0
 	dagger.hit_range = 90.0
-	dagger.knockback_force = 50.0
+	dagger.knockback_force = 400.0
 	weapons["dagger"] = dagger
 	
 	# 魔法武器

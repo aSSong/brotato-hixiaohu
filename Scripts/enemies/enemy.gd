@@ -20,6 +20,10 @@ var attack_cooldown: float = 0.0
 var attack_interval: float = 1.0  # 攻击间隔（秒）
 var attack_damage: int = 5  # 每次攻击造成的伤害
 
+## 击退相关
+var knockback_velocity: Vector2 = Vector2.ZERO  # 击退速度
+var knockback_decay: float = 0.9  # 击退衰减系数（每帧衰减10%）
+
 ## 停止距离（敌人会在这个距离外停下，避免贴脸）
 var stop_distance: float = 100.0  # 可以设置为略大于攻击范围
 
@@ -105,9 +109,14 @@ func _process(delta: float) -> void:
 	# 更新攻击冷却时间
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
+		
+	# 更新击退速度（逐渐衰减）
+	knockback_velocity *= knockback_decay
+	# 如果击退速度很小，直接清零
+	if knockback_velocity.length() < 10.0:
+		knockback_velocity = Vector2.ZERO
 	
 	if target:
-		
 		## 计算到玩家距离
 		# 检查是否接触到玩家（造成伤害）
 		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
@@ -119,7 +128,9 @@ func _process(delta: float) -> void:
 		
 		if player_distance > min_distance:
 			dir = (target.global_position - self.global_position).normalized()
-			velocity = dir * speed
+			#velocity = dir * speed
+			# 基础移动速度 + 击退速度
+			velocity = dir * speed + knockback_velocity
 		else:
 			# 距离足够近，停止移动
 			velocity = Vector2.ZERO
