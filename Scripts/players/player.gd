@@ -144,12 +144,12 @@ func _input(event):
 
 func _on_stop_mouse_entered() -> void:
 	stop = true
-	print("STOP = TRUE")
+	#print("STOP = TRUE")
 	
 
 func _on_stop_mouse_exited() -> void:
 	stop = false
-	print("STOP = FALSE")
+	#print("STOP = FALSE")
 
 
 func _on_drop_item_area_area_entered(area: Area2D) -> void:
