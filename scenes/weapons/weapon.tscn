@@ -28,6 +28,7 @@ animations = [{
 radius = 247.72473
 
 [node name="weapon" type="Node2D"]
+z_index = 11
 scale = Vector2(7, 7)
 script = ExtResource("1_0rtie")
 

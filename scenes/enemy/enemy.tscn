@@ -54,11 +54,11 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nbhyu"]
-size = Vector2(313.3333, 225)
+[sub_resource type="CircleShape2D" id="CircleShape2D_tjssy"]
+radius = 88.33333
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
-z_index = 14
+z_index = 8
 scale = Vector2(0.6, 0.6)
 collision_layer = 8
 collision_mask = 10
@@ -71,5 +71,5 @@ sprite_frames = SubResource("SpriteFrames_cwlon")
 frame_progress = 0.01654145
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-11.666666, -5.833333)
-shape = SubResource("RectangleShape2D_nbhyu")
+position = Vector2(-23.333332, 10)
+shape = SubResource("CircleShape2D_tjssy")
