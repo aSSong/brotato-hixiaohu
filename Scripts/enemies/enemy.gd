@@ -20,6 +20,9 @@ var attack_cooldown: float = 0.0
 var attack_interval: float = 1.0  # 攻击间隔（秒）
 var attack_damage: int = 5  # 每次攻击造成的伤害
 
+## 停止距离（敌人会在这个距离外停下，避免贴脸）
+var stop_distance: float = 100.0  # 可以设置为略大于攻击范围
+
 ## 是否为本波最后一个敌人（用于掉落masterKey）
 var is_last_enemy_in_wave: bool = false
 
@@ -104,17 +107,28 @@ func _process(delta: float) -> void:
 		attack_cooldown -= delta
 	
 	if target:
-		dir = (target.global_position - self.global_position).normalized()
-		velocity = dir * speed
+		
+		## 计算到玩家距离
+		# 检查是否接触到玩家（造成伤害）
+		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
+		var player_distance = global_position.distance_to(target.global_position)
+		var attack_range_value = enemy_data.attack_range if enemy_data else 80.0
+		
+		# 设置停止距离（小于攻击范围，确保攻击生效）
+		var min_distance = attack_range_value - 20.0  # 攻击范围 + 20像素缓冲
+		
+		if player_distance > min_distance:
+			dir = (target.global_position - self.global_position).normalized()
+			velocity = dir * speed
+		else:
+			# 距离足够近，停止移动
+			velocity = Vector2.ZERO
 		move_and_slide()
 		
 		# 朝向修正：图片默认向左，当玩家在右侧时翻转
 		_update_facing_direction()
 		
-		# 检查是否接触到玩家（造成伤害）
-		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
-		var player_distance = global_position.distance_to(target.global_position)
-		var attack_range_value = enemy_data.attack_range if enemy_data else 80.0
+		# 检查是否在攻击范围内（造成伤害）
 		if player_distance < attack_range_value:  # 接触距离
 			_attack_player()
 	pass
