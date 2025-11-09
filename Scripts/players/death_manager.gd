@@ -55,6 +55,7 @@ func set_death_ui(ui: DeathUI) -> void:
 	if death_ui:
 		death_ui.revive_requested.connect(_on_revive_requested)
 		death_ui.give_up_requested.connect(_on_give_up_requested)
+		death_ui.restart_requested.connect(_on_restart_requested)
 	
 	print("[DeathManager] 设置死亡UI")
 
@@ -241,6 +242,25 @@ func _on_give_up_requested() -> void:
 	
 	# 使用安全的场景切换（带清理）
 	await SceneCleanupManager.change_scene_safely("res://scenes/UI/main_title.tscn")
+
+## 再战请求
+func _on_restart_requested() -> void:
+	print("[DeathManager] 玩家再战")
+	
+	# 移除墓碑
+	_remove_grave()
+	
+	# 恢复游戏（需要在切换场景前恢复）
+	get_tree().paused = false
+	
+	# 发出游戏结束信号
+	game_over.emit()
+	
+	# 等待一下再切换场景
+	await get_tree().create_timer(0.1).timeout
+	
+	# 使用安全的场景切换（带清理）
+	await SceneCleanupManager.change_scene_safely("res://scenes/UI/start_menu.tscn")
 
 ## 复活玩家
 func _revive_player() -> void:

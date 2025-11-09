@@ -83,6 +83,13 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_xgq7h")
 text = "复活"
 
+[node name="RestartButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_xgq7h")
+text = "再战"
+
 [node name="GiveUpButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(150, 60)
 layout_mode = 2

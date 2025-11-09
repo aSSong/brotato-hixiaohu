@@ -9,11 +9,13 @@ class_name DeathUI
 @onready var info_label: Label = $Panel/VBoxContainer/InfoLabel
 @onready var revive_button: Button = $Panel/VBoxContainer/ButtonContainer/ReviveButton
 @onready var give_up_button: Button = $Panel/VBoxContainer/ButtonContainer/GiveUpButton
+@onready var restart_button: Button = $Panel/VBoxContainer/ButtonContainer/RestartButton
 @onready var cost_label: Label = $Panel/VBoxContainer/CostLabel
 
 ## 信号
 signal revive_requested  # 请求复活
 signal give_up_requested  # 请求放弃
+signal restart_requested  # 请求再战
 
 var revive_cost: int = 0
 var can_afford: bool = false
@@ -22,6 +24,7 @@ func _ready() -> void:
 	# 连接按钮信号
 	revive_button.pressed.connect(_on_revive_pressed)
 	give_up_button.pressed.connect(_on_give_up_pressed)
+	restart_button.pressed.connect(_on_restart_pressed)
 	
 	# 默认隐藏
 	hide()
@@ -39,9 +42,11 @@ func show_death_screen(revive_count: int, current_gold: int) -> void:
 	if can_afford:
 		revive_button.disabled = false
 		revive_button.text = "复活 (-%d钥匙)" % revive_cost
+		restart_button.visible = false
 	else:
 		revive_button.disabled = true
 		revive_button.text = "钥匙不足"
+		restart_button.visible = true
 	
 	# 显示界面
 	show()
@@ -63,4 +68,10 @@ func _on_give_up_pressed() -> void:
 
 ## 隐藏界面
 func hide_death_screen() -> void:
+	hide()
+
+
+func _on_restart_pressed() -> void:
+	print("[DeathUI] 玩家选择再战")
+	restart_requested.emit()
 	hide()
