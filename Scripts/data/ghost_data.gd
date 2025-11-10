@@ -16,6 +16,12 @@ class_name GhostData
 ## 死亡位置（用于墓碑位置）
 @export var death_position: Vector2 = Vector2.ZERO
 
+## 玩家名字（死亡时的名字）
+@export var player_name: String = ""
+
+## 总死亡次数（死亡时的累计死亡次数，用于显示"第n世"）
+@export var total_death_count: int = 0
+
 ## 从玩家创建Ghost数据
 static func from_player(player: CharacterBody2D, death_count: int) -> GhostData:
 	var data = GhostData.new()
@@ -64,6 +70,12 @@ static func from_player(player: CharacterBody2D, death_count: int) -> GhostData:
 	# 保存死亡信息
 	data.death_count = death_count
 	data.death_position = player.global_position
+	
+	# 保存玩家名字和总死亡次数（从SaveManager获取）
+	data.player_name = SaveManager.get_player_name()
+	data.total_death_count = SaveManager.get_total_death_count()
+	
+	print("[GhostData] 玩家名字:", data.player_name, " 总死亡次数:", data.total_death_count)
 	
 	return data
 

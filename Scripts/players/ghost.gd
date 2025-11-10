@@ -40,6 +40,13 @@ var path_history: Array = []
 var last_recorded_position: Vector2 = Vector2.ZERO
 var max_path_points: int = 300  # 最多记录的路径点数量
 
+## Ghost的名字和死亡次数（用于显示）
+var ghost_player_name: String = ""
+var ghost_total_death_count: int = 0
+
+## 名字显示Label
+var name_label: Label = null
+
 func _ready() -> void:
 	# Ghost不会与其他物体碰撞（只是视觉效果）
 	collision_layer = 0
@@ -146,6 +153,9 @@ func initialize(target: Node2D, index: int, player_speed: float, use_existing_da
 	if not use_existing_data:
 		print("[Ghost initialize] 生成随机数据")
 		_generate_random_data()
+		# 随机Ghost也使用当前玩家名字（表示过去的自己）
+		ghost_player_name = SaveManager.get_player_name()
+		ghost_total_death_count = SaveManager.get_total_death_count()
 	else:
 		print("[Ghost initialize] 使用现有数据 | ghost_weapons数量:", ghost_weapons.size())
 	# 否则，假设class_id和ghost_weapons已经被外部设置
@@ -155,6 +165,9 @@ func initialize(target: Node2D, index: int, player_speed: float, use_existing_da
 	
 	# 创建武器
 	_create_weapons()
+	
+	# 创建名字显示（在所有初始化完成后）
+	call_deferred("_create_name_label")
 
 ## 更新跟随速度（与玩家同步）
 func update_speed(new_speed: float) -> void:
@@ -289,3 +302,54 @@ func _enable_weapons() -> void:
 	if weapons_node:
 		weapons_node.process_mode = Node.PROCESS_MODE_INHERIT
 		weapons_node.visible = true
+
+## 设置Ghost的名字和死亡次数（从GhostData获取）
+func set_name_from_ghost_data(player_name: String, total_death_count: int) -> void:
+	ghost_player_name = player_name
+	ghost_total_death_count = total_death_count
+	
+	# 如果Label已经创建，立即更新
+	if name_label:
+		_update_name_label()
+
+## 创建头顶名字Label
+func _create_name_label() -> void:
+	# 创建Label节点
+	name_label = Label.new()
+	add_child(name_label)
+	
+	# 设置Label属性
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	
+	# 设置位置（在角色头顶上方）
+	name_label.position = Vector2(-50, -150)  # 根据角色大小调整
+	name_label.size = Vector2(100, 20)
+	
+	# 设置字体大小和颜色
+	name_label.add_theme_font_size_override("font_size", 16)
+	name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0))  # 淡蓝色，表示Ghost
+	
+	# 添加黑色描边效果
+	name_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	name_label.add_theme_constant_override("outline_size", 2)
+	
+	# 设置z_index确保在角色上方显示
+	name_label.z_index = 100
+	
+	# 更新名字显示
+	_update_name_label()
+
+## 更新名字Label显示内容
+func _update_name_label() -> void:
+	if name_label == null:
+		return
+	
+	# 如果没有设置名字和死亡次数，使用默认值（不应该发生）
+	if ghost_player_name == "":
+		name_label.text = "未知 - 1世"
+		return
+	
+	# 格式：名字 - n世（n为死亡时的total_death_count）
+	var display_name = "%s - %d世" % [ghost_player_name, ghost_total_death_count]
+	name_label.text = display_name

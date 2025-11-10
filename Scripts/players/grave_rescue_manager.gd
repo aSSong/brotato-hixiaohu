@@ -289,7 +289,11 @@ func _create_ghost_from_data() -> void:
 	new_ghost.class_id = ghost_data.class_id
 	new_ghost.ghost_weapons = ghost_data.weapons.duplicate()  # 复制数组
 	
+	# 设置Ghost的名字和死亡次数（从GhostData获取）
+	new_ghost.set_name_from_ghost_data(ghost_data.player_name, ghost_data.total_death_count)
+	
 	print("[GraveRescue] Ghost数据已设置，class_id:", new_ghost.class_id, " ghost_weapons数量:", new_ghost.ghost_weapons.size())
+	print("[GraveRescue] Ghost名字:", ghost_data.player_name, " 死亡次数:", ghost_data.total_death_count)
 	
 	# 设置初始位置（在add_child之前）
 	if grave_sprite and is_instance_valid(grave_sprite):

@@ -32,6 +32,9 @@ var max_path_points: int = 300  # 最多记录的路径点数量（增加以支�
 ## 信号：血量变化
 signal hp_changed(current_hp: int, max_hp: int)
 
+## 名字显示Label
+var name_label: Label = null
+
 func _ready() -> void:
 	# 初始化职业管理器
 	class_manager = ClassManager.new()
@@ -54,6 +57,9 @@ func _ready() -> void:
 	# 从GameMain读取选择的职业，如果没有则使用默认值
 	var class_id = GameMain.selected_class_id if GameMain.selected_class_id != "" else "balanced"
 	chooseClass(class_id)
+	
+	# 创建头顶名字显示
+	_create_name_label()
 	pass
 
 func choosePlayer(type):
@@ -358,3 +364,44 @@ func _record_path_point() -> void:
 ## 获取路径历史（供Ghost使用）
 func get_path_history() -> Array:
 	return path_history
+
+## 创建头顶名字Label
+func _create_name_label() -> void:
+	# 创建Label节点
+	name_label = Label.new()
+	add_child(name_label)
+	
+	# 设置Label属性
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	
+	# 设置位置（在角色头顶上方）
+	name_label.position = Vector2(-50, -150)  # 根据角色大小调整
+	name_label.size = Vector2(100, 20)
+	
+	# 设置字体大小和颜色
+	name_label.add_theme_font_size_override("font_size", 16)
+	name_label.add_theme_color_override("font_color", Color.WHITE)
+	
+	# 添加黑色描边效果
+	name_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	name_label.add_theme_constant_override("outline_size", 2)
+	
+	# 设置z_index确保在角色上方显示
+	name_label.z_index = 100
+	
+	# 更新名字显示
+	_update_name_label()
+
+## 更新名字Label显示内容
+func _update_name_label() -> void:
+	if name_label == null:
+		return
+	
+	# 从SaveManager获取玩家名字和死亡次数
+	var player_name = SaveManager.get_player_name()
+	var total_death = SaveManager.get_total_death_count()
+	
+	# 格式：名字 - n世（n = total_death_count + 1）
+	var display_name = "%s - %d世" % [player_name, total_death + 1]
+	name_label.text = display_name
