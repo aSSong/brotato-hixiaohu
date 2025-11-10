@@ -290,6 +290,10 @@ func _revive_player() -> void:
 	if player.has_method("enable_weapons"):
 		player.enable_weapons()
 	
+	# 更新名字显示（因为死亡次数已经增加了）
+	if player.has_method("_update_name_label"):
+		player._update_name_label()
+	
 	# 重置死亡状态
 	is_dead = false
 	death_timer = 0.0
