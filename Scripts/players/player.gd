@@ -376,11 +376,11 @@ func _create_name_label() -> void:
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	
 	# 设置位置（在角色头顶上方）
-	name_label.position = Vector2(-50, -150)  # 根据角色大小调整
-	name_label.size = Vector2(100, 20)
+	name_label.position = Vector2(-125, -190)  # 根据角色大小调整
+	name_label.size = Vector2(120, 30)
 	
 	# 设置字体大小和颜色
-	name_label.add_theme_font_size_override("font_size", 16)
+	name_label.add_theme_font_size_override("font_size", 36)
 	name_label.add_theme_color_override("font_color", Color.WHITE)
 	
 	# 添加黑色描边效果
@@ -403,5 +403,5 @@ func _update_name_label() -> void:
 	var total_death = SaveManager.get_total_death_count()
 	
 	# 格式：名字 - n世（n = total_death_count + 1）
-	var display_name = "%s - %d世" % [player_name, total_death + 1]
+	var display_name = "%s - 第 %d 世" % [player_name, total_death + 1]
 	name_label.text = display_name

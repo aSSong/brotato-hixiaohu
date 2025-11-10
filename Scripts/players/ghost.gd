@@ -323,11 +323,11 @@ func _create_name_label() -> void:
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	
 	# 设置位置（在角色头顶上方）
-	name_label.position = Vector2(-50, -150)  # 根据角色大小调整
-	name_label.size = Vector2(100, 20)
+	name_label.position = Vector2(-115, -190)  # 根据角色大小调整
+	name_label.size = Vector2(120, 30)
 	
 	# 设置字体大小和颜色
-	name_label.add_theme_font_size_override("font_size", 16)
+	name_label.add_theme_font_size_override("font_size", 32)
 	name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0))  # 淡蓝色，表示Ghost
 	
 	# 添加黑色描边效果
@@ -347,9 +347,9 @@ func _update_name_label() -> void:
 	
 	# 如果没有设置名字和死亡次数，使用默认值（不应该发生）
 	if ghost_player_name == "":
-		name_label.text = "未知 - 1世"
+		name_label.text = "未知 - 第 1 世"
 		return
 	
 	# 格式：名字 - n世（n为死亡时的total_death_count）
-	var display_name = "%s - %d世" % [ghost_player_name, ghost_total_death_count]
+	var display_name = "%s - 第 %d 世" % [ghost_player_name, ghost_total_death_count]
 	name_label.text = display_name
