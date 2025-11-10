@@ -171,7 +171,7 @@ func enemy_hurt(hurt):
 	if is_dead:
 		return
 	
-	print("[Enemy] 受伤 | HP:", self.enemyHP, " 伤害:", hurt, " 位置:", global_position)
+	#print("[Enemy] 受伤 | HP:", self.enemyHP, " 伤害:", hurt, " 位置:", global_position)
 	self.enemyHP -= hurt
 	
 	# 显示伤害跳字
