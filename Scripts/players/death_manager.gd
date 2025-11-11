@@ -132,6 +132,9 @@ func _create_grave() -> void:
 	# 设置层级（高于玩家和怪物）
 	grave_sprite.z_index = 20
 	
+	# 创建墓碑名字Label（作为墓碑的子节点）
+	_create_grave_name_label()
+	
 	# 添加到当前场景而不是root（避免场景切换后残留）
 	if player and player.get_parent():
 		player.get_parent().add_child(grave_sprite)
@@ -352,3 +355,40 @@ func get_revive_count() -> int:
 ## 获取下次复活费用
 func get_next_revive_cost() -> int:
 	return 5 * (revive_count + 1)
+
+## 创建墓碑名字Label
+func _create_grave_name_label() -> void:
+	if not grave_sprite or not grave_ghost_data:
+		return
+	
+	# 创建Label节点作为墓碑的子节点
+	var name_label = Label.new()
+	grave_sprite.add_child(name_label)
+	
+	# 设置Label属性
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	
+	# 设置位置（在墓碑上方）
+	# 墓碑图片大小需要根据实际调整，这里假设墓碑高度约100像素
+	name_label.position = Vector2(-115, -100)  # 在墓碑上方
+	name_label.size = Vector2(120, 30)
+	
+	# 设置字体大小和颜色（与Ghost一致，使用淡蓝色）
+	name_label.add_theme_font_size_override("font_size", 28)
+	name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0))  # 淡蓝色
+	
+	# 添加黑色描边效果
+	name_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	name_label.add_theme_constant_override("outline_size", 2)
+	
+	# 设置z_index确保在墓碑上方显示
+	name_label.z_index = 100
+	
+	# 设置显示文本：名字 - n世（n为死亡时的total_death_count）
+	var player_name = grave_ghost_data.player_name
+	var total_death = grave_ghost_data.total_death_count
+	var display_name = "%s - 第 %d 世" % [player_name, total_death]
+	name_label.text = display_name
+	
+	print("[DeathManager] 墓碑名字Label已创建:", display_name)
