@@ -99,8 +99,17 @@ func _trigger_death() -> void:
 	
 	# 创建Ghost数据（用于救援）
 	if player:
-		grave_ghost_data = GhostData.from_player(player, death_count)
-		print("[DeathManager] 创建Ghost数据 | 职业:", grave_ghost_data.class_id, " 武器数:", grave_ghost_data.weapons.size())
+		# 获取当前地图ID和波次
+		var current_map_id = GameMain.current_map_id
+		var current_wave = GameMain.current_session.current_wave if GameMain.current_session else 0
+		
+		grave_ghost_data = GhostData.from_player(player, death_count, current_map_id, current_wave)
+		print("[DeathManager] 创建Ghost数据 | 职业:", grave_ghost_data.class_id, " 武器数:", grave_ghost_data.weapons.size(), " 地图:", current_map_id, " 波次:", current_wave)
+		
+		# Multi模式下：记录到GhostDatabase
+		if GameMain.current_mode_id == "multi":
+			GhostDatabase.add_ghost_record(grave_ghost_data)
+			print("[DeathManager] Multi模式 - 已记录到GhostDatabase")
 	
 	# 移除旧墓碑（如果有）
 	_remove_old_grave()
@@ -204,11 +213,12 @@ func _show_death_ui() -> void:
 	# 暂停游戏
 	get_tree().paused = true
 	
-	# 显示死亡界面
+	# 显示死亡界面（传入当前模式）
 	var current_gold = GameMain.gold
-	death_ui.show_death_screen(revive_count, current_gold)
+	var current_mode = GameMain.current_mode_id
+	death_ui.show_death_screen(revive_count, current_gold, current_mode)
 	
-	print("[DeathManager] 显示死亡UI | 钥匙:", current_gold, " 复活费用:", 5 * (revive_count + 1))
+	print("[DeathManager] 显示死亡UI | 模式:", current_mode, " 钥匙:", current_gold, " 复活费用:", 5 * (revive_count + 1))
 
 ## 复活请求
 func _on_revive_requested() -> void:

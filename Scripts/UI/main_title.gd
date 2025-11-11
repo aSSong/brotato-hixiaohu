@@ -26,8 +26,18 @@ func _input(event: InputEvent) -> void:
 
 
 func _on_btn_single_play_pressed() -> void:
+	# 设置为survival模式（默认模式）
+	GameMain.current_mode_id = "survival"
 	get_tree().change_scene_to_file("res://scenes/UI/cutscene_0.tscn")
 	pass # Replace with function body.
+
+
+func _on_btn_multi_play_pressed() -> void:
+	# 设置为multi模式
+	GameMain.current_mode_id = "multi"
+	# 跳过剧情，直接进入start_menu
+	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+	print("[MainTitle] 进入Multi模式")
 
 
 func _on_btn_quit_pressed() -> void:

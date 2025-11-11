@@ -27,6 +27,14 @@ var available_weapons: Array = [
 func _ready() -> void:
 	# 播放标题BGM（如果还未播放）
 	BGMManager.play_bgm("title")
+	
+	# 检查是否从其他场景带入了mode_id
+	var preset_mode = GameMain.current_mode_id
+	if preset_mode != "":
+		print("[StartMenu] 使用预设模式:", preset_mode)
+	else:
+		print("[StartMenu] 使用默认模式: survival")
+	
 	print("[StartMenu] 确保标题BGM播放中")
 	
 	# 初始化界面
@@ -316,9 +324,22 @@ func _on_start_button_pressed() -> void:
 	GameMain.selected_class_id = selected_class_id
 	GameMain.selected_weapon_ids = selected_weapon_ids.duplicate()
 	
+	# 根据当前mode_id选择目标场景
+	var mode_id = GameMain.current_mode_id
+	var target_scene = ""
+	
+	if mode_id == "multi":
+		target_scene = "res://scenes/map/model_2_stage_1.tscn"
+		GameMain.current_map_id = "model2_stage1"
+		print("[StartMenu] 进入Multi模式地图: model2_stage1")
+	else:  # survival或空字符串
+		target_scene = "res://scenes/map/bg_map.tscn"
+		GameMain.current_map_id = "default"
+		print("[StartMenu] 进入Survival模式地图: bg_map")
+	
 	# 加载游戏场景
-	var game_scene = load("res://scenes/map/bg_map.tscn")
+	var game_scene = load(target_scene)
 	if game_scene:
 		get_tree().change_scene_to_packed(game_scene)
 	else:
-		push_error("无法加载游戏场景！")
+		push_error("[StartMenu] 无法加载游戏场景: %s" % target_scene)

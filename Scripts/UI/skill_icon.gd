@@ -145,4 +145,3 @@ func _hide_cd_display() -> void:
 		cd_overlay.visible = false
 	if cd_progress:
 		cd_progress.visible = false
-

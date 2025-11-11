@@ -34,6 +34,10 @@ var selected_class_id: String = ""
 var selected_weapon_ids: Array = []
 var player: CharacterBody2D = null
 
+## Multi模式相关字段
+var current_mode_id: String = "survival"  # 当前游戏模式
+var current_map_id: String = ""  # 当前地图ID
+
 func reset() -> void:
 	gold = 0
 	master_key = 0
@@ -42,6 +46,8 @@ func reset() -> void:
 	revive_count = 0
 	selected_class_id = ""
 	selected_weapon_ids.clear()
+	current_mode_id = "survival"  # 重置为默认模式
+	current_map_id = ""
 	print("[GameSession] 会话数据已重置")
 
 func add_gold(amount: int) -> void:

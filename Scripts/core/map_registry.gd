@@ -11,13 +11,21 @@ func _ready() -> void:
 
 ## 注册内置地图
 func _register_builtin_maps() -> void:
-	# 注册默认地图
-	var default_map = MapConfig.new("default", "默认战场", "res://scenes/enemies/bg_map.tscn")
+	# 注册默认地图（survival模式）
+	var default_map = MapConfig.new("default", "默认战场", "res://scenes/map/bg_map.tscn")
 	default_map.map_description = "标准生存模式地图"
 	default_map.spawn_position = Vector2(960, 540)
 	default_map.enemy_spawn_radius = 800.0
 	default_map.supported_modes = ["survival"]
 	register_map(default_map)
+	
+	# 注册Multi模式第一张地图
+	var multi_stage1 = MapConfig.new("model2_stage1", "Multi模式-第一关", "res://scenes/map/model_2_stage_1.tscn")
+	multi_stage1.map_description = "Multi模式的第一张地图"
+	multi_stage1.spawn_position = Vector2(960, 540)
+	multi_stage1.enemy_spawn_radius = 800.0
+	multi_stage1.supported_modes = ["multi"]
+	register_map(multi_stage1)
 
 ## 注册地图
 func register_map(map_config: MapConfig) -> void:

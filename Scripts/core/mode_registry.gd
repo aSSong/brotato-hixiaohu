@@ -12,6 +12,7 @@ func _ready() -> void:
 ## 注册内置模式
 func _register_builtin_modes() -> void:
 	register_mode(SurvivalMode.new())
+	register_mode(MultiMode.new())
 
 ## 注册模式
 func register_mode(mode: BaseGameMode) -> void:

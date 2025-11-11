@@ -40,5 +40,9 @@ var enemy_ratio_fast: float = 0.2
 var enemy_ratio_tank: float = 0.2
 var enemy_ratio_elite: float = 0.1
 
+# Multi模式配置
+var multi_mode_total_waves: int = 200
+var multi_mode_allow_revive: bool = false
+
 func _ready() -> void:
 	print("[GameConfig] 游戏配置已加载 | 胜利条件: %d 钥匙" % keys_required)

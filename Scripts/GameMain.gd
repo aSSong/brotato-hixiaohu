@@ -105,3 +105,11 @@ var selected_class_id: String:
 var selected_weapon_ids: Array:
 	get: return current_session.selected_weapon_ids if current_session else []
 	set(value): if current_session: current_session.selected_weapon_ids = value
+
+var current_mode_id: String:
+	get: return current_session.current_mode_id if current_session else "survival"
+	set(value): if current_session: current_session.current_mode_id = value
+
+var current_map_id: String:
+	get: return current_session.current_map_id if current_session else ""
+	set(value): if current_session: current_session.current_map_id = value

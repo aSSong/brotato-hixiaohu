@@ -30,28 +30,39 @@ func _ready() -> void:
 	hide()
 
 ## 显示死亡界面
-func show_death_screen(revive_count: int, current_gold: int) -> void:
+func show_death_screen(revive_count: int, current_gold: int, mode_id: String = "survival") -> void:
 	# 计算复活费用
 	revive_cost = 5 * (revive_count + 1)
 	can_afford = current_gold >= revive_cost
 	
-	# 更新动态文本（钥匙数量和按钮状态）
-	cost_label.text = "复活费用：%d 钥匙" % revive_cost
-	
-	# 更新复活按钮状态
-	if can_afford:
-		revive_button.disabled = false
-		revive_button.text = "复活 (-%d钥匙)" % revive_cost
-		restart_button.visible = false
-	else:
-		revive_button.disabled = true
-		revive_button.text = "钥匙不足"
+	# Multi模式下隐藏复活相关UI
+	if mode_id == "multi":
+		revive_button.visible = false
+		cost_label.visible = false
 		restart_button.visible = true
+		print("[DeathUI] Multi模式 - 隐藏复活选项")
+	else:
+		# Survival模式：正常显示复活选项
+		revive_button.visible = true
+		cost_label.visible = true
+		
+		# 更新动态文本（钥匙数量和按钮状态）
+		cost_label.text = "复活费用：%d 钥匙" % revive_cost
+		
+		# 更新复活按钮状态
+		if can_afford:
+			revive_button.disabled = false
+			revive_button.text = "复活 (-%d钥匙)" % revive_cost
+			restart_button.visible = false
+		else:
+			revive_button.disabled = true
+			revive_button.text = "钥匙不足"
+			restart_button.visible = true
 	
 	# 显示界面
 	show()
 	
-	print("[DeathUI] 显示死亡界面 | 复活次数:", revive_count, " 费用:", revive_cost, " 当前钥匙:", current_gold)
+	print("[DeathUI] 显示死亡界面 | 模式:", mode_id, " 复活次数:", revive_count, " 费用:", revive_cost, " 当前钥匙:", current_gold)
 
 ## 复活按钮按下
 func _on_revive_pressed() -> void:
@@ -72,6 +83,8 @@ func hide_death_screen() -> void:
 
 
 func _on_restart_pressed() -> void:
-	print("[DeathUI] 玩家选择再战")
+	var current_mode = GameMain.current_mode_id
+	print("[DeathUI] 玩家选择再战，当前模式:", current_mode)
 	restart_requested.emit()
 	hide()
+	# 注意：不清除mode_id，让StartMenu继续使用当前模式

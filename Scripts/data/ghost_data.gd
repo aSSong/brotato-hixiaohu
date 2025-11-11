@@ -22,8 +22,14 @@ class_name GhostData
 ## 总死亡次数（死亡时的累计死亡次数，用于显示"第n世"）
 @export var total_death_count: int = 0
 
+## 死于哪张地图（地图ID）
+@export var map_id: String = ""
+
+## 死于第几波
+@export var wave: int = 0
+
 ## 从玩家创建Ghost数据
-static func from_player(player: CharacterBody2D, death_count: int) -> GhostData:
+static func from_player(player: CharacterBody2D, death_count: int, map_id: String = "", wave: int = 0) -> GhostData:
 	var data = GhostData.new()
 	
 	# 保存职业ID（通过查找匹配的ClassData来获取ID）
@@ -75,7 +81,11 @@ static func from_player(player: CharacterBody2D, death_count: int) -> GhostData:
 	data.player_name = SaveManager.get_player_name()
 	data.total_death_count = SaveManager.get_total_death_count()
 	
-	print("[GhostData] 玩家名字:", data.player_name, " 总死亡次数:", data.total_death_count)
+	# 保存地图和波次信息
+	data.map_id = map_id
+	data.wave = wave
+	
+	print("[GhostData] 玩家名字:", data.player_name, " 总死亡次数:", data.total_death_count, " 地图:", map_id, " 波次:", wave)
 	
 	return data
 

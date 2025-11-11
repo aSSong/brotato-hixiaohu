@@ -30,6 +30,7 @@ GameMain="*res://Scripts/GameMain.gd"
 CameraShake="*res://Scripts/camera_shake.gd"
 BGMManager="*res://Scripts/managers/bgm_manager.gd"
 SaveManager="*res://Scripts/managers/save_manager.gd"
+GhostDatabase="*res://Scripts/data/ghost_database.gd"
 
 [display]
 

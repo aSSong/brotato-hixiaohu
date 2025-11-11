@@ -54,6 +54,25 @@ var enemy_spawner: Node = null  # 敌人生成器
 func _ready() -> void:
 	_initialize_waves()
 
+## Multi模式：处理墓碑刷新
+func _handle_multi_mode_graves() -> void:
+	# 检查是否是multi模式
+	if GameMain.current_mode_id != "multi":
+		return
+	
+	# 查找MultiGravesManager
+	var graves_manager = get_tree().get_first_node_in_group("multi_graves_manager")
+	if not graves_manager:
+		print("[WaveSystem V3] Multi模式但未找到MultiGravesManager")
+		return
+	
+	# 刷新当前wave的墓碑
+	if graves_manager.has_method("spawn_graves_for_wave"):
+		graves_manager.spawn_graves_for_wave(current_wave)
+		print("[WaveSystem V3] Multi模式 - 已刷新Wave%d的墓碑" % current_wave)
+	else:
+		push_warning("[WaveSystem V3] MultiGravesManager没有spawn_graves_for_wave方法")
+
 ## 初始化波次配置
 func _initialize_waves() -> void:
 	wave_configs.clear()
@@ -191,6 +210,9 @@ func start_next_wave() -> void:
 	
 	print("\n[WaveSystem V3] ========== 第 ", current_wave, " 波开始 ==========")
 	print("[WaveSystem V3] 目标敌人数：", total_enemies_this_wave)
+	
+	# Multi模式：刷新墓碑
+	_handle_multi_mode_graves()
 	
 	# 请求生成器开始生成
 	if enemy_spawner and enemy_spawner.has_method("spawn_wave"):
