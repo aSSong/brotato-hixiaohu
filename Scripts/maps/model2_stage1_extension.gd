@@ -6,11 +6,21 @@ func _ready() -> void:
 	# 等待一帧确保场景树完全初始化
 	await get_tree().process_frame
 	
+	# 初始化游戏系统（DeathManager等）
+	_setup_game_initializer()
+	
 	# 动态加载并添加升级商店（与原模式一致）
 	_setup_upgrade_shop()
 	
 	# Multi模式特有：初始化MultiGravesManager
 	_setup_multi_graves_manager()
+
+## 设置游戏初始化器（创建DeathManager等）
+func _setup_game_initializer() -> void:
+	var game_initializer = preload("res://Scripts/game_initializer.gd").new()
+	game_initializer.name = "GameInitializer"
+	add_child(game_initializer)
+	print("[Model2Stage1] GameInitializer已创建")
 
 ## 设置升级商店（与bg_map_extension一致）
 func _setup_upgrade_shop() -> void:

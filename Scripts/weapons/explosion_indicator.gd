@@ -187,4 +187,3 @@ func fade_out_and_remove(fade_time: float = 0.1) -> void:
 	tween = create_tween()
 	tween.tween_property(circle_sprite, "modulate:a", 0.0, fade_time)
 	tween.tween_callback(queue_free)
-

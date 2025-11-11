@@ -26,6 +26,9 @@ var death_delay: float = 1.5  # 死亡延迟时间
 var death_position: Vector2 = Vector2.ZERO  # 记录死亡位置
 
 func _ready() -> void:
+	# 确保在游戏暂停时仍能处理死亡逻辑
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# 添加到组中方便查找
 	add_to_group("death_manager")
 	
@@ -120,6 +123,10 @@ func _trigger_death() -> void:
 	# 禁止玩家移动
 	if player:
 		player.canMove = false
+	
+	# Multi模式下：清理所有ghost（因为无法复活，必然会离开场景）
+	if GameMain.current_mode_id == "multi":
+		_cleanup_ghosts_for_multi_mode()
 	
 	player_died.emit()
 	print("[DeathManager] 玩家死亡！", death_delay, "秒后显示死亡界面...")
@@ -365,6 +372,32 @@ func get_revive_count() -> int:
 ## 获取下次复活费用
 func get_next_revive_cost() -> int:
 	return 5 * (revive_count + 1)
+
+## Multi模式下清理所有ghost
+func _cleanup_ghosts_for_multi_mode() -> void:
+	print("[DeathManager] Multi模式 - 开始清理Ghost和墓碑")
+	
+	# 查找GhostManager
+	var ghost_manager = get_tree().get_first_node_in_group("ghost_manager")
+	if ghost_manager:
+		if ghost_manager.has_method("clear_all_ghosts"):
+			ghost_manager.clear_all_ghosts()
+			print("[DeathManager] Multi模式 - 已清理所有Ghost")
+		else:
+			print("[DeathManager] Multi模式 - GhostManager没有clear_all_ghosts方法")
+	else:
+		print("[DeathManager] Multi模式 - 未找到GhostManager")
+	
+	# 清理Multi模式的墓碑（如果有）
+	var graves_manager = get_tree().get_first_node_in_group("multi_graves_manager")
+	if graves_manager:
+		if graves_manager.has_method("clear_all_graves"):
+			graves_manager.clear_all_graves()
+			print("[DeathManager] Multi模式 - 已清理所有Multi墓碑")
+		else:
+			print("[DeathManager] Multi模式 - MultiGravesManager没有clear_all_graves方法")
+	else:
+		print("[DeathManager] Multi模式 - 未找到MultiGravesManager（可能正常，取决于wave）")
 
 ## 创建墓碑名字Label
 func _create_grave_name_label() -> void:
