@@ -268,7 +268,8 @@ func _on_give_up_requested() -> void:
 
 ## 再战请求
 func _on_restart_requested() -> void:
-	print("[DeathManager] 玩家再战")
+	var current_mode = GameMain.current_mode_id
+	print("[DeathManager] 玩家再战 | 当前模式:", current_mode)
 	
 	# 移除墓碑
 	_remove_grave()
@@ -282,8 +283,8 @@ func _on_restart_requested() -> void:
 	# 等待一下再切换场景
 	await get_tree().create_timer(0.1).timeout
 	
-	# 使用安全的场景切换（带清理）
-	await SceneCleanupManager.change_scene_safely("res://scenes/UI/start_menu.tscn")
+	# 使用安全的场景切换（带清理，保留模式）
+	await SceneCleanupManager.change_scene_safely_keep_mode("res://scenes/UI/start_menu.tscn")
 
 ## 复活玩家
 func _revive_player() -> void:
