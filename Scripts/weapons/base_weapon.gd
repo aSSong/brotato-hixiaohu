@@ -17,6 +17,7 @@ var attack_enemies: Array = []
 ## 伤害和攻击速度倍数（用于职业加成）
 var damage_multiplier: float = 1.0
 var attack_speed_multiplier: float = 1.0
+var range_multiplier: float = 1.0
 
 ## 武器等级（1-5级）
 var weapon_level: int = 1
@@ -48,12 +49,12 @@ func initialize(data: WeaponData, level: int = 1) -> void:
 		timer.wait_time = final_attack_speed
 		timer.autostart = true
 	
-	# 设置检测范围（考虑等级倍数）
+	# 设置检测范围（考虑等级倍数和职业范围系数）
 	if detection_area and detection_area.get_child(0) is CollisionShape2D:
 		var collision_shape = detection_area.get_child(0) as CollisionShape2D
 		# 创建新的独立 CircleShape2D 资源，避免多个武器实例共享同一个 shape
 		var new_shape = CircleShape2D.new()
-		new_shape.radius = weapon_data.range * multipliers.range_multiplier
+		new_shape.radius = weapon_data.range * multipliers.range_multiplier * range_multiplier
 		collision_shape.shape = new_shape
 	
 	# 设置武器贴图
@@ -80,12 +81,12 @@ func upgrade_level() -> bool:
 		var final_attack_speed = weapon_data.attack_speed / (attack_speed_multiplier * multipliers.attack_speed_multiplier)
 		timer.wait_time = final_attack_speed
 	
-	# 更新检测范围
+	# 更新检测范围（考虑职业范围系数）
 	if detection_area and detection_area.get_child(0) is CollisionShape2D:
 		var collision_shape = detection_area.get_child(0) as CollisionShape2D
 		var shape = collision_shape.shape
 		if shape is CircleShape2D:
-			shape.radius = weapon_data.range * multipliers.range_multiplier
+			shape.radius = weapon_data.range * multipliers.range_multiplier * range_multiplier
 	
 	# 更新颜色和描边
 	_update_weapon_level_appearance()
@@ -254,6 +255,17 @@ func set_attack_speed_multiplier(multiplier: float) -> void:
 	attack_speed_multiplier = multiplier
 	if timer and weapon_data:
 		timer.wait_time = weapon_data.attack_speed / attack_speed_multiplier
+
+## 设置范围倍数
+func set_range_multiplier(multiplier: float) -> void:
+	range_multiplier = multiplier
+	# 更新检测范围
+	if detection_area and detection_area.get_child(0) is CollisionShape2D and weapon_data:
+		var collision_shape = detection_area.get_child(0) as CollisionShape2D
+		var shape = collision_shape.shape
+		if shape is CircleShape2D:
+			var multipliers = WeaponData.get_level_multipliers(weapon_level)
+			shape.radius = weapon_data.range * multipliers.range_multiplier * range_multiplier
 
 ## 获取攻击速度
 func get_attack_speed() -> float:

@@ -273,16 +273,16 @@ func get_attack_multiplier() -> float:
 
 ## 获取武器类型伤害倍数
 func get_weapon_type_multiplier(weapon_type: WeaponData.WeaponType) -> float:
-	if not class_manager:
+	if not current_class:
 		return 1.0
 	
 	match weapon_type:
 		WeaponData.WeaponType.MELEE:
-			return class_manager.get_passive_effect("melee_damage_multiplier", 1.0)
+			return current_class.melee_damage_multiplier
 		WeaponData.WeaponType.RANGED:
-			return class_manager.get_passive_effect("ranged_damage_multiplier", 1.0)
+			return current_class.ranged_damage_multiplier
 		WeaponData.WeaponType.MAGIC:
-			return class_manager.get_passive_effect("magic_damage_multiplier", 1.0)
+			return current_class.magic_damage_multiplier
 	
 	return 1.0
 
@@ -293,10 +293,17 @@ func player_hurt(damage: int) -> void:
 	if current_class:
 		actual_damage = max(1, damage - current_class.defense)
 	
+	# 应用职业减伤系数
+	if current_class:
+		actual_damage = int(actual_damage * current_class.damage_reduction_multiplier)
+	
 	# 应用技能减伤
 	if class_manager and class_manager.is_skill_active("护盾"):
 		var reduction = class_manager.get_skill_effect("护盾_reduction", 0.0)
 		actual_damage = int(actual_damage * (1.0 - reduction))
+	
+	# 确保至少1点伤害
+	actual_damage = max(1, actual_damage)
 	
 	now_hp -= actual_damage
 	

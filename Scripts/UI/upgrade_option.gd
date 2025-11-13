@@ -77,4 +77,3 @@ func _process(_delta: float) -> void:
 	# 实时更新购买按钮状态（钥匙变化时）
 	if upgrade_data:
 		_update_buy_button()
-

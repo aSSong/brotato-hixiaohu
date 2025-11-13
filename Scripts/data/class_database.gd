@@ -29,7 +29,11 @@ static func initialize_classes() -> void:
 		}
 	)
 	warrior.description = "高血量的近战职业，擅长使用近战武器"
-	warrior.traits = ["近战武器伤害+30%", "血量+50", "防御+5"]
+	# 设置近战加成
+	warrior.melee_damage_multiplier = 1.3  # 近战武器伤害+30%
+	warrior.melee_knockback_multiplier = 1.2  # 近战击退+20%
+	# 自动生成特性描述
+	warrior.generate_traits_description()
 	classes["warrior"] = warrior
 	
 	# 射手 - 高攻击速度、远程加成
@@ -50,7 +54,11 @@ static func initialize_classes() -> void:
 		}
 	)
 	ranger.description = "高敏捷的远程职业，擅长使用远程武器"
-	ranger.traits = ["远程武器伤害+25%", "攻击速度+20%", "暴击率+10%"]
+	# 设置远程加成
+	ranger.ranged_damage_multiplier = 1.25  # 远程武器伤害+25%
+	ranger.attack_speed_multiplier = 1.2  # 攻击速度+20%
+	# 自动生成特性描述
+	ranger.generate_traits_description()
 	classes["ranger"] = ranger
 	
 	# 法师 - 低血量、魔法加成、范围伤害
@@ -71,7 +79,12 @@ static func initialize_classes() -> void:
 		}
 	)
 	mage.description = "高智力的魔法职业，擅长使用魔法武器造成范围伤害"
-	mage.traits = ["魔法武器伤害+40%", "爆炸范围+30%", "魔法冷却-20%"]
+	# 设置魔法加成
+	mage.magic_damage_multiplier = 1.4  # 魔法武器伤害+40%
+	mage.magic_explosion_radius_multiplier = 1.3  # 爆炸范围+30%
+	mage.magic_speed_multiplier = 0.8  # 魔法冷却-20%（速度降低=冷却减少）
+	# 自动生成特性描述
+	mage.generate_traits_description()
 	classes["mage"] = mage
 	
 	# 平衡者 - 均衡属性
@@ -79,7 +92,7 @@ static func initialize_classes() -> void:
 		"平衡者",
 		100,  # max_hp
 		400.0,  # speed
-		1.0,  # attack_multiplier
+		1.15,  # attack_multiplier（所有武器伤害+15%）
 		2,  # defense
 		0.1,  # crit_chance
 		1.8,  # crit_damage
@@ -91,7 +104,10 @@ static func initialize_classes() -> void:
 		}
 	)
 	balanced.description = "均衡发展的职业，适合所有武器类型"
-	balanced.traits = ["所有武器伤害+15%", "移动速度+10%"]
+	# 平衡者已经通过 attack_multiplier 设置了所有武器伤害+15%
+	# speed 保持 400.0（移动速度0%）
+	# 自动生成特性描述
+	balanced.generate_traits_description()
 	classes["balanced"] = balanced
 	
 	# 坦克 - 超高血量、防御
@@ -112,7 +128,10 @@ static func initialize_classes() -> void:
 		}
 	)
 	tank.description = "超高血量和防御的职业，生存能力强"
-	tank.traits = ["血量+100", "防御+10", "受到伤害-20%"]
+	# 设置坦克加成
+	tank.damage_reduction_multiplier = 0.8  # 受到伤害-20%（减伤系数0.8）
+	# 自动生成特性描述
+	tank.generate_traits_description()
 	classes["tank"] = tank
 
 ## 获取职业（重命名以避免与Node.get_class()冲突）

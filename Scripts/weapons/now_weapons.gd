@@ -153,26 +153,56 @@ func _get_weapon_id(weapon_data: WeaponData) -> String:
 
 ## 应用职业加成到武器
 func _apply_class_bonuses(weapon: Node2D, weapon_data: WeaponData) -> void:
-	if not player_ref or not player_ref.has_method("get_attack_multiplier"):
+	if not player_ref or not player_ref.current_class:
 		return
 	
-	# 获取攻击力倍数
+	var current_class = player_ref.current_class
+	
+	# 1. 应用伤害倍率
 	var attack_multiplier = player_ref.get_attack_multiplier()
 	var type_multiplier = player_ref.get_weapon_type_multiplier(weapon_data.weapon_type)
-	
-	# 应用到武器伤害（可以通过修改weapon_data或添加加成变量）
-	# 这里我们可以在武器类中添加一个damage_multiplier属性
 	if weapon.has_method("set_damage_multiplier"):
 		weapon.set_damage_multiplier(attack_multiplier * type_multiplier)
 	
-	# 应用攻击速度加成
-	if player_ref.class_manager:
-		var speed_multiplier = player_ref.class_manager.get_passive_effect("attack_speed_multiplier", 1.0)
-		if player_ref.class_manager.is_skill_active("狂暴"):
-			speed_multiplier *= (1.0 + player_ref.class_manager.get_skill_effect("狂暴_attack_speed", 0.0))
-		
-		if weapon.has_method("set_attack_speed_multiplier"):
-			weapon.set_attack_speed_multiplier(speed_multiplier)
+	# 2. 应用攻击速度系数（通用 + 类型特定）
+	var speed_mult = current_class.attack_speed_multiplier
+	match weapon_data.weapon_type:
+		WeaponData.WeaponType.MELEE:
+			speed_mult *= current_class.melee_speed_multiplier
+		WeaponData.WeaponType.RANGED:
+			speed_mult *= current_class.ranged_speed_multiplier
+		WeaponData.WeaponType.MAGIC:
+			speed_mult *= current_class.magic_speed_multiplier
+	
+	# 应用技能加成
+	if player_ref.class_manager and player_ref.class_manager.is_skill_active("狂暴"):
+		speed_mult *= (1.0 + player_ref.class_manager.get_skill_effect("狂暴_attack_speed", 0.0))
+	
+	if weapon.has_method("set_attack_speed_multiplier"):
+		weapon.set_attack_speed_multiplier(speed_mult)
+	
+	# 3. 应用范围系数
+	var range_mult = 1.0
+	match weapon_data.weapon_type:
+		WeaponData.WeaponType.MELEE:
+			range_mult = current_class.melee_range_multiplier
+		WeaponData.WeaponType.RANGED:
+			range_mult = current_class.ranged_range_multiplier
+		WeaponData.WeaponType.MAGIC:
+			range_mult = current_class.magic_range_multiplier
+	
+	if weapon.has_method("set_range_multiplier"):
+		weapon.set_range_multiplier(range_mult)
+	
+	# 4. 应用击退系数（仅近战）
+	if weapon_data.weapon_type == WeaponData.WeaponType.MELEE:
+		if weapon.has_method("set_knockback_multiplier"):
+			weapon.set_knockback_multiplier(current_class.melee_knockback_multiplier)
+	
+	# 5. 应用爆炸范围系数（仅魔法）
+	if weapon_data.weapon_type == WeaponData.WeaponType.MAGIC:
+		if weapon.has_method("set_explosion_radius_multiplier"):
+			weapon.set_explosion_radius_multiplier(current_class.magic_explosion_radius_multiplier)
 
 ## 排列武器位置
 func arrange_weapons() -> void:

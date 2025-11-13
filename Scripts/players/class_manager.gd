@@ -9,83 +9,16 @@ signal skill_deactivated(skill_name: String)
 
 var current_class: ClassData = null
 var active_skills: Dictionary = {}  # 存储激活的技能及其剩余时间
-var passive_effects: Dictionary = {}  # 被动效果
 
 ## 设置当前职业
 func set_class(class_data: ClassData) -> void:
 	current_class = class_data
 	active_skills.clear()
-	passive_effects.clear()
 	
 	if current_class == null:
 		return
 	
-	# 应用被动效果
-	_apply_passive_effects()
-
-## 应用被动效果
-func _apply_passive_effects() -> void:
-	if current_class == null:
-		return
-	
-	# 解析特性并应用
-	var traits_array = current_class.traits
-	if traits_array != null and traits_array.size() > 0:
-		var i = 0
-		while i < traits_array.size():
-			var trait_value = traits_array[i]
-			_parse_and_apply_trait(trait_value)
-			i += 1
-
-## 解析并应用特性
-func _parse_and_apply_trait(trait_value) -> void:
-	# 这里可以根据特性字符串解析并应用效果
-	# 例如："近战武器伤害+30%" -> passive_effects["melee_damage_multiplier"] = 1.3
-	if typeof(trait_value) != TYPE_STRING:
-		return
-	var trait_str: String = str(trait_value)
-	if trait_str.contains("近战武器伤害"):
-		var value = _extract_percentage(trait_str)
-		passive_effects["melee_damage_multiplier"] = 1.0 + value / 100.0
-	elif trait_str.contains("远程武器伤害"):
-		var value = _extract_percentage(trait_str)
-		passive_effects["ranged_damage_multiplier"] = 1.0 + value / 100.0
-	elif trait_str.contains("魔法武器伤害"):
-		var value = _extract_percentage(trait_str)
-		passive_effects["magic_damage_multiplier"] = 1.0 + value / 100.0
-	elif trait_str.contains("所有武器伤害"):
-		var value = _extract_percentage(trait_str)
-		passive_effects["all_weapon_damage_multiplier"] = 1.0 + value / 100.0
-	elif trait_str.contains("攻击速度"):
-		var value = _extract_percentage(trait_str)
-		passive_effects["attack_speed_multiplier"] = 1.0 + value / 100.0
-	elif trait_str.contains("移动速度"):
-		var value = _extract_percentage(trait_str)
-		passive_effects["speed_multiplier"] = 1.0 + value / 100.0
-	elif trait_str.contains("血量"):
-		var value = _extract_number(trait_str)
-		passive_effects["hp_bonus"] = value
-	elif trait_str.contains("防御"):
-		var value = _extract_number(trait_str)
-		passive_effects["defense_bonus"] = value
-
-## 从字符串中提取百分比
-func _extract_percentage(text: String) -> float:
-	var regex = RegEx.new()
-	regex.compile("([+-]?\\d+\\.?\\d*)%")
-	var result = regex.search(text)
-	if result:
-		return float(result.get_string(1))
-	return 0.0
-
-## 从字符串中提取数字
-func _extract_number(text: String) -> int:
-	var regex = RegEx.new()
-	regex.compile("([+-]?\\d+)")
-	var result = regex.search(text)
-	if result:
-		return int(result.get_string(1))
-	return 0
+	# 不再需要解析特性，直接从 ClassData 读取属性即可
 
 ## 激活技能
 func activate_skill() -> void:
@@ -207,9 +140,51 @@ func _deactivate_skill(skill_name: String) -> void:
 		if active_skills.has(key):
 			active_skills.erase(key)
 
-## 获取被动效果值
+## 获取被动效果值（直接从 ClassData 读取）
 func get_passive_effect(effect_name: String, default_value = 1.0):
-	return passive_effects.get(effect_name, default_value)
+	if current_class == null:
+		return default_value
+	
+	# 根据效果名称映射到 ClassData 的对应属性
+	match effect_name:
+		"attack_speed_multiplier":
+			return current_class.attack_speed_multiplier
+		"speed_multiplier":
+			# 移动速度系数（基于 speed 相对于 400 的比例）
+			return current_class.speed / 400.0
+		"all_weapon_damage_multiplier":
+			return current_class.attack_multiplier
+		"melee_damage_multiplier":
+			return current_class.melee_damage_multiplier
+		"ranged_damage_multiplier":
+			return current_class.ranged_damage_multiplier
+		"magic_damage_multiplier":
+			return current_class.magic_damage_multiplier
+		"melee_speed_multiplier":
+			return current_class.melee_speed_multiplier
+		"ranged_speed_multiplier":
+			return current_class.ranged_speed_multiplier
+		"magic_speed_multiplier":
+			return current_class.magic_speed_multiplier
+		"melee_range_multiplier":
+			return current_class.melee_range_multiplier
+		"ranged_range_multiplier":
+			return current_class.ranged_range_multiplier
+		"magic_range_multiplier":
+			return current_class.magic_range_multiplier
+		"melee_knockback_multiplier":
+			return current_class.melee_knockback_multiplier
+		"magic_explosion_radius_multiplier":
+			return current_class.magic_explosion_radius_multiplier
+		"damage_reduction_multiplier":
+			return current_class.damage_reduction_multiplier
+		"hp_bonus":
+			# 血量加成（相对于基础 100）
+			return current_class.max_hp - 100
+		"defense_bonus":
+			return current_class.defense
+		_:
+			return default_value
 
 ## 获取技能效果值
 func get_skill_effect(effect_name: String, default_value = 0.0):

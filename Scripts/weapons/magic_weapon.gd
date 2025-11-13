@@ -16,6 +16,13 @@ var indicator_duration: float = 0.3  # 显示持续时间
 ## 当前正在施法的攻击列表
 var casting_attacks: Array = []  # [{target, target_position, indicator, timer, damage, is_locked}]
 
+## 爆炸范围系数
+var explosion_radius_multiplier: float = 1.0
+
+## 设置爆炸范围系数
+func set_explosion_radius_multiplier(multiplier: float) -> void:
+	explosion_radius_multiplier = multiplier
+
 ## 获取指示器颜色（根据武器类型）
 func _get_indicator_color() -> Color:
 	if weapon_data == null:
@@ -92,6 +99,8 @@ func _cancel_cast(cast_data: Dictionary) -> void:
 func _execute_cast(cast_data: Dictionary) -> void:
 	var damage = cast_data.damage
 	var explosion_radius = weapon_data.explosion_radius if weapon_data else 150.0
+	# 应用爆炸范围系数
+	explosion_radius *= explosion_radius_multiplier
 	
 	# 确定爆炸位置
 	var explosion_position: Vector2
@@ -151,7 +160,7 @@ func _perform_attack() -> void:
 	# 获取延迟时间
 	var cast_delay = weapon_data.attack_cast_delay if weapon_data else 0.0
 	var damage = get_damage()
-	var explosion_radius = weapon_data.explosion_radius
+	var explosion_radius = weapon_data.explosion_radius * explosion_radius_multiplier
 	
 	# 为每个目标显示指示器（现在全部显示）
 	for i in range(targets.size()):
