@@ -41,16 +41,150 @@ static func initialize_upgrades() -> void:
 	heal_hp_upgrade.description = "立即恢复100点生命值"
 	upgrades["heal_hp"] = heal_hp_upgrade
 	
-	# 可以在这里添加更多基础升级选项
-	# 例如：
-	# var attack_damage_upgrade = UpgradeData.new(
-	# 	UpgradeData.UpgradeType.ATTACK_DAMAGE,
-	# 	"攻击力+10",
-	# 	8,
-	# 	"res://assets/items/xxx.png"
-	# )
-	# attack_damage_upgrade.description = "永久增加10点攻击力"
-	# upgrades["attack_damage"] = attack_damage_upgrade
+	# === 战斗属性 ===
+	# 4. 减伤+10%
+	var damage_reduction = UpgradeData.new(
+		UpgradeData.UpgradeType.DAMAGE_REDUCTION,
+		"减伤+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	damage_reduction.description = "受到的伤害降低10%"
+	upgrades["damage_reduction"] = damage_reduction
+	
+	# 5. 幸运+10
+	var luck = UpgradeData.new(
+		UpgradeData.UpgradeType.LUCK,
+		"幸运+10",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	luck.description = "增加10点幸运值（未来影响掉落）"
+	upgrades["luck"] = luck
+	
+	# === 武器通用 ===
+	# 6. 攻击速度+10%
+	var attack_speed = UpgradeData.new(
+		UpgradeData.UpgradeType.ATTACK_SPEED,
+		"攻击速度+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	attack_speed.description = "所有武器攻击速度提升10%"
+	upgrades["attack_speed"] = attack_speed
+	
+	# === 近战武器 ===
+	# 7. 近战伤害+10%
+	var melee_damage = UpgradeData.new(
+		UpgradeData.UpgradeType.MELEE_DAMAGE,
+		"近战伤害+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	melee_damage.description = "近战武器伤害提升10%"
+	upgrades["melee_damage"] = melee_damage
+	
+	# 8. 近战范围+10%
+	var melee_range = UpgradeData.new(
+		UpgradeData.UpgradeType.MELEE_RANGE,
+		"近战范围+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	melee_range.description = "近战武器攻击范围提升10%"
+	upgrades["melee_range"] = melee_range
+	
+	# 9. 近战速度+10%
+	var melee_speed = UpgradeData.new(
+		UpgradeData.UpgradeType.MELEE_SPEED,
+		"近战速度+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	melee_speed.description = "近战武器攻击速度提升10%"
+	upgrades["melee_speed"] = melee_speed
+	
+	# 10. 近战击退+10%
+	var melee_knockback = UpgradeData.new(
+		UpgradeData.UpgradeType.MELEE_KNOCKBACK,
+		"近战击退+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	melee_knockback.description = "近战武器击退效果提升10%"
+	upgrades["melee_knockback"] = melee_knockback
+	
+	# === 远程武器 ===
+	# 11. 远程伤害+10%
+	var ranged_damage = UpgradeData.new(
+		UpgradeData.UpgradeType.RANGED_DAMAGE,
+		"远程伤害+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	ranged_damage.description = "远程武器伤害提升10%"
+	upgrades["ranged_damage"] = ranged_damage
+	
+	# 12. 远程范围+10%
+	var ranged_range = UpgradeData.new(
+		UpgradeData.UpgradeType.RANGED_RANGE,
+		"远程范围+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	ranged_range.description = "远程武器攻击范围提升10%"
+	upgrades["ranged_range"] = ranged_range
+	
+	# 13. 远程速度+10%
+	var ranged_speed = UpgradeData.new(
+		UpgradeData.UpgradeType.RANGED_SPEED,
+		"远程速度+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	ranged_speed.description = "远程武器攻击速度提升10%"
+	upgrades["ranged_speed"] = ranged_speed
+	
+	# === 魔法武器 ===
+	# 14. 魔法伤害+10%
+	var magic_damage = UpgradeData.new(
+		UpgradeData.UpgradeType.MAGIC_DAMAGE,
+		"魔法伤害+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	magic_damage.description = "魔法武器伤害提升10%"
+	upgrades["magic_damage"] = magic_damage
+	
+	# 15. 魔法范围+10%
+	var magic_range = UpgradeData.new(
+		UpgradeData.UpgradeType.MAGIC_RANGE,
+		"魔法范围+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	magic_range.description = "魔法武器攻击范围提升10%"
+	upgrades["magic_range"] = magic_range
+	
+	# 16. 魔法速度+10%
+	var magic_speed = UpgradeData.new(
+		UpgradeData.UpgradeType.MAGIC_SPEED,
+		"魔法速度+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	magic_speed.description = "魔法武器攻击速度提升10%（冷却降低）"
+	upgrades["magic_speed"] = magic_speed
+	
+	# 17. 魔法爆炸范围+10%
+	var magic_explosion = UpgradeData.new(
+		UpgradeData.UpgradeType.MAGIC_EXPLOSION,
+		"爆炸范围+10%",
+		5,
+		"res://assets/skillicon/10.png"
+	)
+	magic_explosion.description = "魔法武器爆炸范围提升10%"
+	upgrades["magic_explosion"] = magic_explosion
 
 ## 获取基础升级数据
 static func get_upgrade_data(upgrade_id: String) -> UpgradeData:

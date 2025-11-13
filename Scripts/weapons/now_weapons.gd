@@ -230,3 +230,15 @@ func clear_weapons() -> void:
 func set_weapon_radius(radius: float) -> void:
 	weapon_radius = radius
 	arrange_weapons()
+
+## 重新应用所有武器的加成（当玩家属性改变时）
+func reapply_all_bonuses() -> void:
+	if not player_ref:
+		return
+	
+	var weapons = get_children()
+	for weapon in weapons:
+		if weapon.has_method("get_meta") and weapon.has_meta("weapon_data"):
+			var weapon_data = weapon.get_meta("weapon_data")
+			_apply_class_bonuses(weapon, weapon_data)
+			print("[NowWeapons] 重新应用加成: ", weapon_data.weapon_name)

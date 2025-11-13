@@ -350,6 +350,44 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 			_apply_new_weapon_upgrade(upgrade.weapon_id)
 		UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
 			_apply_weapon_level_upgrade(upgrade.weapon_id)
+		
+		# 战斗属性
+		UpgradeData.UpgradeType.DAMAGE_REDUCTION:
+			_apply_damage_reduction_upgrade()
+		UpgradeData.UpgradeType.LUCK:
+			_apply_luck_upgrade()
+		
+		# 武器通用
+		UpgradeData.UpgradeType.ATTACK_SPEED:
+			_apply_attack_speed_upgrade()
+		
+		# 近战武器
+		UpgradeData.UpgradeType.MELEE_DAMAGE:
+			_apply_melee_damage_upgrade()
+		UpgradeData.UpgradeType.MELEE_RANGE:
+			_apply_melee_range_upgrade()
+		UpgradeData.UpgradeType.MELEE_SPEED:
+			_apply_melee_speed_upgrade()
+		UpgradeData.UpgradeType.MELEE_KNOCKBACK:
+			_apply_melee_knockback_upgrade()
+		
+		# 远程武器
+		UpgradeData.UpgradeType.RANGED_DAMAGE:
+			_apply_ranged_damage_upgrade()
+		UpgradeData.UpgradeType.RANGED_RANGE:
+			_apply_ranged_range_upgrade()
+		UpgradeData.UpgradeType.RANGED_SPEED:
+			_apply_ranged_speed_upgrade()
+		
+		# 魔法武器
+		UpgradeData.UpgradeType.MAGIC_DAMAGE:
+			_apply_magic_damage_upgrade()
+		UpgradeData.UpgradeType.MAGIC_RANGE:
+			_apply_magic_range_upgrade()
+		UpgradeData.UpgradeType.MAGIC_SPEED:
+			_apply_magic_speed_upgrade()
+		UpgradeData.UpgradeType.MAGIC_EXPLOSION:
+			_apply_magic_explosion_upgrade()
 
 func _apply_hp_max_upgrade() -> void:
 	var player = get_tree().get_first_node_in_group("player")
@@ -387,6 +425,118 @@ func _apply_weapon_level_upgrade(weapon_id: String) -> void:
 		var weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
 		if weapon and weapon.has_method("upgrade_level"):
 			weapon.upgrade_level()
+
+## === 新属性升级函数 ===
+
+# 战斗属性
+func _apply_damage_reduction_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.damage_reduction_multiplier *= 0.9  # 减伤10%，系数从1.0变为0.9
+		print("[UpgradeShop] 减伤系数: ", player.current_class.damage_reduction_multiplier)
+
+func _apply_luck_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.luck += 10
+		print("[UpgradeShop] 幸运值: ", player.current_class.luck, " (未实装)")
+
+# 武器通用
+func _apply_attack_speed_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.attack_speed_multiplier *= 1.1  # 攻击速度+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 攻击速度系数: ", player.current_class.attack_speed_multiplier)
+
+# 近战武器
+func _apply_melee_damage_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.melee_damage_multiplier *= 1.1  # 近战伤害+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 近战伤害系数: ", player.current_class.melee_damage_multiplier)
+
+func _apply_melee_range_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.melee_range_multiplier *= 1.1  # 近战范围+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 近战范围系数: ", player.current_class.melee_range_multiplier)
+
+func _apply_melee_speed_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.melee_speed_multiplier *= 1.1  # 近战速度+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 近战速度系数: ", player.current_class.melee_speed_multiplier)
+
+func _apply_melee_knockback_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.melee_knockback_multiplier *= 1.1  # 近战击退+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 近战击退系数: ", player.current_class.melee_knockback_multiplier)
+
+# 远程武器
+func _apply_ranged_damage_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.ranged_damage_multiplier *= 1.1  # 远程伤害+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 远程伤害系数: ", player.current_class.ranged_damage_multiplier)
+
+func _apply_ranged_range_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.ranged_range_multiplier *= 1.1  # 远程范围+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 远程范围系数: ", player.current_class.ranged_range_multiplier)
+
+func _apply_ranged_speed_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.ranged_speed_multiplier *= 1.1  # 远程速度+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 远程速度系数: ", player.current_class.ranged_speed_multiplier)
+
+# 魔法武器
+func _apply_magic_damage_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.magic_damage_multiplier *= 1.1  # 魔法伤害+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 魔法伤害系数: ", player.current_class.magic_damage_multiplier)
+
+func _apply_magic_range_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.magic_range_multiplier *= 1.1  # 魔法范围+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 魔法范围系数: ", player.current_class.magic_range_multiplier)
+
+func _apply_magic_speed_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.magic_speed_multiplier *= 1.1  # 魔法速度+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 魔法速度系数: ", player.current_class.magic_speed_multiplier)
+
+func _apply_magic_explosion_upgrade() -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.current_class:
+		player.current_class.magic_explosion_radius_multiplier *= 1.1  # 爆炸范围+10%
+		_reapply_weapon_bonuses()
+		print("[UpgradeShop] 魔法爆炸范围系数: ", player.current_class.magic_explosion_radius_multiplier)
+
+## 重新应用武器加成（当属性改变时）
+func _reapply_weapon_bonuses() -> void:
+	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
+	if not weapons_manager:
+		weapons_manager = get_tree().get_first_node_in_group("weapons")
+	
+	if weapons_manager and weapons_manager.has_method("reapply_all_bonuses"):
+		weapons_manager.reapply_all_bonuses()
 
 ## 刷新按钮
 func _on_refresh_button_pressed() -> void:
