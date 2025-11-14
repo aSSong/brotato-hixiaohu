@@ -119,8 +119,10 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 		push_error("[EnemySpawner V3] 敌人数据不存在：", enemy_id)
 		return null
 	
-	# 计算HP增长倍数（每n波增加x%）
-	var hp_multiplier = 1.0 + (floor(wave_number / enemystrong_per_wave) * enemystrong_multi)
+	# 计算HP增长倍数（每n波增加x倍）
+	# 例如：每2波增加2倍，第2波=2倍，第4波=4倍，第6波=8倍
+	var strength_level = floor(wave_number / enemystrong_per_wave)
+	var hp_multiplier = pow(enemystrong_multi, strength_level)
 	
 	# 尝试多次找合适的位置
 	for attempt in max_spawn_attempts:
@@ -142,18 +144,18 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 				if enemy.has_method("_apply_enemy_data"):
 					enemy._apply_enemy_data()
 			
-			# 应用HP增长倍数
-			enemy.max_enemyHP = int(enemy.max_enemyHP * hp_multiplier)
-			enemy.enemyHP = enemy.max_enemyHP
-			
 			# 设置波次号（用于掉落判断）
 			enemy.current_wave_number = wave_number
 			
 			# 标记是否为最后一个敌人（掉落钥匙）
 			enemy.is_last_enemy_in_wave = is_last_in_wave
 			
-			# 添加到场景树
+			# 添加到场景树（这会触发_ready()，可能会重新应用enemy_data）
 			add_child(enemy)
+			
+			# 在_ready()执行完后，应用HP增长倍数（必须在add_child之后）
+			enemy.max_enemyHP = int(enemy.max_enemyHP * hp_multiplier)
+			enemy.enemyHP = enemy.max_enemyHP
 			
 			print("[EnemySpawner V3] 生成敌人：", enemy_id, " 波次:", wave_number, " HP倍数:", hp_multiplier, " 实际HP:", enemy.max_enemyHP)
 			return enemy
