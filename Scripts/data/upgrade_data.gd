@@ -56,6 +56,15 @@ var quality: int = Quality.WHITE  # 品质等级
 var base_cost: int = 5  # 武器升级的基础价格
 var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
 
+## 属性变化配置
+## 格式：{"attribute_name": {"op": "add|multiply", "value": number}}
+## 例如：
+## {"melee_damage_multiplier": {"op": "multiply", "value": 1.1}}  # 乘法：当前值 * 1.1
+## {"max_hp": {"op": "add", "value": 50}}  # 加法：当前值 + 50
+## {"luck": {"op": "add", "value": 10}}  # 加法：当前值 + 10
+## 支持多个属性同时变化
+var attribute_changes: Dictionary = {}
+
 func _init(
 	p_type: UpgradeType = UpgradeType.HP_MAX,
 	p_name: String = "",
@@ -72,6 +81,7 @@ func _init(
 	# 初始化品质和价格
 	quality = Quality.WHITE
 	actual_cost = cost
+	attribute_changes = {}
 
 ## 获取品质价格倍率
 static func get_quality_price_multiplier(quality_level: int) -> float:

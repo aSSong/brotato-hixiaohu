@@ -19,6 +19,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/6.png"
 	)
 	hp_max_upgrade.description = "增加50点最大生命值"
+	hp_max_upgrade.attribute_changes = {
+		"max_hp": {"op": "add", "value": 50}
+	}
 	upgrades["hp_max"] = hp_max_upgrade
 	
 	# 2. 移动速度+10
@@ -29,6 +32,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/11.png"
 	)
 	move_speed_upgrade.description = "增加10点移动速度"
+	move_speed_upgrade.attribute_changes = {
+		"speed": {"op": "add", "value": 10}
+	}
 	upgrades["move_speed"] = move_speed_upgrade
 	
 	# 3. 恢复HP100点
@@ -39,6 +45,7 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/5.png"
 	)
 	heal_hp_upgrade.description = "立即恢复100点生命值"
+	# 注意：HEAL_HP 是特殊处理，直接恢复血量，不通过属性变化配置
 	upgrades["heal_hp"] = heal_hp_upgrade
 	
 	# === 战斗属性 ===
@@ -50,6 +57,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	damage_reduction.description = "受到的伤害降低10%"
+	damage_reduction.attribute_changes = {
+		"damage_reduction_multiplier": {"op": "multiply", "value": 0.9}  # 减伤10%，系数从1.0变为0.9
+	}
 	upgrades["damage_reduction"] = damage_reduction
 	
 	# 5. 幸运+10
@@ -60,6 +70,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	luck.description = "增加10点幸运值（未来影响掉落）"
+	luck.attribute_changes = {
+		"luck": {"op": "add", "value": 10}
+	}
 	upgrades["luck"] = luck
 	
 	# === 武器通用 ===
@@ -71,6 +84,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	attack_speed.description = "所有武器攻击速度提升10%"
+	attack_speed.attribute_changes = {
+		"attack_speed_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["attack_speed"] = attack_speed
 	
 	# === 近战武器 ===
@@ -82,6 +98,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	melee_damage.description = "近战武器伤害提升10%"
+	melee_damage.attribute_changes = {
+		"melee_damage_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["melee_damage"] = melee_damage
 	
 	# 8. 近战范围+10%
@@ -92,6 +111,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	melee_range.description = "近战武器攻击范围提升10%"
+	melee_range.attribute_changes = {
+		"melee_range_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["melee_range"] = melee_range
 	
 	# 9. 近战速度+10%
@@ -102,6 +124,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	melee_speed.description = "近战武器攻击速度提升10%"
+	melee_speed.attribute_changes = {
+		"melee_speed_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["melee_speed"] = melee_speed
 	
 	# 10. 近战击退+10%
@@ -112,6 +137,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	melee_knockback.description = "近战武器击退效果提升10%"
+	melee_knockback.attribute_changes = {
+		"melee_knockback_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["melee_knockback"] = melee_knockback
 	
 	# === 远程武器 ===
@@ -123,6 +151,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	ranged_damage.description = "远程武器伤害提升10%"
+	ranged_damage.attribute_changes = {
+		"ranged_damage_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["ranged_damage"] = ranged_damage
 	
 	# 12. 远程范围+10%
@@ -133,6 +164,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	ranged_range.description = "远程武器攻击范围提升10%"
+	ranged_range.attribute_changes = {
+		"ranged_range_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["ranged_range"] = ranged_range
 	
 	# 13. 远程速度+10%
@@ -143,6 +177,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	ranged_speed.description = "远程武器攻击速度提升10%"
+	ranged_speed.attribute_changes = {
+		"ranged_speed_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["ranged_speed"] = ranged_speed
 	
 	# === 魔法武器 ===
@@ -154,6 +191,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	magic_damage.description = "魔法武器伤害提升10%"
+	magic_damage.attribute_changes = {
+		"magic_damage_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["magic_damage"] = magic_damage
 	
 	# 15. 魔法范围+10%
@@ -164,6 +204,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	magic_range.description = "魔法武器攻击范围提升10%"
+	magic_range.attribute_changes = {
+		"magic_range_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["magic_range"] = magic_range
 	
 	# 16. 魔法速度+10%
@@ -174,6 +217,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	magic_speed.description = "魔法武器攻击速度提升10%（冷却降低）"
+	magic_speed.attribute_changes = {
+		"magic_speed_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["magic_speed"] = magic_speed
 	
 	# 17. 魔法爆炸范围+10%
@@ -184,6 +230,9 @@ static func initialize_upgrades() -> void:
 		"res://assets/skillicon/10.png"
 	)
 	magic_explosion.description = "魔法武器爆炸范围提升10%"
+	magic_explosion.attribute_changes = {
+		"magic_explosion_radius_multiplier": {"op": "multiply", "value": 1.1}
+	}
 	upgrades["magic_explosion"] = magic_explosion
 	
 	# === 设置所有基础属性升级的品质和价格 ===
