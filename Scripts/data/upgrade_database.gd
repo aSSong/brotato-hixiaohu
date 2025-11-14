@@ -185,6 +185,16 @@ static func initialize_upgrades() -> void:
 	)
 	magic_explosion.description = "魔法武器爆炸范围提升10%"
 	upgrades["magic_explosion"] = magic_explosion
+	
+	# === 设置所有基础属性升级的品质和价格 ===
+	for upgrade_id in upgrades.keys():
+		var upgrade = upgrades[upgrade_id]
+		# 基础属性升级（非武器）都设置为白色品质
+		if upgrade.upgrade_type != UpgradeData.UpgradeType.NEW_WEAPON and \
+		   upgrade.upgrade_type != UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+			upgrade.quality = UpgradeData.Quality.WHITE
+			upgrade.set_base_attribute_cost()
+			print("[UpgradeDatabase] 设置 %s 为白色品质，价格=%d" % [upgrade.name, upgrade.actual_cost])
 
 ## 获取基础升级数据
 static func get_upgrade_data(upgrade_id: String) -> UpgradeData:

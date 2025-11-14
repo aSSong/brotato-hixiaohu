@@ -3,6 +3,15 @@ class_name UpgradeData
 
 ## 升级选项数据
 
+## 品质等级枚举
+enum Quality {
+	WHITE = 1,    # 白色 - 普通（Common）
+	GREEN = 2,    # 绿色 - 优秀（Uncommon）
+	BLUE = 3,     # 蓝色 - 稀有（Rare）
+	PURPLE = 4,   # 紫色 - 史诗（Epic）
+	ORANGE = 5    # 橙色 - 传奇（Legendary）
+}
+
 enum UpgradeType {
 	HP_MAX,          # HP上限+50
 	MOVE_SPEED,      # 移动速度+10
@@ -38,9 +47,14 @@ enum UpgradeType {
 @export var upgrade_type: UpgradeType = UpgradeType.HP_MAX
 @export var name: String = ""
 @export var description: String = ""
-@export var cost: int = 5
+@export var cost: int = 5  # 基础价格（用于非武器升级）
 @export var icon_path: String = ""
 @export var weapon_id: String = ""  # 仅用于NEW_WEAPON和WEAPON_LEVEL_UP
+
+## 品质相关（运行时动态设置）
+var quality: int = Quality.WHITE  # 品质等级
+var base_cost: int = 10  # 武器升级的基础价格
+var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
 
 func _init(
 	p_type: UpgradeType = UpgradeType.HP_MAX,
@@ -54,3 +68,45 @@ func _init(
 	cost = p_cost
 	icon_path = p_icon_path
 	weapon_id = p_weapon_id
+	
+	# 初始化品质和价格
+	quality = Quality.WHITE
+	actual_cost = cost
+
+## 获取品质价格倍率
+static func get_quality_price_multiplier(quality_level: int) -> float:
+	match quality_level:
+		Quality.WHITE: return 1.0    # 1x
+		Quality.GREEN: return 2.0    # 2x
+		Quality.BLUE: return 4.0     # 4x
+		Quality.PURPLE: return 8.0   # 8x
+		Quality.ORANGE: return 16.0  # 16x
+		_: return 1.0
+
+## 计算武器升级的实际价格（根据品质）
+func calculate_weapon_upgrade_cost() -> void:
+	actual_cost = int(base_cost * get_quality_price_multiplier(quality))
+
+## 设置基础属性升级价格（使用配置的cost）
+func set_base_attribute_cost() -> void:
+	actual_cost = cost
+
+## 获取品质颜色
+static func get_quality_color(quality_level: int) -> Color:
+	match quality_level:
+		Quality.WHITE: return Color("#FFFFFF")   # 白色
+		Quality.GREEN: return Color("#00FF00")   # 绿色
+		Quality.BLUE: return Color("#0080FF")    # 蓝色
+		Quality.PURPLE: return Color("#A020F0")  # 紫色
+		Quality.ORANGE: return Color("#FF8000")  # 橙色
+		_: return Color.WHITE
+
+## 获取品质名称
+static func get_quality_name(quality_level: int) -> String:
+	match quality_level:
+		Quality.WHITE: return "普通"
+		Quality.GREEN: return "优秀"
+		Quality.BLUE: return "稀有"
+		Quality.PURPLE: return "史诗"
+		Quality.ORANGE: return "传奇"
+		_: return "未知"

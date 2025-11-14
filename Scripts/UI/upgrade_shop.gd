@@ -192,6 +192,9 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 				upgrade_data.weapon_id
 			)
 			upgrade_copy.description = upgrade_data.description
+			# 复制品质和实际价格
+			upgrade_copy.quality = upgrade_data.quality
+			upgrade_copy.actual_cost = upgrade_data.actual_cost
 			upgrades.append(upgrade_copy)
 	
 	# 4. New Weapon（根据规则）
@@ -208,6 +211,9 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 				weapon_id
 			)
 			upgrade.description = weapon_data.description
+			# 新武器固定白色品质，价格为 cost
+			upgrade.quality = UpgradeData.Quality.WHITE
+			upgrade.actual_cost = upgrade.cost
 			upgrades.append(upgrade)
 	
 	# 5. 武器等级+1（基于已有武器）
@@ -218,14 +224,35 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 		if not (weapons_manager.has_all_weapons_max_level() if weapons_manager.has_method("has_all_weapons_max_level") else true):
 			for weapon_id in upgradeable_weapons:
 				var weapon_data = WeaponDatabase.get_weapon(weapon_id)
+				
+				# 获取当前最低等级的武器
+				var lowest_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
+				if not lowest_weapon:
+					continue
+				
+				var current_level = lowest_weapon.weapon_level
 				var upgrade = UpgradeData.new(
 					UpgradeData.UpgradeType.WEAPON_LEVEL_UP,
 					weapon_data.weapon_name + " 等级+1",
-					20,
+					20,  # 这个 cost 会被 base_cost 覆盖
 					weapon_data.texture_path,
 					weapon_id
 				)
-				upgrade.description = "提升武器等级"
+				upgrade.description = "提升武器等级 (当前等级: %d)" % current_level
+				
+				# 动态设置品质和价格（品质 = 当前等级）
+				upgrade.quality = current_level
+				upgrade.base_cost = 10  # 武器升级基础价格
+				upgrade.calculate_weapon_upgrade_cost()
+				
+				print("[UpgradeShop] 武器升级: %s, 等级%d→%d, 品质=%s, 价格=%d" % [
+					weapon_data.weapon_name, 
+					current_level, 
+					current_level + 1,
+					UpgradeData.get_quality_name(upgrade.quality),
+					upgrade.actual_cost
+				])
+				
 				upgrades.append(upgrade)
 	
 	return upgrades
@@ -281,12 +308,13 @@ func _clear_upgrades() -> void:
 
 ## 购买升级
 func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
-	if GameMain.gold < upgrade.cost:
-		print("钥匙不足！")
+	if GameMain.gold < upgrade.actual_cost:
+		print("钥匙不足！需要 %d，当前 %d" % [upgrade.actual_cost, GameMain.gold])
 		return
 	
 	# 扣除钥匙
-	GameMain.remove_gold(upgrade.cost)
+	GameMain.remove_gold(upgrade.actual_cost)
+	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙" % [upgrade.name, upgrade.actual_cost])
 	
 	# 应用升级效果
 	_apply_upgrade(upgrade)
