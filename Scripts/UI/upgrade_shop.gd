@@ -231,6 +231,7 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 					continue
 				
 				var current_level = lowest_weapon.weapon_level
+				var target_level = current_level + 1  # 目标等级
 				var upgrade = UpgradeData.new(
 					UpgradeData.UpgradeType.WEAPON_LEVEL_UP,
 					weapon_data.weapon_name + " 等级+1",
@@ -240,15 +241,15 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 				)
 				upgrade.description = "提升武器等级 (当前等级: %d)" % current_level
 				
-				# 动态设置品质和价格（品质 = 当前等级）
-				upgrade.quality = current_level
-				upgrade.base_cost = 10  # 武器升级基础价格
+				# 动态设置品质和价格（品质 = 目标等级）
+				upgrade.quality = target_level
+				upgrade.base_cost = 20  # 武器升级基础价格
 				upgrade.calculate_weapon_upgrade_cost()
 				
 				print("[UpgradeShop] 武器升级: %s, 等级%d→%d, 品质=%s, 价格=%d" % [
 					weapon_data.weapon_name, 
 					current_level, 
-					current_level + 1,
+					target_level,
 					UpgradeData.get_quality_name(upgrade.quality),
 					upgrade.actual_cost
 				])

@@ -76,11 +76,11 @@ func _init(
 ## 获取品质价格倍率
 static func get_quality_price_multiplier(quality_level: int) -> float:
 	match quality_level:
-		Quality.WHITE: return 1.0    # 1x
-		Quality.GREEN: return 2.0    # 2x
-		Quality.BLUE: return 4.0     # 4x
-		Quality.PURPLE: return 8.0   # 8x
-		Quality.ORANGE: return 16.0  # 16x
+		Quality.WHITE: return 1.0    # 1x（基础属性用）
+		Quality.GREEN: return 1.0    # 1x（1级→2级）
+		Quality.BLUE: return 2.0     # 2x（2级→3级）
+		Quality.PURPLE: return 4.0   # 4x（3级→4级）
+		Quality.ORANGE: return 8.0   # 8x（4级→5级）
 		_: return 1.0
 
 ## 计算武器升级的实际价格（根据品质）
