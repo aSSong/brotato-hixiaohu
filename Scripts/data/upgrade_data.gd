@@ -53,7 +53,7 @@ enum UpgradeType {
 
 ## 品质相关（运行时动态设置）
 var quality: int = Quality.WHITE  # 品质等级
-var base_cost: int = 10  # 武器升级的基础价格
+var base_cost: int = 5  # 武器升级的基础价格
 var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
 
 func _init(
@@ -77,10 +77,10 @@ func _init(
 static func get_quality_price_multiplier(quality_level: int) -> float:
 	match quality_level:
 		Quality.WHITE: return 1.0    # 1x（基础属性用）
-		Quality.GREEN: return 1.0    # 1x（1级→2级）
-		Quality.BLUE: return 2.0     # 2x（2级→3级）
-		Quality.PURPLE: return 4.0   # 4x（3级→4级）
-		Quality.ORANGE: return 8.0   # 8x（4级→5级）
+		Quality.GREEN: return 2.0    # 1x（1级→2级）
+		Quality.BLUE: return 4.0     # 2x（2级→3级）
+		Quality.PURPLE: return 8.0   # 4x（3级→4级）
+		Quality.ORANGE: return 16.0   # 8x（4级→5级）
 		_: return 1.0
 
 ## 计算武器升级的实际价格（根据品质）

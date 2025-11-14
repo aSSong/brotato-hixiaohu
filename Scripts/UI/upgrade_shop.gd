@@ -12,6 +12,11 @@ class_name UpgradeShop
 ## 当前显示的升级选项（最多3个）
 var current_upgrades: Array[UpgradeData] = []
 var refresh_cost: int = 2  # 刷新费用，每次x2
+var base_refresh_cost: int = 2  # 基础刷新费用
+
+## 武器相关参数
+var new_weapon_cost: int = 5 # 新武器基础价格
+#var green_weapon_multi: int = 2 #绿色武器价格倍率
 
 ## 信号
 signal upgrade_purchased(upgrade: UpgradeData)
@@ -82,7 +87,7 @@ func open_shop() -> void:
 	set_process_input(true)
 	
 	# 重置刷新费用
-	refresh_cost = 2
+	refresh_cost = base_refresh_cost
 	_update_refresh_cost_display()
 	
 	# 确保容器可用
@@ -206,7 +211,7 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 			var upgrade = UpgradeData.new(
 				UpgradeData.UpgradeType.NEW_WEAPON,
 				"新武器: " + weapon_data.weapon_name,
-				10,
+				new_weapon_cost,
 				weapon_data.texture_path,
 				weapon_id
 			)
@@ -235,7 +240,7 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 				var upgrade = UpgradeData.new(
 					UpgradeData.UpgradeType.WEAPON_LEVEL_UP,
 					weapon_data.weapon_name + " 等级+1",
-					20,  # 这个 cost 会被 base_cost 覆盖
+					new_weapon_cost,  # 这个 cost 会被 base_cost 覆盖
 					weapon_data.texture_path,
 					weapon_id
 				)
@@ -243,7 +248,7 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 				
 				# 动态设置品质和价格（品质 = 目标等级）
 				upgrade.quality = target_level
-				upgrade.base_cost = 20  # 武器升级基础价格
+				upgrade.base_cost = new_weapon_cost  # 武器升级基础价格
 				upgrade.calculate_weapon_upgrade_cost()
 				
 				print("[UpgradeShop] 武器升级: %s, 等级%d→%d, 品质=%s, 价格=%d" % [
