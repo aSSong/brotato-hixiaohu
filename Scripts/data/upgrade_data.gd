@@ -3,20 +3,58 @@ class_name UpgradeData
 
 ## 升级选项数据
 
+## 品质等级枚举
+enum Quality {
+	WHITE = 1,    # 白色 - 普通（Common）
+	GREEN = 2,    # 绿色 - 优秀（Uncommon）
+	BLUE = 3,     # 蓝色 - 稀有（Rare）
+	PURPLE = 4,   # 紫色 - 史诗（Epic）
+	ORANGE = 5    # 橙色 - 传奇（Legendary）
+}
+
 enum UpgradeType {
 	HP_MAX,          # HP上限+50
 	MOVE_SPEED,      # 移动速度+10
 	HEAL_HP,         # 恢复HP100点
 	NEW_WEAPON,      # 新武器
-	WEAPON_LEVEL_UP  # 武器等级+1
+	WEAPON_LEVEL_UP, # 武器等级+1
+	
+	# 战斗属性
+	DAMAGE_REDUCTION,  # 减伤+10%
+	LUCK,              # 幸运+10
+	
+	# 武器通用
+	ATTACK_SPEED,      # 攻击速度+10%
+	
+	# 近战武器
+	MELEE_DAMAGE,      # 近战伤害+10%
+	MELEE_RANGE,       # 近战范围+10%
+	MELEE_SPEED,       # 近战速度+10%
+	MELEE_KNOCKBACK,   # 近战击退+10%
+	
+	# 远程武器
+	RANGED_DAMAGE,     # 远程伤害+10%
+	RANGED_RANGE,      # 远程范围+10%
+	RANGED_SPEED,      # 远程速度+10%
+	
+	# 魔法武器
+	MAGIC_DAMAGE,      # 魔法伤害+10%
+	MAGIC_RANGE,       # 魔法范围+10%
+	MAGIC_SPEED,       # 魔法速度+10%
+	MAGIC_EXPLOSION,   # 魔法爆炸范围+10%
 }
 
 @export var upgrade_type: UpgradeType = UpgradeType.HP_MAX
 @export var name: String = ""
 @export var description: String = ""
-@export var cost: int = 5
+@export var cost: int = 5  # 基础价格（用于非武器升级）
 @export var icon_path: String = ""
 @export var weapon_id: String = ""  # 仅用于NEW_WEAPON和WEAPON_LEVEL_UP
+
+## 品质相关（运行时动态设置）
+var quality: int = Quality.WHITE  # 品质等级
+var base_cost: int = 10  # 武器升级的基础价格
+var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
 
 func _init(
 	p_type: UpgradeType = UpgradeType.HP_MAX,
@@ -30,3 +68,45 @@ func _init(
 	cost = p_cost
 	icon_path = p_icon_path
 	weapon_id = p_weapon_id
+	
+	# 初始化品质和价格
+	quality = Quality.WHITE
+	actual_cost = cost
+
+## 获取品质价格倍率
+static func get_quality_price_multiplier(quality_level: int) -> float:
+	match quality_level:
+		Quality.WHITE: return 1.0    # 1x（基础属性用）
+		Quality.GREEN: return 1.0    # 1x（1级→2级）
+		Quality.BLUE: return 2.0     # 2x（2级→3级）
+		Quality.PURPLE: return 4.0   # 4x（3级→4级）
+		Quality.ORANGE: return 8.0   # 8x（4级→5级）
+		_: return 1.0
+
+## 计算武器升级的实际价格（根据品质）
+func calculate_weapon_upgrade_cost() -> void:
+	actual_cost = int(base_cost * get_quality_price_multiplier(quality))
+
+## 设置基础属性升级价格（使用配置的cost）
+func set_base_attribute_cost() -> void:
+	actual_cost = cost
+
+## 获取品质颜色
+static func get_quality_color(quality_level: int) -> Color:
+	match quality_level:
+		Quality.WHITE: return Color("#FFFFFF")   # 白色
+		Quality.GREEN: return Color("#00FF00")   # 绿色
+		Quality.BLUE: return Color("#0080FF")    # 蓝色
+		Quality.PURPLE: return Color("#A020F0")  # 紫色
+		Quality.ORANGE: return Color("#FF8000")  # 橙色
+		_: return Color.WHITE
+
+## 获取品质名称
+static func get_quality_name(quality_level: int) -> String:
+	match quality_level:
+		Quality.WHITE: return "普通"
+		Quality.GREEN: return "优秀"
+		Quality.BLUE: return "稀有"
+		Quality.PURPLE: return "史诗"
+		Quality.ORANGE: return "传奇"
+		_: return "未知"

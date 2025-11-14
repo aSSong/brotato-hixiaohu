@@ -8,6 +8,11 @@ var rotation_angle: float = 0.0
 var is_attacking: bool = false
 var attack_timer: float = 0.0
 var has_dealt_damage: bool = false  # 标记本次攻击是否已造成伤害
+var knockback_multiplier: float = 1.0  # 击退系数
+
+## 设置击退系数
+func set_knockback_multiplier(multiplier: float) -> void:
+	knockback_multiplier = multiplier
 
 func _on_weapon_initialized() -> void:
 	rotation_angle = 0.0
@@ -77,16 +82,17 @@ func _check_and_damage_enemies() -> void:
 			if enemy.has_method("enemy_hurt"):
 				enemy.enemy_hurt(damage)
 			
-			# 如果有击退效果
+			# 如果有击退效果（应用击退系数）
 			if weapon_data.knockback_force > 0:
 				var knockback_dir = (enemy.global_position - global_position).normalized()
+				var final_knockback = weapon_data.knockback_force * knockback_multiplier
 				if enemy is CharacterBody2D:
 					# 使用敌人的击退速度变量
 					if enemy.has_method("apply_knockback"):
-						enemy.apply_knockback(knockback_dir * weapon_data.knockback_force)
+						enemy.apply_knockback(knockback_dir * final_knockback)
 					else:
 						# 兼容旧代码：直接设置 knockback_velocity（如果存在）
 						if "knockback_velocity" in enemy:
-							enemy.knockback_velocity += knockback_dir * weapon_data.knockback_force
+							enemy.knockback_velocity += knockback_dir * final_knockback
 						else:
-							enemy.velocity += knockback_dir * weapon_data.knockback_force
+							enemy.velocity += knockback_dir * final_knockback
