@@ -390,7 +390,7 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 func _apply_heal_upgrade() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
-		player.now_hp = min(player.now_hp + 100, player.max_hp)
+		player.now_hp = min(player.now_hp + 10, player.max_hp)
 		player.hp_changed.emit(player.now_hp, player.max_hp)
 
 func _apply_new_weapon_upgrade(weapon_id: String) -> void:
@@ -444,7 +444,7 @@ func _apply_attribute_changes(upgrade: UpgradeData) -> void:
 		if attr_name == "max_hp":
 			if op == "add":
 				player.max_hp += int(value)
-				player.now_hp += int(value)  # 同时恢复HP
+				#player.now_hp += int(value)  # 同时恢复HP
 				player.hp_changed.emit(player.now_hp, player.max_hp)
 				print("[UpgradeShop] %s: max_hp += %d (当前: %d)" % [upgrade.name, int(value), player.max_hp])
 			continue

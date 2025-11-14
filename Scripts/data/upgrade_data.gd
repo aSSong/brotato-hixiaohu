@@ -101,14 +101,14 @@ func calculate_weapon_upgrade_cost() -> void:
 func set_base_attribute_cost() -> void:
 	actual_cost = cost
 
-## 获取品质颜色
+## 获取品质颜色（复用 weapon 的颜色规则）
 static func get_quality_color(quality_level: int) -> Color:
 	match quality_level:
 		Quality.WHITE: return Color("#FFFFFF")   # 白色
 		Quality.GREEN: return Color("#00FF00")   # 绿色
-		Quality.BLUE: return Color("#0080FF")    # 蓝色
-		Quality.PURPLE: return Color("#A020F0")  # 紫色
-		Quality.ORANGE: return Color("#FF8000")  # 橙色
+		Quality.BLUE: return Color("#0000FF")    # 蓝色（与 weapon level_3 一致）
+		Quality.PURPLE: return Color("#FF00FF")  # 紫色（与 weapon level_4 一致）
+		Quality.ORANGE: return Color("#FF0000")  # 红色/橙色（与 weapon level_5 一致）
 		_: return Color.WHITE
 
 ## 获取品质名称
