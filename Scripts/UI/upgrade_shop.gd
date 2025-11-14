@@ -457,7 +457,14 @@ func _apply_attribute_changes(upgrade: UpgradeData) -> void:
 			continue
 		
 		# 其他属性在 class_data 上
-		if not class_data.has(attr_name):
+		# 检查属性是否存在（Resource 没有 has() 方法，需要检查 property_list）
+		var property_exists = false
+		for prop in class_data.get_property_list():
+			if prop.name == attr_name:
+				property_exists = true
+				break
+		
+		if not property_exists:
 			push_error("[UpgradeShop] 属性不存在: %s" % attr_name)
 			continue
 		
