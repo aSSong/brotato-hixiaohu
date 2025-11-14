@@ -87,7 +87,14 @@ func _check_and_damage_enemies() -> void:
 			
 			# 如果有击退效果（应用击退系数）
 			if weapon_data.knockback_force > 0:
-				var knockback_dir = (enemy.global_position - global_position).normalized()
+				# 获取玩家位置（击退方向从玩家指向敌人）
+				var player = get_tree().get_first_node_in_group("player")
+				var player_pos = global_position  # 默认使用武器位置
+				if player and is_instance_valid(player):
+					player_pos = player.global_position
+				
+				# 击退方向：从玩家指向敌人的方向（敌人被击退远离玩家）
+				var knockback_dir = (enemy.global_position - player_pos).normalized()
 				var final_knockback = weapon_data.knockback_force * knockback_multiplier
 				if enemy is CharacterBody2D:
 					# 使用敌人的击退速度变量
