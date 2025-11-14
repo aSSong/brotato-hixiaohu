@@ -59,9 +59,9 @@ static func initialize_weapons() -> void:
 	var sword = WeaponData.new(
 		"剑",
 		WeaponData.WeaponType.MELEE,
-		3,  # damage
+		4,  # damage
 		0.5,  # attack_speed
-		150.0,  # range
+		240.0,  # range
 		"res://assets/weapon/Weapon_lasersword.png",
 		Vector2(1, 1)  # scale
 	)
@@ -70,7 +70,7 @@ static func initialize_weapons() -> void:
 	sword.hit_range = 120.0
 	sword.knockback_force = 800.0
 	sword.orbit_radius = 230.0  # 环绕半径
-	sword.orbit_speed = 90.0  # 环绕速度（度/秒）
+	sword.orbit_speed = 180.0  # 环绕速度（度/秒）
 	weapons["sword"] = sword
 	
 	var axe = WeaponData.new(
@@ -87,7 +87,7 @@ static func initialize_weapons() -> void:
 	axe.hit_range = 250.0
 	axe.knockback_force = 1200.0
 	axe.orbit_radius = 250.0  # 环绕半径（稍大）
-	axe.orbit_speed = 60.0  # 环绕速度（较慢）
+	axe.orbit_speed = 120.0  # 环绕速度（较慢）
 	weapons["axe"] = axe
 	
 	var dagger = WeaponData.new(
@@ -104,7 +104,7 @@ static func initialize_weapons() -> void:
 	dagger.hit_range = 90.0
 	dagger.knockback_force = 400.0
 	dagger.orbit_radius = 200.0  # 环绕半径（较小）
-	dagger.orbit_speed = 120.0  # 环绕速度（较快）
+	dagger.orbit_speed = 240.0  # 环绕速度（较快）
 	weapons["dagger"] = dagger
 	
 	# 魔法武器
