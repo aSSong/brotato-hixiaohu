@@ -8,9 +8,9 @@ var flip =false
 var canMove = true
 var stop = false
 
-var now_hp = 100
-var base_max_hp = 100  # 基础最大血量
-var max_hp = 100
+var now_hp = 30
+var base_max_hp = 30  # 基础最大血量
+var max_hp = 30
 var max_exp = 5
 var now_exp = 0
 var level = 1
@@ -224,7 +224,7 @@ func _apply_class_stats() -> void:
 		return
 	
 	# 应用血量
-	max_hp = base_max_hp + current_class.max_hp - 100  # 减去默认值，加上职业值
+	max_hp = base_max_hp + current_class.max_hp - base_max_hp  # 减去默认值，加上职业值
 	# 如果当前血量超过最大血量，调整当前血量
 	if now_hp > max_hp:
 		now_hp = max_hp

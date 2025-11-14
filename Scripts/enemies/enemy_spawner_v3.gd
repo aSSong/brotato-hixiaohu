@@ -6,15 +6,18 @@ class_name EnemySpawnerV3
 
 ## ========== 配置 ==========
 @export var enemy_scene: PackedScene
-@export var spawn_delay: float = 0.5  # 生成间隔
+@export var spawn_delay: float = 0.3  # 生成间隔
 
 var floor_layer: TileMapLayer = null
 var player: Node = null
 var wave_system: WaveSystemV3 = null
 
 ## ========== 生成参数 ==========
-var min_distance_from_player: float = 500.0
+var min_distance_from_player: float = 300.0
 var max_spawn_attempts: int = 30
+
+var enemystrong_per_wave: float = 2.0 # 每多少波敌人变强一次
+var enemystrong_multi :float = 2.0 # 每次变强多少
 
 ## ========== 状态 ==========
 var is_spawning: bool = false
@@ -116,8 +119,8 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 		push_error("[EnemySpawner V3] 敌人数据不存在：", enemy_id)
 		return null
 	
-	# 计算HP增长倍数（每5波增加10%）
-	var hp_multiplier = 1.0 + (floor(wave_number / 5.0) * 0.1)
+	# 计算HP增长倍数（每n波增加x%）
+	var hp_multiplier = 1.0 + (floor(wave_number / enemystrong_per_wave) * enemystrong_multi)
 	
 	# 尝试多次找合适的位置
 	for attempt in max_spawn_attempts:

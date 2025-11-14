@@ -15,7 +15,7 @@ static func initialize_enemies() -> void:
 	# 假设sheet有5帧，横向排列，每帧240x240
 	var basic_enemy = EnemyData.new(
 		"基础敌人",
-		40,  # max_hp
+		10,  # max_hp
 		5,  # attack_damage
 		300.0,  # move_speed
 		"res://assets/enemy/enemy-green-sheet.png",
@@ -30,7 +30,7 @@ static func initialize_enemies() -> void:
 	# 快速敌人 - 低血量，高速度
 	var fast_enemy = EnemyData.new(
 		"快速敌人",
-		30,  # max_hp
+		8,  # max_hp
 		3,  # attack_damage
 		500.0,  # move_speed（更快）
 		"res://assets/enemy/enemy-puerple-sheet.png",
@@ -45,7 +45,7 @@ static func initialize_enemies() -> void:
 	# 坦克敌人 - 高血量，低速度
 	var tank_enemy = EnemyData.new(
 		"坦克敌人",
-		150,  # max_hp（更高）
+		30,  # max_hp（更高）
 		8,  # attack_damage（更高）
 		200.0,  # move_speed（更慢）
 		"res://assets/enemy/enemy-slow-sheet.png",
@@ -60,7 +60,7 @@ static func initialize_enemies() -> void:
 	# 精英敌人 - 全属性较高
 	var elite_enemy = EnemyData.new(
 		"精英敌人",
-		100,  # max_hp
+		25,  # max_hp
 		10,  # attack_damage
 		350.0,  # move_speed
 		"res://assets/enemy/enemy-red-sheet.png",
@@ -76,9 +76,9 @@ static func initialize_enemies() -> void:
 	# 波次Boss敌人 - 每波最后一个，掉落Master Key
 	var last_enemy = EnemyData.new(
 		"波次首领",
-		80,  # max_hp
+		45,  # max_hp
 		8,  # attack_damage
-		320.0,  # move_speed
+		380.0,  # move_speed
 		"res://assets/enemy/boss01-sheet.png",  # 特殊外观
 		360,  # frame_width（根据boss的实际尺寸修改）
 		240,  # frame_height

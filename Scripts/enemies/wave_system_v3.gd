@@ -20,6 +20,7 @@ enum WaveState {
 var wave_configs: Array = []  # 波次配置
 var current_wave: int = 0
 var current_state: WaveState = WaveState.IDLE
+var enemy_add_multi:int = 5 #每波增加敌人数
 
 ## ========== 敌人追踪 ==========
 var active_enemies: Array = []  # 当前存活的敌人实例列表（直接引用）
@@ -91,7 +92,7 @@ func _initialize_waves() -> void:
 		# 计算本波普通敌人数量（不含BOSS）
 		# 第1波: 9个普通 + 1个BOSS = 10个
 		# 第2波: 11个普通 + 1个BOSS = 12个
-		var normal_enemy_count = 9 + (wave * 2)
+		var normal_enemy_count = 9 + (wave * enemy_add_multi )
 		
 		# 按照配比分配敌人数量
 		var basic_count = int(normal_enemy_count * 0.5)   # 50%基础敌人

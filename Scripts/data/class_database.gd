@@ -14,7 +14,7 @@ static func initialize_classes() -> void:
 	# 战士 - 高血量、近战加成
 	var warrior = ClassData.new(
 		"战士",
-		150,  # max_hp
+		40,  # max_hp
 		350.0,  # speed (稍慢)
 		1.2,  # attack_multiplier
 		5,  # defense
@@ -39,7 +39,7 @@ static func initialize_classes() -> void:
 	# 射手 - 高攻击速度、远程加成
 	var ranger = ClassData.new(
 		"射手",
-		80,  # max_hp
+		20,  # max_hp
 		450.0,  # speed (较快)
 		1.0,  # attack_multiplier
 		0,  # defense
@@ -64,7 +64,7 @@ static func initialize_classes() -> void:
 	# 法师 - 低血量、魔法加成、范围伤害
 	var mage = ClassData.new(
 		"法师",
-		60,  # max_hp (低血量)
+		20,  # max_hp (低血量)
 		400.0,  # speed
 		0.9,  # attack_multiplier (基础攻击稍低)
 		0,  # defense
@@ -90,7 +90,7 @@ static func initialize_classes() -> void:
 	# 平衡者 - 均衡属性
 	var balanced = ClassData.new(
 		"平衡者",
-		100,  # max_hp
+		30,  # max_hp
 		400.0,  # speed
 		1.15,  # attack_multiplier（所有武器伤害+15%）
 		2,  # defense
@@ -113,7 +113,7 @@ static func initialize_classes() -> void:
 	# 坦克 - 超高血量、防御
 	var tank = ClassData.new(
 		"坦克",
-		200,  # max_hp (超高)
+		60,  # max_hp (超高)
 		300.0,  # speed (慢)
 		0.8,  # attack_multiplier (低攻击)
 		10,  # defense (高防御)
