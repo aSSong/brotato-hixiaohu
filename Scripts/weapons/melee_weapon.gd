@@ -28,7 +28,7 @@ func _on_weapon_process(delta: float) -> void:
 	if is_attacking:
 		attack_timer -= delta
 		
-		# 旋转武器
+		# 旋转武器（相对于当前位置）
 		if weapon_data.rotation_speed > 0:
 			rotation_angle += weapon_data.rotation_speed * delta
 			rotation_degrees = rotation_angle
@@ -40,11 +40,14 @@ func _on_weapon_process(delta: float) -> void:
 			rotation_angle = 0.0
 			rotation_degrees = 0.0
 	else:
-		# 朝向最近的敌人（如果没有攻击）
-		if attack_enemies.size() > 0:
-			var target = attack_enemies[0]
-			if is_instance_valid(target):
-				look_at(target.global_position)
+		# 不攻击时，武器朝向环绕运动的方向（可选）
+		# 或者保持默认朝向（0度），让武器跟随环绕运动自然旋转
+		# 如果需要武器始终朝向敌人，可以取消下面的注释
+		# if attack_enemies.size() > 0:
+		# 	var target = attack_enemies[0]
+		# 	if is_instance_valid(target):
+		# 		look_at(target.global_position)
+		rotation_degrees = 0.0
 
 func _perform_attack() -> void:
 	if weapon_data == null:

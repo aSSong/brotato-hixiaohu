@@ -4,6 +4,9 @@ var weapon_radius = 230
 var weapon_num = 0
 var player_ref: Node2D = null  # 玩家引用，用于获取职业加成
 
+## 近战武器环绕运动管理
+var melee_weapon_angles: Dictionary = {}  # 存储每个近战武器的当前角度 {instance_id: angle}
+
 ## 预加载武器场景（使用现有的weapon.tscn作为基础模板）
 var base_weapon_scene = preload("res://scenes/weapons/weapon.tscn")
 
@@ -212,19 +215,89 @@ func arrange_weapons() -> void:
 	if weapon_num == 0:
 		return
 	
-	var unit = TAU / weapon_num
+	# 分离近战武器和其他武器
+	var melee_weapons: Array = []
+	var other_weapons: Array = []
 	
-	for i in range(weapon_num):
-		var weapon = weapons[i]
-		var weapon_rad = unit * i
+	for weapon in weapons:
+		if weapon is BaseWeapon and weapon.weapon_data:
+			if weapon.weapon_data.weapon_type == WeaponData.WeaponType.MELEE:
+				melee_weapons.append(weapon)
+			else:
+				other_weapons.append(weapon)
+	
+	# 为近战武器分配初始角度（均匀分布）
+	var melee_unit = TAU / max(melee_weapons.size(), 1)
+	for i in range(melee_weapons.size()):
+		var weapon = melee_weapons[i]
+		var weapon_id = weapon.get_instance_id()
+		var initial_angle = melee_unit * i
+		
+		# 存储初始角度
+		melee_weapon_angles[weapon_id] = initial_angle
+		
+		# 使用武器的环绕半径（如果配置了），否则使用默认半径
+		var radius = weapon.weapon_data.orbit_radius if weapon.weapon_data.orbit_radius > 0 else weapon_radius
+		var end_pos = Vector2(radius, 0).rotated(initial_angle)
+		weapon.position = end_pos
+	
+	# 为其他武器分配固定位置（均匀分布）
+	var other_unit = TAU / max(other_weapons.size(), 1)
+	for i in range(other_weapons.size()):
+		var weapon = other_weapons[i]
+		var weapon_rad = other_unit * i
 		var end_pos = Vector2(weapon_radius, 0).rotated(weapon_rad)
 		weapon.position = end_pos
+
+## 更新近战武器环绕运动
+func _process(delta: float) -> void:
+	# 收集当前所有有效的近战武器ID
+	var valid_weapon_ids: Array = []
+	
+	# 更新所有近战武器的位置（持续旋转）
+	for child in get_children():
+		if child is BaseWeapon and child.weapon_data:
+			if child.weapon_data.weapon_type == WeaponData.WeaponType.MELEE:
+				var weapon_id = child.get_instance_id()
+				valid_weapon_ids.append(weapon_id)
+				
+				# 如果这个武器还没有角度记录，初始化它
+				if not melee_weapon_angles.has(weapon_id):
+					# 计算初始角度（基于当前位置）
+					var current_pos = child.position
+					var angle = atan2(current_pos.y, current_pos.x)
+					melee_weapon_angles[weapon_id] = angle
+				
+				# 获取武器的环绕速度（如果配置了），否则使用默认值
+				var orbit_speed = child.weapon_data.orbit_speed if child.weapon_data.orbit_speed > 0 else 90.0
+				
+				# 更新角度（持续旋转）
+				var current_angle = melee_weapon_angles[weapon_id]
+				current_angle += deg_to_rad(orbit_speed) * delta
+				melee_weapon_angles[weapon_id] = current_angle
+				
+				# 获取武器的环绕半径（如果配置了），否则使用默认半径
+				var radius = child.weapon_data.orbit_radius if child.weapon_data.orbit_radius > 0 else weapon_radius
+				
+				# 更新位置
+				var new_pos = Vector2(radius, 0).rotated(current_angle)
+				child.position = new_pos
+	
+	# 清理无效的角度记录（武器已被移除）
+	var keys_to_remove: Array = []
+	for weapon_id in melee_weapon_angles.keys():
+		if not valid_weapon_ids.has(weapon_id):
+			keys_to_remove.append(weapon_id)
+	
+	for key in keys_to_remove:
+		melee_weapon_angles.erase(key)
 
 ## 移除所有武器
 func clear_weapons() -> void:
 	for child in get_children():
 		child.queue_free()
 	weapon_num = 0
+	melee_weapon_angles.clear()  # 清除角度记录
 
 ## 设置武器半径
 func set_weapon_radius(radius: float) -> void:

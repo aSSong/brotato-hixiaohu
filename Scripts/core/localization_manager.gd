@@ -61,4 +61,3 @@ func get_available_locales() -> Array:
 ## 获取翻译文本（辅助函数）
 func tr_text(key: String) -> String:
 	return tr(key)
-

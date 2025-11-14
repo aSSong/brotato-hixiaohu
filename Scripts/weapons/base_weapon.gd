@@ -182,16 +182,18 @@ func _ready() -> void:
 				remove_meta("weapon_level")
 
 func _process(delta: float) -> void:
-	# 朝向最近的敌人
-	if attack_enemies.size() > 0:
-		var target_enemy = attack_enemies[0]
-		if is_instance_valid(target_enemy):
-			look_at(target_enemy.global_position)
+	# 近战武器不自动朝向敌人（由环绕运动控制位置）
+	# 其他武器类型朝向最近的敌人
+	if weapon_data and weapon_data.weapon_type != WeaponData.WeaponType.MELEE:
+		if attack_enemies.size() > 0:
+			var target_enemy = attack_enemies[0]
+			if is_instance_valid(target_enemy):
+				look_at(target_enemy.global_position)
+			else:
+				attack_enemies.erase(target_enemy)
+				sort_enemy()
 		else:
-			attack_enemies.erase(target_enemy)
-			sort_enemy()
-	else:
-		rotation_degrees = 0
+			rotation_degrees = 0
 	
 	# 调用子类的更新逻辑
 	_on_weapon_process(delta)

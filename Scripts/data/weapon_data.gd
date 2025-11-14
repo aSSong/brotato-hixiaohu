@@ -32,6 +32,8 @@ enum WeaponType {
 @export var rotation_speed: float = 360.0  # 旋转速度（度/秒）
 @export var swing_angle: float = 180.0  # 挥砍角度
 @export var hit_range: float = 100.0  # 攻击判定范围
+@export var orbit_radius: float = 230.0  # 环绕半径（围绕玩家的旋转半径）
+@export var orbit_speed: float = 90.0  # 环绕速度（度/秒，围绕玩家旋转的速度）
 
 ## 魔法武器专用属性
 @export var explosion_radius: float = 150.0  # 爆炸范围
