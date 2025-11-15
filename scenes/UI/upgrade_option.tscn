@@ -58,7 +58,7 @@ text = "0 钥匙"
 
 [node name="BuyButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_s3bqk")
 text = "购买"
