@@ -8,9 +8,9 @@ var flip =false
 var canMove = true
 var stop = false
 
-var now_hp = 30
-var base_max_hp = 30  # 基础最大血量
-var max_hp = 30
+var now_hp = 50
+var base_max_hp = 50  # 基础最大血量
+var max_hp = 50
 var max_exp = 5
 var now_exp = 0
 var level = 1
