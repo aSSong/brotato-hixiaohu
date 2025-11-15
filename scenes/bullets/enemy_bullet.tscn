@@ -28,6 +28,8 @@ collision_layer = 4
 script = ExtResource("2_enemy_bullet")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 25
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_enemy_bullet")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
