@@ -6,7 +6,7 @@ class_name EnemySpawnerV3
 
 ## ========== 配置 ==========
 @export var enemy_scene: PackedScene
-@export var spawn_delay: float = 0.3  # 生成间隔
+@export var spawn_delay: float = 0.4  # 生成间隔
 
 var floor_layer: TileMapLayer = null
 var player: Node = null
@@ -17,7 +17,7 @@ var min_distance_from_player: float = 300.0
 var max_spawn_attempts: int = 30
 
 var enemystrong_per_wave: float = 2.0 # 每多少波敌人变强一次
-var enemystrong_multi :float = 2.0 # 每次变强多少
+var enemystrong_multi :float = 1.5 # 每次变强多少
 
 ## ========== 状态 ==========
 var is_spawning: bool = false
