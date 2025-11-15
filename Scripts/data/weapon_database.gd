@@ -68,7 +68,7 @@ static func initialize_weapons() -> void:
 	sword.description = "基础近战武器，旋转攻击"
 	sword.rotation_speed = 360.0
 	sword.hit_range = 240.0
-	sword.knockback_force = 800.0
+	sword.knockback_force = 560.0
 	sword.orbit_radius = 300.0  # 环绕半径
 	sword.orbit_speed = 180.0  # 环绕速度（度/秒）
 	weapons["sword"] = sword
@@ -85,7 +85,7 @@ static func initialize_weapons() -> void:
 	axe.description = "高伤害近战武器，攻击速度较慢"
 	axe.rotation_speed = 270.0
 	axe.hit_range = 280.0
-	axe.knockback_force = 1200.0
+	axe.knockback_force = 840.0
 	axe.orbit_radius = 400.0  # 环绕半径（稍大）
 	axe.orbit_speed = 120.0  # 环绕速度（较慢）
 	weapons["axe"] = axe
@@ -102,7 +102,7 @@ static func initialize_weapons() -> void:
 	dagger.description = "快速攻击的近战武器"
 	dagger.rotation_speed = 540.0
 	dagger.hit_range = 200.0
-	dagger.knockback_force = 400.0
+	dagger.knockback_force = 280.0
 	dagger.orbit_radius = 200.0  # 环绕半径（较小）
 	dagger.orbit_speed = 240.0  # 环绕速度（较快）
 	weapons["dagger"] = dagger
