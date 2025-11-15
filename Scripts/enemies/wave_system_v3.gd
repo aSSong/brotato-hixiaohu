@@ -89,10 +89,16 @@ func _initialize_waves() -> void:
 	for wave in range(200):
 		var wave_number = wave + 1
 		
-		# 计算本波普通敌人数量（不含BOSS）
+		# 计算本波普通敌人数量（不含BOSS和技能怪）
 		# 第1波: 9个普通 + 1个BOSS = 10个
 		# 第2波: 11个普通 + 1个BOSS = 12个
 		var normal_enemy_count = 9 + (wave * enemy_add_multi )
+		
+		# 技能怪数量（固定每波3个）
+		var skill_enemy_count = 3  # 冲锋、射击、自爆各1个
+		
+		# 从普通敌人数量中扣除技能怪数量，确保总数不变
+		normal_enemy_count = max(0, normal_enemy_count - skill_enemy_count)
 		
 		# 按照配比分配敌人数量
 		var basic_count = int(normal_enemy_count * 0.5)   # 50%基础敌人
@@ -128,7 +134,10 @@ func _initialize_waves() -> void:
 				{"id": "basic", "count": basic_count},
 				{"id": "fast", "count": fast_count},
 				{"id": "tank", "count": tank_count},
-				{"id": "elite", "count": elite_count}
+				{"id": "elite", "count": elite_count},
+				{"id": "charging_enemy", "count": 1},  # 冲锋敌人（测试用）
+				{"id": "shooting_enemy", "count": 1},  # 射击敌人（测试用）
+				{"id": "exploding_enemy", "count": 1}  # 自爆敌人（测试用）
 			],
 			"last_enemy": {"id": "last_enemy", "count": 1}  # BOSS
 		}
