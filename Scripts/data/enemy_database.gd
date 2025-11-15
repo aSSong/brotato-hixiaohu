@@ -89,6 +89,74 @@ static func initialize_enemies() -> void:
 	last_enemy.scale = Vector2(1.2, 1.2)  # 1.2倍大小
 	last_enemy.animation_speed = 8.0
 	enemies["last_enemy"] = last_enemy
+	
+	# ========== 技能敌人 ==========
+	
+	# 冲锋敌人 - 带有冲锋技能
+	var charging_enemy = EnemyData.new(
+		"冲锋敌人",
+		20,  # max_hp
+		6,   # attack_damage
+		350.0,  # move_speed
+		"res://assets/enemy/enemy-red-sheet.png",
+		357,
+		240,
+		5
+	)
+	charging_enemy.description = "会冲锋攻击的敌人"
+	charging_enemy.skill_type = EnemyData.EnemySkillType.CHARGING
+	charging_enemy.skill_config = {
+		"trigger_distance": 500.0,   # 触发距离
+		"charge_speed": 800.0,        # 冲锋速度
+		"charge_distance": 600.0,     # 冲锋距离
+		"cooldown": 3.0,              # 冷却时间
+		"extra_damage": 10,           # 额外伤害
+		"prepare_time": 0.3           # 准备时间
+	}
+	enemies["charging_enemy"] = charging_enemy
+	
+	# 射击敌人 - 带有射击技能
+	var shooting_enemy = EnemyData.new(
+		"射击敌人",
+		15,  # max_hp
+		4,   # attack_damage
+		250.0,  # move_speed（较慢，因为远程）
+		"res://assets/enemy/enemy-puerple-sheet.png",
+		357,
+		240,
+		5
+	)
+	shooting_enemy.description = "会远程射击的敌人"
+	shooting_enemy.skill_type = EnemyData.EnemySkillType.SHOOTING
+	shooting_enemy.skill_config = {
+		"shoot_range": 600.0,         # 射击范围
+		"shoot_interval": 2.0,        # 射击间隔
+		"bullet_speed": 400.0,        # 子弹速度
+		"bullet_damage": 10,          # 子弹伤害
+		"bullet_id": "basic"          # 子弹ID（从数据库获取）
+	}
+	enemies["shooting_enemy"] = shooting_enemy
+	
+	# 自爆敌人 - 带有自爆技能
+	var exploding_enemy = EnemyData.new(
+		"自爆敌人",
+		12,  # max_hp（较低，因为会自爆）
+		3,   # attack_damage
+		280.0,  # move_speed
+		"res://assets/enemy/enemy-green-sheet.png",
+		357,
+		240,
+		5
+	)
+	exploding_enemy.description = "低血量时会自爆的敌人"
+	exploding_enemy.skill_type = EnemyData.EnemySkillType.EXPLODING
+	exploding_enemy.skill_config = {
+		"trigger_condition": "low_hp",  # 触发条件：低血量
+		"explosion_range": 200.0,        # 爆炸范围
+		"explosion_damage": 30,          # 爆炸伤害
+		"low_hp_threshold": 0.3         # 低血量阈值（30%）
+	}
+	enemies["exploding_enemy"] = exploding_enemy
 
 ## 获取敌人数据
 static func get_enemy_data(enemy_id: String) -> EnemyData:

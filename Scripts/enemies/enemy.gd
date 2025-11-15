@@ -36,6 +36,9 @@ var current_wave_number: int = 1
 ## 是否已经死亡（防止重复掉落）
 var is_dead: bool = false
 
+## 技能行为列表
+var behaviors: Array[EnemyBehavior] = []
+
 ## 信号：敌人死亡
 signal enemy_killed(enemy_ref: Enemy)
 
@@ -102,6 +105,9 @@ func _apply_enemy_data() -> void:
 	shake_on_death = enemy_data.shake_on_death
 	shake_duration = enemy_data.shake_duration
 	shake_amount = enemy_data.shake_amount
+	
+	# 初始化技能行为
+	_setup_skill_behavior()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -116,7 +122,22 @@ func _process(delta: float) -> void:
 	if knockback_velocity.length() < 10.0:
 		knockback_velocity = Vector2.ZERO
 	
-	if target:
+	# 更新技能行为
+	for behavior in behaviors:
+		if is_instance_valid(behavior):
+			behavior.update_behavior(delta)
+	
+	# 检查是否有技能正在控制移动（如冲锋）
+	var is_skill_controlling_movement = false
+	for behavior in behaviors:
+		if is_instance_valid(behavior) and behavior is ChargingBehavior:
+			var charging = behavior as ChargingBehavior
+			if charging.is_charging_now():
+				is_skill_controlling_movement = true
+				break
+	
+	# 如果没有技能控制移动，执行正常移动逻辑
+	if not is_skill_controlling_movement and target:
 		## 计算到玩家距离
 		# 检查是否接触到玩家（造成伤害）
 		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
@@ -201,6 +222,12 @@ func enemy_dead():
 	is_dead = true
 	print("[Enemy] enemy_dead() 被调用 | 位置:", global_position)
 	
+	# 通知技能行为敌人死亡（用于自爆技能的ON_DEATH触发）
+	for behavior in behaviors:
+		if is_instance_valid(behavior) and behavior is ExplodingBehavior:
+			var exploding = behavior as ExplodingBehavior
+			exploding.on_enemy_death()
+	
 	#GameMain.duplicate_node.global_position = self.global_position
 	
 	GameMain.animation_scene_obj.run_animation({
@@ -252,3 +279,40 @@ func enemy_flash():
 	await get_tree().create_timer(0.1).timeout
 	$AnimatedSprite2D.material.set_shader_parameter("flash_opacity",0)
 	pass
+
+## 设置技能行为
+func _setup_skill_behavior() -> void:
+	if enemy_data == null:
+		return
+	
+	# 清理旧的技能行为
+	for behavior in behaviors:
+		if is_instance_valid(behavior):
+			behavior.queue_free()
+	behaviors.clear()
+	
+	# 根据技能类型创建技能行为
+	match enemy_data.skill_type:
+		EnemyData.EnemySkillType.CHARGING:
+			var charging = ChargingBehavior.new()
+			add_child(charging)
+			charging.initialize(self, enemy_data.skill_config)
+			behaviors.append(charging)
+			print("[Enemy] 添加冲锋技能行为")
+		
+		EnemyData.EnemySkillType.SHOOTING:
+			var shooting = ShootingBehavior.new()
+			add_child(shooting)
+			shooting.initialize(self, enemy_data.skill_config)
+			behaviors.append(shooting)
+			print("[Enemy] 添加射击技能行为")
+		
+		EnemyData.EnemySkillType.EXPLODING:
+			var exploding = ExplodingBehavior.new()
+			add_child(exploding)
+			exploding.initialize(self, enemy_data.skill_config)
+			behaviors.append(exploding)
+			print("[Enemy] 添加自爆技能行为")
+		
+		EnemyData.EnemySkillType.NONE:
+			pass  # 无技能

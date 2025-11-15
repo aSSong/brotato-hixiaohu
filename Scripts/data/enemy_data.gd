@@ -4,8 +4,20 @@ class_name EnemyData
 ## 敌人数据 Resource 类
 ## 定义敌人的属性：HP、攻击力、移动速度、贴图等
 
+## 技能类型枚举
+enum EnemySkillType {
+	NONE,      # 无技能
+	CHARGING,  # 冲锋技能
+	SHOOTING,  # 射击技能
+	EXPLODING  # 自爆技能
+}
+
 @export var enemy_name: String = "默认敌人"
 @export var description: String = ""
+
+## 技能配置
+@export var skill_type: EnemySkillType = EnemySkillType.NONE
+@export var skill_config: Dictionary = {}  # 技能参数字典
 
 ## 外观设置
 @export var texture_path: String = "res://assets/enemy/enemy-sheet.png"  # 敌人贴图路径
