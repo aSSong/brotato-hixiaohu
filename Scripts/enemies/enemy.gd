@@ -199,6 +199,25 @@ func enemy_hurt(hurt):
 	if is_invincible:
 		return
 	
+	# 检查是否有自爆技能，如果这次伤害会导致HP降到阈值以下，先触发自爆
+	for behavior in behaviors:
+		if is_instance_valid(behavior) and behavior is ExplodingBehavior:
+			var exploding = behavior as ExplodingBehavior
+			if exploding.trigger_condition == ExplodingBehavior.ExplodeTrigger.LOW_HP:
+				# 检查当前HP是否已经低于阈值，或者这次伤害会导致HP降到阈值以下
+				var current_hp_percentage = float(self.enemyHP) / float(self.max_enemyHP)
+				var new_hp = self.enemyHP - hurt
+				var new_hp_percentage = float(new_hp) / float(self.max_enemyHP)
+				
+				# 如果当前HP已经低于阈值，或者这次伤害会导致HP降到阈值以下
+				if current_hp_percentage <= exploding.low_hp_threshold or new_hp_percentage <= exploding.low_hp_threshold:
+					# 先触发自爆（如果还没开始倒数）
+					if exploding.state == ExplodingBehavior.ExplodeState.IDLE:
+						exploding._start_countdown()
+					# 设置HP为1，确保不会立即死亡（但允许触发自爆）
+					self.enemyHP = max(1, new_hp)
+					return
+	
 	#print("[Enemy] 受伤 | HP:", self.enemyHP, " 伤害:", hurt, " 位置:", global_position)
 	self.enemyHP -= hurt
 	
