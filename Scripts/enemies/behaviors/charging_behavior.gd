@@ -114,7 +114,8 @@ func _update_charge(delta: float) -> void:
 	var player = get_player()
 	if player:
 		var player_distance = enemy.global_position.distance_to(player.global_position)
-		if player_distance < enemy.attack_range:
+		var attack_range_value = enemy.enemy_data.attack_range if enemy.enemy_data else 80.0
+		if player_distance < attack_range_value:
 			# 命中玩家，造成额外伤害
 			_hit_player_with_charge()
 			_end_charge()
@@ -147,4 +148,3 @@ func _end_charge() -> void:
 ## 是否正在冲锋（供Enemy类查询，用于覆盖正常移动）
 func is_charging_now() -> bool:
 	return is_charging and state == ChargeState.CHARGING
-

@@ -98,7 +98,7 @@ static func initialize_enemies() -> void:
 		20,  # max_hp
 		6,   # attack_damage
 		350.0,  # move_speed
-		"res://assets/enemy/enemy-red-sheet.png",
+		"res://assets/enemy/enemy-wings-yellow-sheet.png",
 		357,
 		240,
 		5
@@ -121,7 +121,7 @@ static func initialize_enemies() -> void:
 		15,  # max_hp
 		4,   # attack_damage
 		250.0,  # move_speed（较慢，因为远程）
-		"res://assets/enemy/enemy-puerple-sheet.png",
+		"res://assets/enemy/slime-indgo-sheet.png",
 		357,
 		240,
 		5
@@ -130,9 +130,9 @@ static func initialize_enemies() -> void:
 	shooting_enemy.skill_type = EnemyData.EnemySkillType.SHOOTING
 	shooting_enemy.skill_config = {
 		"shoot_range": 600.0,         # 射击范围
-		"shoot_interval": 2.0,        # 射击间隔
-		"bullet_speed": 400.0,        # 子弹速度
-		"bullet_damage": 10,          # 子弹伤害
+		"shoot_interval": 1.0,        # 射击间隔
+		"bullet_speed": 350.0,        # 子弹速度
+		"bullet_damage": 5,          # 子弹伤害
 		"bullet_id": "basic"          # 子弹ID（从数据库获取）
 	}
 	enemies["shooting_enemy"] = shooting_enemy
@@ -143,7 +143,7 @@ static func initialize_enemies() -> void:
 		12,  # max_hp（较低，因为会自爆）
 		3,   # attack_damage
 		280.0,  # move_speed
-		"res://assets/enemy/enemy-green-sheet.png",
+		"res://assets/enemy/slime-red-sheet.png",
 		357,
 		240,
 		5
