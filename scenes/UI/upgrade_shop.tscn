@@ -88,3 +88,158 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "关闭"
+
+[node name="WeaponList" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_left = 228.0
+offset_top = 254.0
+offset_right = 268.0
+offset_bottom = 754.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WeaponList"]
+layout_mode = 2
+theme_override_constants/separation = 100
+
+[node name="weapon1" type="Control" parent="WeaponList/VBoxContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon1"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+color = Color(0.17728807, 0.17728806, 0.17728804, 1)
+
+[node name="Weapon1Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon1/ColorRect"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+
+[node name="Weapon1Label" type="Label" parent="WeaponList/VBoxContainer/weapon1"]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 13.0
+offset_right = 262.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
+text = "武器1：空缺
+品质：无"
+
+[node name="weapon2" type="Control" parent="WeaponList/VBoxContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon2"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+color = Color(0.17728807, 0.17728806, 0.17728804, 1)
+
+[node name="Weapon2Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon2/ColorRect"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+
+[node name="Weapon2Label" type="Label" parent="WeaponList/VBoxContainer/weapon2"]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 13.0
+offset_right = 262.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
+text = "武器2：空缺
+品质：无"
+
+[node name="weapon3" type="Control" parent="WeaponList/VBoxContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon3"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+color = Color(0.17728807, 0.17728806, 0.17728804, 1)
+
+[node name="Weapon3Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon3/ColorRect"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+
+[node name="Weapon3Label" type="Label" parent="WeaponList/VBoxContainer/weapon3"]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 13.0
+offset_right = 262.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
+text = "武器3：空缺
+品质：无"
+
+[node name="weapon4" type="Control" parent="WeaponList/VBoxContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon4"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+color = Color(0.17728807, 0.17728806, 0.17728804, 1)
+
+[node name="Weapon4Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon4/ColorRect"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+
+[node name="Weapon4Label" type="Label" parent="WeaponList/VBoxContainer/weapon4"]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 13.0
+offset_right = 262.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
+text = "武器4：空缺
+品质：无"
+
+[node name="weapon5" type="Control" parent="WeaponList/VBoxContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon5"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+color = Color(0.17728807, 0.17728806, 0.17728804, 1)
+
+[node name="Weapon5Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon5/ColorRect"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+
+[node name="Weapon5Label" type="Label" parent="WeaponList/VBoxContainer/weapon5"]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 13.0
+offset_right = 262.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
+text = "武器5：空缺
+品质：无"
+
+[node name="weapon6" type="Control" parent="WeaponList/VBoxContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon6"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+color = Color(0.17728807, 0.17728806, 0.17728804, 1)
+
+[node name="Weapon6Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon6/ColorRect"]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 80.0
+
+[node name="Weapon6Label" type="Label" parent="WeaponList/VBoxContainer/weapon6"]
+layout_mode = 0
+offset_left = 172.0
+offset_top = 13.0
+offset_right = 262.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
+text = "武器6：空缺
+品质：无"

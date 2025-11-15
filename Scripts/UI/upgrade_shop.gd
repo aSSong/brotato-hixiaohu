@@ -9,6 +9,20 @@ class_name UpgradeShop
 @onready var close_button: Button = %CloseButton
 @onready var refresh_cost_label: Label = %RefreshCostLabel
 
+## 武器列表UI引用
+@onready var weapon1_icon: TextureRect = $WeaponList/VBoxContainer/weapon1/ColorRect/Weapon1Icon
+@onready var weapon1_label: Label = $WeaponList/VBoxContainer/weapon1/Weapon1Label
+@onready var weapon2_icon: TextureRect = $WeaponList/VBoxContainer/weapon2/ColorRect/Weapon2Icon
+@onready var weapon2_label: Label = $WeaponList/VBoxContainer/weapon2/Weapon2Label
+@onready var weapon3_icon: TextureRect = $WeaponList/VBoxContainer/weapon3/ColorRect/Weapon3Icon
+@onready var weapon3_label: Label = $WeaponList/VBoxContainer/weapon3/Weapon3Label
+@onready var weapon4_icon: TextureRect = $WeaponList/VBoxContainer/weapon4/ColorRect/Weapon4Icon
+@onready var weapon4_label: Label = $WeaponList/VBoxContainer/weapon4/Weapon4Label
+@onready var weapon5_icon: TextureRect = $WeaponList/VBoxContainer/weapon5/ColorRect/Weapon5Icon
+@onready var weapon5_label: Label = $WeaponList/VBoxContainer/weapon5/Weapon5Label
+@onready var weapon6_icon: TextureRect = $WeaponList/VBoxContainer/weapon6/ColorRect/Weapon6Icon
+@onready var weapon6_label: Label = $WeaponList/VBoxContainer/weapon6/Weapon6Label
+
 ## 当前显示的升级选项（最多3个）
 var current_upgrades: Array[UpgradeData] = []
 var refresh_cost: int = 2  # 刷新费用，每次x2
@@ -81,9 +95,19 @@ func _ready() -> void:
 			close_button.pressed.connect(_on_close_button_pressed)
 	
 	_update_refresh_cost_display()
+	
+	# 验证武器列表节点是否找到
+	if not weapon1_icon:
+		push_warning("weapon1_icon 未找到，尝试手动查找")
+		weapon1_icon = get_node_or_null("WeaponList/VBoxContainer/weapon1/ColorRect/Weapon1Icon")
+	if not weapon1_label:
+		push_warning("weapon1_label 未找到，尝试手动查找")
+		weapon1_label = get_node_or_null("WeaponList/VBoxContainer/weapon1/Weapon1Label")
+	
 	hide()  # 初始隐藏
 	print("升级商店 _ready() 完成，节点路径: ", get_path(), " 组: ", get_groups())
 	print("upgrade_container: ", upgrade_container, " refresh_button: ", refresh_button, " close_button: ", close_button)
+	print("weapon1_icon: ", weapon1_icon, " weapon1_label: ", weapon1_label)
 
 ## 打开商店
 func open_shop() -> void:
@@ -125,6 +149,9 @@ func open_shop() -> void:
 	
 	# 生成初始升级选项（异步，需要等待）
 	await generate_upgrades()
+	
+	# 更新武器列表显示
+	_update_weapon_list()
 	
 	print("升级商店已打开，选项数量: ", current_upgrades.size())
 	print("容器子节点数（生成后）: ", upgrade_container.get_child_count())
@@ -349,8 +376,14 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	GameMain.remove_gold(adjusted_cost)
 	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d，波次修正后 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost, adjusted_cost])
 	
-	# 应用升级效果
-	_apply_upgrade(upgrade)
+	# 应用升级效果（武器相关的是异步的，需要等待）
+	if upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+		await _apply_upgrade(upgrade)
+		# 等待一帧确保武器已完全添加到场景树
+		await get_tree().process_frame
+		_update_weapon_list()
+	else:
+		_apply_upgrade(upgrade)
 	
 	upgrade_purchased.emit(upgrade)
 	
@@ -405,7 +438,7 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 		UpgradeData.UpgradeType.HEAL_HP:
 			_apply_heal_upgrade()
 		UpgradeData.UpgradeType.NEW_WEAPON:
-			_apply_new_weapon_upgrade(upgrade.weapon_id)
+			await _apply_new_weapon_upgrade(upgrade.weapon_id)
 		UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
 			_apply_weapon_level_upgrade(upgrade.weapon_id)
 		_:
@@ -552,3 +585,97 @@ func _on_close_button_pressed() -> void:
 func _update_refresh_cost_display() -> void:
 	if refresh_cost_label:
 		refresh_cost_label.text = "刷新: %d 钥匙" % refresh_cost
+
+## 更新武器列表显示
+func _update_weapon_list() -> void:
+	# 确保节点引用存在，如果不存在则尝试手动查找
+	if not weapon1_icon:
+		weapon1_icon = get_node_or_null("WeaponList/VBoxContainer/weapon1/ColorRect/Weapon1Icon")
+	if not weapon1_label:
+		weapon1_label = get_node_or_null("WeaponList/VBoxContainer/weapon1/Weapon1Label")
+	if not weapon2_icon:
+		weapon2_icon = get_node_or_null("WeaponList/VBoxContainer/weapon2/ColorRect/Weapon2Icon")
+	if not weapon2_label:
+		weapon2_label = get_node_or_null("WeaponList/VBoxContainer/weapon2/Weapon2Label")
+	if not weapon3_icon:
+		weapon3_icon = get_node_or_null("WeaponList/VBoxContainer/weapon3/ColorRect/Weapon3Icon")
+	if not weapon3_label:
+		weapon3_label = get_node_or_null("WeaponList/VBoxContainer/weapon3/Weapon3Label")
+	if not weapon4_icon:
+		weapon4_icon = get_node_or_null("WeaponList/VBoxContainer/weapon4/ColorRect/Weapon4Icon")
+	if not weapon4_label:
+		weapon4_label = get_node_or_null("WeaponList/VBoxContainer/weapon4/Weapon4Label")
+	if not weapon5_icon:
+		weapon5_icon = get_node_or_null("WeaponList/VBoxContainer/weapon5/ColorRect/Weapon5Icon")
+	if not weapon5_label:
+		weapon5_label = get_node_or_null("WeaponList/VBoxContainer/weapon5/Weapon5Label")
+	if not weapon6_icon:
+		weapon6_icon = get_node_or_null("WeaponList/VBoxContainer/weapon6/ColorRect/Weapon6Icon")
+	if not weapon6_label:
+		weapon6_label = get_node_or_null("WeaponList/VBoxContainer/weapon6/Weapon6Label")
+	
+	# 获取武器管理器
+	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
+	if not weapons_manager:
+		weapons_manager = get_tree().get_first_node_in_group("weapons")
+	
+	if not weapons_manager:
+		print("[UpgradeShop] 无法找到武器管理器")
+		return
+	
+	# 获取所有武器（按获得顺序）
+	var weapons = weapons_manager.get_all_weapons()
+	print("[UpgradeShop] 找到武器管理器，武器数量: ", weapons.size())
+	
+	# 武器图标和标签数组
+	var weapon_icons = [weapon1_icon, weapon2_icon, weapon3_icon, weapon4_icon, weapon5_icon, weapon6_icon]
+	var weapon_labels = [weapon1_label, weapon2_label, weapon3_label, weapon4_label, weapon5_label, weapon6_label]
+	
+	# 更新每个武器槽位（1-6）
+	for i in range(6):
+		var slot_index = i  # 槽位索引（0-5对应武器1-6）
+		var icon = weapon_icons[slot_index]
+		var label = weapon_labels[slot_index]
+		
+		if not icon or not label:
+			continue
+		
+		# 检查是否有对应位置的武器
+		if slot_index < weapons.size() and weapons[slot_index] is BaseWeapon:
+			var weapon = weapons[slot_index] as BaseWeapon
+			var weapon_data = weapon.weapon_data
+			var weapon_level = weapon.weapon_level
+			
+			if weapon_data:
+				# 设置图标（80x80尺寸已在场景中设置）
+				if weapon_data.texture_path != "":
+					var texture = load(weapon_data.texture_path)
+					if texture:
+						icon.texture = texture
+						icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+						icon.scale = Vector2(0.8,0.8)
+					else:
+						icon.texture = null
+				else:
+					icon.texture = null
+				
+				# 将武器等级映射到品质等级（1-5级对应WHITE-ORANGE）
+				var quality_level = weapon_level
+				var quality_name = UpgradeData.get_quality_name(quality_level)
+				var quality_color = UpgradeData.get_quality_color(quality_level)
+				
+				# 设置标签文本和颜色
+				label.text = "武器%d：%s\n品质：%s" % [slot_index + 1, weapon_data.weapon_name, quality_name]
+				label.add_theme_color_override("font_color", quality_color)
+			else:
+				# 武器数据为空，显示空缺
+				icon.texture = null
+				label.text = "武器%d：空缺\n品质：无" % [slot_index + 1]
+				label.add_theme_color_override("font_color", Color.WHITE)
+		else:
+			# 该槽位没有武器，保持默认状态
+			icon.texture = null
+			label.text = "武器%d：空缺\n品质：无" % [slot_index + 1]
+			label.add_theme_color_override("font_color", Color.WHITE)
+	
+	print("[UpgradeShop] 武器列表已更新，当前武器数量: ", weapons.size())
