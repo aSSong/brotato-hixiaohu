@@ -125,11 +125,14 @@ func _start_countdown() -> void:
 	state = ExplodeState.COUNTDOWN
 	countdown_timer = countdown_duration
 	is_invincible = true  # 进入无敌状态
-	is_flashing = false
+	is_flashing = true  # 立即开始闪烁
 	flash_timer = 0.0
 	
 	# 显示范围指示器
 	_show_range_indicator()
+	
+	# 立即更新闪烁效果
+	_update_flash_effect()
 	
 	# 阻止敌人死亡（通过设置一个标记，在Enemy类中检查）
 	# 注意：我们需要在Enemy类中添加对is_invincible的检查
@@ -167,13 +170,13 @@ func _update_flash_effect() -> void:
 	
 	var sprite = enemy.get_node("AnimatedSprite2D")
 	if is_flashing:
-		# 红色闪烁
+		# 黄色闪烁（使用flash_opacity参数）
 		sprite.material.set_shader_parameter("flash_color",Color(0.826, 0.766, 0.0, 1.0) )
-		#sprite.modulate = Color(0.826, 0.766, 0.0, 1.0)  # 红色
+		sprite.material.set_shader_parameter("flash_opacity", 1.0)
 	else:
-		# 恢复正常颜色
+		# 恢复正常
 		sprite.material.set_shader_parameter("flash_color",Color(1.0, 1.0, 1.0, 1.0) )
-		#sprite.modulate = Color.WHITE
+		sprite.material.set_shader_parameter("flash_opacity", 0.0)
 
 ## 执行爆炸
 func _explode() -> void:
