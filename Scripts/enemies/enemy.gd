@@ -36,6 +36,9 @@ var current_wave_number: int = 1
 ## 是否已经死亡（防止重复掉落）
 var is_dead: bool = false
 
+## 是否无敌（倒数期间）
+var is_invincible: bool = false
+
 ## 技能行为列表
 var behaviors: Array[EnemyBehavior] = []
 
@@ -192,6 +195,10 @@ func enemy_hurt(hurt):
 	if is_dead:
 		return
 	
+	# 如果无敌（如自爆倒数期间），忽略伤害
+	if is_invincible:
+		return
+	
 	#print("[Enemy] 受伤 | HP:", self.enemyHP, " 伤害:", hurt, " 位置:", global_position)
 	self.enemyHP -= hurt
 	
@@ -218,6 +225,15 @@ func enemy_dead():
 	if is_dead:
 		print("[Enemy] 已经死亡，忽略重复调用 | 位置:", global_position)
 		return
+	
+	# 检查是否在自爆倒数状态（如果是，不立即死亡）
+	for behavior in behaviors:
+		if is_instance_valid(behavior) and behavior is ExplodingBehavior:
+			var exploding = behavior as ExplodingBehavior
+			if exploding.is_in_countdown():
+				# 在倒数状态，不立即死亡，等待爆炸
+				print("[Enemy] 在自爆倒数状态，延迟死亡")
+				return
 	
 	is_dead = true
 	print("[Enemy] enemy_dead() 被调用 | 位置:", global_position)
@@ -279,6 +295,11 @@ func enemy_flash():
 	await get_tree().create_timer(0.1).timeout
 	$AnimatedSprite2D.material.set_shader_parameter("flash_opacity",0)
 	pass
+
+## 设置无敌状态
+func set_invincible(value: bool) -> void:
+	is_invincible = value
+	print("[Enemy] 无敌状态:", value)
 
 ## 设置技能行为
 func _setup_skill_behavior() -> void:

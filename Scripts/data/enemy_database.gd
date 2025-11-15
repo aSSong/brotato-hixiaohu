@@ -164,7 +164,8 @@ static func initialize_enemies() -> void:
 		"trigger_condition": "low_hp",  # 触发条件：低血量
 		"explosion_range": 200.0,        # 爆炸范围
 		"explosion_damage": 30,          # 爆炸伤害
-		"low_hp_threshold": 0.3         # 低血量阈值（30%）
+		"low_hp_threshold": 0.3,        # 低血量阈值（30%）
+		"countdown_duration": 3.0        # 倒数时长（秒）
 	}
 	enemies["exploding_enemy"] = exploding_enemy
 
