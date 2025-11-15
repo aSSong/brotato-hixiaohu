@@ -25,6 +25,28 @@ signal shop_closed()
 ## 升级选项预制（用于UI显示）
 var upgrade_option_scene = preload("res://scenes/UI/upgrade_option.tscn")
 
+## 计算带波次修正的价格
+## 公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
+static func calculate_wave_adjusted_cost(base_cost: int) -> int:
+	var wave_number: int = 0
+	
+	# 尝试获取场景树
+	var main_loop = Engine.get_main_loop()
+	if main_loop and main_loop is SceneTree:
+		var scene_tree = main_loop as SceneTree
+		
+		# 尝试获取波次管理器
+		var wave_system = scene_tree.get_first_node_in_group("wave_system")
+		if not wave_system:
+			wave_system = scene_tree.get_first_node_in_group("wave_manager")
+		
+		if wave_system and "current_wave" in wave_system:
+			wave_number = wave_system.current_wave
+	
+	# 应用公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
+	var adjusted_cost = float(base_cost) + float(wave_number) + (float(base_cost) * 0.1 * float(wave_number))
+	return int(floor(adjusted_cost))
+
 func _ready() -> void:
 	# 确保在组中
 	if not is_in_group("upgrade_shop"):
@@ -316,13 +338,16 @@ func _clear_upgrades() -> void:
 
 ## 购买升级
 func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
-	if GameMain.gold < upgrade.actual_cost:
-		print("钥匙不足！需要 %d，当前 %d" % [upgrade.actual_cost, GameMain.gold])
+	# 计算波次修正后的价格
+	var adjusted_cost = calculate_wave_adjusted_cost(upgrade.actual_cost)
+	
+	if GameMain.gold < adjusted_cost:
+		print("钥匙不足！需要 %d（基础 %d），当前 %d" % [adjusted_cost, upgrade.actual_cost, GameMain.gold])
 		return
 	
-	# 扣除钥匙
-	GameMain.remove_gold(upgrade.actual_cost)
-	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙" % [upgrade.name, upgrade.actual_cost])
+	# 扣除钥匙（使用修正后的价格）
+	GameMain.remove_gold(adjusted_cost)
+	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d，波次修正后 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost, adjusted_cost])
 	
 	# 应用升级效果
 	_apply_upgrade(upgrade)
@@ -444,7 +469,7 @@ func _apply_attribute_changes(upgrade: UpgradeData) -> void:
 		if attr_name == "max_hp":
 			if op == "add":
 				player.max_hp += int(value)
-				#player.now_hp += int(value)  # 同时恢复HP
+				# player.now_hp += int(value)  # 同时恢复HP
 				player.hp_changed.emit(player.now_hp, player.max_hp)
 				print("[UpgradeShop] %s: max_hp += %d (当前: %d)" % [upgrade.name, int(value), player.max_hp])
 			continue

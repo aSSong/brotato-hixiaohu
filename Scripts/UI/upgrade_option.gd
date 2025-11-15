@@ -65,14 +65,18 @@ func get_upgrade_data() -> UpgradeData:
 
 func _update_cost_display() -> void:
 	if cost_label and upgrade_data:
-		cost_label.text = "%d 钥匙" % upgrade_data.actual_cost
+		# 使用波次修正后的价格
+		var adjusted_cost = UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
+		cost_label.text = "%d 钥匙" % adjusted_cost
 	_update_buy_button()
 
 func _update_buy_button() -> void:
 	if not buy_button or not upgrade_data:
 		return
 	
-	var can_afford = GameMain.gold >= upgrade_data.actual_cost
+	# 使用波次修正后的价格进行判断
+	var adjusted_cost = UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
+	var can_afford = GameMain.gold >= adjusted_cost
 	buy_button.disabled = not can_afford
 	
 	if not can_afford:
@@ -81,8 +85,11 @@ func _update_buy_button() -> void:
 		buy_button.modulate = Color.WHITE
 
 func _on_buy_button_pressed() -> void:
-	if upgrade_data and GameMain.gold >= upgrade_data.actual_cost:
-		purchased.emit(upgrade_data)
+	if upgrade_data:
+		# 使用波次修正后的价格进行购买检查
+		var adjusted_cost = UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
+		if GameMain.gold >= adjusted_cost:
+			purchased.emit(upgrade_data)
 
 func _process(_delta: float) -> void:
 	# 实时更新购买按钮状态（钥匙变化时）
