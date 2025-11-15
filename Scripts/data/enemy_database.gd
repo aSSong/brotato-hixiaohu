@@ -88,6 +88,16 @@ static func initialize_enemies() -> void:
 	last_enemy.shake_amount = 15.0  # 强震动
 	last_enemy.scale = Vector2(1.2, 1.2)  # 1.2倍大小
 	last_enemy.animation_speed = 8.0
+	# 添加冲锋技能
+	last_enemy.skill_type = EnemyData.EnemySkillType.CHARGING
+	last_enemy.skill_config = {
+		"trigger_distance": 600.0,   # 触发距离（更远）
+		"charge_speed": 900.0,        # 冲锋速度（更快）
+		"charge_distance": 700.0,     # 冲锋距离（更远）
+		"cooldown": 2.5,              # 冷却时间（更短）
+		"extra_damage": 15,           # 额外伤害（更高）
+		"prepare_time": 0.2           # 准备时间（更短）
+	}
 	enemies["last_enemy"] = last_enemy
 	
 	# ========== 技能敌人 ==========
