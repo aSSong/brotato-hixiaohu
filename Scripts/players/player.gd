@@ -29,6 +29,18 @@ var path_record_distance: float = 3.0  # 路径记录间隔（减小以获得更
 var last_recorded_position: Vector2 = Vector2.ZERO
 var max_path_points: int = 300  # 最多记录的路径点数量（增加以支持更多Ghost）
 
+## Dash系统
+@export var dash_duration := 0.5
+@export var dash_speed_multi := 2.0
+@export var dash_cooldown := 5.0
+var dash_timer: Timer = null
+var dash_cooldown_timer: Timer = null
+var is_dashing := false
+var dash_available := true
+
+
+var original_path_record_distance: float = 3.0  # 保存原始路径记录间隔
+
 ## 信号：血量变化
 signal hp_changed(current_hp: int, max_hp: int)
 
@@ -50,6 +62,10 @@ func _ready() -> void:
 	# 初始化路径记录
 	last_recorded_position = global_position
 	path_history.append(global_position)
+	original_path_record_distance = path_record_distance
+	
+	# 创建Dash计时器
+	_setup_dash_timers()
 	
 	# 默认选择玩家外观
 	choosePlayer("player2")
@@ -100,8 +116,12 @@ func _process(delta: float) -> void:
 			flip = false
 	
 		playerAni.flip_h = flip
-	
+		
 		dir = (mouse_pos - self_pos).normalized()
+		
+		# 检查是否可以dash
+		if can_dash():
+			start_dash()
 		
 		# 应用速度加成
 		var final_speed = speed
@@ -112,6 +132,10 @@ func _process(delta: float) -> void:
 				var multiplier = class_manager.get_skill_effect("全面强化_multiplier", 1.0)
 				if multiplier > 0:
 					final_speed *= multiplier
+		
+		# 应用dash速度倍数
+		if is_dashing:
+			final_speed *= dash_speed_multi
 		
 		velocity = dir * final_speed
 		#移动
@@ -128,6 +152,11 @@ func _input(event):
 		# 技能输入不应该影响移动状态
 		return
 	
+	# 检查是否是dash输入动作（需要优先处理，避免被鼠标左键逻辑拦截）
+	if event.is_action("dash"):
+		# dash输入不应该影响移动状态，让_process中的can_dash()处理
+		return
+	
 	# 检查是否是添加Ghost的输入动作
 	if event.is_action_pressed("Add_ghost"):
 		# 创建Ghost
@@ -136,10 +165,10 @@ func _input(event):
 		return
 	
 	# 处理鼠标左键的移动逻辑
-	# 但需要排除技能输入的情况
+	# 但需要排除技能和dash输入的情况
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		# 如果这个鼠标事件也是技能输入的一部分，不处理移动逻辑
-		if not event.is_action("skill"):
+		# 如果这个鼠标事件是技能或dash输入的一部分，不处理移动逻辑
+		if not event.is_action("skill") and not event.is_action("dash"):
 			if event.is_pressed():
 				canMove = false
 			else:
@@ -412,3 +441,64 @@ func _update_name_label() -> void:
 	# 格式：名字 - n世（n = total_death_count + 1）
 	var display_name = "%s - 第 %d 世" % [player_name, total_death + 1]
 	name_label.text = display_name
+
+## 设置Dash计时器
+func _setup_dash_timers() -> void:
+	# 创建Dash持续时间计时器
+	dash_timer = Timer.new()
+	dash_timer.name = "DashTimer"
+	dash_timer.wait_time = dash_duration
+	dash_timer.one_shot = true
+	dash_timer.timeout.connect(_on_dash_timer_timeout)
+	add_child(dash_timer)
+	
+	# 创建Dash冷却计时器
+	dash_cooldown_timer = Timer.new()
+	dash_cooldown_timer.name = "DashCooldownTimer"
+	dash_cooldown_timer.wait_time = dash_cooldown
+	dash_cooldown_timer.one_shot = true
+	add_child(dash_cooldown_timer)
+
+## 检查是否可以dash
+func can_dash() -> bool:
+	return not is_dashing and\
+		dash_cooldown_timer.is_stopped() and\
+		Input.is_action_just_pressed("dash") and\
+		dir != Vector2.ZERO
+
+## 开始dash
+func start_dash() -> void:
+	is_dashing = true
+	dash_timer.start()
+	
+	# 减少透明度
+	playerAni.modulate.a = 0.5
+	
+	# 禁用碰撞
+	var collision = get_node_or_null("CollisionShape2D")
+	if collision:
+		collision.set_deferred("disabled", true)
+	
+	# 减少路径记录间隔，使Ghost跟随更平滑
+	path_record_distance = original_path_record_distance * 0.5
+
+## Dash计时器超时回调
+func _on_dash_timer_timeout() -> void:
+	is_dashing = false
+	
+	# 恢复透明度
+	playerAni.modulate.a = 1.0
+	
+	# 恢复路径记录间隔
+	path_record_distance = original_path_record_distance
+	
+	# 重置移动方向（可选，根据原示例）
+	# dir = Vector2.ZERO  # 注释掉，保持当前移动方向
+	
+	# 重新启用碰撞
+	var collision = get_node_or_null("CollisionShape2D")
+	if collision:
+		collision.set_deferred("disabled", false)
+	
+	# 开始冷却计时器
+	dash_cooldown_timer.start()
