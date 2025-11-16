@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://1sc0j7mvwax6"]
+[gd_scene load_steps=27 format=4 uid="uid://1sc0j7mvwax6"]
 
 [ext_resource type="Texture2D" uid="uid://bbt2ogwu3myns" path="res://assets/bg/bg.png" id="1_luqls"]
 [ext_resource type="PackedScene" uid="uid://cktxl6bnggc0p" path="res://scenes/players/player.tscn" id="2_2iyd7"]
@@ -421,6 +421,24 @@ custom_data_layer_0/name = "isWall"
 custom_data_layer_0/type = 1
 sources/0 = SubResource("TileSetAtlasSource_2iyd7")
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_16rjt"]
+polygon = PackedVector2Array(66, -395, 67, -277, 187, -276, 185, -240, 249, -249, 245, -197, 338, -193, 330, -240, 391, -246, 394, -269, 534, -271, 532, -395)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_130aa"]
+polygon = PackedVector2Array(201, -159, 204, 210, 154, 344, 170, 400, 261, 387, 334, 420, 950, 421, 1016, 397, 1016, 347, 1090, 350, 1089, -169)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_yl07x"]
+polygon = PackedVector2Array(780, 339, 783, 490, 961, 494, 961, 341)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_xaroc"]
+polygon = PackedVector2Array(1427, 1441, 1437, 2329, 2626, 2335, 2636, 1436)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_7sqwg"]
+polygon = PackedVector2Array(908, 1451, 917, 2329, -419, 2341, -404, 1408)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_s2j1h"]
+polygon = PackedVector2Array(360, 974, 404, 973, 399, 1434, 359, 1435)
+
 [node name="bg_map" type="Node2D"]
 script = ExtResource("5_bg_map_extension")
 
@@ -505,3 +523,26 @@ floor_layer_path = NodePath("../TileMap_BG")
 
 [node name="GameInitializer" type="Node2D" parent="."]
 script = ExtResource("6_game_initializer")
+
+[node name="LightOccluder" type="Node2D" parent="."]
+
+[node name="LightOccluder2D2" type="LightOccluder2D" parent="LightOccluder"]
+position = Vector2(576, 511)
+occluder = SubResource("OccluderPolygon2D_16rjt")
+
+[node name="LightOccluder2D3" type="LightOccluder2D" parent="LightOccluder"]
+position = Vector2(1557, 282)
+occluder = SubResource("OccluderPolygon2D_130aa")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="LightOccluder"]
+occluder = SubResource("OccluderPolygon2D_yl07x")
+
+[node name="LightOccluder2D4" type="LightOccluder2D" parent="LightOccluder"]
+position = Vector2(0, 24)
+occluder = SubResource("OccluderPolygon2D_xaroc")
+
+[node name="LightOccluder2D5" type="LightOccluder2D" parent="LightOccluder"]
+occluder = SubResource("OccluderPolygon2D_7sqwg")
+
+[node name="LightOccluder2D6" type="LightOccluder2D" parent="LightOccluder"]
+occluder = SubResource("OccluderPolygon2D_s2j1h")
