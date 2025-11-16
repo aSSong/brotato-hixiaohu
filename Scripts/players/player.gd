@@ -1,5 +1,6 @@
 extends CharacterBody2D
 @onready var playerAni: AnimatedSprite2D = %AnimatedSprite2D
+@onready var trail: Trail = %Trail
 
 var dir = Vector2.ZERO
 var base_speed = 400  # 基础速度
@@ -473,6 +474,10 @@ func start_dash() -> void:
 	
 	# 减少透明度
 	playerAni.modulate.a = 0.5
+	
+	# 启动trail效果
+	if trail:
+		trail.start_trail()
 	
 	# 禁用碰撞
 	var collision = get_node_or_null("CollisionShape2D")

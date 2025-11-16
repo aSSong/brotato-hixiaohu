@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cktxl6bnggc0p"]
+[gd_scene load_steps=14 format=3 uid="uid://cktxl6bnggc0p"]
 
 [ext_resource type="Script" uid="uid://vk8vnqvjt832" path="res://Scripts/players/player.gd" id="1_ldeu4"]
 [ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_edvpf"]
+[ext_resource type="Script" uid="uid://fqudu87a8guo" path="res://Scripts/players/trail.gd" id="3_edvpf"]
 [ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_kc87p"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kc87p"]
@@ -47,6 +48,10 @@ animations = [{
 radius = 58.333332
 height = 234.00002
 
+[sub_resource type="Curve" id="Curve_edvpf"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.9939759, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_kc87p"]
 radius = 588.67316
 
@@ -75,6 +80,14 @@ frame_progress = 0.5189973
 position = Vector2(-11.666668, -15.33334)
 shape = SubResource("CapsuleShape2D_sguum")
 debug_color = Color(0.5792219, 0.38419825, 1, 0.41960785)
+
+[node name="Trail" type="Line2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-36.666664, 70)
+width = 40.0
+width_curve = SubResource("Curve_edvpf")
+default_color = Color(1, 1, 0.6509804, 0.40392157)
+script = ExtResource("3_edvpf")
 
 [node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
 zoom = Vector2(0.9, 0.9)
