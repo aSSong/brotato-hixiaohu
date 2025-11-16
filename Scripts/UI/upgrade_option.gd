@@ -112,15 +112,7 @@ func _update_lock_button() -> void:
 	if not upgrade_data:
 		return
 	
-	# 检查是否为新武器类型
-	if upgrade_data.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
-		lock_button.disabled = true
-		lock_button.text = "不可锁定"
-		# 使用灰色样式表示禁用
-		lock_button.modulate = Color(0.5, 0.5, 0.5)
-		return
-	
-	# 非新武器类型，可以锁定/解锁
+	# 所有升级类型都可以锁定/解锁
 	lock_button.disabled = false
 	
 	if is_locked:
@@ -140,10 +132,6 @@ func _update_lock_button() -> void:
 
 func _on_lock_button_pressed() -> void:
 	if not upgrade_data:
-		return
-	
-	# 新武器类型不应该能点击到这里，但为了安全还是检查一下
-	if upgrade_data.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
 		return
 	
 	# 切换锁定状态
