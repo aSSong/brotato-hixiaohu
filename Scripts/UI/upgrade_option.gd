@@ -8,14 +8,23 @@ class_name UpgradeOption
 @onready var cost_label: Label = %CostLabel
 @onready var description_label: Label = %DescriptionLabel
 @onready var buy_button: Button = %BuyButton
+@onready var lock_button: Button = %LockButton
 
 var upgrade_data: UpgradeData = null
+var is_locked: bool = false
+var position_index: int = -1  # 在商店中的位置索引（0-2）
 
 signal purchased(upgrade: UpgradeData)
+signal lock_state_changed(upgrade: UpgradeData, is_locked: bool, position_index: int)
 
 func _ready() -> void:
 	if buy_button:
 		buy_button.pressed.connect(_on_buy_button_pressed)
+	if lock_button:
+		lock_button.pressed.connect(_on_lock_button_pressed)
+		print("[UpgradeOption] LockButton 已连接信号")
+	else:
+		push_warning("[UpgradeOption] LockButton 未找到！")
 	_update_cost_display()
 
 func set_upgrade_data(data: UpgradeData) -> void:
@@ -25,7 +34,7 @@ func set_upgrade_data(data: UpgradeData) -> void:
 		return
 	
 	# 如果@onready变量还没初始化，等待一帧
-	if not name_label or not cost_label or not description_label:
+	if not name_label or not cost_label or not description_label or not lock_button:
 		await get_tree().process_frame
 	
 	# 设置名称（根据品质设置颜色）
@@ -59,6 +68,7 @@ func set_upgrade_data(data: UpgradeData) -> void:
 	self.modulate = quality_color.lerp(Color.WHITE, 0.7)  # 混合70%白色，避免过于鲜艳
 	
 	_update_cost_display()
+	_update_lock_button()
 
 func get_upgrade_data() -> UpgradeData:
 	return upgrade_data
@@ -90,6 +100,58 @@ func _on_buy_button_pressed() -> void:
 		var adjusted_cost = UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
 		if GameMain.gold >= adjusted_cost:
 			purchased.emit(upgrade_data)
+
+func set_lock_state(locked: bool) -> void:
+	is_locked = locked
+	_update_lock_button()
+
+func _update_lock_button() -> void:
+	if not lock_button:
+		push_warning("[UpgradeOption] LockButton 未找到，无法更新锁定按钮状态")
+		return
+	if not upgrade_data:
+		return
+	
+	# 检查是否为新武器类型
+	if upgrade_data.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
+		lock_button.disabled = true
+		lock_button.text = "不可锁定"
+		# 使用灰色样式表示禁用
+		lock_button.modulate = Color(0.5, 0.5, 0.5)
+		return
+	
+	# 非新武器类型，可以锁定/解锁
+	lock_button.disabled = false
+	
+	if is_locked:
+		# 锁定态：绿色按钮，文本"已锁定"
+		lock_button.text = "已锁定"
+		lock_button.modulate = Color(0.0, 1.0, 0.0)  # 绿色
+		# 创建绿色样式
+		var green_style = StyleBoxFlat.new()
+		green_style.bg_color = Color(0.0, 0.8, 0.0, 1.0)  # 深绿色背景
+		lock_button.add_theme_stylebox_override("normal", green_style)
+	else:
+		# 正常态：常规按钮，文本"锁定"
+		lock_button.text = "锁定"
+		lock_button.modulate = Color.WHITE
+		# 移除自定义样式，使用默认样式
+		lock_button.remove_theme_stylebox_override("normal")
+
+func _on_lock_button_pressed() -> void:
+	if not upgrade_data:
+		return
+	
+	# 新武器类型不应该能点击到这里，但为了安全还是检查一下
+	if upgrade_data.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
+		return
+	
+	# 切换锁定状态
+	is_locked = not is_locked
+	_update_lock_button()
+	
+	# 发送锁定状态变化信号
+	lock_state_changed.emit(upgrade_data, is_locked, position_index)
 
 func _process(_delta: float) -> void:
 	# 实时更新购买按钮状态（钥匙变化时）

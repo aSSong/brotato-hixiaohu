@@ -28,6 +28,9 @@ var current_upgrades: Array[UpgradeData] = []
 var refresh_cost: int = 2  # 刷新费用，每次x2
 var base_refresh_cost: int = 2  # 基础刷新费用
 
+## 锁定的升级选项（key: 位置索引 0-2, value: UpgradeData）
+var locked_upgrades: Dictionary = {}
+
 ## 武器相关参数
 var new_weapon_cost: int = 5 # 新武器基础价格
 #var green_weapon_multi: int = 2 #绿色武器价格倍率
@@ -178,45 +181,79 @@ func generate_upgrades() -> void:
 	
 	var available_upgrades = _get_available_upgrades(weapons_manager)
 	
-	# 随机选择3个（避免重复）
+	# 先处理锁定的升级，确保它们保持在相同位置
+	var selected: Array[UpgradeData] = []
+	selected.resize(3)  # 预分配3个位置
+	var locked_positions = {}  # 记录哪些位置已被锁定升级占用
+	
+	# 恢复锁定的升级到对应位置
+	for position_index in range(3):
+		if locked_upgrades.has(position_index):
+			var locked_upgrade = locked_upgrades[position_index]
+			# 创建升级数据的副本（价格会根据波次重新计算）
+			var upgrade_copy = _duplicate_upgrade_data(locked_upgrade)
+			selected[position_index] = upgrade_copy
+			locked_positions[position_index] = true
+			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s" % [position_index, upgrade_copy.name])
+	
+	# 随机选择剩余的升级选项填充空位（避免重复）
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	
-	var selected: Array[UpgradeData] = []
 	var used_indices = {}
 	var attempts = 0
-	while selected.size() < 3 and attempts < 100 and available_upgrades.size() > 0:
-		var random_index = rng.randi_range(0, available_upgrades.size() - 1)
+	
+	# 填充每个空位
+	for position_index in range(3):
+		if selected[position_index] != null:
+			continue  # 该位置已被锁定升级占用
 		
-		if used_indices.has(random_index):
-			attempts += 1
-			continue
-		
-		var random_upgrade = available_upgrades[random_index]
-		
-		# 检查是否重复（考虑类型和武器ID）
-		var is_duplicate = false
-		for existing in selected:
-			if existing.upgrade_type == random_upgrade.upgrade_type:
-				if random_upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or random_upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
-					if existing.weapon_id == random_upgrade.weapon_id:
+		attempts = 0
+		while attempts < 100 and available_upgrades.size() > 0:
+			var random_index = rng.randi_range(0, available_upgrades.size() - 1)
+			
+			if used_indices.has(random_index):
+				attempts += 1
+				continue
+			
+			var random_upgrade = available_upgrades[random_index]
+			
+			# 检查是否重复（考虑类型和武器ID）
+			var is_duplicate = false
+			for existing in selected:
+				if existing == null:
+					continue
+				if existing.upgrade_type == random_upgrade.upgrade_type:
+					if random_upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or random_upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+						if existing.weapon_id == random_upgrade.weapon_id:
+							is_duplicate = true
+							break
+					else:
 						is_duplicate = true
 						break
-				else:
-					is_duplicate = true
-					break
-		
-		if not is_duplicate:
-			selected.append(random_upgrade)
-			used_indices[random_index] = true
-		
-		attempts += 1
+			
+			if not is_duplicate:
+				selected[position_index] = random_upgrade
+				used_indices[random_index] = true
+				break
+			
+			attempts += 1
 	
-	# 创建UI选项（需要等待每个选项完全创建）
-	for upgrade in selected:
-		await _create_upgrade_option_ui(upgrade)
+	# 按照位置索引顺序创建UI选项（确保UI顺序正确）
+	var final_selected: Array[UpgradeData] = []
+	for position_index in range(selected.size()):
+		if selected[position_index] != null:
+			var upgrade = selected[position_index]
+			var option_ui = await _create_upgrade_option_ui(upgrade)
+			# 设置位置索引
+			if option_ui:
+				option_ui.position_index = position_index
+				# 如果这个位置是锁定的，设置锁定状态
+				if locked_positions.has(position_index):
+					option_ui.set_lock_state(true)
+			final_selected.append(upgrade)
 	
-	current_upgrades = selected
+	current_upgrades = final_selected
 
 ## 获取所有可用的升级选项
 func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
@@ -315,15 +352,15 @@ func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
 	return upgrades
 
 ## 创建升级选项UI
-func _create_upgrade_option_ui(upgrade: UpgradeData) -> void:
+func _create_upgrade_option_ui(upgrade: UpgradeData) -> UpgradeOption:
 	if not upgrade_option_scene:
 		push_error("升级选项场景未加载！")
-		return
+		return null
 	
 	var option_ui = upgrade_option_scene.instantiate()
 	if not option_ui:
 		push_error("无法实例化升级选项！")
-		return
+		return null
 	
 	# 先添加到场景树，确保@onready变量初始化
 	if upgrade_container:
@@ -336,7 +373,7 @@ func _create_upgrade_option_ui(upgrade: UpgradeData) -> void:
 			container.add_child(option_ui)
 		else:
 			push_error("无法找到升级容器节点！")
-			return
+			return null
 	
 	# 等待一帧确保@onready变量已初始化
 	await get_tree().process_frame
@@ -348,12 +385,15 @@ func _create_upgrade_option_ui(upgrade: UpgradeData) -> void:
 	# 连接信号
 	if option_ui.has_signal("purchased"):
 		option_ui.purchased.connect(_on_upgrade_purchased)
+	if option_ui.has_signal("lock_state_changed"):
+		option_ui.lock_state_changed.connect(_on_upgrade_lock_state_changed)
 	
 	# 确保选项可见
 	option_ui.visible = true
 	option_ui.show()
 	
 	print("升级选项已添加到容器: ", upgrade.name, " 容器子节点数: ", upgrade_container.get_child_count())
+	return option_ui
 
 ## 清除所有升级选项UI
 func _clear_upgrades() -> void:
@@ -362,6 +402,45 @@ func _clear_upgrades() -> void:
 			child.queue_free()
 		print("清除升级选项，容器子节点数: ", upgrade_container.get_child_count())
 	current_upgrades.clear()
+	# 注意：不清除 locked_upgrades，因为需要在下次生成时保留
+
+## 处理锁定状态变化
+func _on_upgrade_lock_state_changed(upgrade: UpgradeData, is_locked: bool, position_index: int) -> void:
+	if is_locked:
+		# 锁定：添加到字典
+		locked_upgrades[position_index] = upgrade
+		print("[UpgradeShop] 锁定升级: %s 在位置 %d" % [upgrade.name, position_index])
+	else:
+		# 解锁：从字典移除
+		if locked_upgrades.has(position_index):
+			locked_upgrades.erase(position_index)
+			print("[UpgradeShop] 解锁升级: %s 在位置 %d" % [upgrade.name, position_index])
+
+## 复制升级数据（用于锁定升级的恢复）
+func _duplicate_upgrade_data(source: UpgradeData) -> UpgradeData:
+	var copy = UpgradeData.new(
+		source.upgrade_type,
+		source.name,
+		source.cost,
+		source.icon_path,
+		source.weapon_id
+	)
+	copy.description = source.description
+	copy.quality = source.quality
+	copy.base_cost = source.base_cost
+	copy.actual_cost = source.actual_cost
+	copy.attribute_changes = source.attribute_changes.duplicate(true)
+	return copy
+
+## 判断两个升级是否相同
+func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
+	if upgrade1.upgrade_type != upgrade2.upgrade_type:
+		return false
+	
+	if upgrade1.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade1.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+		return upgrade1.weapon_id == upgrade2.weapon_id
+	
+	return true
 
 ## 购买升级
 func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
@@ -375,6 +454,14 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	# 扣除钥匙（使用修正后的价格）
 	GameMain.remove_gold(adjusted_cost)
 	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d，波次修正后 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost, adjusted_cost])
+	
+	# 移除锁定状态（如果该升级被锁定）
+	for position_index in locked_upgrades.keys():
+		var locked_upgrade = locked_upgrades[position_index]
+		if _is_same_upgrade(locked_upgrade, upgrade):
+			locked_upgrades.erase(position_index)
+			print("[UpgradeShop] 已购买的升级从锁定列表中移除: %s" % upgrade.name)
+			break
 	
 	# 应用升级效果（武器相关的是异步的，需要等待）
 	if upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
@@ -429,7 +516,9 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 			rng.randomize()
 			var new_upgrade = filtered_available[rng.randi_range(0, filtered_available.size() - 1)]
 			current_upgrades.append(new_upgrade)
-			await _create_upgrade_option_ui(new_upgrade)
+			var option_ui = await _create_upgrade_option_ui(new_upgrade)
+			if option_ui:
+				option_ui.position_index = current_upgrades.size() - 1
 
 ## 应用升级效果
 func _apply_upgrade(upgrade: UpgradeData) -> void:

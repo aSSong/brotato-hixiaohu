@@ -6,7 +6,7 @@
 bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
 
 [node name="UpgradeOption" type="Panel"]
-custom_minimum_size = Vector2(300, 150)
+custom_minimum_size = Vector2(500, 150)
 script = ExtResource("1_upgrade_option")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -55,6 +55,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 text = "0 钥匙"
+
+[node name="LockButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_s3bqk")
+text = "锁定"
 
 [node name="BuyButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
