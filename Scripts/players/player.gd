@@ -147,10 +147,9 @@ func _process(delta: float) -> void:
 	pass
 	
 func _input(event):
-	# 检查是否是技能输入动作
-	# 如果事件匹配技能输入动作，不处理移动逻辑
-	if event.is_action("skill"):
-		# 技能输入不应该影响移动状态
+	# 检查技能输入并激活
+	if event.is_action_pressed("skill"):
+		activate_class_skill()
 		return
 	
 	# 检查是否是dash输入动作（需要优先处理，避免被鼠标左键逻辑拦截）

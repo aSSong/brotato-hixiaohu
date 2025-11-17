@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqi5j0ht5t7pd"]
+
+[ext_resource type="Script" path="res://Scripts/UI/components/resource_counter.gd" id="1"]
+
+[node name="ResourceCounter" type="Control"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 200.0
+offset_bottom = 49.0
+script = ExtResource("1")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 49.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 35
+text = "0"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -40.0
+offset_right = 35.0
+grow_vertical = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Control"]
+position = Vector2(-33, 17)
+scale = Vector2(0.1, 0.1)
+

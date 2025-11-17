@@ -15,7 +15,7 @@ func _init() -> void:
 	mode_name = "Multi模式"
 	mode_description = "无复活模式，拯救墓碑获得援助"
 	total_waves = GameConfig.total_waves
-	victory_condition_type = "keys"
+	victory_condition_type = "waves"
 	allow_revive = false
 
 ## 获取当前波次配置（与survival模式一致）
@@ -50,8 +50,10 @@ func get_wave_config(wave_number: int) -> Dictionary:
 
 ## 检查波次胜利
 func _check_waves_victory() -> bool:
-	if GameMain.current_session:
-		return GameMain.current_session.current_wave >= total_waves
+	# Multi模式：完成40波即胜利
+	var wave_manager = Engine.get_main_loop().get_first_node_in_group("wave_manager")
+	if wave_manager and "current_wave" in wave_manager:
+		return wave_manager.current_wave >= GameConfig.multi_mode_victory_waves
 	return false
 
 ## 检查失败条件（Multi模式：玩家死亡即失败）

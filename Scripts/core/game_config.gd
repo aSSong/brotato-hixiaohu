@@ -42,6 +42,7 @@ var enemy_ratio_elite: float = 0.1
 
 # Multi模式配置
 var multi_mode_total_waves: int = 200
+var multi_mode_victory_waves: int = 40
 var multi_mode_allow_revive: bool = false
 
 func _ready() -> void:

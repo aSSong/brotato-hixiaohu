@@ -7,6 +7,8 @@ var death_manager: DeathManager = null
 var death_ui: DeathUI = null
 var player: CharacterBody2D = null
 var floor_layer: TileMapLayer = null
+var current_mode: BaseGameMode = null
+var victory_triggered: bool = false
 
 func _ready() -> void:
 	# 等待场景完全加载
@@ -35,6 +37,9 @@ func _ready() -> void:
 	
 	# 创建ESC菜单管理器
 	_create_esc_menu_manager()
+	
+	# 设置胜利条件检测
+	_setup_victory_detection()
 	
 	print("[GameInitializer] 游戏初始化完成")
 
@@ -75,4 +80,70 @@ func _create_esc_menu_manager() -> void:
 	esc_manager.set_script(load("res://Scripts/UI/esc_menu_manager.gd"))
 	add_child(esc_manager)
 	print("[GameInitializer] ESC菜单管理器已创建")
+
+## 设置胜利条件检测
+func _setup_victory_detection() -> void:
+	# 获取当前模式
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"  # 默认为生存模式
+	
+	current_mode = ModeRegistry.get_mode(mode_id)
+	if not current_mode:
+		push_error("[GameInitializer] 无法获取游戏模式: %s" % mode_id)
+		return
+	
+	print("[GameInitializer] 设置胜利检测 | 模式: %s | 条件: %s" % [current_mode.mode_name, current_mode.victory_condition_type])
+	
+	# 根据胜利条件类型连接相应信号
+	match current_mode.victory_condition_type:
+		"keys":
+			# 钥匙胜利条件：监听金币变化
+			if not GameMain.gold_changed.is_connected(_on_resource_changed):
+				GameMain.gold_changed.connect(_on_resource_changed)
+		"waves":
+			# 波次胜利条件：监听波次结束
+			await get_tree().create_timer(0.5).timeout  # 等待波次系统初始化
+			var wave_manager = get_tree().get_first_node_in_group("wave_manager")
+			if wave_manager and wave_manager.has_signal("wave_ended"):
+				if not wave_manager.wave_ended.is_connected(_on_wave_ended):
+					wave_manager.wave_ended.connect(_on_wave_ended)
+				print("[GameInitializer] 已连接波次结束信号")
+			else:
+				push_warning("[GameInitializer] 未找到wave_manager，波次胜利检测可能不工作")
+
+## 资源变化回调（用于钥匙胜利条件）
+func _on_resource_changed(_new_val: int, _change: int) -> void:
+	_check_victory()
+
+## 波次结束回调（用于波次胜利条件）
+func _on_wave_ended(_wave_number: int) -> void:
+	_check_victory()
+
+## 检查胜利条件
+func _check_victory() -> void:
+	if victory_triggered:
+		return
+	
+	if not current_mode:
+		return
+	
+	if current_mode.check_victory_condition():
+		victory_triggered = true
+		_trigger_victory()
+
+## 触发胜利
+func _trigger_victory() -> void:
+	print("[GameInitializer] 达成胜利条件！")
+	
+	# 延迟一下再跳转
+	await get_tree().create_timer(1.0).timeout
+	
+	# 加载胜利UI场景
+	var victory_scene = load("res://scenes/UI/victory_ui.tscn")
+	if victory_scene:
+		# 使用安全的场景切换（带清理）
+		await SceneCleanupManager.change_scene_to_packed_safely(victory_scene)
+	else:
+		push_error("[GameInitializer] 无法加载胜利UI场景！")
 
