@@ -42,9 +42,15 @@ var enemies_spawned_this_wave: int:
 	get:
 		return spawned_enemies_this_wave
 
+## 兼容旧系统：is_wave_in_progress
+var is_wave_in_progress: bool:
+	get:
+		return current_state == WaveState.SPAWNING or current_state == WaveState.FIGHTING
+
 ## ========== 信号 ==========
 signal wave_started(wave_number: int)
 signal wave_completed(wave_number: int)
+signal wave_ended(wave_number: int)  # 兼容旧系统（与wave_completed相同）
 signal all_waves_completed()
 signal state_changed(new_state: WaveState)
 signal enemy_killed(wave_number: int, killed: int, total: int)  # 兼容UI
@@ -53,6 +59,14 @@ signal enemy_killed(wave_number: int, killed: int, total: int)  # 兼容UI
 var enemy_spawner: Node = null  # 敌人生成器
 
 func _ready() -> void:
+	# 添加到 wave_manager 组，以便其他系统能找到（兼容性）
+	if not is_in_group("wave_manager"):
+		add_to_group("wave_manager")
+	if not is_in_group("wave_system"):
+		add_to_group("wave_system")
+	
+	print("[WaveSystem V3] 已添加到组: wave_manager, wave_system")
+	
 	_initialize_waves()
 
 ## Multi模式：处理墓碑刷新
@@ -305,6 +319,7 @@ func _check_wave_complete() -> void:
 		print("[WaveSystem V3] 已生成：", spawned_enemies_this_wave, " 目标：", total_enemies_this_wave)
 		_change_state(WaveState.WAVE_COMPLETE)
 		wave_completed.emit(current_wave)
+		wave_ended.emit(current_wave)  # 兼容旧系统
 		
 		# 显示商店
 		call_deferred("_show_shop")
@@ -322,19 +337,20 @@ func _show_shop() -> void:
 	if current_state != WaveState.WAVE_COMPLETE:
 		return
 	
-	# 延迟2秒再打开商店
-	print("[WaveSystem V3] 波次完成，2秒后打开商店...")
+	# 短暂延迟，让胜利检测有机会先执行
+	print("[WaveSystem V3] 波次完成，0.2秒后检查是否打开商店...")
 	
 	# 使用安全的方式等待（避免场景切换时出错）
 	var tree = get_tree()
 	if tree == null:
 		return
 	
-	await tree.create_timer(2.0).timeout
+	await tree.create_timer(0.2).timeout
 	
-	# await后再次检查tree（可能在等待期间场景被切换了）
+	# await后再次检查tree和节点（可能在等待期间场景被切换了）
 	tree = get_tree()
-	if tree == null:
+	if tree == null or not is_inside_tree():
+		print("[WaveSystem V3] 节点已不在场景树中，可能已触发胜利，跳过商店")
 		return
 	
 	# 检查玩家是否死亡（如果死亡则不打开商店）

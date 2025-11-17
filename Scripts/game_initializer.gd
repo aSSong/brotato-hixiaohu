@@ -119,19 +119,29 @@ func _on_resource_changed(_new_val: int, _change: int) -> void:
 
 ## 波次结束回调（用于波次胜利条件）
 func _on_wave_ended(_wave_number: int) -> void:
+	print("[GameInitializer] 波次结束回调：wave_number=%d, 开始检查胜利条件" % _wave_number)
 	_check_victory()
 
 ## 检查胜利条件
 func _check_victory() -> void:
 	if victory_triggered:
+		print("[GameInitializer] 胜利已触发，跳过检查")
 		return
 	
 	if not current_mode:
+		print("[GameInitializer] 当前模式为空，跳过胜利检查")
 		return
 	
-	if current_mode.check_victory_condition():
+	print("[GameInitializer] 检查胜利条件...")
+	var victory = current_mode.check_victory_condition()
+	print("[GameInitializer] 胜利条件检查结果: %s" % victory)
+	
+	if victory:
 		victory_triggered = true
+		print("[GameInitializer] ========== 触发胜利！==========")
 		_trigger_victory()
+	else:
+		print("[GameInitializer] 未达成胜利条件")
 
 ## 触发胜利
 func _trigger_victory() -> void:

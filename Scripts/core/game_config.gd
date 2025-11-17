@@ -5,7 +5,7 @@ extends Node
 
 # 玩家配置
 var base_speed: float = 400.0
-var base_max_hp: int = 100
+var base_max_hp: int = 50
 var base_defense: int = 0
 var base_max_exp: int = 5
 
