@@ -311,8 +311,18 @@ func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
 	if upgrade1.upgrade_type != upgrade2.upgrade_type:
 		return false
 	
+	# 武器类型：比较weapon_id
 	if upgrade1.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade1.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
 		return upgrade1.weapon_id == upgrade2.weapon_id
+	
+	# 属性类型：需要类型、品质、价格都相同才算重复
+	# 这样允许不同品质的相同属性类型共存（例如：攻击速度+3%白色 和 攻击速度+5%绿色）
+	if upgrade1.quality != upgrade2.quality:
+		return false
+	
+	# 进一步检查价格，确保完全相同
+	if upgrade1.actual_cost != upgrade2.actual_cost:
+		return false
 	
 	return true
 
