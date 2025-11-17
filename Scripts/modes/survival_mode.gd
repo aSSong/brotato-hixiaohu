@@ -59,3 +59,11 @@ func check_defeat_condition() -> bool:
 			return true
 	
 	return false
+
+## 重写：获取胜利条件描述
+func get_victory_description() -> String:
+	return "持有钥匙 %d 把" % GameConfig.keys_required
+
+## 重写：获取当前进度
+func get_progress_text() -> String:
+	return "已持有 %d 把" % GameMain.gold

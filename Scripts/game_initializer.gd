@@ -101,14 +101,15 @@ func _setup_victory_detection() -> void:
 			# 钥匙胜利条件：监听金币变化
 			if not GameMain.gold_changed.is_connected(_on_resource_changed):
 				GameMain.gold_changed.connect(_on_resource_changed)
+			print("[GameInitializer] 已连接金币变化信号用于胜利检测")
 		"waves":
-			# 波次胜利条件：监听波次结束
+			# 波次胜利条件：监听波次结束（重要：在波次结束后才检查胜利）
 			await get_tree().create_timer(0.5).timeout  # 等待波次系统初始化
 			var wave_manager = get_tree().get_first_node_in_group("wave_manager")
 			if wave_manager and wave_manager.has_signal("wave_ended"):
 				if not wave_manager.wave_ended.is_connected(_on_wave_ended):
 					wave_manager.wave_ended.connect(_on_wave_ended)
-				print("[GameInitializer] 已连接波次结束信号")
+				print("[GameInitializer] 已连接波次结束信号用于胜利检测")
 			else:
 				push_warning("[GameInitializer] 未找到wave_manager，波次胜利检测可能不工作")
 
@@ -134,10 +135,15 @@ func _check_victory() -> void:
 
 ## 触发胜利
 func _trigger_victory() -> void:
-	print("[GameInitializer] 达成胜利条件！")
+	print("[GameInitializer] 达成胜利条件！准备切换到胜利场景...")
 	
-	# 延迟一下再跳转
-	await get_tree().create_timer(1.0).timeout
+	# 立即恢复游戏（取消暂停），阻止商店打开
+	if get_tree().paused:
+		get_tree().paused = false
+		print("[GameInitializer] 取消暂停以阻止商店打开")
+	
+	# 短暂延迟以显示最后一击的效果
+	await get_tree().create_timer(0.5).timeout
 	
 	# 加载胜利UI场景
 	var victory_scene = load("res://scenes/UI/victory_ui.tscn")

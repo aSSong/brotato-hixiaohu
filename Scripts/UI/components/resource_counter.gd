@@ -68,4 +68,3 @@ func _show_popup(change: int) -> void:
 	
 	# 动画结束后删除
 	tween.finished.connect(popup.queue_free)
-

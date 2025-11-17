@@ -169,6 +169,15 @@ func _end_current_wave() -> void:
 	print("=== 第 ", current_wave, " 波结束 ===")
 	print("击杀: ", enemies_killed_this_wave, "/", enemies_total_this_wave)
 	print("已生成: ", enemies_spawned_this_wave, " 存活: ", enemies_alive_this_wave)
+	
+	# 等待一小会儿，让胜利检测有机会先执行
+	await get_tree().create_timer(0.1).timeout
+	
+	# 检查游戏是否仍在运行（可能已经切换到胜利场景）
+	if not is_inside_tree():
+		print("节点已不在场景树中，可能已触发胜利，跳过商店")
+		return
+	
 	print("准备打开商店...")
 	
 	# 暂停游戏（在打开商店前）

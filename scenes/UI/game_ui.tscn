@@ -74,16 +74,16 @@ corner_radius_bottom_left = 10
 script = ExtResource("1_168mx")
 
 [node name="master_key_counter" parent="." instance=ExtResource("2_5b3ti")]
-offset_left = 429.0
+offset_left = 335.0
 offset_top = 129.0
-offset_right = 629.0
+offset_right = 535.0
 offset_bottom = 178.0
 icon_texture = ExtResource("3_5b3ti")
 
 [node name="gold_counter" parent="." instance=ExtResource("2_5b3ti")]
-offset_left = 82.0
+offset_left = 133.0
 offset_top = 129.0
-offset_right = 282.0
+offset_right = 333.0
 offset_bottom = 178.0
 icon_texture = ExtResource("2_yr8ot")
 

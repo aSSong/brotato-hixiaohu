@@ -51,9 +51,14 @@ func get_wave_config(wave_number: int) -> Dictionary:
 ## 检查波次胜利
 func _check_waves_victory() -> bool:
 	# Multi模式：完成40波即胜利
+	# 需要在波次结束后才判定，而不是波次开始时
 	var wave_manager = Engine.get_main_loop().get_first_node_in_group("wave_manager")
 	if wave_manager and "current_wave" in wave_manager:
-		return wave_manager.current_wave >= GameConfig.multi_mode_victory_waves
+		# 已完成的波数 = current_wave（如果波次没在进行）或 current_wave - 1（如果在进行）
+		var completed_waves = wave_manager.current_wave
+		if "is_wave_in_progress" in wave_manager and wave_manager.is_wave_in_progress:
+			completed_waves -= 1
+		return completed_waves >= GameConfig.multi_mode_victory_waves
 	return false
 
 ## 检查失败条件（Multi模式：玩家死亡即失败）
@@ -71,4 +76,19 @@ func check_defeat_condition() -> bool:
 ## 是否允许复活
 func can_revive() -> bool:
 	return allow_revive
+
+## 重写：获取胜利条件描述
+func get_victory_description() -> String:
+	return "完成消灭 %d 波敌人" % GameConfig.multi_mode_victory_waves
+
+## 重写：获取当前进度
+func get_progress_text() -> String:
+	var wave_manager = Engine.get_main_loop().get_first_node_in_group("wave_manager")
+	if wave_manager and "current_wave" in wave_manager:
+		# 已消灭的波数 = 当前波次 - 1（因为当前波次还在进行中）
+		var completed_waves = wave_manager.current_wave
+		if "is_wave_in_progress" in wave_manager and wave_manager.is_wave_in_progress:
+			completed_waves -= 1
+		return "已消灭 %d 波" % completed_waves
+	return "已消灭 0 波"
 

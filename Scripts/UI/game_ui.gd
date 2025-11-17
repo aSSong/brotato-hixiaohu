@@ -10,13 +10,18 @@ extends CanvasLayer
 @onready var exp_value_bar: ProgressBar = %exp_value_bar
 @onready var skill_icon: Control = %SkillIcon
 @onready var wave_label: Label = %WaveLabel
+@onready var kpi_label: Label = $KPI
 
 # 内部引用
 var hp_label: Label = null  # HP标签
 var player_ref: CharacterBody2D = null  # 玩家引用
 var wave_manager_ref = null  # 波次管理器引用
+var current_mode: BaseGameMode = null  # 当前游戏模式
 
 func _ready() -> void:
+	# 获取当前游戏模式
+	_setup_game_mode()
+	
 	# 连接信号
 	GameMain.gold_changed.connect(_on_gold_changed)
 	GameMain.master_key_changed.connect(_on_master_key_changed)
@@ -31,6 +36,19 @@ func _ready() -> void:
 	_setup_skill_icon()
 	_setup_hp_display()
 	_setup_wave_display()
+	
+	# 初始化 KPI 显示
+	_update_kpi_display()
+
+## 设置游戏模式
+func _setup_game_mode() -> void:
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"
+	
+	current_mode = ModeRegistry.get_mode(mode_id)
+	if not current_mode:
+		push_error("[GameUI] 无法获取游戏模式: %s" % mode_id)
 
 ## 设置技能图标
 func _setup_skill_icon() -> void:
@@ -50,6 +68,10 @@ func _setup_skill_icon() -> void:
 func _on_gold_changed(new_amount: int, change: int) -> void:
 	if gold_counter:
 		gold_counter.set_value(new_amount, change)
+	
+	# 如果是钥匙胜利条件，更新 KPI
+	if current_mode and current_mode.victory_condition_type == "keys":
+		_update_kpi_display()
 
 ## 设置HP显示
 func _setup_hp_display() -> void:
@@ -117,6 +139,9 @@ func _setup_wave_display() -> void:
 		if wave_manager_ref.has_signal("wave_started"):
 			if not wave_manager_ref.wave_started.is_connected(_on_wave_started):
 				wave_manager_ref.wave_started.connect(_on_wave_started)
+		if wave_manager_ref.has_signal("wave_ended"):
+			if not wave_manager_ref.wave_ended.is_connected(_on_wave_ended):
+				wave_manager_ref.wave_ended.connect(_on_wave_ended)
 		
 		# 初始化显示
 		_update_wave_display()
@@ -140,6 +165,9 @@ func _find_wave_manager_periodically() -> void:
 				if wave_manager_ref.has_signal("wave_started"):
 					if not wave_manager_ref.wave_started.is_connected(_on_wave_started):
 						wave_manager_ref.wave_started.connect(_on_wave_started)
+				if wave_manager_ref.has_signal("wave_ended"):
+					if not wave_manager_ref.wave_ended.is_connected(_on_wave_ended):
+						wave_manager_ref.wave_ended.connect(_on_wave_ended)
 				_update_wave_display()
 				return
 		attempts += 1
@@ -147,10 +175,20 @@ func _find_wave_manager_periodically() -> void:
 ## 波次开始回调
 func _on_wave_started(_wave_number: int) -> void:
 	_update_wave_display()
+	
+	# 如果是波次胜利条件，更新 KPI（波次开始时）
+	if current_mode and current_mode.victory_condition_type == "waves":
+		_update_kpi_display()
 
 ## 波次敌人击杀回调
 func _on_wave_enemy_killed(_wave_number: int, _killed: int, _total: int) -> void:
 	_update_wave_display()
+
+## 波次结束回调
+func _on_wave_ended(_wave_number: int) -> void:
+	# 如果是波次胜利条件，更新 KPI（波次结束后，已消灭波数会+1）
+	if current_mode and current_mode.victory_condition_type == "waves":
+		_update_kpi_display()
 
 ## 更新波次显示
 func _update_wave_display() -> void:
@@ -167,3 +205,10 @@ func _update_wave_display() -> void:
 func _on_master_key_changed(new_amount: int, change: int) -> void:
 	if master_key_counter:
 		master_key_counter.set_value(new_amount, change)
+
+## 更新 KPI 显示
+func _update_kpi_display() -> void:
+	if not kpi_label or not current_mode:
+		return
+	
+	kpi_label.text = current_mode.get_kpi_text()
