@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://c44attsrfmghf"]
+[gd_scene load_steps=11 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 [ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
 [ext_resource type="PackedScene" uid="uid://cqi5j0ht5t7pd" path="res://scenes/UI/components/resource_counter.tscn" id="2_5b3ti"]
 [ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="2_yr8ot"]
 [ext_resource type="Texture2D" uid="uid://d0y4qqnoa48r2" path="res://assets/items/mkey.png" id="3_5b3ti"]
+[ext_resource type="Texture2D" uid="uid://bspq5i4khlok1" path="res://assets/others/dash_icon.png" id="6_cn4gw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
@@ -220,11 +221,10 @@ layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -150.0
-offset_right = 150.0
-offset_bottom = -50.0
-grow_horizontal = 0
+offset_left = 210.0
+offset_top = -157.0
+offset_right = 310.0
+offset_bottom = -57.0
 grow_vertical = 0
 script = ExtResource("1_skill_icon")
 
@@ -260,11 +260,10 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -50.0
-offset_top = -60.0
+offset_top = -29.0
 offset_right = 50.0
-offset_bottom = -30.0
+offset_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
@@ -294,6 +293,69 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 show_percentage = false
+
+[node name="SkillKey" type="Label" parent="SkillIcon"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 107.0
+offset_right = 91.0
+offset_bottom = 130.0
+text = "右键"
+horizontal_alignment = 1
+
+[node name="Dash_ui" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 72.0
+offset_top = 923.0
+offset_right = 112.0
+offset_bottom = 963.0
+
+[node name="TextureRect" type="TextureRect" parent="Dash_ui"]
+layout_mode = 0
+offset_right = 250.0
+offset_bottom = 250.0
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("6_cn4gw")
+
+[node name="ColorRect" type="ColorRect" parent="Dash_ui"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+color = Color(0.07450981, 0.07450981, 0.07450981, 0.88235295)
+
+[node name="SkillCooldown" type="Label" parent="Dash_ui"]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 10.0
+offset_right = 80.0
+offset_bottom = 79.0
+theme_override_font_sizes/font_size = 50
+text = "30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkillName" type="Label" parent="Dash_ui"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = -41.0
+offset_right = 87.0
+offset_bottom = 1.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
+text = "Dash"
+
+[node name="SkillKey" type="Label" parent="Dash_ui"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 107.0
+offset_right = 101.0
+offset_bottom = 135.0
+theme_override_font_sizes/font_size = 20
+text = "左键 / 空格"
+horizontal_alignment = 1
 
 [node name="KPI" type="Label" parent="."]
 anchors_preset = 7
