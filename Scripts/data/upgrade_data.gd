@@ -55,6 +55,7 @@ enum UpgradeType {
 var quality: int = Quality.WHITE  # 品质等级
 var base_cost: int = 5  # 武器升级的基础价格
 var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
+var locked_cost: int = -1  # 锁定时的价格（-1表示未锁定）
 
 ## 属性变化配置
 ## 格式：{"attribute_name": {"op": "add|multiply", "value": number}}

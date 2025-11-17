@@ -181,11 +181,17 @@ func generate_upgrades() -> void:
 	for position_index in range(3):
 		if locked_upgrades.has(position_index):
 			var locked_upgrade = locked_upgrades[position_index]
-			# 创建升级数据的副本（价格会根据波次重新计算）
+			# 创建升级数据的副本（保留锁定价格）
 			var upgrade_copy = _duplicate_upgrade_data(locked_upgrade)
 			selected[position_index] = upgrade_copy
 			locked_positions[position_index] = true
-			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s" % [position_index, upgrade_copy.name])
+			# 同步更新字典中的引用为新副本，保持对象一致性
+			locked_upgrades[position_index] = upgrade_copy
+			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s, 锁定价格: %d" % [
+				position_index, 
+				upgrade_copy.name, 
+				upgrade_copy.locked_cost if upgrade_copy.locked_cost >= 0 else upgrade_copy.actual_cost
+			])
 	
 	# 逐个生成剩余的空位
 	for position_index in range(3):
@@ -271,11 +277,14 @@ func _clear_upgrades() -> void:
 ## 处理锁定状态变化
 func _on_upgrade_lock_state_changed(upgrade: UpgradeData, is_locked: bool, position_index: int) -> void:
 	if is_locked:
-		# 锁定：添加到字典
+		# 锁定：计算并保存当前波次的价格
+		var adjusted_cost = calculate_wave_adjusted_cost(upgrade.actual_cost)
+		upgrade.locked_cost = adjusted_cost
 		locked_upgrades[position_index] = upgrade
-		print("[UpgradeShop] 锁定升级: %s 在位置 %d" % [upgrade.name, position_index])
+		print("[UpgradeShop] 锁定升级: %s 在位置 %d, 锁定价格: %d" % [upgrade.name, position_index, adjusted_cost])
 	else:
-		# 解锁：从字典移除
+		# 解锁：清除锁定价格
+		upgrade.locked_cost = -1
 		if locked_upgrades.has(position_index):
 			locked_upgrades.erase(position_index)
 			print("[UpgradeShop] 解锁升级: %s 在位置 %d" % [upgrade.name, position_index])
@@ -293,6 +302,7 @@ func _duplicate_upgrade_data(source: UpgradeData) -> UpgradeData:
 	copy.quality = source.quality
 	copy.base_cost = source.base_cost
 	copy.actual_cost = source.actual_cost
+	copy.locked_cost = source.locked_cost  # 保留锁定时的价格
 	copy.attribute_changes = source.attribute_changes.duplicate(true)
 	return copy
 
@@ -308,16 +318,20 @@ func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
 
 ## 购买升级
 func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
-	# 计算波次修正后的价格
-	var adjusted_cost = calculate_wave_adjusted_cost(upgrade.actual_cost)
+	# 如果有锁定价格，使用锁定价格；否则计算波次修正后的价格
+	var adjusted_cost: int
+	if upgrade.locked_cost >= 0:
+		adjusted_cost = upgrade.locked_cost
+	else:
+		adjusted_cost = calculate_wave_adjusted_cost(upgrade.actual_cost)
 	
 	if GameMain.gold < adjusted_cost:
-		print("钥匙不足！需要 %d（基础 %d），当前 %d" % [adjusted_cost, upgrade.actual_cost, GameMain.gold])
+		print("钥匙不足！需要 %d，当前 %d" % [adjusted_cost, GameMain.gold])
 		return
 	
 	# 扣除钥匙（使用修正后的价格）
 	GameMain.remove_gold(adjusted_cost)
-	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d，波次修正后 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost, adjusted_cost])
+	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost])
 	
 	# 移除锁定状态（如果该升级被锁定）
 	for position_index in locked_upgrades.keys():
