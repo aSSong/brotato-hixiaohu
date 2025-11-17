@@ -169,17 +169,8 @@ func close_shop() -> void:
 
 ## 生成升级选项（3个）
 func generate_upgrades() -> void:
-	# 注意：这是一个异步函数，会等待所有选项创建完成
 	# 清除现有选项
 	_clear_upgrades()
-	
-	# 获取当前武器管理器
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		# 尝试查找now_weapons节点
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
-	
-	var available_upgrades = _get_available_upgrades(weapons_manager)
 	
 	# 先处理锁定的升级，确保它们保持在相同位置
 	var selected: Array[UpgradeData] = []
@@ -196,48 +187,17 @@ func generate_upgrades() -> void:
 			locked_positions[position_index] = true
 			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s" % [position_index, upgrade_copy.name])
 	
-	# 随机选择剩余的升级选项填充空位（避免重复）
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	
-	var used_indices = {}
-	var attempts = 0
-	
-	# 填充每个空位
+	# 逐个生成剩余的空位
 	for position_index in range(3):
 		if selected[position_index] != null:
 			continue  # 该位置已被锁定升级占用
 		
-		attempts = 0
-		while attempts < 100 and available_upgrades.size() > 0:
-			var random_index = rng.randi_range(0, available_upgrades.size() - 1)
-			
-			if used_indices.has(random_index):
-				attempts += 1
-				continue
-			
-			var random_upgrade = available_upgrades[random_index]
-			
-			# 检查是否重复（考虑类型和武器ID）
-			var is_duplicate = false
-			for existing in selected:
-				if existing == null:
-					continue
-				if existing.upgrade_type == random_upgrade.upgrade_type:
-					if random_upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or random_upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
-						if existing.weapon_id == random_upgrade.weapon_id:
-							is_duplicate = true
-							break
-					else:
-						is_duplicate = true
-						break
-			
-			if not is_duplicate:
-				selected[position_index] = random_upgrade
-				used_indices[random_index] = true
-				break
-			
-			attempts += 1
+		# 生成单个upgrade（独立判定）
+		var new_upgrade = _generate_single_upgrade(selected)
+		if new_upgrade:
+			selected[position_index] = new_upgrade
+		else:
+			print("[UpgradeShop] 警告: 无法生成位置 %d 的升级选项" % position_index)
 	
 	# 按照位置索引顺序创建UI选项（确保UI顺序正确）
 	var final_selected: Array[UpgradeData] = []
@@ -254,102 +214,6 @@ func generate_upgrades() -> void:
 			final_selected.append(upgrade)
 	
 	current_upgrades = final_selected
-
-## 获取所有可用的升级选项
-func _get_available_upgrades(weapons_manager) -> Array[UpgradeData]:
-	var upgrades: Array[UpgradeData] = []
-	var weapon_count = 0
-	var new_weapon_count_in_shop = 0
-	
-	if weapons_manager:
-		weapon_count = weapons_manager.get_weapon_count() if weapons_manager.has_method("get_weapon_count") else 0
-	
-	# 统计当前商店中的new weapon数量
-	for upgrade in current_upgrades:
-		if upgrade != null and upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
-			new_weapon_count_in_shop += 1
-	
-	# 从数据库获取所有基础升级选项
-	var base_upgrades = UpgradeDatabase.get_all_upgrade_ids()
-	for upgrade_id in base_upgrades:
-		var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
-		if upgrade_data:
-			# 创建副本以避免修改原始数据
-			var upgrade_copy = UpgradeData.new(
-				upgrade_data.upgrade_type,
-				upgrade_data.name,
-				upgrade_data.cost,
-				upgrade_data.icon_path,
-				upgrade_data.weapon_id
-			)
-			upgrade_copy.description = upgrade_data.description
-			# 复制品质和实际价格
-			upgrade_copy.quality = upgrade_data.quality
-			upgrade_copy.actual_cost = upgrade_data.actual_cost
-			# 复制属性变化配置
-			upgrade_copy.attribute_changes = upgrade_data.attribute_changes.duplicate(true)
-			upgrades.append(upgrade_copy)
-	
-	# 4. New Weapon（根据规则）
-	if weapons_manager and (weapon_count + new_weapon_count_in_shop) < 6:
-		# 获取所有可用武器
-		var all_weapon_ids = WeaponDatabase.get_all_weapon_ids()
-		for weapon_id in all_weapon_ids:
-			var weapon_data = WeaponDatabase.get_weapon(weapon_id)
-			var upgrade = UpgradeData.new(
-				UpgradeData.UpgradeType.NEW_WEAPON,
-				"新武器: " + weapon_data.weapon_name,
-				new_weapon_cost,
-				weapon_data.texture_path,
-				weapon_id
-			)
-			upgrade.description = weapon_data.description
-			# 新武器固定白色品质，价格为 cost
-			upgrade.quality = UpgradeData.Quality.WHITE
-			upgrade.actual_cost = upgrade.cost
-			upgrades.append(upgrade)
-	
-	# 5. 武器等级+1（基于已有武器）
-	if weapons_manager:
-		var upgradeable_weapons = weapons_manager.get_upgradeable_weapon_types() if weapons_manager.has_method("get_upgradeable_weapon_types") else []
-		
-		# 如果所有武器都已满级，不添加
-		if not (weapons_manager.has_all_weapons_max_level() if weapons_manager.has_method("has_all_weapons_max_level") else true):
-			for weapon_id in upgradeable_weapons:
-				var weapon_data = WeaponDatabase.get_weapon(weapon_id)
-				
-				# 获取当前最低等级的武器
-				var lowest_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
-				if not lowest_weapon:
-					continue
-				
-				var current_level = lowest_weapon.weapon_level
-				var target_level = current_level + 1  # 目标等级
-				var upgrade = UpgradeData.new(
-					UpgradeData.UpgradeType.WEAPON_LEVEL_UP,
-					weapon_data.weapon_name + " 等级+1",
-					new_weapon_cost,  # 这个 cost 会被 base_cost 覆盖
-					weapon_data.texture_path,
-					weapon_id
-				)
-				upgrade.description = "提升武器等级 (当前等级: %d)" % current_level
-				
-				# 动态设置品质和价格（品质 = 目标等级）
-				upgrade.quality = target_level
-				upgrade.base_cost = new_weapon_cost  # 武器升级基础价格
-				upgrade.calculate_weapon_upgrade_cost()
-				
-				print("[UpgradeShop] 武器升级: %s, 等级%d→%d, 品质=%s, 价格=%d" % [
-					weapon_data.weapon_name, 
-					current_level, 
-					target_level,
-					UpgradeData.get_quality_name(upgrade.quality),
-					upgrade.actual_cost
-				])
-				
-				upgrades.append(upgrade)
-	
-	return upgrades
 
 ## 创建升级选项UI
 func _create_upgrade_option_ui(upgrade: UpgradeData) -> UpgradeOption:
@@ -489,32 +353,9 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	
 	# 补充新的选项（如果少于3个）
 	if current_upgrades.size() < 3:
-		var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-		if not weapons_manager:
-			weapons_manager = get_tree().get_first_node_in_group("weapons")
-		
-		var available = _get_available_upgrades(weapons_manager)
-		
-		# 过滤掉已存在的选项
-		var filtered_available: Array[UpgradeData] = []
-		for candidate in available:
-			var exists = false
-			for existing in current_upgrades:
-				if existing.upgrade_type == candidate.upgrade_type:
-					if candidate.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or candidate.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
-						if existing.weapon_id == candidate.weapon_id:
-							exists = true
-							break
-					else:
-						exists = true
-						break
-			if not exists:
-				filtered_available.append(candidate)
-		
-		if filtered_available.size() > 0:
-			var rng = RandomNumberGenerator.new()
-			rng.randomize()
-			var new_upgrade = filtered_available[rng.randi_range(0, filtered_available.size() - 1)]
+		# 生成新的upgrade选项
+		var new_upgrade = _generate_single_upgrade(current_upgrades)
+		if new_upgrade:
 			current_upgrades.append(new_upgrade)
 			var option_ui = await _create_upgrade_option_ui(new_upgrade)
 			if option_ui:
@@ -768,3 +609,315 @@ func _update_weapon_list() -> void:
 			label.add_theme_color_override("font_color", Color.WHITE)
 	
 	print("[UpgradeShop] 武器列表已更新，当前武器数量: ", weapons.size())
+
+## ========== 新的商店刷新系统 ==========
+
+## 获取当前波数
+func _get_current_wave() -> int:
+	# 尝试多种方式获取波次管理器
+	var wave_manager = get_tree().get_first_node_in_group("wave_system")
+	if not wave_manager:
+		wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	
+	var current_wave = 1
+	if wave_manager and "current_wave" in wave_manager:
+		current_wave = wave_manager.current_wave
+	
+	return current_wave
+
+## 获取玩家幸运值
+func _get_player_luck() -> float:
+	var player = get_tree().get_first_node_in_group("player")
+	var luck_value = 0.0
+	if player and player.current_class:
+		luck_value = player.current_class.luck
+	return luck_value
+
+## 统计商店中的new weapon数量（包括锁定的）
+func _count_new_weapons_in_shop() -> int:
+	var count = 0
+	
+	# 统计当前显示的
+	for upgrade in current_upgrades:
+		if upgrade != null and upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
+			count += 1
+	
+	# 统计锁定的
+	for position_index in locked_upgrades.keys():
+		var locked_upgrade = locked_upgrades[position_index]
+		if locked_upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
+			count += 1
+	
+	return count
+
+## 根据幸运值和波数计算品质
+## 返回品质等级（1-5对应WHITE-ORANGE）
+func _get_quality_by_luck(luck_value: float, current_wave: int) -> int:
+	# 品质配置表
+	var quality_configs = [
+		# [品质, 最低波数, 基础概率, 每波增加, 最高概率]
+		[UpgradeData.Quality.ORANGE, 10, 0.0, 0.23, 8.0],    # Tier 5
+		[UpgradeData.Quality.PURPLE, 8, 0.0, 2.0, 25.0],     # Tier 4
+		[UpgradeData.Quality.BLUE, 4, 0.0, 6.0, 60.0],       # Tier 3
+		[UpgradeData.Quality.GREEN, 2, 0.0, 8.0, 80.0],      # Tier 2
+		[UpgradeData.Quality.WHITE, 1, 100.0, 0.0, 100.0],   # Tier 1
+	]
+	
+	# 幸运值转换为百分比倍率（luck值 / 100）
+	var luck_multiplier = 1.0 + (luck_value / 100.0)
+	
+	# 计算每个品质的概率
+	var quality_probabilities = []
+	for config in quality_configs:
+		var quality = config[0]
+		var min_wave = config[1]
+		var base_prob = config[2]
+		var wave_increase = config[3]
+		var max_prob = config[4]
+		
+		# 如果当前波数低于最低出现波数，概率为0
+		if current_wave < min_wave:
+			quality_probabilities.append([quality, 0.0])
+			continue
+		
+		# 计算概率：((每波增加 × (当前波数 - 最低波数 - 1)) + 基础概率) × 幸运倍率
+		var wave_bonus = wave_increase * float(current_wave - min_wave - 1)
+		var probability = (base_prob + wave_bonus) * luck_multiplier
+		
+		# 限制在最高概率
+		probability = min(probability, max_prob)
+		
+		quality_probabilities.append([quality, probability])
+	
+	# 从高到低检查品质，使用递减概率
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var roll = rng.randf_range(0.0, 100.0)
+	
+	var accumulated_prob = 0.0
+	for i in range(quality_probabilities.size()):
+		var quality = quality_probabilities[i][0]
+		var prob = quality_probabilities[i][1]
+		
+		# 计算实际可用概率（从剩余概率中分配）
+		var available_prob = 100.0 - accumulated_prob
+		var actual_prob = min(prob, available_prob)
+		
+		if roll < accumulated_prob + actual_prob:
+			print("[UpgradeShop] 品质抽取: 波数=%d, 幸运=%d, Roll=%.1f%%, 品质=%s (概率=%.1f%%)" % [
+				current_wave, int(luck_value), roll, 
+				UpgradeData.get_quality_name(quality), actual_prob
+			])
+			return quality
+		
+		accumulated_prob += actual_prob
+	
+	# 保底返回白色
+	return UpgradeData.Quality.WHITE
+
+## 生成单个upgrade选项（独立判定）
+func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeData:
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	
+	# 35% 概率生成武器，65% 概率生成属性
+	var is_weapon = rng.randf() < 0.35
+	
+	var attempts = 0
+	var max_attempts = 50
+	
+	while attempts < max_attempts:
+		attempts += 1
+		
+		var upgrade: UpgradeData = null
+		
+		if is_weapon:
+			upgrade = _generate_weapon_upgrade()
+		else:
+			# 获取当前波数和幸运值
+			var current_wave = _get_current_wave()
+			var luck_value = _get_player_luck()
+			
+			# 根据幸运值决定品质
+			var quality = _get_quality_by_luck(luck_value, current_wave)
+			
+			upgrade = _generate_attribute_upgrade(quality)
+		
+		if upgrade == null:
+			# 如果生成失败，尝试切换类型
+			if is_weapon:
+				# 武器生成失败，尝试生成属性
+				var current_wave = _get_current_wave()
+				var luck_value = _get_player_luck()
+				var quality = _get_quality_by_luck(luck_value, current_wave)
+				upgrade = _generate_attribute_upgrade(quality)
+			else:
+				# 属性生成失败，尝试生成武器
+				upgrade = _generate_weapon_upgrade()
+			
+			if upgrade == null:
+				continue
+		
+		# 检查是否与已有选项重复
+		var is_duplicate = false
+		for existing in existing_upgrades:
+			if existing == null:
+				continue
+			if _is_same_upgrade(existing, upgrade):
+				is_duplicate = true
+				break
+		
+		if not is_duplicate:
+			return upgrade
+	
+	print("[UpgradeShop] 警告: 尝试 %d 次后仍无法生成不重复的升级" % max_attempts)
+	return null
+
+## 生成武器相关upgrade
+func _generate_weapon_upgrade() -> UpgradeData:
+	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
+	if not weapons_manager:
+		weapons_manager = get_tree().get_first_node_in_group("weapons")
+	
+	if not weapons_manager:
+		return null
+	
+	var weapon_count = 0
+	if weapons_manager.has_method("get_weapon_count"):
+		weapon_count = weapons_manager.get_weapon_count()
+	
+	# 统计商店中的new weapon数量（包括锁定的）
+	var new_weapon_count_in_shop = _count_new_weapons_in_shop()
+	
+	# 检查是否可以生成新武器
+	var can_generate_new_weapon = (weapon_count + new_weapon_count_in_shop) < 6
+	
+	# 检查是否所有武器都满级
+	var all_weapons_max_level = false
+	if weapons_manager.has_method("has_all_weapons_max_level"):
+		all_weapons_max_level = weapons_manager.has_all_weapons_max_level()
+	
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	
+	# 决定生成NEW_WEAPON还是WEAPON_LEVEL_UP
+	var can_level_up = weapon_count > 0 and not all_weapons_max_level
+	
+	if not can_generate_new_weapon and not can_level_up:
+		# 既不能生成新武器，也不能升级武器
+		return null
+	
+	if can_generate_new_weapon and not can_level_up:
+		# 只能生成新武器
+		return _generate_new_weapon_upgrade()
+	
+	if not can_generate_new_weapon and can_level_up:
+		# 只能升级武器
+		return _generate_weapon_level_up_upgrade(weapons_manager)
+	
+	# 两者都可以，随机选择
+	if rng.randf() < 0.5:
+		return _generate_new_weapon_upgrade()
+	else:
+		return _generate_weapon_level_up_upgrade(weapons_manager)
+
+## 生成新武器upgrade
+func _generate_new_weapon_upgrade() -> UpgradeData:
+	var all_weapon_ids = WeaponDatabase.get_all_weapon_ids()
+	if all_weapon_ids.is_empty():
+		return null
+	
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var weapon_id = all_weapon_ids[rng.randi_range(0, all_weapon_ids.size() - 1)]
+	
+	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
+	var upgrade = UpgradeData.new(
+		UpgradeData.UpgradeType.NEW_WEAPON,
+		"新武器: " + weapon_data.weapon_name,
+		new_weapon_cost,
+		weapon_data.texture_path,
+		weapon_id
+	)
+	upgrade.description = weapon_data.description
+	upgrade.quality = UpgradeData.Quality.WHITE
+	upgrade.actual_cost = upgrade.cost
+	
+	return upgrade
+
+## 生成武器升级upgrade
+func _generate_weapon_level_up_upgrade(weapons_manager) -> UpgradeData:
+	if not weapons_manager.has_method("get_upgradeable_weapon_types"):
+		return null
+	
+	var upgradeable_weapons = weapons_manager.get_upgradeable_weapon_types()
+	if upgradeable_weapons.is_empty():
+		return null
+	
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var weapon_id = upgradeable_weapons[rng.randi_range(0, upgradeable_weapons.size() - 1)]
+	
+	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
+	
+	# 获取当前最低等级的武器
+	var lowest_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
+	if not lowest_weapon:
+		return null
+	
+	var current_level = lowest_weapon.weapon_level
+	var target_level = current_level + 1  # 目标等级
+	
+	var upgrade = UpgradeData.new(
+		UpgradeData.UpgradeType.WEAPON_LEVEL_UP,
+		weapon_data.weapon_name + " 等级+1",
+		new_weapon_cost,
+		weapon_data.texture_path,
+		weapon_id
+	)
+	upgrade.description = "提升武器等级 (当前等级: %d)" % current_level
+	
+	# 动态设置品质和价格（品质 = 目标等级）
+	upgrade.quality = target_level
+	upgrade.base_cost = new_weapon_cost
+	upgrade.calculate_weapon_upgrade_cost()
+	
+	return upgrade
+
+## 生成指定品质的属性upgrade
+func _generate_attribute_upgrade(quality: int) -> UpgradeData:
+	# 获取所有upgrade ID
+	var all_upgrade_ids = UpgradeDatabase.get_all_upgrade_ids()
+	
+	# 筛选出指定品质的upgrade
+	var quality_upgrades = []
+	for upgrade_id in all_upgrade_ids:
+		var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
+		if upgrade_data and upgrade_data.quality == quality:
+			quality_upgrades.append(upgrade_id)
+	
+	if quality_upgrades.is_empty():
+		print("[UpgradeShop] 警告: 没有品质为 %s 的升级选项" % UpgradeData.get_quality_name(quality))
+		return null
+	
+	# 随机选择一个
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var upgrade_id = quality_upgrades[rng.randi_range(0, quality_upgrades.size() - 1)]
+	
+	var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
+	
+	# 创建副本
+	var upgrade_copy = UpgradeData.new(
+		upgrade_data.upgrade_type,
+		upgrade_data.name,
+		upgrade_data.cost,
+		upgrade_data.icon_path,
+		upgrade_data.weapon_id
+	)
+	upgrade_copy.description = upgrade_data.description
+	upgrade_copy.quality = upgrade_data.quality
+	upgrade_copy.actual_cost = upgrade_data.actual_cost
+	upgrade_copy.attribute_changes = upgrade_data.attribute_changes.duplicate(true)
+	
+	return upgrade_copy
