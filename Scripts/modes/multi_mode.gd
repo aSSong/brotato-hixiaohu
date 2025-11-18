@@ -16,6 +16,7 @@ func _init() -> void:
 	mode_description = "无复活模式，拯救墓碑获得援助"
 	total_waves = GameConfig.total_waves
 	victory_condition_type = "waves"
+	wave_config_id = "default"  # 使用默认波次配置
 	allow_revive = false
 
 ## 获取当前波次配置（与survival模式一致）

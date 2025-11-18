@@ -14,6 +14,7 @@ var mode_name: String = ""
 var mode_description: String = ""
 var total_waves: int = 20
 var victory_condition_type: String = "waves"  # "waves", "keys", "time", "survival"
+var wave_config_id: String = "default"  # 波次配置ID（对应JSON文件名）
 
 ## 初始化模式
 func initialize(config: Dictionary = {}) -> void:

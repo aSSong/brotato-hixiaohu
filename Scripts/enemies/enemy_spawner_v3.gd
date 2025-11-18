@@ -6,7 +6,6 @@ class_name EnemySpawnerV3
 
 ## ========== 配置 ==========
 @export var enemy_scene: PackedScene
-@export var spawn_delay: float = 0.4  # 生成间隔
 
 var floor_layer: TileMapLayer = null
 var player: Node = null
@@ -15,9 +14,6 @@ var wave_system: WaveSystemV3 = null
 ## ========== 生成参数 ==========
 var min_distance_from_player: float = 300.0
 var max_spawn_attempts: int = 30
-
-var enemystrong_per_wave: float = 2.0 # 每多少波敌人变强一次
-var enemystrong_multi :float = 1.5 # 每次变强多少
 
 ## ========== 状态 ==========
 var is_spawning: bool = false
@@ -51,13 +47,18 @@ func spawn_wave(wave_config: Dictionary) -> void:
 		return
 	
 	var wave_number = wave_config.wave_number
+	var spawn_interval = wave_config.get("spawn_interval", 0.4)
+	var hp_growth = wave_config.get("hp_growth", 0.0)
+	var damage_growth = wave_config.get("damage_growth", 0.0)
+	
 	print("[EnemySpawner V3] 开始生成第 ", wave_number, " 波")
+	print("[EnemySpawner V3] 刷新间隔: ", spawn_interval, " | HP成长: ", hp_growth * 100, "% | 伤害成长: ", damage_growth * 100, "%")
 	
 	# 构建生成列表
 	var spawn_list = _build_spawn_list(wave_config)
 	
-	# 开始异步生成（传入波次号用于HP计算）
-	_spawn_enemies_async(spawn_list, wave_number)
+	# 开始异步生成（传入成长率）
+	_spawn_enemies_async(spawn_list, wave_number, spawn_interval, hp_growth, damage_growth)
 
 ## 构建生成列表
 func _build_spawn_list(config: Dictionary) -> Array:
@@ -78,15 +79,15 @@ func _build_spawn_list(config: Dictionary) -> Array:
 	return list
 
 ## 异步生成敌人列表
-func _spawn_enemies_async(spawn_list: Array, wave_number: int) -> void:
+func _spawn_enemies_async(spawn_list: Array, wave_number: int, spawn_interval: float, hp_growth: float, damage_growth: float) -> void:
 	is_spawning = true
 	
 	var index = 0
 	for enemy_id in spawn_list:
 		var is_last = (index == spawn_list.size() - 1)
 		
-		# 生成敌人（传入波次号）
-		var enemy = _spawn_single_enemy(enemy_id, is_last, wave_number)
+		# 生成敌人（传入成长率）
+		var enemy = _spawn_single_enemy(enemy_id, is_last, wave_number, hp_growth, damage_growth)
 		
 		# 通知波次系统
 		if enemy and wave_system:
@@ -96,14 +97,14 @@ func _spawn_enemies_async(spawn_list: Array, wave_number: int) -> void:
 		
 		# 等待间隔（受游戏暂停影响）
 		# 第二个参数为false表示当游戏暂停时，计时器也暂停
-		await get_tree().create_timer(spawn_delay, false).timeout
+		await get_tree().create_timer(spawn_interval, false).timeout
 		index += 1
 	
 	is_spawning = false
 	print("[EnemySpawner V3] 生成完成")
 
 ## 生成单个敌人
-func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_number: int = 1) -> Node:
+func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_number: int = 1, hp_growth: float = 0.0, damage_growth: float = 0.0) -> Node:
 	if not floor_layer:
 		push_error("[EnemySpawner V3] floor_layer未设置")
 		return null
@@ -118,11 +119,6 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 	if enemy_data == null:
 		push_error("[EnemySpawner V3] 敌人数据不存在：", enemy_id)
 		return null
-	
-	# 计算HP增长倍数（每n波增加x倍）
-	# 例如：每2波增加2倍，第2波=2倍，第4波=4倍，第6波=8倍
-	var strength_level = floor(wave_number / enemystrong_per_wave)
-	var hp_multiplier = pow(enemystrong_multi, strength_level)
 	
 	# 尝试多次找合适的位置
 	for attempt in max_spawn_attempts:
@@ -153,11 +149,21 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 			# 添加到场景树（这会触发_ready()，可能会重新应用enemy_data）
 			add_child(enemy)
 			
-			# 在_ready()执行完后，应用HP增长倍数（必须在add_child之后）
+			# 在_ready()执行完后，应用成长率（必须在add_child之后）
+			# HP成长：基础值 * (1 + 成长率)
+			var hp_multiplier = 1.0 + hp_growth
+			var damage_multiplier = 1.0 + damage_growth
+			
 			enemy.max_enemyHP = int(enemy.max_enemyHP * hp_multiplier)
 			enemy.enemyHP = enemy.max_enemyHP
 			
-			print("[EnemySpawner V3] 生成敌人：", enemy_id, " 波次:", wave_number, " HP倍数:", hp_multiplier, " 实际HP:", enemy.max_enemyHP)
+			# 应用伤害成长
+			if "attack_damage" in enemy:
+				enemy.attack_damage = int(enemy.attack_damage * damage_multiplier)
+			
+			print("[EnemySpawner V3] 生成敌人：", enemy_id, " 波次:", wave_number, 
+				  " HP倍数:", hp_multiplier, " 实际HP:", enemy.max_enemyHP,
+				  " 伤害倍数:", damage_multiplier)
 			return enemy
 	
 	# 尝试多次后仍失败

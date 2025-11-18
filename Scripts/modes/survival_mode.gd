@@ -9,6 +9,7 @@ func _init() -> void:
 	mode_description = "收集200个钥匙以获得胜利"
 	total_waves = GameConfig.total_waves
 	victory_condition_type = "keys"
+	wave_config_id = "default"  # 使用默认波次配置
 
 ## 获取当前波次配置
 func get_wave_config(wave_number: int) -> Dictionary:

@@ -8,7 +8,7 @@ extends Node2D
 @export var floor_layer_path: NodePath
 @export var min_distance_from_player: float = 300.0  # 玩家周围的安全距离
 @export var max_spawn_attempts: int = 20  # 最多尝试找位置的次数
-@export var spawn_delay: float = 0.5  # 每个敌人之间的生成间隔
+# spawn_delay 已移除，现在从波次配置JSON中读取
 
 @onready var floor_layer: TileMapLayer = get_node(floor_layer_path)
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
@@ -40,7 +40,7 @@ func _ready() -> void:
 	enemy_spawner.player = player
 	enemy_spawner.min_distance_from_player = min_distance_from_player
 	enemy_spawner.max_spawn_attempts = max_spawn_attempts
-	enemy_spawner.spawn_delay = spawn_delay
+	# spawn_delay 现在从波次配置中读取，不再需要手动设置
 	
 	# 连接系统
 	wave_system.set_enemy_spawner(enemy_spawner)

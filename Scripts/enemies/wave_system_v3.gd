@@ -20,7 +20,7 @@ enum WaveState {
 var wave_configs: Array = []  # 波次配置
 var current_wave: int = 0
 var current_state: WaveState = WaveState.IDLE
-var enemy_add_multi:int = 5 #每波增加敌人数
+var wave_config_id: String = "default"  # 当前使用的配置ID
 
 ## ========== 敌人追踪 ==========
 var active_enemies: Array = []  # 当前存活的敌人实例列表（直接引用）
@@ -67,6 +67,13 @@ func _ready() -> void:
 	
 	print("[WaveSystem V3] 已添加到组: wave_manager, wave_system")
 	
+	# 从当前模式获取配置ID（如果有）
+	if GameMain.current_session and "mode" in GameMain.current_session:
+		var mode = GameMain.current_session.mode
+		if mode and "wave_config_id" in mode:
+			wave_config_id = mode.wave_config_id
+			print("[WaveSystem V3] 从模式获取配置ID: ", wave_config_id)
+	
 	_initialize_waves()
 
 ## Multi模式：处理墓碑刷新
@@ -90,77 +97,100 @@ func _handle_multi_mode_graves() -> void:
 
 ## 初始化波次配置
 func _initialize_waves() -> void:
+	# 从JSON加载配置
+	load_wave_config(wave_config_id)
+
+## 加载波次配置
+func load_wave_config(config_id: String) -> void:
+	wave_config_id = config_id
 	wave_configs.clear()
 	
-	# 200波，每波比上一波多2个敌人
-	# 第1波: 10个敌人 (9个普通 + 1个BOSS)
-	# 第2波: 12个敌人 (11个普通 + 1个BOSS)
-	# ...
-	# 第200波: 408个敌人
+	print("[WaveSystem V3] 开始加载波次配置: ", config_id)
 	
-	# 敌人配比：50%基础，20%快速，20%坦克，10%精英
+	# 使用WaveConfigLoader加载配置
+	var config_data = WaveConfigLoader.load_config(config_id)
 	
-	for wave in range(200):
+	if config_data.is_empty():
+		push_error("[WaveSystem V3] 配置加载失败，使用默认配置")
+		_create_fallback_config()
+		return
+	
+	# 转换JSON配置为内部格式
+	for wave_data in config_data.waves:
+		var wave_config = _convert_wave_config(wave_data)
+		wave_configs.append(wave_config)
+	
+	print("[WaveSystem V3] 配置加载完成：", wave_configs.size(), " 波")
+	if wave_configs.size() > 0:
+		print("[WaveSystem V3] 第1波配置：", wave_configs[0])
+	if wave_configs.size() >= 10:
+		print("[WaveSystem V3] 第10波配置：", wave_configs[9])
+
+## 转换波次配置（从JSON格式到内部格式）
+func _convert_wave_config(wave_data: Dictionary) -> Dictionary:
+	var config = {
+		"wave_number": wave_data.wave,
+		"spawn_interval": wave_data.get("spawn_interval", 0.4),
+		"hp_growth": wave_data.get("hp_growth", 0.0),
+		"damage_growth": wave_data.get("damage_growth", 0.0),
+		"enemies": [],
+		"last_enemy": {}
+	}
+	
+	# 处理敌人配比
+	var total_count = wave_data.get("total_count", 10)
+	var enemy_ratios = wave_data.get("enemies", {})
+	
+	# 收集所有敌人类型及其数量
+	var enemy_list = []
+	for enemy_id in enemy_ratios:
+		var ratio = enemy_ratios[enemy_id]
+		var count = int(total_count * ratio)
+		if count > 0:
+			enemy_list.append({"id": enemy_id, "count": count})
+	
+	# 处理BOSS配置
+	var boss_config = wave_data.get("boss_config", {})
+	var boss_count = boss_config.get("count", 1)
+	var boss_id = boss_config.get("enemy_id", "last_enemy")
+	var boss_at_end = boss_config.get("spawn_at_end", true)
+	
+	# 处理special_spawns（特殊刷怪位置）
+	var special_spawns = wave_data.get("special_spawns", [])
+	
+	# 如果有特殊刷怪配置，需要特殊处理
+	if special_spawns.size() > 0:
+		config["special_spawns"] = special_spawns
+	
+	# 如果BOSS在最后刷出
+	if boss_at_end:
+		config["enemies"] = enemy_list
+		config["last_enemy"] = {"id": boss_id, "count": boss_count}
+	else:
+		# BOSS不在最后，需要根据special_spawns处理
+		config["enemies"] = enemy_list
+		config["last_enemy"] = {"id": boss_id, "count": 0}  # 标记为0，实际通过special_spawns刷出
+	
+	return config
+
+## 创建后备配置（当JSON加载失败时）
+func _create_fallback_config() -> void:
+	for wave in range(20):
 		var wave_number = wave + 1
-		
-		# 计算本波普通敌人数量（不含BOSS和技能怪）
-		# 第1波: 9个普通 + 1个BOSS = 10个
-		# 第2波: 11个普通 + 1个BOSS = 12个
-		var normal_enemy_count = 9 + (wave * enemy_add_multi )
-		
-		# 技能怪数量（固定每波3个）
-		var skill_enemy_count = 3  # 冲锋、射击、自爆各1个
-		
-		# 从普通敌人数量中扣除技能怪数量，确保总数不变
-		normal_enemy_count = max(0, normal_enemy_count - skill_enemy_count)
-		
-		# 按照配比分配敌人数量
-		var basic_count = int(normal_enemy_count * 0.5)   # 50%基础敌人
-		var fast_count = int(normal_enemy_count * 0.2)    # 20%快速敌人
-		var tank_count = int(normal_enemy_count * 0.2)    # 20%坦克敌人
-		var elite_count = int(normal_enemy_count * 0.1)   # 10%精英敌人
-		
-		# 确保总数正确（处理取整误差）
-		var total = basic_count + fast_count + tank_count + elite_count
-		var diff = normal_enemy_count - total
-		if diff > 0:
-			basic_count += diff  # 余数加到基础敌人
-		
-		# 确保每种敌人至少有1个（从第1波开始）
-		if basic_count == 0:
-			basic_count = 1
-		if fast_count == 0:
-			fast_count = 1
-		if tank_count == 0:
-			tank_count = 1
-		if elite_count == 0:
-			elite_count = 1
-		
-		# 重新平衡（如果强制添加后超出）
-		total = basic_count + fast_count + tank_count + elite_count
-		if total > normal_enemy_count:
-			var excess = total - normal_enemy_count
-			basic_count = max(1, basic_count - excess)
-		
 		var config = {
 			"wave_number": wave_number,
+			"spawn_interval": 0.4,
+			"hp_growth": wave * 0.05,
+			"damage_growth": wave * 0.05,
 			"enemies": [
-				{"id": "basic", "count": basic_count},
-				{"id": "fast", "count": fast_count},
-				{"id": "tank", "count": tank_count},
-				{"id": "elite", "count": elite_count},
-				{"id": "charging_enemy", "count": 1},  # 冲锋敌人（测试用）
-				{"id": "shooting_enemy", "count": 1},  # 射击敌人（测试用）
-				{"id": "exploding_enemy", "count": 1}  # 自爆敌人（测试用）
+				{"id": "basic", "count": 5},
+				{"id": "fast", "count": 2},
+				{"id": "tank", "count": 2},
 			],
-			"last_enemy": {"id": "last_enemy", "count": 1}  # BOSS
+			"last_enemy": {"id": "last_enemy", "count": 1}
 		}
-		
 		wave_configs.append(config)
-	
-	print("[WaveSystem V3] 初始化完成：", wave_configs.size(), "波")
-	print("[WaveSystem V3] 第1波配置：", wave_configs[0])
-	print("[WaveSystem V3] 第10波配置：", wave_configs[9])
+	print("[WaveSystem V3] 使用后备配置：", wave_configs.size(), " 波")
 
 ## 设置敌人生成器
 func set_enemy_spawner(spawner: Node) -> void:
@@ -226,6 +256,10 @@ func start_next_wave() -> void:
 		total_enemies_this_wave += enemy_group.count
 	total_enemies_this_wave += config.last_enemy.count
 	
+	# 如果有special_spawns，也需要计算进去
+	if config.has("special_spawns"):
+		total_enemies_this_wave += config.special_spawns.size()
+	
 	spawned_enemies_this_wave = 0
 	killed_enemies_this_wave = 0  # 重置击杀计数
 	
@@ -234,11 +268,14 @@ func start_next_wave() -> void:
 	
 	print("\n[WaveSystem V3] ========== 第 ", current_wave, " 波开始 ==========")
 	print("[WaveSystem V3] 目标敌人数：", total_enemies_this_wave)
+	print("[WaveSystem V3] HP成长率：", config.get("hp_growth", 0.0) * 100, "%")
+	print("[WaveSystem V3] 伤害成长率：", config.get("damage_growth", 0.0) * 100, "%")
+	print("[WaveSystem V3] 刷新间隔：", config.get("spawn_interval", 0.4), " 秒")
 	
 	# Multi模式：刷新墓碑
 	_handle_multi_mode_graves()
 	
-	# 请求生成器开始生成
+	# 请求生成器开始生成（传递完整配置）
 	if enemy_spawner and enemy_spawner.has_method("spawn_wave"):
 		enemy_spawner.spawn_wave(config)
 	else:
