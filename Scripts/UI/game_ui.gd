@@ -11,6 +11,7 @@ extends CanvasLayer
 @onready var skill_icon: Control = %SkillIcon
 @onready var wave_label: Label = %WaveLabel
 @onready var kpi_label: Label = $KPI
+@onready var player_stats_info: PlayerStatsInfo = $PlayerStatsInfo
 
 # 内部引用
 var hp_label: Label = null  # HP标签
@@ -31,6 +32,10 @@ func _ready() -> void:
 		gold_counter.set_value(GameMain.gold, 0)
 	if master_key_counter:
 		master_key_counter.set_value(GameMain.master_key, 0)
+		
+	# 默认隐藏属性面板（可选）
+	if player_stats_info:
+		player_stats_info.visible = false
 	
 	# 初始化各个子系统
 	_setup_skill_icon()
@@ -212,3 +217,9 @@ func _update_kpi_display() -> void:
 		return
 	
 	kpi_label.text = current_mode.get_kpi_text()
+
+## 切换属性面板显示/隐藏
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("info"):
+		if player_stats_info:
+			player_stats_info.toggle_visibility()

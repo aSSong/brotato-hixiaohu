@@ -1,0 +1,231 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3m1tn5m8yxoe"]
+
+[ext_resource type="Script" uid="uid://buov72meljrna" path="res://Scripts/UI/components/player_stats_info.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.1, 0.1, 0.1, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.6, 1, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="PlayerStatsInfo" type="PanelContainer"]
+custom_minimum_size = Vector2(300, 900)
+offset_right = 300.0
+offset_bottom = 400.0
+script = ExtResource("1")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 20
+text = "玩家属性"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="BasicStatsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "▼ 基础属性"
+
+[node name="MaxHP" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "最大HP: 100"
+
+[node name="CurrentHP" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "当前HP: 100"
+
+[node name="Speed" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "移动速度: 400"
+
+[node name="Defense" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "防御: 0"
+
+[node name="Luck" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "幸运: 0"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="CombatStatsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "▼ 战斗属性"
+
+[node name="CritChance" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "暴击率: 0%"
+
+[node name="CritDamage" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "暴击伤害: 150%"
+
+[node name="DamageReduction" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "减伤: 0%"
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="GlobalStatsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "▼ 全局武器属性"
+
+[node name="GlobalDamageMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "全局伤害: ×1.00"
+
+[node name="GlobalAttackSpeedMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "全局攻速: ×1.00"
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="MeleeStatsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.7, 0.3, 1)
+theme_override_font_sizes/font_size = 16
+text = "▼ 近战武器"
+
+[node name="MeleeDamageMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "近战伤害: ×1.00"
+
+[node name="MeleeSpeedMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "近战攻速: ×1.00"
+
+[node name="MeleeRangeMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "近战范围: ×1.00"
+
+[node name="MeleeKnockbackMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "近战击退: ×1.00"
+
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="RangedStatsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.3, 1)
+theme_override_font_sizes/font_size = 16
+text = "▼ 远程武器"
+
+[node name="RangedDamageMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "远程伤害: ×1.00"
+
+[node name="RangedSpeedMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "远程攻速: ×1.00"
+
+[node name="RangedRangeMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "远程范围: ×1.00"
+
+[node name="HSeparator6" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="MagicStatsLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "▼ 魔法武器"
+
+[node name="MagicDamageMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "魔法伤害: ×1.00"
+
+[node name="MagicSpeedMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "魔法攻速: ×1.00"
+
+[node name="MagicRangeMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "魔法范围: ×1.00"
+
+[node name="MagicExplosionRadiusMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "爆炸范围: ×1.00"
+
+[node name="HSeparator7" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+
+[node name="ModifierCountLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 14
+text = "▼ 加成统计"
+
+[node name="PermanentModifiers" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "永久加成: 0"
+
+[node name="TemporaryModifiers" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "临时加成: 0"

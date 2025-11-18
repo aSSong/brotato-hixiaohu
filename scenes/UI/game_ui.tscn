@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://c44attsrfmghf"]
+[gd_scene load_steps=13 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 [ext_resource type="Script" uid="uid://bgraqcbpydou6" path="res://Scripts/UI/dash_ui.gd" id="1_dash_ui"]
 [ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
 [ext_resource type="PackedScene" uid="uid://cqi5j0ht5t7pd" path="res://scenes/UI/components/resource_counter.tscn" id="2_5b3ti"]
+[ext_resource type="PackedScene" uid="uid://d3m1tn5m8yxoe" path="res://scenes/UI/components/player_stats_info.tscn" id="2_owrpm"]
 [ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="2_yr8ot"]
 [ext_resource type="Texture2D" uid="uid://d0y4qqnoa48r2" path="res://assets/items/mkey.png" id="3_5b3ti"]
 [ext_resource type="Texture2D" uid="uid://bspq5i4khlok1" path="res://assets/others/dash_icon.png" id="6_cn4gw"]
@@ -74,6 +75,12 @@ corner_radius_bottom_left = 10
 
 [node name="game_ui" type="CanvasLayer"]
 script = ExtResource("1_168mx")
+
+[node name="PlayerStatsInfo" parent="." instance=ExtResource("2_owrpm")]
+offset_left = 1529.0
+offset_top = 88.0
+offset_right = 1829.0
+offset_bottom = 988.0
 
 [node name="master_key_counter" parent="." instance=ExtResource("2_5b3ti")]
 offset_left = 335.0
