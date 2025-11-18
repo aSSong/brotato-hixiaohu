@@ -189,10 +189,6 @@ func get_actual_damage() -> int:
 	var multipliers = WeaponData.get_level_multipliers(weapon_level)
 	return int(weapon_data.damage * multipliers.damage_multiplier * damage_multiplier)
 
-## 获取伤害（别名，供子类使用）
-func get_damage() -> int:
-	return get_actual_damage()
-
 ## 设置武器外观
 func _setup_weapon_appearance() -> void:
 	if weapon_data == null or not weaponAni:
@@ -332,9 +328,3 @@ func set_range_multiplier(multiplier: float) -> void:
 		if shape is CircleShape2D:
 			var multipliers = WeaponData.get_level_multipliers(weapon_level)
 			shape.radius = weapon_data.range * multipliers.range_multiplier * range_multiplier
-
-## 获取攻击速度
-func get_attack_speed() -> float:
-	if weapon_data == null:
-		return 0.5
-	return weapon_data.attack_speed

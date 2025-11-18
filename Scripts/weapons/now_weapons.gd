@@ -84,7 +84,7 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 ## 设置武器的属性引用
 ## 
 ## 连接武器和玩家的属性系统
-func _setup_weapon_stats(weapon: BaseWeapon) -> void:
+func _setup_weapon_stats(weapon) -> void:
 	if not player_ref:
 		push_warning("[NowWeapons] player_ref 未设置，无法设置武器属性")
 		return
@@ -113,7 +113,7 @@ func get_weapon_count() -> int:
 	return get_all_weapons().size()
 
 ## 获取指定类型的最低级武器
-func get_lowest_level_weapon_of_type(weapon_id: String) -> BaseWeapon:
+func get_lowest_level_weapon_of_type(weapon_id: String):
 	var target_data = WeaponDatabase.get_weapon(weapon_id)
 	if target_data == null:
 		return null

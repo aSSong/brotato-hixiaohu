@@ -4,7 +4,7 @@ class_name WeaponFactory
 
 static var base_weapon_scene = preload("res://scenes/weapons/weapon.tscn")
 
-static func create_weapon(weapon_id: String, level: int = 1) -> BaseWeapon:
+static func create_weapon(weapon_id: String, level: int = 1):
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
 	if not weapon_data:
 		push_error("[WeaponFactory] 武器不存在: " + weapon_id)

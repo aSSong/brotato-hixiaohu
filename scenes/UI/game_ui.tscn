@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
-[ext_resource type="Script" path="res://Scripts/UI/dash_ui.gd" id="1_dash_ui"]
+[ext_resource type="Script" uid="uid://bgraqcbpydou6" path="res://Scripts/UI/dash_ui.gd" id="1_dash_ui"]
 [ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
 [ext_resource type="PackedScene" uid="uid://cqi5j0ht5t7pd" path="res://scenes/UI/components/resource_counter.tscn" id="2_5b3ti"]
 [ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="2_yr8ot"]
@@ -321,7 +321,6 @@ scale = Vector2(0.4, 0.4)
 texture = ExtResource("6_cn4gw")
 
 [node name="CDMask" type="ColorRect" parent="Dash_ui"]
-unique_name_in_owner = true
 layout_mode = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -329,7 +328,6 @@ mouse_filter = 2
 color = Color(0.07450981, 0.07450981, 0.07450981, 0.88235295)
 
 [node name="CDText" type="Label" parent="Dash_ui"]
-unique_name_in_owner = true
 layout_mode = 0
 offset_left = 23.0
 offset_top = 10.0
