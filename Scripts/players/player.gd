@@ -518,11 +518,6 @@ func start_dash() -> void:
 	if trail:
 		trail.start_trail()
 	
-	# 禁用碰撞
-	var collision = get_node_or_null("CollisionShape2D")
-	if collision:
-		collision.set_deferred("disabled", true)
-	
 	# 减少路径记录间隔，使Ghost跟随更平滑
 	path_record_distance = original_path_record_distance * 0.5
 
@@ -538,11 +533,6 @@ func _on_dash_timer_timeout() -> void:
 	
 	# 重置移动方向（可选，根据原示例）
 	# dir = Vector2.ZERO  # 注释掉，保持当前移动方向
-	
-	# 重新启用碰撞
-	var collision = get_node_or_null("CollisionShape2D")
-	if collision:
-		collision.set_deferred("disabled", false)
 	
 	# 开始冷却计时器
 	dash_cooldown_timer.start()
