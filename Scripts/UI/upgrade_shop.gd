@@ -396,8 +396,8 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 		UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
 			_apply_weapon_level_upgrade(upgrade.weapon_id)
 		_:
-			# 使用配置的属性变化
-			_apply_attribute_changes(upgrade)
+			# 使用新属性系统应用升级
+			_apply_attribute_upgrade(upgrade)
 
 func _apply_heal_upgrade() -> void:
 	var player = get_tree().get_first_node_in_group("player")
@@ -423,9 +423,34 @@ func _apply_weapon_level_upgrade(weapon_id: String) -> void:
 		if weapon and weapon.has_method("upgrade_level"):
 			weapon.upgrade_level()
 
-## 通用属性变化应用函数
+## 应用属性升级（新系统）
+## 
+## 使用AttributeManager添加永久属性加成
+func _apply_attribute_upgrade(upgrade: UpgradeData) -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		push_error("[UpgradeShop] 无法找到玩家节点")
+		return
+	
+	# 检查是否使用新属性系统
+	if player.has_node("AttributeManager"):
+		# 新系统：使用AttributeModifier
+		if upgrade.stats_modifier:
+			var modifier = upgrade.create_modifier()
+			player.attribute_manager.add_permanent_modifier(modifier)
+			print("[UpgradeShop] 使用新系统应用升级: %s" % upgrade.name)
+		else:
+			# 如果升级还没有stats_modifier，尝试使用旧系统
+			push_warning("[UpgradeShop] 升级 %s 没有stats_modifier，降级到旧系统" % upgrade.name)
+			_apply_attribute_changes_old(upgrade)
+	else:
+		# 降级方案：使用旧系统
+		_apply_attribute_changes_old(upgrade)
+
+## 通用属性变化应用函数（旧系统兼容）
+## 
 ## 根据 upgrade.attribute_changes 配置应用属性变化
-func _apply_attribute_changes(upgrade: UpgradeData) -> void:
+func _apply_attribute_changes_old(upgrade: UpgradeData) -> void:
 	if upgrade.attribute_changes.is_empty():
 		print("[UpgradeShop] 警告: 升级 %s 没有配置属性变化" % upgrade.name)
 		return

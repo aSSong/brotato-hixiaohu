@@ -1,13 +1,17 @@
 extends Node2D
 
+## 武器管理器（重构版）
+## 
+## 简化：直接设置武器的player_stats引用，不再手动计算加成
+
 var weapon_radius = 230
 var weapon_num = 0
-var player_ref: Node2D = null  # 玩家引用，用于获取职业加成
+var player_ref: Node2D = null
 
 ## 近战武器环绕运动管理
-var melee_weapon_angles: Dictionary = {}  # 存储每个近战武器的当前角度 {instance_id: angle}
+var melee_weapon_angles: Dictionary = {}
 
-## 预加载武器场景（使用现有的weapon.tscn作为基础模板）
+## 预加载武器场景
 var base_weapon_scene = preload("res://scenes/weapons/weapon.tscn")
 
 func _ready() -> void:
@@ -69,15 +73,32 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 		push_error("[NowWeapons] 武器实例在添加后变为无效: " + weapon_id)
 		return
 	
-	# 应用职业加成（检查weapon_data是否存在）
-	if "weapon_data" in weapon_instance and weapon_instance.weapon_data:
-		_apply_class_bonuses(weapon_instance, weapon_instance.weapon_data)
-	else:
-		push_warning("[NowWeapons] 武器实例的weapon_data未初始化: " + weapon_id)
+	# 设置player_stats引用（新系统）
+	if weapon_instance is BaseWeapon:
+		_setup_weapon_stats(weapon_instance)
 	
 	# 排列武器
 	arrange_weapons()
 	print("[NowWeapons] 武器添加完成，当前武器数量: ", get_child_count())
+
+## 设置武器的属性引用
+## 
+## 连接武器和玩家的属性系统
+func _setup_weapon_stats(weapon: BaseWeapon) -> void:
+	if not player_ref:
+		push_warning("[NowWeapons] player_ref 未设置，无法设置武器属性")
+		return
+	
+	# 使用新系统：直接引用玩家的final_stats
+	if player_ref.has_node("AttributeManager"):
+		var attr_manager = player_ref.get_node("AttributeManager")
+		weapon.player_stats = attr_manager.final_stats
+		print("[NowWeapons] 武器使用新属性系统")
+	else:
+		# 降级方案：继续使用旧系统
+		push_warning("[NowWeapons] 玩家没有AttributeManager，使用旧系统")
+		if weapon.weapon_data:
+			_apply_class_bonuses_old(weapon, weapon.weapon_data)
 
 ## 获取所有武器
 func get_all_weapons() -> Array:
@@ -154,8 +175,8 @@ func _get_weapon_id(weapon_data: WeaponData) -> String:
 			return weapon_id
 	return ""
 
-## 应用职业加成到武器
-func _apply_class_bonuses(weapon: Node2D, weapon_data: WeaponData) -> void:
+## 应用职业加成到武器（旧系统兼容）
+func _apply_class_bonuses_old(weapon: Node2D, weapon_data: WeaponData) -> void:
 	if not player_ref or not player_ref.current_class:
 		return
 	
@@ -305,13 +326,20 @@ func set_weapon_radius(radius: float) -> void:
 	arrange_weapons()
 
 ## 重新应用所有武器的加成（当玩家属性改变时）
+## 
+## 注意：使用新系统后，这个方法基本不需要调用
+## 因为所有武器直接引用player.attribute_manager.final_stats
+## 属性变化时会自动体现
 func reapply_all_bonuses() -> void:
 	if not player_ref:
 		return
 	
-	var weapons = get_children()
-	for weapon in weapons:
-		if weapon.has_method("get_meta") and weapon.has_meta("weapon_data"):
-			var weapon_data = weapon.get_meta("weapon_data")
-			_apply_class_bonuses(weapon, weapon_data)
-			print("[NowWeapons] 重新应用加成: ", weapon_data.weapon_name)
+	# 新系统：刷新所有武器的属性引用
+	for weapon in get_children():
+		if weapon is BaseWeapon:
+			_setup_weapon_stats(weapon)
+			# 刷新武器的攻速和范围（基于新属性）
+			if weapon.has_method("refresh_weapon_stats"):
+				weapon.refresh_weapon_stats()
+	
+	print("[NowWeapons] 重新应用所有武器加成")

@@ -1,14 +1,16 @@
 extends BaseWeapon
 class_name MeleeWeapon
 
-## 近战武器
-## 通过旋转或挥砍攻击范围内的敌人
+## 近战武器（重构版）
+## 
+## 使用新的DamageCalculator和SpecialEffects系统
+## 支持暴击、吸血、燃烧等特效
 
 var rotation_angle: float = 0.0
 var is_attacking: bool = false
 var attack_timer: float = 0.0
-var has_dealt_damage: bool = false  # 标记本次攻击是否已造成伤害
-var knockback_multiplier: float = 1.0  # 击退系数
+var has_dealt_damage: bool = false
+var knockback_multiplier: float = 1.0  # 旧系统兼容
 
 ## 设置击退系数
 func set_knockback_multiplier(multiplier: float) -> void:
@@ -66,7 +68,8 @@ func _check_and_damage_enemies() -> void:
 	if weapon_data == null:
 		return
 	
-	var damage = get_damage()
+	# 使用新系统获取伤害
+	var base_damage = get_damage()
 	var hit_range = weapon_data.hit_range
 	
 	# 获取所有敌人
@@ -81,27 +84,69 @@ func _check_and_damage_enemies() -> void:
 		
 		# 如果在攻击范围内
 		if distance <= hit_range:
+			var final_damage = base_damage
+			var is_critical = false
+			
+			# 暴击判定（使用新系统）
+			if player_stats:
+				is_critical = DamageCalculator.roll_critical(player_stats)
+				if is_critical:
+					final_damage = DamageCalculator.apply_critical_multiplier(base_damage, player_stats)
+			
 			# 造成伤害
 			if enemy.has_method("enemy_hurt"):
-				enemy.enemy_hurt(damage)
+				enemy.enemy_hurt(final_damage)
 			
-			# 如果有击退效果（应用击退系数）
-			if weapon_data.knockback_force > 0:
-				# 获取玩家位置（击退方向从玩家指向敌人）
+			# 显示暴击跳字（如果暴击）
+			if is_critical and FloatingText:
+				FloatingText.create_floating_text(
+					enemy.global_position + Vector2(0, -20),
+					"暴击! %d" % final_damage,
+					Color(1.0, 0.5, 0.0)  # 橙色表示暴击
+				)
+			
+			# 吸血效果（使用新系统）
+			if player_stats and player_stats.lifesteal_percent > 0:
 				var player = get_tree().get_first_node_in_group("player")
-				var player_pos = global_position  # 默认使用武器位置
+				SpecialEffects.apply_lifesteal(player, final_damage, player_stats.lifesteal_percent)
+			
+			# 燃烧效果（使用新系统）
+			if player_stats:
+				SpecialEffects.try_apply_burn(player_stats, enemy)
+			
+			# 冰冻效果
+			if player_stats:
+				SpecialEffects.try_apply_freeze(player_stats, enemy)
+			
+			# 中毒效果
+			if player_stats:
+				SpecialEffects.try_apply_poison(player_stats, enemy)
+			
+			# 击退效果（使用新系统）
+			if weapon_data.knockback_force > 0:
+				var player = get_tree().get_first_node_in_group("player")
+				var player_pos = global_position
 				if player and is_instance_valid(player):
 					player_pos = player.global_position
 				
-				# 击退方向：从玩家指向敌人的方向（敌人被击退远离玩家）
 				var knockback_dir = (enemy.global_position - player_pos).normalized()
-				var final_knockback = weapon_data.knockback_force * knockback_multiplier
+				
+				# 使用DamageCalculator计算最终击退力
+				var final_knockback = weapon_data.knockback_force
+				if player_stats:
+					final_knockback = DamageCalculator.calculate_knockback(
+						weapon_data.knockback_force,
+						player_stats
+					)
+				else:
+					# 降级方案：使用旧系统
+					final_knockback *= knockback_multiplier
+				
+				# 应用击退
 				if enemy is CharacterBody2D:
-					# 使用敌人的击退速度变量
 					if enemy.has_method("apply_knockback"):
 						enemy.apply_knockback(knockback_dir * final_knockback)
 					else:
-						# 兼容旧代码：直接设置 knockback_velocity（如果存在）
 						if "knockback_velocity" in enemy:
 							enemy.knockback_velocity += knockback_dir * final_knockback
 						else:

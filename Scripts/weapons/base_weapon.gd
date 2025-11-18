@@ -1,8 +1,15 @@
 extends Node2D
 class_name BaseWeapon
 
-## 武器基类
-## 提取通用逻辑，定义虚函数接口供子类实现
+## 武器基类（重构版）
+## 
+## 使用新的DamageCalculator系统计算所有战斗属性
+## 移除手动倍数管理，直接引用玩家的CombatStats
+## 
+## 重要变化：
+##   - 移除 damage_multiplier, attack_speed_multiplier, range_multiplier
+##   - 添加 player_stats 引用
+##   - 所有计算通过 DamageCalculator
 
 @onready var weaponAni: AnimatedSprite2D = $AnimatedSprite2D
 @onready var timer: Timer = $Timer
@@ -14,7 +21,12 @@ var weapon_data: WeaponData = null
 ## 敌人列表
 var attack_enemies: Array = []
 
-## 伤害和攻击速度倍数（用于职业加成）
+## ===== 新属性系统 =====
+## 玩家属性引用（从AttributeManager.final_stats获取）
+var player_stats: CombatStats = null
+
+## ===== 旧系统（已废弃，保留兼容） =====
+## 注意：这些字段将被忽略，请设置 player_stats
 var damage_multiplier: float = 1.0
 var attack_speed_multiplier: float = 1.0
 var range_multiplier: float = 1.0
@@ -40,22 +52,8 @@ func initialize(data: WeaponData, level: int = 1) -> void:
 		push_error("武器数据为空！")
 		return
 	
-	# 获取等级倍数
-	var multipliers = WeaponData.get_level_multipliers(weapon_level)
-	
-	# 设置攻击间隔（考虑攻击速度倍数和等级倍数）
-	if timer:
-		var final_attack_speed = weapon_data.attack_speed / (attack_speed_multiplier * multipliers.attack_speed_multiplier)
-		timer.wait_time = final_attack_speed
-		timer.autostart = true
-	
-	# 设置检测范围（考虑等级倍数和职业范围系数）
-	if detection_area and detection_area.get_child(0) is CollisionShape2D:
-		var collision_shape = detection_area.get_child(0) as CollisionShape2D
-		# 创建新的独立 CircleShape2D 资源，避免多个武器实例共享同一个 shape
-		var new_shape = CircleShape2D.new()
-		new_shape.radius = weapon_data.range * multipliers.range_multiplier * range_multiplier
-		collision_shape.shape = new_shape
+	# 刷新武器属性（攻速、范围等）
+	refresh_weapon_stats()
 	
 	# 设置武器贴图
 	_setup_weapon_appearance()
@@ -66,6 +64,84 @@ func initialize(data: WeaponData, level: int = 1) -> void:
 	# 调用子类的初始化
 	_on_weapon_initialized()
 
+## 刷新武器属性
+## 
+## 当player_stats变化时调用此方法更新武器的攻速和范围
+func refresh_weapon_stats() -> void:
+	if not weapon_data:
+		return
+	
+	# 更新攻击间隔
+	if timer:
+		var final_attack_speed = get_attack_speed()
+		timer.wait_time = final_attack_speed
+		if not timer.autostart:
+			timer.autostart = true
+	
+	# 更新检测范围
+	if detection_area and detection_area.get_child(0) is CollisionShape2D:
+		var collision_shape = detection_area.get_child(0) as CollisionShape2D
+		# 创建新的独立 CircleShape2D 资源
+		var new_shape = CircleShape2D.new()
+		new_shape.radius = get_range()
+		collision_shape.shape = new_shape
+
+## 获取最终伤害
+## 
+## 使用DamageCalculator计算，考虑武器等级、玩家属性等
+func get_damage() -> int:
+	if not weapon_data:
+		return 0
+	
+	if player_stats:
+		# 新系统：使用DamageCalculator
+		return DamageCalculator.calculate_weapon_damage(
+			weapon_data.damage,
+			weapon_level,
+			weapon_data.weapon_type,
+			player_stats
+		)
+	else:
+		# 降级方案：使用旧系统
+		var multipliers = WeaponData.get_level_multipliers(weapon_level)
+		return int(weapon_data.damage * multipliers.damage_multiplier * damage_multiplier)
+
+## 获取最终攻击速度（攻击间隔）
+func get_attack_speed() -> float:
+	if not weapon_data:
+		return 1.0
+	
+	if player_stats:
+		# 新系统：使用DamageCalculator
+		return DamageCalculator.calculate_attack_speed(
+			weapon_data.attack_speed,
+			weapon_level,
+			weapon_data.weapon_type,
+			player_stats
+		)
+	else:
+		# 降级方案：使用旧系统
+		var multipliers = WeaponData.get_level_multipliers(weapon_level)
+		return weapon_data.attack_speed / (attack_speed_multiplier * multipliers.attack_speed_multiplier)
+
+## 获取最终攻击范围
+func get_range() -> float:
+	if not weapon_data:
+		return 100.0
+	
+	if player_stats:
+		# 新系统：使用DamageCalculator
+		return DamageCalculator.calculate_range(
+			weapon_data.range,
+			weapon_level,
+			weapon_data.weapon_type,
+			player_stats
+		)
+	else:
+		# 降级方案：使用旧系统
+		var multipliers = WeaponData.get_level_multipliers(weapon_level)
+		return weapon_data.range * multipliers.range_multiplier * range_multiplier
+
 ## 升级武器等级
 func upgrade_level() -> bool:
 	if weapon_level >= 5:
@@ -73,20 +149,8 @@ func upgrade_level() -> bool:
 	
 	weapon_level += 1
 	
-	# 重新应用等级倍数
-	var multipliers = WeaponData.get_level_multipliers(weapon_level)
-	
-	# 更新攻击间隔
-	if timer:
-		var final_attack_speed = weapon_data.attack_speed / (attack_speed_multiplier * multipliers.attack_speed_multiplier)
-		timer.wait_time = final_attack_speed
-	
-	# 更新检测范围（考虑职业范围系数）
-	if detection_area and detection_area.get_child(0) is CollisionShape2D:
-		var collision_shape = detection_area.get_child(0) as CollisionShape2D
-		var shape = collision_shape.shape
-		if shape is CircleShape2D:
-			shape.radius = weapon_data.range * multipliers.range_multiplier * range_multiplier
+	# 刷新属性（使用新的统一方法）
+	refresh_weapon_stats()
 	
 	# 更新颜色和描边
 	_update_weapon_level_appearance()

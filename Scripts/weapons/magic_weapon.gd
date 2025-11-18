@@ -1,22 +1,24 @@
 extends BaseWeapon
 class_name MagicWeapon
 
-## 魔法武器
-## 对范围内的多个敌人造成爆炸/范围伤害
+## 魔法武器（重构版）
+## 
+## 使用DamageCalculator计算爆炸范围
+## 支持暴击、吸血、燃烧等特效
 
 @onready var shoot_pos: Marker2D = $shoot_pos
-var explosion_particles_scene = null  # 可选：爆炸粒子效果
+var explosion_particles_scene = null
 
 ## 爆炸指示器脚本
 var explosion_indicator_script = preload("res://Scripts/weapons/explosion_indicator.gd")
 
 ## 指示器持续时间
-var indicator_duration: float = 0.3  # 显示持续时间
+var indicator_duration: float = 0.3
 
 ## 当前正在施法的攻击列表
-var casting_attacks: Array = []  # [{target, target_position, indicator, timer, damage, is_locked}]
+var casting_attacks: Array = []
 
-## 爆炸范围系数
+## 爆炸范围系数（旧系统兼容）
 var explosion_radius_multiplier: float = 1.0
 
 ## 设置爆炸范围系数
@@ -97,10 +99,18 @@ func _cancel_cast(cast_data: Dictionary) -> void:
 
 ## 执行施法
 func _execute_cast(cast_data: Dictionary) -> void:
-	var damage = cast_data.damage
+	var base_damage = cast_data.damage
 	var explosion_radius = weapon_data.explosion_radius if weapon_data else 150.0
-	# 应用爆炸范围系数
-	explosion_radius *= explosion_radius_multiplier
+	
+	# 使用DamageCalculator计算最终爆炸范围
+	if player_stats:
+		explosion_radius = DamageCalculator.calculate_explosion_radius(
+			explosion_radius,
+			player_stats
+		)
+	else:
+		# 降级方案：使用旧系统
+		explosion_radius *= explosion_radius_multiplier
 	
 	# 确定爆炸位置
 	var explosion_position: Vector2
@@ -109,27 +119,52 @@ func _execute_cast(cast_data: Dictionary) -> void:
 		# 锁敌模式：在目标当前位置爆炸
 		var target = cast_data.target
 		if not is_instance_valid(target):
-			# 目标无效，清理指示器
 			if cast_data.indicator and is_instance_valid(cast_data.indicator):
 				cast_data.indicator.hide_and_remove()
 			return
 		explosion_position = target.global_position
 		
+		# 暴击判定（新系统）
+		var final_damage = base_damage
+		var is_critical = false
+		if player_stats:
+			is_critical = DamageCalculator.roll_critical(player_stats)
+			if is_critical:
+				final_damage = DamageCalculator.apply_critical_multiplier(base_damage, player_stats)
+		
 		# 对目标造成直接伤害
 		if target.has_method("enemy_hurt"):
-			var final_damage = int(damage * weapon_data.explosion_damage_multiplier)
-			target.enemy_hurt(final_damage)
+			var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
+			target.enemy_hurt(damage_to_deal)
+			
+			# 显示暴击跳字
+			if is_critical and FloatingText:
+				FloatingText.create_floating_text(
+					target.global_position + Vector2(0, -20),
+					"暴击! %d" % damage_to_deal,
+					Color(1.0, 0.5, 0.0)
+				)
+			
+			# 吸血效果
+			if player_stats and player_stats.lifesteal_percent > 0:
+				var player = get_tree().get_first_node_in_group("player")
+				SpecialEffects.apply_lifesteal(player, damage_to_deal, player_stats.lifesteal_percent)
+			
+			# 特殊效果
+			if player_stats:
+				SpecialEffects.try_apply_burn(player_stats, target)
+				SpecialEffects.try_apply_freeze(player_stats, target)
+				SpecialEffects.try_apply_poison(player_stats, target)
 		
-		# 爆炸范围伤害（如果启用，排除主目标）
+		# 爆炸范围伤害
 		if weapon_data.has_explosion_damage and explosion_radius > 0:
-			_explode_at_position(explosion_position, explosion_radius, damage, target)
+			_explode_at_position(explosion_position, explosion_radius, base_damage, target)
 	else:
 		# 非锁敌模式：在锁定的位置爆炸
 		explosion_position = cast_data.target_position
 		
-		# 只有爆炸伤害，没有直接伤害
 		if weapon_data.has_explosion_damage and explosion_radius > 0:
-			_explode_at_position(explosion_position, explosion_radius, damage, null)
+			_explode_at_position(explosion_position, explosion_radius, base_damage, null)
 	
 	# 播放爆炸粒子效果
 	_create_explosion_effect(explosion_position)
