@@ -54,15 +54,9 @@ func _get_remaining_cd() -> float:
 		return 0.0
 	
 	var class_manager = player_ref.class_manager
-	var cd_key = skill_data.skill_name + "_cd"
 	
-	# 从 class_manager 的 active_skills 获取CD剩余时间
-	if class_manager.active_skills.has(cd_key):
-		var remaining = class_manager.active_skills[cd_key]
-		if typeof(remaining) == TYPE_FLOAT or typeof(remaining) == TYPE_INT:
-			return float(remaining)
-	
-	return 0.0
+	# ⭐ 新系统：直接用技能名称作为键（不加 "_cd" 后缀）
+	return class_manager.get_skill_cooldown(skill_data.skill_name)
 
 ## 处理点击激活技能（可选功能）
 func _gui_input(event: InputEvent) -> void:

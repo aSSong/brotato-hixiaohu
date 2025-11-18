@@ -140,15 +140,15 @@ func _process(delta: float) -> void:
 		if can_dash():
 			start_dash()
 		
-		# 应用速度加成
+		# 应用速度加成（使用新系统）
 		var final_speed = speed
-		if class_manager:
-			final_speed *= class_manager.get_passive_effect("speed_multiplier", 1.0)
-			# 检查技能效果（使用安全的访问方式）
-			if class_manager.is_skill_active("全面强化"):
-				var multiplier = class_manager.get_skill_effect("全面强化_multiplier", 1.0)
-				if multiplier > 0:
-					final_speed *= multiplier
+		# 新系统：速度已经在 attribute_manager.final_stats 中计算好了
+		# 不需要额外应用 class_manager 的被动效果
+		if attribute_manager and attribute_manager.final_stats:
+			final_speed = attribute_manager.final_stats.speed
+		elif class_manager and class_manager.current_class:
+			# 降级方案：使用旧系统
+			final_speed = class_manager.current_class.speed
 		
 		# 应用dash速度倍数
 		if is_dashing:
@@ -329,17 +329,9 @@ func get_attack_multiplier() -> float:
 	if current_class:
 		multiplier = current_class.attack_multiplier
 	
-	# 应用被动效果
-	if class_manager:
-		multiplier *= class_manager.get_passive_effect("all_weapon_damage_multiplier", 1.0)
-		
-		# 检查技能效果（使用安全的访问方式）
-		if class_manager.is_skill_active("全面强化"):
-			var skill_multiplier = class_manager.get_skill_effect("全面强化_multiplier", 1.0)
-			if skill_multiplier > 0:
-				multiplier *= skill_multiplier
-		if class_manager.is_skill_active("狂暴"):
-			multiplier *= class_manager.get_skill_effect("狂暴_damage", 1.0)
+	# 新系统：伤害倍数已经在 DamageCalculator 中计算
+	# 这里只需要返回基础的 attack_multiplier
+	# 职业被动和技能效果由 AttributeManager 统一管理
 	
 	return multiplier
 

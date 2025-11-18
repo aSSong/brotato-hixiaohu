@@ -79,6 +79,7 @@ static func initialize_classes() -> void:
 		"魔法爆发",  # skill_name
 		{
 			"cooldown": 12.0,
+			"duration": 5.0,  # ⭐ 添加持续时间
 			"explosion_radius_multiplier": 2.0,  # 爆炸范围x2
 			"damage_multiplier": 1.5,  # 伤害+50%
 			"all_enemies_in_range": true  # 范围内所有敌人

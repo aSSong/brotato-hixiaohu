@@ -39,6 +39,12 @@ func activate_skill() -> void:
 		push_warning("[ClassManager] 玩家没有AttributeManager，无法激活技能")
 		return
 	
+	# ⭐ 如果技能已经激活（旧修改器还存在），先移除
+	if skill_modifiers.has(skill_name):
+		var old_modifier = skill_modifiers[skill_name]
+		player.attribute_manager.remove_modifier_by_id(old_modifier.modifier_id)
+		print("[ClassManager] 移除旧的技能修改器: %s" % skill_name)
+	
 	# 创建技能修改器
 	var skill_modifier = _create_skill_modifier(skill_name, params)
 	if not skill_modifier:
@@ -77,7 +83,8 @@ func _create_skill_modifier(skill_name: String, params: Dictionary) -> Attribute
 			# 战士技能：攻击速度+50%，伤害+30%
 			var attack_speed_boost = params.get("attack_speed_boost", 0.0)
 			var damage_boost = params.get("damage_boost", 1.0)
-			modifier.stats_delta.global_attack_speed_add = attack_speed_boost
+			# ⭐ 修正：attack_speed_boost 是加成百分比（0.5 = +50%），转换为乘法倍数
+			modifier.stats_delta.global_attack_speed_mult = 1.0 + attack_speed_boost
 			modifier.stats_delta.global_damage_mult = damage_boost
 		
 		"精准射击":
