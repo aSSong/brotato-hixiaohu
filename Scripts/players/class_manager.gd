@@ -77,6 +77,20 @@ func _create_skill_modifier(skill_name: String, params: Dictionary) -> Attribute
 	modifier.duration = duration
 	modifier.initial_duration = duration
 	
+	# ⭐ 重要：将默认值重置为0，避免意外累加
+	# 对于加法属性，默认值应该是0
+	modifier.stats_delta.max_hp = 0
+	modifier.stats_delta.speed = 0.0
+	modifier.stats_delta.defense = 0
+	modifier.stats_delta.luck = 0.0
+	modifier.stats_delta.crit_chance = 0.0
+	modifier.stats_delta.crit_damage = 0.0  # 默认值1.5改为0
+	modifier.stats_delta.damage_reduction = 0.0
+	
+	# 对于乘法属性，默认值应该是1.0（不修改）
+	# global_damage_mult, global_attack_speed_mult 等默认值是1.0，保持不变
+	# 因为在 apply_to() 中使用 *= 运算符
+	
 	# 根据技能类型设置属性变化
 	match skill_name:
 		"狂暴":

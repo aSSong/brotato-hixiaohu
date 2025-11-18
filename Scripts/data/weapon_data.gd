@@ -138,6 +138,11 @@ func create_weapon_modifier(weapon_id: String) -> AttributeModifier:
 	modifier.modifier_id = "weapon_" + weapon_id
 	modifier.stats_delta = CombatStats.new()
 	
+	# ⭐ 重要：清零默认值，避免意外累加
+	modifier.stats_delta.max_hp = 0
+	modifier.stats_delta.speed = 0.0
+	modifier.stats_delta.crit_damage = 0.0
+	
 	# 转换武器特殊属性到CombatStats
 	if crit_chance_bonus != 0.0:
 		modifier.stats_delta.crit_chance = crit_chance_bonus
