@@ -30,6 +30,11 @@ class Buff:
 		buff_id = p_buff_id
 		duration = p_duration
 		stats_modifier = CombatStats.new()
+		
+		# ⭐ 清零默认值，避免意外累加
+		stats_modifier.max_hp = 0
+		stats_modifier.speed = 0.0
+		stats_modifier.crit_damage = 0.0
 
 ## 当前所有激活的Buff
 var active_buffs: Dictionary = {}  # key: buff_id, value: Buff

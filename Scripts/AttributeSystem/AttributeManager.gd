@@ -95,6 +95,14 @@ func add_permanent_modifier(modifier: AttributeModifier) -> void:
 		push_warning("[AttributeManager] 尝试添加空的永久加成")
 		return
 	
+	# ⭐ 调试：打印modifier的内容
+	print("[AttributeManager] 添加永久加成:")
+	print("  - modifier_type: ", modifier.modifier_type)
+	print("  - modifier_id: ", modifier.modifier_id)
+	if modifier.stats_delta:
+		print("  - stats_delta.max_hp: ", modifier.stats_delta.max_hp)
+		print("  - stats_delta.speed: ", modifier.stats_delta.speed)
+	
 	permanent_modifiers.append(modifier)
 	recalculate()
 	

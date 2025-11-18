@@ -110,7 +110,17 @@ func sync_to_base_stats() -> void:
 	if not base_stats:
 		base_stats = CombatStats.new()
 	
-	# 基础属性
+	# ⭐ 清零所有加法属性的默认值（防止意外累加）
+	base_stats.max_hp = 0
+	base_stats.speed = 0.0
+	base_stats.defense = 0
+	base_stats.luck = 0.0
+	base_stats.crit_chance = 0.0
+	base_stats.crit_damage = 0.0
+	base_stats.damage_reduction = 0.0
+	# 乘法属性保持1.0（正确行为）
+	
+	# 基础属性（设置实际值）
 	base_stats.max_hp = max_hp
 	base_stats.speed = speed
 	base_stats.defense = defense

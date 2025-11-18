@@ -79,6 +79,8 @@ static func initialize_upgrades() -> void:
 		hp_upgrade.attribute_changes = {
 			"max_hp": {"op": "add", "value": hp_max_values[tier]}
 		}
+		# ⭐ 新系统
+		hp_upgrade.stats_modifier = UpgradeDatabaseHelper.create_max_hp_stats(hp_max_values[tier])
 		hp_upgrade.quality = tier_qualities[tier]
 		hp_upgrade.set_base_attribute_cost()
 		upgrades["hp_max_tier%d" % (tier + 1)] = hp_upgrade
@@ -95,6 +97,8 @@ static func initialize_upgrades() -> void:
 		speed_upgrade.attribute_changes = {
 			"speed": {"op": "add", "value": move_speed_values[tier]}
 		}
+		# ⭐ 新系统
+		speed_upgrade.stats_modifier = UpgradeDatabaseHelper.create_move_speed_stats(move_speed_values[tier])
 		speed_upgrade.quality = tier_qualities[tier]
 		speed_upgrade.set_base_attribute_cost()
 		upgrades["move_speed_tier%d" % (tier + 1)] = speed_upgrade
@@ -112,6 +116,8 @@ static func initialize_upgrades() -> void:
 		attack_speed_upgrade.attribute_changes = {
 			"attack_speed_multiplier": {"op": "multiply", "value": s_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		attack_speed_upgrade.stats_modifier = UpgradeDatabaseHelper.create_attack_speed_stats(s_tier_values[tier])
 		attack_speed_upgrade.quality = tier_qualities[tier]
 		attack_speed_upgrade.set_base_attribute_cost()
 		upgrades["attack_speed_tier%d" % (tier + 1)] = attack_speed_upgrade
@@ -129,6 +135,8 @@ static func initialize_upgrades() -> void:
 		damage_reduction_upgrade.attribute_changes = {
 			"damage_reduction_multiplier": {"op": "multiply", "value": damage_reduction_values[tier]}
 		}
+		# ⭐ 新系统
+		damage_reduction_upgrade.stats_modifier = UpgradeDatabaseHelper.create_damage_reduction_stats(1.0 - damage_reduction_values[tier])
 		damage_reduction_upgrade.quality = tier_qualities[tier]
 		damage_reduction_upgrade.set_base_attribute_cost()
 		upgrades["damage_reduction_tier%d" % (tier + 1)] = damage_reduction_upgrade
@@ -146,6 +154,8 @@ static func initialize_upgrades() -> void:
 		melee_damage_upgrade.attribute_changes = {
 			"melee_damage_multiplier": {"op": "multiply", "value": a_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		melee_damage_upgrade.stats_modifier = UpgradeDatabaseHelper.create_melee_damage_stats(a_tier_values[tier])
 		melee_damage_upgrade.quality = tier_qualities[tier]
 		melee_damage_upgrade.set_base_attribute_cost()
 		upgrades["melee_damage_tier%d" % (tier + 1)] = melee_damage_upgrade
@@ -163,6 +173,8 @@ static func initialize_upgrades() -> void:
 		ranged_damage_upgrade.attribute_changes = {
 			"ranged_damage_multiplier": {"op": "multiply", "value": a_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		ranged_damage_upgrade.stats_modifier = UpgradeDatabaseHelper.create_ranged_damage_stats(a_tier_values[tier])
 		ranged_damage_upgrade.quality = tier_qualities[tier]
 		ranged_damage_upgrade.set_base_attribute_cost()
 		upgrades["ranged_damage_tier%d" % (tier + 1)] = ranged_damage_upgrade
@@ -180,6 +192,8 @@ static func initialize_upgrades() -> void:
 		magic_damage_upgrade.attribute_changes = {
 			"magic_damage_multiplier": {"op": "multiply", "value": a_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		magic_damage_upgrade.stats_modifier = UpgradeDatabaseHelper.create_magic_damage_stats(a_tier_values[tier])
 		magic_damage_upgrade.quality = tier_qualities[tier]
 		magic_damage_upgrade.set_base_attribute_cost()
 		upgrades["magic_damage_tier%d" % (tier + 1)] = magic_damage_upgrade
@@ -197,6 +211,8 @@ static func initialize_upgrades() -> void:
 		melee_speed_upgrade.attribute_changes = {
 			"melee_speed_multiplier": {"op": "multiply", "value": b_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		melee_speed_upgrade.stats_modifier = UpgradeDatabaseHelper.create_melee_speed_stats(b_tier_values[tier])
 		melee_speed_upgrade.quality = tier_qualities[tier]
 		melee_speed_upgrade.set_base_attribute_cost()
 		upgrades["melee_speed_tier%d" % (tier + 1)] = melee_speed_upgrade
@@ -214,6 +230,8 @@ static func initialize_upgrades() -> void:
 		ranged_speed_upgrade.attribute_changes = {
 			"ranged_speed_multiplier": {"op": "multiply", "value": b_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		ranged_speed_upgrade.stats_modifier = UpgradeDatabaseHelper.create_ranged_speed_stats(b_tier_values[tier])
 		ranged_speed_upgrade.quality = tier_qualities[tier]
 		ranged_speed_upgrade.set_base_attribute_cost()
 		upgrades["ranged_speed_tier%d" % (tier + 1)] = ranged_speed_upgrade
@@ -231,6 +249,8 @@ static func initialize_upgrades() -> void:
 		magic_speed_upgrade.attribute_changes = {
 			"magic_speed_multiplier": {"op": "multiply", "value": b_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		magic_speed_upgrade.stats_modifier = UpgradeDatabaseHelper.create_magic_speed_stats(b_tier_values[tier])
 		magic_speed_upgrade.quality = tier_qualities[tier]
 		magic_speed_upgrade.set_base_attribute_cost()
 		upgrades["magic_speed_tier%d" % (tier + 1)] = magic_speed_upgrade
@@ -248,6 +268,8 @@ static func initialize_upgrades() -> void:
 		melee_range_upgrade.attribute_changes = {
 			"melee_range_multiplier": {"op": "multiply", "value": b_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		melee_range_upgrade.stats_modifier = UpgradeDatabaseHelper.create_melee_range_stats(b_tier_values[tier])
 		melee_range_upgrade.quality = tier_qualities[tier]
 		melee_range_upgrade.set_base_attribute_cost()
 		upgrades["melee_range_tier%d" % (tier + 1)] = melee_range_upgrade
@@ -265,6 +287,8 @@ static func initialize_upgrades() -> void:
 		ranged_range_upgrade.attribute_changes = {
 			"ranged_range_multiplier": {"op": "multiply", "value": b_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		ranged_range_upgrade.stats_modifier = UpgradeDatabaseHelper.create_ranged_range_stats(b_tier_values[tier])
 		ranged_range_upgrade.quality = tier_qualities[tier]
 		ranged_range_upgrade.set_base_attribute_cost()
 		upgrades["ranged_range_tier%d" % (tier + 1)] = ranged_range_upgrade
@@ -282,6 +306,8 @@ static func initialize_upgrades() -> void:
 		magic_range_upgrade.attribute_changes = {
 			"magic_range_multiplier": {"op": "multiply", "value": b_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		magic_range_upgrade.stats_modifier = UpgradeDatabaseHelper.create_magic_range_stats(b_tier_values[tier])
 		magic_range_upgrade.quality = tier_qualities[tier]
 		magic_range_upgrade.set_base_attribute_cost()
 		upgrades["magic_range_tier%d" % (tier + 1)] = magic_range_upgrade
@@ -299,6 +325,8 @@ static func initialize_upgrades() -> void:
 		melee_knockback_upgrade.attribute_changes = {
 			"melee_knockback_multiplier": {"op": "multiply", "value": c_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		melee_knockback_upgrade.stats_modifier = UpgradeDatabaseHelper.create_melee_knockback_stats(c_tier_values[tier])
 		melee_knockback_upgrade.quality = tier_qualities[tier]
 		melee_knockback_upgrade.set_base_attribute_cost()
 		upgrades["melee_knockback_tier%d" % (tier + 1)] = melee_knockback_upgrade
@@ -316,6 +344,8 @@ static func initialize_upgrades() -> void:
 		magic_explosion_upgrade.attribute_changes = {
 			"magic_explosion_radius_multiplier": {"op": "multiply", "value": c_tier_values[tier]}
 		}
+		# ⭐ 新系统
+		magic_explosion_upgrade.stats_modifier = UpgradeDatabaseHelper.create_magic_explosion_stats(c_tier_values[tier])
 		magic_explosion_upgrade.quality = tier_qualities[tier]
 		magic_explosion_upgrade.set_base_attribute_cost()
 		upgrades["magic_explosion_tier%d" % (tier + 1)] = magic_explosion_upgrade
@@ -332,6 +362,8 @@ static func initialize_upgrades() -> void:
 		luck_upgrade.attribute_changes = {
 			"luck": {"op": "add", "value": luck_values[tier]}
 		}
+		# ⭐ 新系统
+		luck_upgrade.stats_modifier = UpgradeDatabaseHelper.create_luck_stats(luck_values[tier])
 		luck_upgrade.quality = tier_qualities[tier]
 		luck_upgrade.set_base_attribute_cost()
 		upgrades["luck_tier%d" % (tier + 1)] = luck_upgrade

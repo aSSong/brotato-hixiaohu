@@ -46,6 +46,12 @@ var initial_duration: float = -1.0
 
 func _init():
 	stats_delta = CombatStats.new()
+	
+	# ⭐ 清零默认值，避免意外累加
+	# 虽然大多数情况下会被立即覆盖，但为了安全起见还是清零
+	stats_delta.max_hp = 0
+	stats_delta.speed = 0.0
+	stats_delta.crit_damage = 0.0
 
 ## 应用修改器到目标属性
 ## 
