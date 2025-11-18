@@ -229,12 +229,8 @@ func enemy_hurt(hurt):
 	)
 	
 	enemy_flash()
-	GameMain.animation_scene_obj.run_animation({
-		"box":self,
-		"ani_name":"enemies_hurt",
-		"position":Vector2(0,0),
-		"scale":Vector2(1,1)
-	})
+	# 使用统一的特效管理器
+	CombatEffectManager.play_enemy_hurt(global_position)
 	if self.enemyHP <= 0:
 		print("[Enemy] 死亡 | 位置:", global_position)
 		enemy_dead()
@@ -263,14 +259,8 @@ func enemy_dead():
 			var exploding = behavior as ExplodingBehavior
 			exploding.on_enemy_death()
 	
-	#GameMain.duplicate_node.global_position = self.global_position
-	
-	GameMain.animation_scene_obj.run_animation({
-		#"box":GameMain.duplicate_node,
-		"ani_name":"enemies_dead",
-		"position":self.global_position,
-		"scale":Vector2(1,1)
-	})
+	# 使用统一的特效管理器
+	CombatEffectManager.play_enemy_death(global_position)
 	
 	# 判断掉落物品类型
 	var item_name = "gold"  # 默认掉落金币

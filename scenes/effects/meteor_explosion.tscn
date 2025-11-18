@@ -1,18 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7m3k6x9t4h5y"]
-
-[sub_resource type="Gradient" id="Gradient_meteor"]
-offsets = PackedFloat32Array(0, 0.2, 0.5, 0.8, 1)
-colors = PackedColorArray(1, 1, 0.9, 1, 1, 0.4, 0, 1, 0.8, 0.1, 0, 1, 0.4, 0, 0, 0.8, 0.1, 0, 0, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_meteor"]
-gradient = SubResource("Gradient_meteor")
+[gd_scene format=3 uid="uid://b7m3k6yat4h5y"]
 
 [node name="MeteorExplosion" type="Node2D"]
 
 [node name="Core" type="CPUParticles2D" parent="."]
 emitting = false
 amount = 40
-lifetime = 1.0
 one_shot = true
 explosiveness = 0.95
 randomness = 0.2
@@ -31,7 +23,6 @@ damping_min = 100.0
 damping_max = 200.0
 scale_amount_min = 3.0
 scale_amount_max = 6.0
-color_ramp = SubResource("GradientTexture1D_meteor")
 
 [node name="Shockwave" type="CPUParticles2D" parent="."]
 emitting = false
@@ -51,7 +42,6 @@ damping_max = 250.0
 scale_amount_min = 2.5
 scale_amount_max = 4.5
 color = Color(1, 0.5, 0, 1)
-color_ramp = SubResource("GradientTexture1D_meteor")
 
 [node name="Debris" type="CPUParticles2D" parent="."]
 emitting = false
@@ -93,4 +83,3 @@ damping_max = 50.0
 scale_amount_min = 4.0
 scale_amount_max = 8.0
 color = Color(0.3, 0.2, 0.1, 0.6)
-

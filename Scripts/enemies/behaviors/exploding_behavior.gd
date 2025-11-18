@@ -287,20 +287,8 @@ func _hide_range_indicator() -> void:
 
 ## 创建爆炸效果
 func _create_explosion_effect(pos: Vector2) -> void:
-	if explosion_effect_scene:
-		var effect = explosion_effect_scene.instantiate()
-		if effect:
-			effect.global_position = pos
-			get_tree().root.add_child(effect)
-			print("[ExplodingBehavior] 播放爆炸特效")
-	else:
-		# 回退到默认效果
-		if GameMain.animation_scene_obj:
-			GameMain.animation_scene_obj.run_animation({
-				"ani_name": "enemies_dead",
-				"position": pos,
-				"scale": Vector2(1.5, 1.5)
-			})
+	# 使用统一的特效管理器
+	CombatEffectManager.play_enemy_death(pos, 1.5)
 	
 	# 震动屏幕
 	CameraShake.shake(0.3, 15.0)

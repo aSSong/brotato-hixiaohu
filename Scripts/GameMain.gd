@@ -15,6 +15,9 @@ func _ready():
 	drop_item_scene_obj = drop_item_scene.instantiate()
 	#add_child(drop_item_scene_obj)
 	
+	# 初始化战斗特效管理器（预加载所有特效）
+	CombatEffectManager.initialize()
+	
 	# 创建会话
 	if current_session == null:
 		current_session = GameSession.new()
