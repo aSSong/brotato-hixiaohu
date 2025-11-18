@@ -27,6 +27,18 @@ func _ready() -> void:
 		push_warning("[UpgradeOption] LockButton 未找到！")
 	_update_cost_display()
 
+## 获取显示价格
+## 
+## 统一价格获取逻辑，优先返回锁定价格，否则返回波次调整后的价格
+func get_display_cost() -> int:
+	if not upgrade_data:
+		return 0
+	
+	if upgrade_data.locked_cost >= 0:
+		return upgrade_data.locked_cost
+	else:
+		return UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
+
 func set_upgrade_data(data: UpgradeData) -> void:
 	upgrade_data = data
 	
@@ -75,12 +87,7 @@ func get_upgrade_data() -> UpgradeData:
 
 func _update_cost_display() -> void:
 	if cost_label and upgrade_data:
-		# 如果有锁定价格，使用锁定价格；否则使用波次修正后的价格
-		var display_cost: int
-		if upgrade_data.locked_cost >= 0:
-			display_cost = upgrade_data.locked_cost
-		else:
-			display_cost = UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
+		var display_cost = get_display_cost()
 		cost_label.text = "%d 钥匙" % display_cost
 	_update_buy_button()
 
@@ -88,13 +95,7 @@ func _update_buy_button() -> void:
 	if not buy_button or not upgrade_data:
 		return
 	
-	# 如果有锁定价格，使用锁定价格；否则使用波次修正后的价格
-	var display_cost: int
-	if upgrade_data.locked_cost >= 0:
-		display_cost = upgrade_data.locked_cost
-	else:
-		display_cost = UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
-	
+	var display_cost = get_display_cost()
 	var can_afford = GameMain.gold >= display_cost
 	buy_button.disabled = not can_afford
 	
@@ -105,12 +106,7 @@ func _update_buy_button() -> void:
 
 func _on_buy_button_pressed() -> void:
 	if upgrade_data:
-		# 如果有锁定价格，使用锁定价格；否则使用波次修正后的价格
-		var display_cost: int
-		if upgrade_data.locked_cost >= 0:
-			display_cost = upgrade_data.locked_cost
-		else:
-			display_cost = UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
+		var display_cost = get_display_cost()
 		
 		if GameMain.gold >= display_cost:
 			purchased.emit(upgrade_data)

@@ -49,6 +49,26 @@ enum WeaponType {
 @export var knockback_force: float = 0.0  # 击退力度
 @export var special_effects: Dictionary = {}  # 特殊效果参数
 
+## ========== 新增特殊属性字段（统一属性系统扩展）==========
+## 
+## 这些属性会在武器创建时应用到玩家的AttributeManager
+## 允许不同武器提供额外的属性加成
+
+## 暴击相关
+@export var crit_chance_bonus: float = 0.0  # 暴击率加成（例如：0.1 = +10%暴击率）
+@export var crit_damage_bonus: float = 0.0  # 暴击伤害加成（例如：0.5 = +50%暴击伤害）
+
+## 特殊效果几率
+@export var lifesteal_percent: float = 0.0  # 吸血百分比（例如：0.1 = 10%吸血）
+@export var burn_chance: float = 0.0  # 燃烧几率（0.0-1.0）
+@export var freeze_chance: float = 0.0  # 冰冻几率（0.0-1.0）
+@export var poison_chance: float = 0.0  # 中毒几率（0.0-1.0）
+
+## 防御和生存
+@export var defense_bonus: int = 0  # 防御力加成
+@export var hp_bonus: int = 0  # 生命值加成
+@export var speed_bonus: float = 0.0  # 速度加成
+
 ## 武器等级颜色（白、绿、蓝、紫、红）
 const weapon_level_colors = {
 	level_1 = "#FFFFFF",  # 白色
@@ -107,3 +127,37 @@ func _init(
 	range = p_range
 	texture_path = p_texture_path
 	scale = p_scale
+
+## 创建武器的属性修改器
+## 
+## 将武器的特殊属性转换为AttributeModifier，用于应用到玩家
+## 允许武器提供额外的属性加成（如暴击率、吸血等）
+func create_weapon_modifier(weapon_id: String) -> AttributeModifier:
+	var modifier = AttributeModifier.new()
+	modifier.modifier_type = AttributeModifier.ModifierType.BASE
+	modifier.modifier_id = "weapon_" + weapon_id
+	modifier.stats_delta = CombatStats.new()
+	
+	# 转换武器特殊属性到CombatStats
+	if crit_chance_bonus != 0.0:
+		modifier.stats_delta.crit_chance = crit_chance_bonus
+	if crit_damage_bonus != 0.0:
+		modifier.stats_delta.crit_mult = crit_damage_bonus
+	
+	if lifesteal_percent != 0.0:
+		modifier.stats_delta.lifesteal_percent = lifesteal_percent
+	if burn_chance != 0.0:
+		modifier.stats_delta.burn_chance = burn_chance
+	if freeze_chance != 0.0:
+		modifier.stats_delta.freeze_chance = freeze_chance
+	if poison_chance != 0.0:
+		modifier.stats_delta.poison_chance = poison_chance
+	
+	if defense_bonus != 0:
+		modifier.stats_delta.defense = float(defense_bonus)
+	if hp_bonus != 0:
+		modifier.stats_delta.max_hp = float(hp_bonus)
+	if speed_bonus != 0.0:
+		modifier.stats_delta.speed = speed_bonus
+	
+	return modifier
