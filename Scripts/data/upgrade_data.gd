@@ -1,7 +1,10 @@
 extends Resource
 class_name UpgradeData
 
-## 升级选项数据
+## 升级选项数据（重构版）
+## 
+## 使用新的CombatStats系统表示属性变化
+## 保留旧的attribute_changes字段以兼容现有代码
 
 ## 品质等级枚举
 enum Quality {
@@ -57,13 +60,11 @@ var base_cost: int = 5  # 武器升级的基础价格
 var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
 var locked_cost: int = -1  # 锁定时的价格（-1表示未锁定）
 
-## 属性变化配置
+## 新属性系统：使用CombatStats表示属性变化
+var stats_modifier: CombatStats = null
+
+## 旧属性系统（已废弃，保留以兼容）
 ## 格式：{"attribute_name": {"op": "add|multiply", "value": number}}
-## 例如：
-## {"melee_damage_multiplier": {"op": "multiply", "value": 1.1}}  # 乘法：当前值 * 1.1
-## {"max_hp": {"op": "add", "value": 50}}  # 加法：当前值 + 50
-## {"luck": {"op": "add", "value": 10}}  # 加法：当前值 + 10
-## 支持多个属性同时变化
 var attribute_changes: Dictionary = {}
 
 func _init(
@@ -82,7 +83,22 @@ func _init(
 	# 初始化品质和价格
 	quality = Quality.WHITE
 	actual_cost = cost
+	
+	# 初始化新属性系统
+	stats_modifier = CombatStats.new()
 	attribute_changes = {}
+
+## 创建AttributeModifier
+## 
+## 将这个升级数据转换为可以应用到AttributeManager的修改器
+## 
+## @return 属性修改器
+func create_modifier() -> AttributeModifier:
+	var modifier = AttributeModifier.new()
+	modifier.modifier_type = AttributeModifier.ModifierType.UPGRADE
+	modifier.stats_delta = stats_modifier
+	modifier.modifier_id = "upgrade_" + name
+	return modifier
 
 ## 获取品质价格倍率
 static func get_quality_price_multiplier(quality_level: int) -> float:

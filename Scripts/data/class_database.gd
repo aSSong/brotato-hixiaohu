@@ -1,8 +1,10 @@
 extends Node
 class_name ClassDatabase
 
-## 职业数据库
+## 职业数据库（重构版）
 ## 预定义多个职业及其属性和技能
+## 
+## 使用新的CombatStats系统管理职业属性
 
 static var classes: Dictionary = {}
 
@@ -32,6 +34,8 @@ static func initialize_classes() -> void:
 	# 设置近战加成
 	warrior.melee_damage_multiplier = 1.3  # 近战武器伤害+30%
 	warrior.melee_knockback_multiplier = 1.2  # 近战击退+20%
+	# 同步到新系统
+	warrior.sync_to_base_stats()
 	# 自动生成特性描述
 	warrior.generate_traits_description()
 	classes["warrior"] = warrior
@@ -57,6 +61,8 @@ static func initialize_classes() -> void:
 	# 设置远程加成
 	ranger.ranged_damage_multiplier = 1.25  # 远程武器伤害+25%
 	ranger.attack_speed_multiplier = 1.2  # 攻击速度+20%
+	# 同步到新系统
+	ranger.sync_to_base_stats()
 	# 自动生成特性描述
 	ranger.generate_traits_description()
 	classes["ranger"] = ranger
@@ -83,6 +89,8 @@ static func initialize_classes() -> void:
 	mage.magic_damage_multiplier = 1.4  # 魔法武器伤害+40%
 	mage.magic_explosion_radius_multiplier = 1.3  # 爆炸范围+30%
 	mage.magic_speed_multiplier = 0.8  # 魔法冷却-20%（速度降低=冷却减少）
+	# 同步到新系统
+	mage.sync_to_base_stats()
 	# 自动生成特性描述
 	mage.generate_traits_description()
 	classes["mage"] = mage
@@ -106,6 +114,8 @@ static func initialize_classes() -> void:
 	balanced.description = "均衡发展的职业，适合所有武器类型"
 	# 平衡者已经通过 attack_multiplier 设置了所有武器伤害+15%
 	# speed 保持 400.0（移动速度0%）
+	# 同步到新系统
+	balanced.sync_to_base_stats()
 	# 自动生成特性描述
 	balanced.generate_traits_description()
 	classes["balanced"] = balanced
@@ -130,6 +140,8 @@ static func initialize_classes() -> void:
 	tank.description = "超高血量和防御的职业，生存能力强"
 	# 设置坦克加成
 	tank.damage_reduction_multiplier = 0.8  # 受到伤害-20%（减伤系数0.8）
+	# 同步到新系统
+	tank.sync_to_base_stats()
 	# 自动生成特性描述
 	tank.generate_traits_description()
 	classes["tank"] = tank

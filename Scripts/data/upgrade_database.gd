@@ -1,8 +1,20 @@
 extends Node
 class_name UpgradeDatabase
 
-## 升级数据库
+## 升级数据库（重构版）
 ## 预定义各种升级选项及其属性
+## 
+## 重要说明：
+##   - 新代码应使用stats_modifier（CombatStats系统）
+##   - 保留attribute_changes以保证向后兼容性
+##   - 将来所有升级都应迁移到新系统
+## 
+## 新系统使用示例：
+##   var upgrade = UpgradeData.new(...)
+##   upgrade.stats_modifier = CombatStats.new()
+##   upgrade.stats_modifier.melee_damage_mult = 1.1  # +10%近战伤害
+##   upgrade.stats_modifier.max_hp = 50  # +50血量
+##   upgrades["upgrade_id"] = upgrade
 
 static var upgrades: Dictionary = {}
 

@@ -1,53 +1,73 @@
 extends Resource
 class_name ClassData
 
-## 职业数据 Resource 类
-## 定义职业的基础属性和技能信息
+## 职业数据 Resource 类（重构版）
+## 
+## 职责：作为只读的职业模板，定义职业的基础属性和技能信息
+## 
+## 重要说明：
+##   - 这是只读模板，不应在运行时修改
+##   - 使用新的CombatStats系统存储所有战斗属性
+##   - 保留旧属性字段以兼容现有代码，但优先使用base_stats
+## 
+## 使用方法：
+##   var class_data = ClassDatabase.get_class_data("warrior")
+##   var runtime_stats = class_data.base_stats.clone()  # 克隆用于运行时修改
 
 @export var name: String = "默认职业"
 @export var description: String = ""
 
-## 基础属性
+## 新属性系统：使用CombatStats统一管理所有战斗属性
+@export var base_stats: CombatStats = null
+
+## ===== 以下为旧属性（保留以兼容现有代码） =====
+## 注意：这些属性将在未来版本中被移除
+## 新代码应优先使用 base_stats
+
+## 基础属性（已废弃，请使用base_stats）
 @export var max_hp: int = 100
 @export var speed: float = 400.0
-@export var attack_multiplier: float = 1.0  # 攻击力倍数（所有武器）
-@export var defense: int = 0  # 防御力（固定减伤）
-@export var crit_chance: float = 0.0  # 暴击率 (0.0-1.0)
-@export var crit_damage: float = 1.5  # 暴击伤害倍数
+@export var attack_multiplier: float = 1.0
+@export var defense: int = 0
+@export var crit_chance: float = 0.0
+@export var crit_damage: float = 1.5
 
-## 战斗属性系数
-@export var damage_reduction_multiplier: float = 1.0  # 减伤系数（1.0=不减伤，0.8=减伤20%）
-@export var luck: float = 0.0  # 幸运值（预留，影响掉落）
+## 战斗属性系数（已废弃，请使用base_stats）
+@export var damage_reduction_multiplier: float = 1.0
+@export var luck: float = 0.0
 
-## 武器通用系数
-@export var attack_speed_multiplier: float = 1.0  # 攻击速度系数（所有武器）
+## 武器通用系数（已废弃，请使用base_stats）
+@export var attack_speed_multiplier: float = 1.0
 
-## 近战武器系数
-@export var melee_damage_multiplier: float = 1.0  # 近战武器伤害系数
-@export var melee_range_multiplier: float = 1.0  # 近战武器范围系数
-@export var melee_speed_multiplier: float = 1.0  # 近战武器速度系数
-@export var melee_knockback_multiplier: float = 1.0  # 近战武器击退系数
+## 近战武器系数（已废弃，请使用base_stats）
+@export var melee_damage_multiplier: float = 1.0
+@export var melee_range_multiplier: float = 1.0
+@export var melee_speed_multiplier: float = 1.0
+@export var melee_knockback_multiplier: float = 1.0
 
-## 远程武器系数（枪械）
-@export var ranged_damage_multiplier: float = 1.0  # 远程武器伤害系数
-@export var ranged_range_multiplier: float = 1.0  # 远程武器范围系数
-@export var ranged_speed_multiplier: float = 1.0  # 远程武器速度系数
+## 远程武器系数（已废弃，请使用base_stats）
+@export var ranged_damage_multiplier: float = 1.0
+@export var ranged_range_multiplier: float = 1.0
+@export var ranged_speed_multiplier: float = 1.0
 
-## 魔法武器系数
-@export var magic_damage_multiplier: float = 1.0  # 魔法武器伤害系数
-@export var magic_range_multiplier: float = 1.0  # 魔法武器范围系数
-@export var magic_speed_multiplier: float = 1.0  # 魔法武器速度系数（魔法冷却）
-@export var magic_explosion_radius_multiplier: float = 1.0  # 魔法武器爆炸范围系数
+## 魔法武器系数（已废弃，请使用base_stats）
+@export var magic_damage_multiplier: float = 1.0
+@export var magic_range_multiplier: float = 1.0
+@export var magic_speed_multiplier: float = 1.0
+@export var magic_explosion_radius_multiplier: float = 1.0
 
 ## 特殊技能配置
 @export var skill_name: String = ""
 @export var skill_description: String = ""
-@export var skill_params: Dictionary = {}  # 技能参数，例如：{"cooldown": 5.0, "damage_boost": 1.5}
+@export var skill_params: Dictionary = {}
 
-## 职业特性（被动效果描述，自动生成）
-@export var traits: Array = []  # 特性列表，例如：["近战武器伤害+20%", "血量+50"]
+## 职业特性描述（自动生成）
+@export var traits: Array = []
 
 ## 初始化函数
+## 
+## 保留旧的初始化参数以兼容现有代码
+## 但同时创建并填充base_stats
 func _init(
 	p_name: String = "默认职业",
 	p_max_hp: int = 100,
@@ -60,6 +80,8 @@ func _init(
 	p_skill_params: Dictionary = {}
 ) -> void:
 	name = p_name
+	
+	# 填充旧属性（向后兼容）
 	max_hp = p_max_hp
 	speed = p_speed
 	attack_multiplier = p_attack_multiplier
@@ -69,7 +91,56 @@ func _init(
 	skill_name = p_skill_name
 	skill_params = p_skill_params
 	
-	# 新属性使用默认值，由调用者在创建后手动设置
+	# 创建新的CombatStats并填充基础值
+	base_stats = CombatStats.new()
+	base_stats.max_hp = p_max_hp
+	base_stats.speed = p_speed
+	base_stats.defense = p_defense
+	base_stats.crit_chance = p_crit_chance
+	base_stats.crit_damage = p_crit_damage
+	base_stats.global_damage_mult = p_attack_multiplier
+	
+	# 其他属性保持默认值，由调用者在创建后手动设置
+
+## 同步旧属性到base_stats
+## 
+## 当手动设置旧属性后，调用此方法同步到base_stats
+## 确保两个系统的数据一致性
+func sync_to_base_stats() -> void:
+	if not base_stats:
+		base_stats = CombatStats.new()
+	
+	# 基础属性
+	base_stats.max_hp = max_hp
+	base_stats.speed = speed
+	base_stats.defense = defense
+	base_stats.luck = luck
+	base_stats.crit_chance = crit_chance
+	base_stats.crit_damage = crit_damage
+	
+	# 减伤（注意：旧系统是乘数，新系统是减免比例）
+	base_stats.damage_reduction = 1.0 - damage_reduction_multiplier
+	
+	# 全局武器属性
+	base_stats.global_damage_mult = attack_multiplier
+	base_stats.global_attack_speed_mult = attack_speed_multiplier
+	
+	# 近战武器属性
+	base_stats.melee_damage_mult = melee_damage_multiplier
+	base_stats.melee_speed_mult = melee_speed_multiplier
+	base_stats.melee_range_mult = melee_range_multiplier
+	base_stats.melee_knockback_mult = melee_knockback_multiplier
+	
+	# 远程武器属性
+	base_stats.ranged_damage_mult = ranged_damage_multiplier
+	base_stats.ranged_speed_mult = ranged_speed_multiplier
+	base_stats.ranged_range_mult = ranged_range_multiplier
+	
+	# 魔法武器属性
+	base_stats.magic_damage_mult = magic_damage_multiplier
+	base_stats.magic_speed_mult = magic_speed_multiplier
+	base_stats.magic_range_mult = magic_range_multiplier
+	base_stats.magic_explosion_radius_mult = magic_explosion_radius_multiplier
 
 ## 自动生成职业特性描述
 func generate_traits_description() -> void:

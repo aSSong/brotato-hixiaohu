@@ -17,6 +17,10 @@ var now_exp = 0
 var level = 1
 var gold = 0
 
+## ===== 新属性系统 =====
+var attribute_manager: AttributeManager = null  ## 属性管理器
+var buff_system: BuffSystem = null  ## Buff系统
+
 ## 职业系统
 var current_class: ClassData = null
 var class_manager: ClassManager = null
@@ -49,6 +53,18 @@ signal hp_changed(current_hp: int, max_hp: int)
 var name_label: Label = null
 
 func _ready() -> void:
+	# 初始化属性管理器
+	attribute_manager = AttributeManager.new()
+	attribute_manager.name = "AttributeManager"
+	add_child(attribute_manager)
+	attribute_manager.stats_changed.connect(_on_stats_changed)
+	
+	# 初始化Buff系统
+	buff_system = BuffSystem.new()
+	buff_system.name = "BuffSystem"
+	add_child(buff_system)
+	buff_system.buff_tick.connect(_on_buff_tick)
+	
 	# 初始化职业管理器
 	class_manager = ClassManager.new()
 	add_child(class_manager)
@@ -240,31 +256,58 @@ func chooseClass(class_id: String) -> void:
 	current_class = class_data
 	class_manager.set_class(class_data)
 	
-	# 应用职业基础属性
-	_apply_class_stats()
+	# 确保class_data的base_stats已同步
+	if not current_class.base_stats or current_class.base_stats.max_hp == 100:
+		current_class.sync_to_base_stats()
+	
+	# 设置AttributeManager的基础属性
+	if attribute_manager:
+		attribute_manager.base_stats = current_class.base_stats.clone()
+		attribute_manager.recalculate()
 	
 	print("选择职业: ", class_data.name)
 	print("描述: ", class_data.description)
 	print("特性: ", class_data.traits)
 
-## 应用职业属性
+## 属性变化回调
+##
+## 当AttributeManager重新计算后，应用新属性到玩家
+func _on_stats_changed(new_stats: CombatStats) -> void:
+	if not new_stats:
+		return
+	
+	# 应用新属性
+	max_hp = new_stats.max_hp
+	speed = new_stats.speed
+	
+	# 确保当前血量不超过最大血量
+	if now_hp > max_hp:
+		now_hp = max_hp
+	
+	# 发送血量变化信号
+	hp_changed.emit(now_hp, max_hp)
+	
+	print("[Player] 属性更新: HP=%d/%d, Speed=%.1f" % [now_hp, max_hp, speed])
+
+## Buff Tick回调
+## 
+## 当Buff触发Tick效果时（DoT伤害等）
+func _on_buff_tick(buff_id: String, tick_data: Dictionary) -> void:
+	# 处理DoT伤害
+	SpecialEffects.apply_dot_damage(self, tick_data)
+
+## 应用职业属性（保留旧系统兼容）
 func _apply_class_stats() -> void:
 	if current_class == null:
 		return
 	
-	# 应用血量
-	max_hp = base_max_hp + current_class.max_hp - base_max_hp  # 减去默认值，加上职业值
-	# 如果当前血量超过最大血量，调整当前血量
+	# 旧系统：直接设置属性
+	max_hp = base_max_hp + current_class.max_hp - base_max_hp
 	if now_hp > max_hp:
 		now_hp = max_hp
 	
-	# 发送血量变化信号（初始化时）
 	hp_changed.emit(now_hp, max_hp)
-	
-	# 应用速度
-	speed = base_speed * (current_class.speed / 400.0)  # 相对于基础速度的比例
-	
-	# 应用防御等其他属性可以在受伤时处理
+	speed = base_speed * (current_class.speed / 400.0)
 
 ## 激活技能（可以绑定到按键）
 func activate_class_skill() -> void:
@@ -317,24 +360,29 @@ func get_weapon_type_multiplier(weapon_type: WeaponData.WeaponType) -> float:
 
 ## 玩家受伤
 func player_hurt(damage: int) -> void:
-	# 计算实际伤害（考虑防御）
-	var actual_damage = damage
-	if current_class:
-		actual_damage = max(1, damage - current_class.defense)
+	# 使用新的DamageCalculator计算最终伤害
+	var final_damage = damage
 	
-	# 应用职业减伤系数
-	if current_class:
-		actual_damage = int(actual_damage * current_class.damage_reduction_multiplier)
+	if attribute_manager and attribute_manager.final_stats:
+		final_damage = DamageCalculator.calculate_defense_reduction(
+			damage,
+			attribute_manager.final_stats
+		)
+	else:
+		# 降级方案：使用旧系统
+		var actual_damage = damage
+		if current_class:
+			actual_damage = max(1, damage - current_class.defense)
+			actual_damage = int(actual_damage * current_class.damage_reduction_multiplier)
+		
+		# 应用技能减伤
+		if class_manager and class_manager.is_skill_active("护盾"):
+			var reduction = class_manager.get_skill_effect("护盾_reduction", 0.0)
+			actual_damage = int(actual_damage * (1.0 - reduction))
+		
+		final_damage = max(1, actual_damage)
 	
-	# 应用技能减伤
-	if class_manager and class_manager.is_skill_active("护盾"):
-		var reduction = class_manager.get_skill_effect("护盾_reduction", 0.0)
-		actual_damage = int(actual_damage * (1.0 - reduction))
-	
-	# 确保至少1点伤害
-	actual_damage = max(1, actual_damage)
-	
-	now_hp -= actual_damage
+	now_hp -= final_damage
 	
 	# 确保血量不小于0
 	if now_hp < 0:
@@ -346,7 +394,7 @@ func player_hurt(damage: int) -> void:
 	# 显示伤害跳字
 	FloatingText.create_floating_text(
 		global_position + Vector2(0, -30),  # 在玩家上方显示
-		"-" + str(actual_damage),
+		"-" + str(final_damage),
 		Color(1.0, 0.8, 0.2)  # 黄色伤害数字（区别于敌人）
 	)
 	
