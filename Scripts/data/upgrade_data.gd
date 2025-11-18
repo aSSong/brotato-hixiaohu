@@ -86,6 +86,10 @@ func _init(
 	
 	# 初始化新属性系统
 	stats_modifier = CombatStats.new()
+	# ⭐ 清零默认值，防止污染
+	stats_modifier.max_hp = 0
+	stats_modifier.speed = 0.0
+	stats_modifier.crit_damage = 0.0
 	attribute_changes = {}
 
 ## 创建AttributeModifier
@@ -96,6 +100,15 @@ func _init(
 func create_modifier() -> AttributeModifier:
 	var modifier = AttributeModifier.new()
 	modifier.modifier_type = AttributeModifier.ModifierType.UPGRADE
+	
+	# ⭐ 调试：检查stats_modifier是否正确
+	if stats_modifier:
+		print("[UpgradeData] create_modifier: ", name)
+		print("  - stats_modifier.max_hp: ", stats_modifier.max_hp)
+		print("  - stats_modifier.speed: ", stats_modifier.speed)
+	else:
+		print("[UpgradeData] 警告：stats_modifier 为 null！")
+	
 	modifier.stats_delta = stats_modifier
 	modifier.modifier_id = "upgrade_" + name
 	return modifier

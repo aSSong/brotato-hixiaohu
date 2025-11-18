@@ -69,6 +69,12 @@ func recalculate() -> void:
 		push_error("[AttributeManager] base_stats 未设置！")
 		return
 	
+	# ⭐ 调试：打印base_stats
+	print("[AttributeManager] recalculate():")
+	print("  - base_stats.max_hp: ", base_stats.max_hp)
+	print("  - base_stats.speed: ", base_stats.speed)
+	print("  - permanent_modifiers数量: ", permanent_modifiers.size())
+	
 	# 从基础属性开始
 	final_stats = base_stats.clone()
 	
@@ -81,6 +87,9 @@ func recalculate() -> void:
 	for modifier in temporary_modifiers:
 		if modifier and modifier.stats_delta and not modifier.is_expired():
 			modifier.apply_to(final_stats)
+	
+	print("  - final_stats.max_hp: ", final_stats.max_hp)
+	print("  - final_stats.speed: ", final_stats.speed)
 	
 	# 发送变化信号
 	stats_changed.emit(final_stats)
