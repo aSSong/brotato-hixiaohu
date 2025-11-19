@@ -27,7 +27,7 @@ static func initialize_upgrades() -> void:
 		return
 	
 	# 价格系数设置
-	var base_cost: int = 5
+	var base_cost: int = 3
 	var tier_multipliers: Array = [1, 2, 4, 8, 16]  # 5个品质的价格系数
 	var tier_qualities: Array = [
 		UpgradeData.Quality.WHITE,
@@ -81,6 +81,7 @@ static func initialize_upgrades() -> void:
 		}
 		# ⭐ 新系统
 		hp_upgrade.stats_modifier = UpgradeDatabaseHelper.create_max_hp_stats(hp_max_values[tier])
+		print("[UpgradeDatabase] 创建HP升级后，stats_modifier.max_hp: ", hp_upgrade.stats_modifier.max_hp)
 		hp_upgrade.quality = tier_qualities[tier]
 		hp_upgrade.set_base_attribute_cost()
 		upgrades["hp_max_tier%d" % (tier + 1)] = hp_upgrade
@@ -232,6 +233,7 @@ static func initialize_upgrades() -> void:
 		}
 		# ⭐ 新系统
 		ranged_speed_upgrade.stats_modifier = UpgradeDatabaseHelper.create_ranged_speed_stats(b_tier_values[tier])
+		print("[UpgradeDatabase] 创建远程速度升级后，stats_modifier.ranged_speed_mult: ", ranged_speed_upgrade.stats_modifier.ranged_speed_mult)
 		ranged_speed_upgrade.quality = tier_qualities[tier]
 		ranged_speed_upgrade.set_base_attribute_cost()
 		upgrades["ranged_speed_tier%d" % (tier + 1)] = ranged_speed_upgrade

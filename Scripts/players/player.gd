@@ -276,9 +276,17 @@ func _on_stats_changed(new_stats: CombatStats) -> void:
 	if not new_stats:
 		return
 	
+	# 计算最大HP的变化量
+	var old_max_hp = max_hp
+	var hp_increase = new_stats.max_hp - old_max_hp
+	
 	# 应用新属性
 	max_hp = new_stats.max_hp
 	speed = new_stats.speed
+	
+	# 如果最大HP增加了，同时恢复相应的HP
+	if hp_increase > 0:
+		now_hp = min(now_hp + hp_increase, max_hp)
 	
 	# 确保当前血量不超过最大血量
 	if now_hp > max_hp:
@@ -287,7 +295,7 @@ func _on_stats_changed(new_stats: CombatStats) -> void:
 	# 发送血量变化信号
 	hp_changed.emit(now_hp, max_hp)
 	
-	print("[Player] 属性更新: HP=%d/%d, Speed=%.1f" % [now_hp, max_hp, speed])
+	print("[Player] 属性更新: HP=%d/%d (+%d), Speed=%.1f" % [now_hp, max_hp, hp_increase, speed])
 
 ## Buff Tick回调
 ## 

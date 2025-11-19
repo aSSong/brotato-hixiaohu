@@ -304,6 +304,11 @@ func _duplicate_upgrade_data(source: UpgradeData) -> UpgradeData:
 	copy.actual_cost = source.actual_cost
 	copy.locked_cost = source.locked_cost  # 保留锁定时的价格
 	copy.attribute_changes = source.attribute_changes.duplicate(true)
+	
+	# ⭐ 关键：复制stats_modifier（新属性系统）
+	if source.stats_modifier:
+		copy.stats_modifier = source.stats_modifier.clone()
+	
 	return copy
 
 ## 判断两个升级是否相同
@@ -968,5 +973,9 @@ func _generate_attribute_upgrade(quality: int) -> UpgradeData:
 	upgrade_copy.quality = upgrade_data.quality
 	upgrade_copy.actual_cost = upgrade_data.actual_cost
 	upgrade_copy.attribute_changes = upgrade_data.attribute_changes.duplicate(true)
+	
+	# ⭐ 关键：复制stats_modifier（新属性系统）
+	if upgrade_data.stats_modifier:
+		upgrade_copy.stats_modifier = upgrade_data.stats_modifier.clone()
 	
 	return upgrade_copy

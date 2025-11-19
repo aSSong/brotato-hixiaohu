@@ -49,17 +49,30 @@ var player: Node = null
 var update_timer: Timer
 
 func _ready():
+	# 延迟查找玩家节点（确保场景已完全加载）
+	await get_tree().create_timer(0.1).timeout
+	
 	# 查找玩家节点
 	player = get_tree().get_first_node_in_group("player")
 	
-	if player and player.has_node("AttributeManager"):
+	if not player:
+		print("[PlayerStatsInfo] 警告：未找到玩家节点")
+		return
+	
+	if player.has_node("AttributeManager"):
 		var attribute_manager = player.get_node("AttributeManager")
+		
 		# 监听属性变化
-		attribute_manager.stats_changed.connect(_on_stats_changed)
+		if not attribute_manager.stats_changed.is_connected(_on_stats_changed):
+			attribute_manager.stats_changed.connect(_on_stats_changed)
+			print("[PlayerStatsInfo] 已连接属性变化信号")
 		
 		# 初始更新
 		if attribute_manager.final_stats:
 			_on_stats_changed(attribute_manager.final_stats)
+			print("[PlayerStatsInfo] 初始属性已更新")
+	else:
+		print("[PlayerStatsInfo] 警告：玩家没有 AttributeManager")
 	
 	# 创建定时器，定期更新（包括当前HP）
 	update_timer = Timer.new()

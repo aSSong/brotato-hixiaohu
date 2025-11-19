@@ -91,6 +91,8 @@ func _init(
 	stats_modifier.speed = 0.0
 	stats_modifier.crit_damage = 0.0
 	attribute_changes = {}
+	
+	print("[UpgradeData._init] 创建: %s, stats_modifier.max_hp: %d" % [name, stats_modifier.max_hp])
 
 ## 创建AttributeModifier
 ## 

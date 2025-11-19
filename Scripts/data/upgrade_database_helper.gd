@@ -28,6 +28,8 @@ static func create_attack_speed_stats(multiplier: float) -> CombatStats:
 static func create_max_hp_stats(hp_add: int) -> CombatStats:
 	var stats = create_clean_stats()
 	stats.max_hp = hp_add
+	print("[UpgradeDatabaseHelper] create_max_hp_stats(%d)" % hp_add)
+	print("  - stats.max_hp: ", stats.max_hp)
 	return stats
 
 ## 创建移动速度升级的stats_modifier
@@ -70,6 +72,8 @@ static func create_melee_speed_stats(multiplier: float) -> CombatStats:
 static func create_ranged_speed_stats(multiplier: float) -> CombatStats:
 	var stats = create_clean_stats()
 	stats.ranged_speed_mult = multiplier
+	print("[UpgradeDatabaseHelper] create_ranged_speed_stats(%.2f)" % multiplier)
+	print("  - stats.ranged_speed_mult: ", stats.ranged_speed_mult)
 	return stats
 
 ## 创建魔法速度升级的stats_modifier
