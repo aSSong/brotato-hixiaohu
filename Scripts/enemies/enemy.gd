@@ -190,7 +190,7 @@ func _attack_player() -> void:
 	if target and target.has_method("player_hurt"):
 		target.player_hurt(attack_damage)
 		attack_cooldown = attack_interval
-func enemy_hurt(hurt):
+func enemy_hurt(hurt, is_critical: bool = false):
 	# 如果已经死亡，忽略后续伤害
 	if is_dead:
 		return
@@ -221,11 +221,25 @@ func enemy_hurt(hurt):
 	#print("[Enemy] 受伤 | HP:", self.enemyHP, " 伤害:", hurt, " 位置:", global_position)
 	self.enemyHP -= hurt
 	
+	# 确定伤害数字颜色
+	var text_color = Color(1.0, 1.0, 1.0, 1.0)  # 伤害数字
+	if is_critical:
+		text_color = Color(0.2, 0.8, 0.8, 1.0)  # 表示暴击
+	
+	# 忽略0伤害
+	if hurt <= 0:
+		return
+
 	# 显示伤害跳字
+	var text_content = "-" + str(hurt)
+	if is_critical:
+		text_content = "暴击 " + str(hurt)
+		
 	FloatingText.create_floating_text(
 		global_position + Vector2(0, -30),  # 在敌人上方显示
-		"-" + str(hurt),
-		Color(1.0, 0.3, 0.3)  # 红色伤害数字
+		text_content,
+		text_color,
+		is_critical
 	)
 	
 	enemy_flash()

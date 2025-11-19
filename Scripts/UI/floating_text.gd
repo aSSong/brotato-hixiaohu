@@ -7,49 +7,88 @@ class_name FloatingText
 @onready var label: Label = $Label
 
 var text: String = ""
-var duration: float = 1.0
-var float_speed: float = 50.0  # 向上飘的速度
-var start_scale: float = 0.5
+var duration: float = 0.8
+# 移除 float_speed，使用 velocity 模拟物理
+var velocity: Vector2 = Vector2.ZERO
+var gravity: float = 800.0  # 重力加速度
+var start_scale: float = 0.1
+var peak_scale: float = 2.0  # 放大峰值
 var end_scale: float = 1.0
+var is_critical: bool = false
+var initial_color: Color = Color.WHITE  # 存储初始颜色
 
 func _ready() -> void:
 	if label:
 		label.text = text
+		# 使用存储的初始颜色
+		label.modulate = initial_color
 		label.modulate.a = 1.0
-		scale = Vector2(start_scale, start_scale)
+		
+		# 根据是否暴击调整字体大小和效果
+		if is_critical:
+			label.add_theme_font_size_override("font_size", 36)
+			peak_scale = 2.0
+			# 暴击时初始向上的冲力更大
+			velocity.y -= 100
+			# 暴击时添加描边效果
+			label.add_theme_color_override("font_outline_color", Color.BLACK)
+			label.add_theme_constant_override("outline_size", 4)
+		else:
+			label.add_theme_font_size_override("font_size", 28)
+			label.add_theme_color_override("font_outline_color", Color.BLACK)
+			label.add_theme_constant_override("outline_size", 2)
+	
+	# 设置高Z层级，确保显示在最上层
+	z_index = 100
+	
+	scale = Vector2(start_scale, start_scale)
 	
 	# 开始动画
 	_start_animation()
+
+func _process(delta: float) -> void:
+	# 应用重力
+	velocity.y += gravity * delta
+	# 更新位置
+	position += velocity * delta
 
 func _start_animation() -> void:
 	var tween = create_tween()
 	tween.set_parallel(true)
 	
-	# 向上移动
-	tween.tween_property(self, "position:y", position.y - float_speed, duration)
-	
-	# 缩放动画
-	tween.tween_property(self, "scale", Vector2(end_scale, end_scale), duration * 0.3)
-	tween.tween_property(self, "scale", Vector2(end_scale * 0.8, end_scale * 0.8), duration * 0.7).set_delay(duration * 0.3)
+	# 缩放动画：先放大(pop)再缩小
+	# 1. 快速放大到峰值
+	tween.tween_property(self, "scale", Vector2(peak_scale, peak_scale), duration * 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	# 2. 恢复到正常大小
+	tween.tween_property(self, "scale", Vector2(end_scale, end_scale), duration * 0.4).set_delay(duration * 0.2)
 	
 	# 淡出
 	if label:
-		tween.tween_property(label, "modulate:a", 0.0, duration * 0.5).set_delay(duration * 0.5)
+		tween.tween_property(label, "modulate:a", 0.0, duration * 0.3).set_delay(duration * 0.7)
 	
 	# 动画结束后删除
 	tween.finished.connect(queue_free)
 
 ## 静态方法：创建浮动文字
-static func create_floating_text(world_pos: Vector2, damage_text: String, color: Color = Color.WHITE) -> void:
+static func create_floating_text(world_pos: Vector2, damage_text: String, color: Color = Color.WHITE, is_critical: bool = false) -> void:
+	# 忽略0伤害
+	if damage_text == "-0" or damage_text == "0":
+		return
+		
 	var floating_text_scene = preload("res://scenes/UI/floating_text.tscn")
 	var floating_text = floating_text_scene.instantiate()
 	
-	# 设置文字
+	# 设置属性
 	floating_text.text = damage_text
+	floating_text.is_critical = is_critical
+	floating_text.initial_color = color
 	
-	# 设置颜色
-	if floating_text.label:
-		floating_text.label.modulate = color
+	# 设置初始速度（模拟飞溅）
+	# 向上的冲力
+	var up_speed = randf_range(300, 500)
+	# 左右的随机速度
+	var side_speed = randf_range(-200, 200)
+	floating_text.velocity = Vector2(side_speed, -up_speed)
 	
 	# 添加到CanvasLayer以便正确显示
 	var tree = Engine.get_main_loop()

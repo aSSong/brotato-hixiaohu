@@ -95,15 +95,7 @@ func _check_and_damage_enemies() -> void:
 			
 			# 造成伤害
 			if enemy.has_method("enemy_hurt"):
-				enemy.enemy_hurt(final_damage)
-			
-			# 显示暴击跳字（如果暴击）
-			if is_critical and FloatingText:
-				FloatingText.create_floating_text(
-					enemy.global_position + Vector2(0, -20),
-					"暴击! %d" % final_damage,
-					Color(1.0, 0.5, 0.0)  # 橙色表示暴击
-				)
+				enemy.enemy_hurt(final_damage, is_critical)
 			
 			# 吸血效果（使用新系统）
 			if player_stats and player_stats.lifesteal_percent > 0:

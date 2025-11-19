@@ -135,15 +135,7 @@ func _execute_cast(cast_data: Dictionary) -> void:
 		# 对目标造成直接伤害
 		if target.has_method("enemy_hurt"):
 			var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
-			target.enemy_hurt(damage_to_deal)
-			
-			# 显示暴击跳字
-			if is_critical and FloatingText:
-				FloatingText.create_floating_text(
-					target.global_position + Vector2(0, -20),
-					"暴击! %d" % damage_to_deal,
-					Color(1.0, 0.5, 0.0)
-				)
+			target.enemy_hurt(damage_to_deal, is_critical)
 			
 			# 吸血效果
 			if player_stats and player_stats.lifesteal_percent > 0:
@@ -222,8 +214,21 @@ func _execute_immediate_attack(target: Node2D, damage: int, radius: float, show_
 	if is_locked:
 		# 锁敌模式：直接伤害 + 爆炸伤害
 		if target.has_method("enemy_hurt"):
-			var final_damage = int(damage * weapon_data.explosion_damage_multiplier)
-			target.enemy_hurt(final_damage)
+			# 暴击判定
+			var final_damage = damage
+			var is_critical = false
+			if player_stats:
+				is_critical = DamageCalculator.roll_critical(player_stats)
+				if is_critical:
+					final_damage = DamageCalculator.apply_critical_multiplier(damage, player_stats)
+			
+			var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
+			target.enemy_hurt(damage_to_deal, is_critical)
+			
+			# 吸血效果
+			if player_stats and player_stats.lifesteal_percent > 0:
+				var player = get_tree().get_first_node_in_group("player")
+				SpecialEffects.apply_lifesteal(player, damage_to_deal, player_stats.lifesteal_percent)
 		
 		# 爆炸范围伤害（排除主目标）
 		if weapon_data.has_explosion_damage and radius > 0:

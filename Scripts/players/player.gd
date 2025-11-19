@@ -394,8 +394,9 @@ func player_hurt(damage: int) -> void:
 	# 显示伤害跳字
 	FloatingText.create_floating_text(
 		global_position + Vector2(0, -30),  # 在玩家上方显示
-		"-" + str(final_damage),
-		Color(1.0, 0.8, 0.2)  # 黄色伤害数字（区别于敌人）
+		"玩家- " + str(final_damage),
+		Color(1.0, 0.0, 0.0, 1.0),  # 伤害数字（区别于敌人）
+		true  # 玩家受伤总是使用大字体/动画效果
 	)
 	
 	# 检查是否死亡
