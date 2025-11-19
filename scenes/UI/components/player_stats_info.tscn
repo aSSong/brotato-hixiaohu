@@ -17,7 +17,7 @@ corner_radius_bottom_left = 8
 [node name="PlayerStatsInfo" type="PanelContainer"]
 custom_minimum_size = Vector2(300, 900)
 offset_right = 300.0
-offset_bottom = 400.0
+offset_bottom = 1050.0
 script = ExtResource("1")
 
 [node name="Panel" type="Panel" parent="."]
@@ -48,6 +48,7 @@ layout_mode = 2
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 4.83
 
 [node name="StatsContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
 unique_name_in_owner = true

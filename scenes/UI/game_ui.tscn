@@ -77,10 +77,10 @@ corner_radius_bottom_left = 10
 script = ExtResource("1_168mx")
 
 [node name="PlayerStatsInfo" parent="." instance=ExtResource("2_owrpm")]
-offset_left = 1529.0
-offset_top = 88.0
-offset_right = 1829.0
-offset_bottom = 988.0
+offset_left = 1605.0
+offset_top = 14.0
+offset_right = 1905.0
+offset_bottom = 1064.0
 
 [node name="master_key_counter" parent="." instance=ExtResource("2_5b3ti")]
 offset_left = 335.0
