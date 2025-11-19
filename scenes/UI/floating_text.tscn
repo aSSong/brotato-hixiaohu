@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://floating_text_001"]
+[gd_scene load_steps=2 format=3 uid="uid://bvitktk0378rb"]
 
-[ext_resource type="Script" path="res://Scripts/UI/floating_text.gd" id="1_floating"]
+[ext_resource type="Script" uid="uid://8tyyrrgo2i4l" path="res://Scripts/UI/floating_text.gd" id="1_floating"]
 
 [node name="FloatingText" type="Control"]
 layout_mode = 3
@@ -15,6 +15,7 @@ offset_right = 50.0
 offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_floating")
 
 [node name="Label" type="Label" parent="."]
@@ -33,4 +34,3 @@ theme_override_font_sizes/font_size = 24
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
-

@@ -38,8 +38,8 @@ func _ready() -> void:
 			label.add_theme_color_override("font_outline_color", Color.BLACK)
 			label.add_theme_constant_override("outline_size", 2)
 	
-	# 设置高Z层级，确保显示在最上层
-	z_index = 100
+	# 设置高Z层级，确保显示在最上层，低于ui的100
+	z_index = 99
 	
 	scale = Vector2(start_scale, start_scale)
 	
