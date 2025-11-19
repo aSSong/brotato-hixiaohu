@@ -32,12 +32,20 @@ func _perform_attack() -> void:
 	
 	# 获取伤害值
 	var damage = get_damage()
+	var is_critical = false
+	
+	# 暴击判定
+	if player_stats:
+		is_critical = DamageCalculator.roll_critical(player_stats)
+		if is_critical:
+			damage = DamageCalculator.apply_critical_multiplier(damage, player_stats)
 	
 	# 发射子弹
 	bullet.start(
 		shoot_pos.global_position,
 		direction,
 		weapon_data.bullet_speed,
-		damage
+		damage,
+		is_critical,
+		player_stats
 	)
-
