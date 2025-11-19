@@ -17,6 +17,9 @@ class_name ClassData
 @export var name: String = "默认职业"
 @export var description: String = ""
 
+## 技能数据（新系统）
+@export var skill_data: SkillData
+
 ## 新属性系统：使用CombatStats统一管理所有战斗属性
 @export var base_stats: CombatStats = null
 

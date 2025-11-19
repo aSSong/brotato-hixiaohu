@@ -42,6 +42,9 @@ class_name PlayerStatsInfo
 @onready var permanent_modifiers_label: Label = %PermanentModifiers
 @onready var temporary_modifiers_label: Label = %TemporaryModifiers
 
+# 日志文本框
+@onready var log_text: RichTextLabel = %LogText
+
 # 玩家引用
 var player: Node = null
 
@@ -66,6 +69,12 @@ func _ready():
 		if not attribute_manager.stats_changed.is_connected(_on_stats_changed):
 			attribute_manager.stats_changed.connect(_on_stats_changed)
 			print("[PlayerStatsInfo] 已连接属性变化信号")
+		
+		# 监听日志信号
+		if attribute_manager.has_signal("stats_log"):
+			if not attribute_manager.stats_log.is_connected(_on_stats_log):
+				attribute_manager.stats_log.connect(_on_stats_log)
+				print("[PlayerStatsInfo] 已连接属性日志信号")
 		
 		# 初始更新
 		if attribute_manager.final_stats:
@@ -124,6 +133,16 @@ func _on_stats_changed(stats: CombatStats) -> void:
 	
 	# 高亮非默认值
 	_highlight_modified_stats(stats)
+
+## 当收到属性日志时
+func _on_stats_log(message: String) -> void:
+	if not log_text:
+		return
+		
+	var time = Time.get_time_string_from_system()
+	log_text.append_text("[color=#aaaaaa][%s][/color] %s\n" % [time, message])
+	# 自动滚动到底部
+	# log_text.scroll_to_line(log_text.get_line_count() - 1)
 
 ## 定期更新当前值（HP等）
 func _update_current_values() -> void:

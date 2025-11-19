@@ -120,8 +120,9 @@ func apply_to(target_stats: CombatStats) -> void:
 ## 
 ## @return 如果是临时效果且已过期返回true，永久效果返回false
 func is_expired() -> bool:
-	# 永久效果永不过期
-	if duration < 0:
+	# 如果初始设定为永久（initial_duration <= 0），则永不过期
+	# 注意：不能只检查 duration < 0，因为倒计时结束时 duration 也会变成负数
+	if initial_duration <= 0:
 		return false
 	
 	# 临时效果检查剩余时间

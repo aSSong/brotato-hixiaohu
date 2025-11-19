@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://cx1h3tjkuvqt5"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_mvv0e"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_n7j0x"]
+
+[sub_resource type="Resource" id="Resource_mvv0e"]
+script = ExtResource("2_n7j0x")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+magic_range_mult = 1.25
+
+[resource]
+script = ExtResource("1_mvv0e")
+upgrade_type = 16
+name = "魔法范围+25%"
+description = "魔法武器攻击范围提升25%"
+cost = 12
+icon_path = "res://assets/skillicon/10.png"
+quality = 3
+actual_cost = 12
+stats_modifier = SubResource("Resource_mvv0e")

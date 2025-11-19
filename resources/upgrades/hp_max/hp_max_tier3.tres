@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://d1x7yjqv02sp0"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_5tnp0"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_ke7rq"]
+
+[sub_resource type="Resource" id="Resource_5tnp0"]
+script = ExtResource("2_ke7rq")
+max_hp = 20
+speed = 0.0
+crit_damage = 0.0
+
+[resource]
+script = ExtResource("1_5tnp0")
+name = "HP上限+20"
+description = "增加20点最大生命值"
+cost = 12
+icon_path = "res://assets/skillicon/6.png"
+quality = 3
+actual_cost = 12
+stats_modifier = SubResource("Resource_5tnp0")

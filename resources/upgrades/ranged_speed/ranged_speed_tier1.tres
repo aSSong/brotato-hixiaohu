@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://i8ok4xttmaxf"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_ehbs8"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_qt60q"]
+
+[sub_resource type="Resource" id="Resource_ehbs8"]
+script = ExtResource("2_qt60q")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+ranged_speed_mult = 1.08
+
+[resource]
+script = ExtResource("1_ehbs8")
+upgrade_type = 14
+name = "远程速度+8%"
+description = "远程武器攻击速度提升8%"
+cost = 3
+icon_path = "res://assets/skillicon/10.png"
+actual_cost = 3
+stats_modifier = SubResource("Resource_ehbs8")

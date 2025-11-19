@@ -40,6 +40,10 @@ var final_stats: CombatStats = null
 ## @param new_stats 新的最终属性
 signal stats_changed(new_stats: CombatStats)
 
+## 属性日志信号
+## 当属性发生变化产生日志时发出
+signal stats_log(message: String)
+
 func _ready():
 	# 确保base_stats存在
 	if not base_stats:
@@ -69,11 +73,8 @@ func recalculate() -> void:
 		push_error("[AttributeManager] base_stats 未设置！")
 		return
 	
-	# ⭐ 调试：打印base_stats
-	print("[AttributeManager] recalculate():")
-	print("  - base_stats.max_hp: ", base_stats.max_hp)
-	print("  - base_stats.speed: ", base_stats.speed)
-	print("  - permanent_modifiers数量: ", permanent_modifiers.size())
+	# 保存旧值用于对比
+	var old_stats = final_stats
 	
 	# 从基础属性开始
 	final_stats = base_stats.clone()
@@ -81,18 +82,60 @@ func recalculate() -> void:
 	# 应用所有永久加成
 	for modifier in permanent_modifiers:
 		if modifier and modifier.stats_delta:
+			var old_speed = final_stats.speed
 			modifier.apply_to(final_stats)
+			if not is_equal_approx(final_stats.speed, old_speed):
+				print("[AttributeManager] 永久加成改变速度: %+.1f (ID: %s)" % [final_stats.speed - old_speed, modifier.modifier_id])
 	
 	# 应用所有临时加成
 	for modifier in temporary_modifiers:
 		if modifier and modifier.stats_delta and not modifier.is_expired():
+			var old_speed = final_stats.speed
 			modifier.apply_to(final_stats)
+			if not is_equal_approx(final_stats.speed, old_speed):
+				print("[AttributeManager] 临时加成改变速度: %+.1f (ID: %s)" % [final_stats.speed - old_speed, modifier.modifier_id])
 	
-	print("  - final_stats.max_hp: ", final_stats.max_hp)
-	print("  - final_stats.speed: ", final_stats.speed)
+	# 记录属性变化 Diff
+	_log_stats_diff(old_stats, final_stats)
 	
 	# 发送变化信号
 	stats_changed.emit(final_stats)
+
+## 记录属性变化 Diff
+func _log_stats_diff(old_stats: CombatStats, new_stats: CombatStats) -> void:
+	if not old_stats or not new_stats:
+		return
+		
+	var diffs = []
+	
+	# 基础属性
+	if old_stats.max_hp != new_stats.max_hp:
+		diffs.append("MaxHP: %d -> %d (%+d)" % [old_stats.max_hp, new_stats.max_hp, new_stats.max_hp - old_stats.max_hp])
+	if not is_equal_approx(old_stats.speed, new_stats.speed):
+		diffs.append("Speed: %.1f -> %.1f (%+.1f)" % [old_stats.speed, new_stats.speed, new_stats.speed - old_stats.speed])
+	if old_stats.defense != new_stats.defense:
+		diffs.append("Defense: %d -> %d (%+d)" % [old_stats.defense, new_stats.defense, new_stats.defense - old_stats.defense])
+	if not is_equal_approx(old_stats.luck, new_stats.luck):
+		diffs.append("Luck: %.1f -> %.1f (%+.1f)" % [old_stats.luck, new_stats.luck, new_stats.luck - old_stats.luck])
+		
+	# 战斗属性
+	if not is_equal_approx(old_stats.crit_chance, new_stats.crit_chance):
+		diffs.append("CritChance: %.1f%% -> %.1f%% (%+.1f%%)" % [old_stats.crit_chance * 100, new_stats.crit_chance * 100, (new_stats.crit_chance - old_stats.crit_chance) * 100])
+	if not is_equal_approx(old_stats.crit_damage, new_stats.crit_damage):
+		diffs.append("CritDamage: %.1f%% -> %.1f%% (%+.1f%%)" % [old_stats.crit_damage * 100, new_stats.crit_damage * 100, (new_stats.crit_damage - old_stats.crit_damage) * 100])
+	if not is_equal_approx(old_stats.damage_reduction, new_stats.damage_reduction):
+		diffs.append("DamageReduction: %.1f%% -> %.1f%% (%+.1f%%)" % [old_stats.damage_reduction * 100, new_stats.damage_reduction * 100, (new_stats.damage_reduction - old_stats.damage_reduction) * 100])
+		
+	# 全局属性
+	if not is_equal_approx(old_stats.global_damage_mult, new_stats.global_damage_mult):
+		diffs.append("GlobalDamage: x%.2f -> x%.2f" % [old_stats.global_damage_mult, new_stats.global_damage_mult])
+	if not is_equal_approx(old_stats.global_attack_speed_mult, new_stats.global_attack_speed_mult):
+		diffs.append("GlobalAttackSpeed: x%.2f -> x%.2f" % [old_stats.global_attack_speed_mult, new_stats.global_attack_speed_mult])
+		
+	if not diffs.is_empty():
+		var msg = "[AttributeManager] 属性变更:\n  " + "\n  ".join(diffs)
+		print(msg)
+		stats_log.emit(msg)
 
 ## 添加永久加成
 ## 
@@ -103,14 +146,6 @@ func add_permanent_modifier(modifier: AttributeModifier) -> void:
 	if not modifier:
 		push_warning("[AttributeManager] 尝试添加空的永久加成")
 		return
-	
-	# ⭐ 调试：打印modifier的内容
-	print("[AttributeManager] 添加永久加成:")
-	print("  - modifier_type: ", modifier.modifier_type)
-	print("  - modifier_id: ", modifier.modifier_id)
-	if modifier.stats_delta:
-		print("  - stats_delta.max_hp: ", modifier.stats_delta.max_hp)
-		print("  - stats_delta.speed: ", modifier.stats_delta.speed)
 	
 	permanent_modifiers.append(modifier)
 	recalculate()
@@ -262,4 +297,3 @@ enum ModifierType {
 	SKILL,
 	BUFF
 }
-

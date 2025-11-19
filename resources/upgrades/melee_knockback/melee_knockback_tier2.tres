@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://e6axeb7dfv42"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_agopw"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_ehvfk"]
+
+[sub_resource type="Resource" id="Resource_agopw"]
+script = ExtResource("2_ehvfk")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+melee_knockback_mult = 1.2
+
+[resource]
+script = ExtResource("1_agopw")
+upgrade_type = 11
+name = "近战击退+19%"
+description = "近战武器击退效果提升19%"
+cost = 6
+icon_path = "res://assets/skillicon/10.png"
+quality = 2
+actual_cost = 6
+stats_modifier = SubResource("Resource_agopw")

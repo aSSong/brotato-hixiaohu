@@ -71,6 +71,9 @@ class_name CombatStats
 @export var freeze_chance: float = 0.0  ## 冰冻触发概率（0-1）
 @export var poison_chance: float = 0.0  ## 中毒触发概率（0-1）
 
+func _init() -> void:
+	pass
+
 ## 获取指定武器类型的最终伤害倍数
 ## 
 ## 计算公式：(1 + global_add + type_add) × global_mult × type_mult

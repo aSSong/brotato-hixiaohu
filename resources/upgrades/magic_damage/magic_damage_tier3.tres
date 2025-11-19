@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://7stak38msurs"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_xk6pb"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_tt6am"]
+
+[sub_resource type="Resource" id="Resource_xk6pb"]
+script = ExtResource("2_tt6am")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+magic_damage_mult = 1.15
+
+[resource]
+script = ExtResource("1_xk6pb")
+upgrade_type = 15
+name = "魔法伤害+14%"
+description = "魔法武器伤害提升14%"
+cost = 12
+icon_path = "res://assets/skillicon/10.png"
+quality = 3
+actual_cost = 12
+stats_modifier = SubResource("Resource_xk6pb")

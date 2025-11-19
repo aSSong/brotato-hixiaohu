@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://2dh5f4vru7hm"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_3qlxc"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_8c214"]
+
+[sub_resource type="Resource" id="Resource_3qlxc"]
+script = ExtResource("2_8c214")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+ranged_range_mult = 1.35
+
+[resource]
+script = ExtResource("1_3qlxc")
+upgrade_type = 13
+name = "远程范围+35%"
+description = "远程武器攻击范围提升35%"
+cost = 24
+icon_path = "res://assets/skillicon/10.png"
+quality = 4
+actual_cost = 24
+stats_modifier = SubResource("Resource_3qlxc")

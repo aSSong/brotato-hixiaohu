@@ -55,13 +55,13 @@ enum UpgradeType {
 @export var weapon_id: String = ""  # 仅用于NEW_WEAPON和WEAPON_LEVEL_UP
 
 ## 品质相关（运行时动态设置）
-var quality: int = Quality.WHITE  # 品质等级
-var base_cost: int = 5  # 武器升级的基础价格
-var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
-var locked_cost: int = -1  # 锁定时的价格（-1表示未锁定）
+@export var quality: int = Quality.WHITE  # 品质等级
+@export var base_cost: int = 5  # 武器升级的基础价格
+@export var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
+@export var locked_cost: int = -1  # 锁定时的价格（-1表示未锁定）
 
 ## 新属性系统：使用CombatStats表示属性变化
-var stats_modifier: CombatStats = null
+@export var stats_modifier: CombatStats = null
 
 ## 旧属性系统（已废弃，保留以兼容）
 ## 格式：{"attribute_name": {"op": "add|multiply", "value": number}}
@@ -91,8 +91,6 @@ func _init(
 	stats_modifier.speed = 0.0
 	stats_modifier.crit_damage = 0.0
 	attribute_changes = {}
-	
-	print("[UpgradeData._init] 创建: %s, stats_modifier.max_hp: %d" % [name, stats_modifier.max_hp])
 
 ## 创建AttributeModifier
 ## 
@@ -103,13 +101,8 @@ func create_modifier() -> AttributeModifier:
 	var modifier = AttributeModifier.new()
 	modifier.modifier_type = AttributeModifier.ModifierType.UPGRADE
 	
-	# ⭐ 调试：检查stats_modifier是否正确
-	if stats_modifier:
-		print("[UpgradeData] create_modifier: ", name)
-		print("  - stats_modifier.max_hp: ", stats_modifier.max_hp)
-		print("  - stats_modifier.speed: ", stats_modifier.speed)
-	else:
-		print("[UpgradeData] 警告：stats_modifier 为 null！")
+	if not stats_modifier:
+		push_warning("[UpgradeData] 警告：stats_modifier 为 null！(Name: %s)" % name)
 	
 	modifier.stats_delta = stats_modifier
 	modifier.modifier_id = "upgrade_" + name

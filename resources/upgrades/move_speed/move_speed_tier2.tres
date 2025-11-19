@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://de4sjpt0rfqct"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_lpcaq"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_x00a1"]
+
+[sub_resource type="Resource" id="Resource_lpcaq"]
+script = ExtResource("2_x00a1")
+max_hp = 0
+speed = 10.0
+crit_damage = 0.0
+
+[resource]
+script = ExtResource("1_lpcaq")
+upgrade_type = 1
+name = "移动速度+10"
+description = "增加10点移动速度"
+cost = 6
+icon_path = "res://assets/skillicon/11.png"
+quality = 2
+actual_cost = 6
+stats_modifier = SubResource("Resource_lpcaq")

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3 uid="uid://bv1qofjv1ecn"]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_dhvvd"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_mkqwn"]
+
+[sub_resource type="Resource" id="Resource_dhvvd"]
+script = ExtResource("2_mkqwn")
+max_hp = 0
+speed = 0.0
+luck = 5.0
+crit_damage = 0.0
+
+[resource]
+script = ExtResource("1_dhvvd")
+upgrade_type = 6
+name = "幸运+5"
+description = "增加5点幸运值（未来影响掉落）"
+cost = 3
+icon_path = "res://assets/skillicon/10.png"
+actual_cost = 3
+stats_modifier = SubResource("Resource_dhvvd")

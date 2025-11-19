@@ -21,9 +21,73 @@ func set_class(class_data: ClassData) -> void:
 
 ## 激活技能
 func activate_skill() -> void:
-	if current_class == null or current_class.skill_name.is_empty():
+	if current_class == null:
 		return
 	
+	# 优先使用新的 SkillData 系统
+	if current_class.skill_data:
+		_activate_skill_from_data(current_class.skill_data)
+		return
+		
+	# 兼容旧系统 (如果 skill_data 为空但 skill_name 不为空)
+	if not current_class.skill_name.is_empty():
+		push_warning("[ClassManager] ⚠️ 正在使用旧技能系统激活技能: %s (请迁移到 SkillData)" % current_class.skill_name)
+		print("[ClassManager] ⚠️ 警告：调用了旧的技能系统！")
+		_activate_skill_legacy()
+
+## 从 SkillData 激活技能
+func _activate_skill_from_data(skill_data: SkillData) -> void:
+	var skill_name = skill_data.name
+	
+	# 检查冷却时间
+	if active_skills.has(skill_name):
+		if active_skills[skill_name] > 0:
+			return  # 技能还在冷却中
+	
+	# 获取玩家引用
+	var player = get_parent()
+	if not player or not player.has_node("AttributeManager"):
+		push_warning("[ClassManager] 玩家没有AttributeManager，无法激活技能")
+		return
+	
+	# 如果技能已经激活（旧修改器还存在），先移除
+	if skill_modifiers.has(skill_name):
+		var old_modifier = skill_modifiers[skill_name]
+		player.attribute_manager.remove_modifier_by_id(old_modifier.modifier_id)
+		print("[ClassManager] 移除旧的技能修改器: %s" % skill_name)
+	
+	# 创建技能修改器
+	var skill_modifier = AttributeModifier.new()
+	skill_modifier.modifier_type = AttributeModifier.ModifierType.SKILL
+	skill_modifier.modifier_id = "skill_" + skill_name
+	skill_modifier.duration = skill_data.duration
+	skill_modifier.initial_duration = skill_data.duration
+	
+	# 克隆属性加成 (必须克隆，否则会修改资源文件)
+	if skill_data.stats_modifier:
+		skill_modifier.stats_delta = skill_data.stats_modifier.clone()
+	else:
+		skill_modifier.stats_delta = CombatStats.new()
+		# 确保默认值干净
+		skill_modifier.stats_delta.max_hp = 0
+		skill_modifier.stats_delta.speed = 0.0
+	
+	# 添加到AttributeManager
+	player.attribute_manager.add_temporary_modifier(skill_modifier)
+	
+	# 保存修改器引用
+	skill_modifiers[skill_name] = skill_modifier
+	
+	# 设置冷却时间
+	if skill_data.cooldown > 0:
+		active_skills[skill_name] = skill_data.cooldown
+	
+	# 发送信号
+	skill_activated.emit(skill_name)
+	print("[ClassManager] 技能激活: %s，持续时间: %.1f秒" % [skill_name, skill_modifier.duration])
+
+## 激活技能（旧系统兼容）
+func _activate_skill_legacy() -> void:
 	var skill_name = current_class.skill_name
 	var params = current_class.skill_params
 	var cooldown = params.get("cooldown", 0.0)
@@ -39,14 +103,13 @@ func activate_skill() -> void:
 		push_warning("[ClassManager] 玩家没有AttributeManager，无法激活技能")
 		return
 	
-	# ⭐ 如果技能已经激活（旧修改器还存在），先移除
+	# 如果技能已经激活（旧修改器还存在），先移除
 	if skill_modifiers.has(skill_name):
 		var old_modifier = skill_modifiers[skill_name]
 		player.attribute_manager.remove_modifier_by_id(old_modifier.modifier_id)
-		print("[ClassManager] 移除旧的技能修改器: %s" % skill_name)
 	
 	# 创建技能修改器
-	var skill_modifier = _create_skill_modifier(skill_name, params)
+	var skill_modifier = _create_skill_modifier_legacy(skill_name, params)
 	if not skill_modifier:
 		return
 	
@@ -62,12 +125,10 @@ func activate_skill() -> void:
 	
 	# 发送信号
 	skill_activated.emit(skill_name)
-	print("[ClassManager] 技能激活: %s，持续时间: %.1f秒" % [skill_name, skill_modifier.duration])
+	print("[ClassManager] 技能激活(旧系统): %s" % skill_name)
 
-## 创建技能修改器
-## 
-## 根据技能名称和参数创建对应的AttributeModifier
-func _create_skill_modifier(skill_name: String, params: Dictionary) -> AttributeModifier:
+## 创建技能修改器（旧系统兼容）
+func _create_skill_modifier_legacy(skill_name: String, params: Dictionary) -> AttributeModifier:
 	var modifier = AttributeModifier.new()
 	modifier.modifier_type = AttributeModifier.ModifierType.SKILL
 	modifier.modifier_id = "skill_" + skill_name
@@ -77,59 +138,43 @@ func _create_skill_modifier(skill_name: String, params: Dictionary) -> Attribute
 	modifier.duration = duration
 	modifier.initial_duration = duration
 	
-	# ⭐ 重要：将默认值重置为0，避免意外累加
-	# 对于加法属性，默认值应该是0
+	# 将默认值重置为0
 	modifier.stats_delta.max_hp = 0
 	modifier.stats_delta.speed = 0.0
 	modifier.stats_delta.defense = 0
 	modifier.stats_delta.luck = 0.0
 	modifier.stats_delta.crit_chance = 0.0
-	modifier.stats_delta.crit_damage = 0.0  # 默认值1.5改为0
+	modifier.stats_delta.crit_damage = 0.0
 	modifier.stats_delta.damage_reduction = 0.0
-	
-	# 对于乘法属性，默认值应该是1.0（不修改）
-	# global_damage_mult, global_attack_speed_mult 等默认值是1.0，保持不变
-	# 因为在 apply_to() 中使用 *= 运算符
 	
 	# 根据技能类型设置属性变化
 	match skill_name:
 		"狂暴":
-			# 战士技能：攻击速度+50%，伤害+30%
 			var attack_speed_boost = params.get("attack_speed_boost", 0.0)
 			var damage_boost = params.get("damage_boost", 1.0)
-			# ⭐ 修正：attack_speed_boost 是加成百分比（0.5 = +50%），转换为乘法倍数
 			modifier.stats_delta.global_attack_speed_mult = 1.0 + attack_speed_boost
 			modifier.stats_delta.global_damage_mult = damage_boost
 		
 		"精准射击":
-			# 射手技能：暴击率+50%
 			var crit_boost = params.get("crit_chance_boost", 0.0)
 			modifier.stats_delta.crit_chance = crit_boost
-			# 全部暴击效果由武器层面处理，这里只设置暴击率
 		
 		"魔法爆发":
-			# 法师技能：爆炸范围x2，伤害+50%
-			# 注意：这里使用乘法层
 			var radius_mult = params.get("explosion_radius_multiplier", 1.0)
 			var damage_mult = params.get("damage_multiplier", 1.0)
 			modifier.stats_delta.magic_explosion_radius_mult = radius_mult
 			modifier.stats_delta.magic_damage_mult = damage_mult
 		
 		"全面强化":
-			# 平衡者技能：所有属性+20%
 			var all_boost = params.get("all_stats_boost", 1.0)
-			# 应用到所有武器类型
 			modifier.stats_delta.global_damage_mult = all_boost
 			modifier.stats_delta.global_attack_speed_mult = all_boost
-			# 也可以应用到速度
 			var speed_boost = (all_boost - 1.0) * 400.0
 			modifier.stats_delta.speed = speed_boost
 		
 		"护盾":
-			# 坦克技能：减伤50%
 			var damage_reduction = params.get("damage_reduction", 0.0)
 			modifier.stats_delta.damage_reduction = damage_reduction
-			# 反弹伤害需要特殊处理（不是属性，是效果）
 		
 		_:
 			push_warning("[ClassManager] 未知技能: " + skill_name)
@@ -161,24 +206,17 @@ func is_skill_on_cooldown(skill_name: String) -> bool:
 func get_skill_cooldown(skill_name: String) -> float:
 	return active_skills.get(skill_name, 0.0)
 
-## 检查技能是否激活（兼容旧代码）
-## 
-## 注意：技能效果现在由AttributeManager管理
-## 这个方法主要用于检查modifier是否存在
+## 检查技能是否激活
 func is_skill_active(skill_name: String) -> bool:
 	return skill_modifiers.has(skill_name)
 
 ## 获取技能效果值（已废弃）
-## 
-## 旧方法保留以兼容，但建议直接从player.attribute_manager.final_stats读取
 @warning_ignore("unused_parameter")
 func get_skill_effect(effect_name: String, default_value = 0.0):
 	push_warning("[ClassManager] get_skill_effect() 已废弃，请直接访问 player.attribute_manager.final_stats")
 	return default_value
 
 ## 获取被动效果值（已废弃）
-## 
-## 旧方法保留以兼容，但建议直接从current_class.base_stats读取
 @warning_ignore("unused_parameter")
 func get_passive_effect(effect_name: String, default_value = 1.0):
 	push_warning("[ClassManager] get_passive_effect() 已废弃，请直接访问 current_class.base_stats")
