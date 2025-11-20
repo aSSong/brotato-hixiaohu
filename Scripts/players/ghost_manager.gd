@@ -23,44 +23,62 @@ func _ready() -> void:
 	# 添加到组中以便查找
 	add_to_group("ghost_manager")
 
-func _process(delta: float) -> void:
-	# 同步所有Ghost的速度与玩家速度
-	if player and is_instance_valid(player):
-		var player_speed = _get_player_speed()
+func _process(_delta: float) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	
+	var player_speed = _get_player_speed()
+	var player_path: Array = []
+	if "get_path_history" in player:
+		player_path = player.get_path_history()
+	
+	var max_required_player_points: int = ghost_path_length + ghost_Interval
+	var offset_points: int = max(1, ghost_Interval)
+	
+	for i in range(ghosts.size()):
+		var ghost = ghosts[i]
+		if ghost == null or not is_instance_valid(ghost):
+			continue
 		
-		# 获取玩家路径历史
-		var player_path = []
-		if "get_path_history" in player:
-			player_path = player.get_path_history()
+		ghost.update_speed(player_speed)
 		
-		for i in range(ghosts.size()):
-			var ghost = ghosts[i]
-			if is_instance_valid(ghost):
-				ghost.update_speed(player_speed)
-				
-				# 方案3：让Ghost从最新的路径点开始跟随
-				# 每个Ghost使用前方目标的最后N个路径点，而不是前面的旧路径点
-				var path_offset = (i + 1) * ghost_Interval  # 每个Ghost延迟的路径点数
-				
-				if i == 0:
-					# 第一个Ghost直接使用玩家的最新路径
-					if player_path.size() > path_offset:
-						# 使用路径末尾的最新路径点
-						var start_index = max(0, player_path.size() - ghost_path_length - path_offset)
-						var end_index = player_path.size() - path_offset
-						var ghost_path = player_path.slice(start_index, end_index)
-						ghost.update_path_points(ghost_path)
-				else:
-					# 后续Ghost使用前一个Ghost的路径
-					var prev_ghost = ghosts[i - 1]
-					if is_instance_valid(prev_ghost) and "path_history" in prev_ghost:
-						var prev_path = prev_ghost.path_history
-						if prev_path.size() > path_offset:
-							# 使用前一个Ghost路径的最新部分
-							var start_index = max(0, prev_path.size() - ghost_path_length - path_offset)
-							var end_index = prev_path.size() - path_offset
-							var ghost_path = prev_path.slice(start_index, end_index)
-							ghost.update_path_points(ghost_path)
+		var desired_length: int = ghost_path_length + i * ghost_Interval
+		if "ensure_path_history_capacity" in ghost:
+			ghost.ensure_path_history_capacity(desired_length + offset_points)
+		
+		if i == 0:
+			max_required_player_points = max(max_required_player_points, desired_length + offset_points)
+			_assign_chain_path(ghost, player_path, offset_points, desired_length)
+		else:
+			var prev_ghost = ghosts[i - 1]
+			if prev_ghost == null or not is_instance_valid(prev_ghost):
+				continue
+			if not ("path_history" in prev_ghost):
+				continue
+			_assign_chain_path(ghost, prev_ghost.path_history, offset_points, desired_length)
+	
+	if "ensure_path_history_capacity" in player:
+		player.ensure_path_history_capacity(max_required_player_points)
+	elif "max_path_points" in player:
+		player.max_path_points = max(player.max_path_points, max_required_player_points)
+
+func _assign_chain_path(ghost: Node, source_path: Array, offset_points: int, desired_length: int) -> void:
+	if source_path.is_empty():
+		return
+	var end_index: int = source_path.size() - offset_points
+	if end_index <= 0:
+		return
+	var length: int = min(desired_length, end_index)
+	var start_index: int = max(0, end_index - length)
+	if end_index - start_index < 2:
+		return
+	var ghost_path: Array = source_path.slice(start_index, end_index)
+	if ghost_path.is_empty():
+		return
+	if "update_path_points" in ghost:
+		ghost.update_path_points(ghost_path)
+	if "ensure_chain_alignment" in ghost:
+		ghost.ensure_chain_alignment(ghost_path)
 
 ## 设置玩家引用
 func set_player(p: Node2D) -> void:

@@ -120,7 +120,7 @@ func choosePlayer(type):
 	playerAni.play("default")
 	pass
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
 	var self_pos = position
 	
@@ -300,7 +300,7 @@ func _on_stats_changed(new_stats: CombatStats) -> void:
 ## Buff Tick回调
 ## 
 ## 当Buff触发Tick效果时（DoT伤害等）
-func _on_buff_tick(buff_id: String, tick_data: Dictionary) -> void:
+func _on_buff_tick(_buff_id: String, tick_data: Dictionary) -> void:
 	# 处理DoT伤害
 	SpecialEffects.apply_dot_damage(self, tick_data)
 
@@ -449,6 +449,13 @@ func _record_path_point() -> void:
 ## 获取路径历史（供Ghost使用）
 func get_path_history() -> Array:
 	return path_history
+
+func ensure_path_history_capacity(required_points: int) -> void:
+	var margin := 12
+	var target_capacity := required_points + margin
+	if target_capacity > max_path_points:
+		# 限制上限防止无限增长
+		max_path_points = min(target_capacity, 4096)
 
 ## 创建头顶名字Label
 func _create_name_label() -> void:

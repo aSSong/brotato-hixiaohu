@@ -39,6 +39,36 @@ var current_path_index: int = 0
 var path_history: Array = []
 var last_recorded_position: Vector2 = Vector2.ZERO
 var max_path_points: int = 300  # 最多记录的路径点数量
+const PATH_HISTORY_MIN_CAPACITY: int = 60
+const PATH_HISTORY_MAX_CAPACITY: int = 2000
+const PATH_HISTORY_MARGIN_POINTS: int = 12  # 额外冗余，避免刚好触发裁剪
+
+## 跟随间隔调试开关与状态
+var spacing_debug_enabled: bool = true
+var spacing_debug_allow_unlisted_events: bool = false
+var spacing_debug_allowed_events := {
+	"path_index_adjusted": true,
+	"path_points_became_empty": true,
+	"clamp_path_index": true,
+	"alignment_started": true,
+	"alignment_completed": true,
+	"alignment_aborted": true
+}
+var _was_within_follow_distance: bool = false
+var _using_path_points: bool = false
+var _spacing_debug_time_accumulator: float = 0.0
+var _has_logged_speed: bool = false
+var _last_logged_speed: float = 0.0
+var _has_logged_path_signature: bool = false
+var _last_path_signature_size: int = -1
+var _last_path_signature_length: float = 0.0
+var spacing_debug_speed_epsilon: float = 0.5
+var spacing_debug_path_length_epsilon: float = 0.5
+var _chain_follow_initialized: bool = false
+var _alignment_in_progress: bool = false
+var _alignment_target: Vector2 = Vector2.ZERO
+var _alignment_fast_speed_multiplier: float = 3.0
+var _alignment_snap_distance: float = 8.0
 
 ## Ghost的名字和死亡次数（用于显示）
 var ghost_player_name: String = ""
@@ -46,6 +76,61 @@ var ghost_total_death_count: int = 0
 
 ## 名字显示Label
 var name_label: Label = null
+
+func _log_spacing_event(event_name: String, extra_data: Dictionary = {}) -> void:
+	if not spacing_debug_enabled:
+		return
+	
+	if spacing_debug_allow_unlisted_events:
+		# 仅当明确禁用该事件时跳出
+		if spacing_debug_allowed_events.has(event_name) and not spacing_debug_allowed_events[event_name]:
+			return
+	else:
+		# 仅允许白名单事件
+		if not spacing_debug_allowed_events.get(event_name, false):
+			return
+	
+	var target_name := "null"
+	var distance_to_target := -1.0
+	if follow_target != null and is_instance_valid(follow_target):
+		target_name = str(follow_target.name)
+		distance_to_target = global_position.distance_to(follow_target.global_position)
+	
+	var next_point_distance := -1.0
+	if not target_path_points.is_empty():
+		var idx = clamp(current_path_index, 0, target_path_points.size() - 1)
+		if idx >= 0 and idx < target_path_points.size():
+			next_point_distance = global_position.distance_to(target_path_points[idx])
+	
+	var base_message = "[Ghost spacing] %s | ghost:%s idx:%d target:%s dist_target:%.2f follow_dist:%.2f record_dist:%.2f next_point_dist:%.2f path_points:%d path_index:%d elapsed:%.2f" % [
+		event_name,
+		name,
+		queue_index,
+		target_name,
+		distance_to_target,
+		follow_distance,
+		path_record_distance,
+		next_point_distance,
+		target_path_points.size(),
+		current_path_index,
+		_spacing_debug_time_accumulator
+	]
+	
+	if not extra_data.is_empty():
+		var extra_parts: Array[String] = []
+		for key in extra_data.keys():
+			extra_parts.append("%s=%s" % [str(key), str(extra_data[key])])
+		base_message += " | " + ", ".join(extra_parts)
+	
+	print(base_message)
+
+func _compute_path_length(points: Array) -> float:
+	if points.size() < 2:
+		return 0.0
+	var total_distance := 0.0
+	for i in range(1, points.size()):
+		total_distance += points[i - 1].distance_to(points[i])
+	return total_distance
 
 func _ready() -> void:
 	# Ghost不会与其他物体碰撞（只是视觉效果）
@@ -72,34 +157,60 @@ func _process(delta: float) -> void:
 	if follow_target == null or not is_instance_valid(follow_target):
 		return
 	
+	if spacing_debug_enabled:
+		_spacing_debug_time_accumulator += delta
+
+	if _alignment_in_progress:
+		if _update_alignment(delta):
+			_record_path_point()
+		return
+		
 	# 使用贪吃蛇式跟随
-	_snake_follow(delta)
+	_snake_follow()
 	
 	# 记录Ghost自己的路径（供后续Ghost使用）
 	_record_path_point()
 
 ## 贪吃蛇式跟随逻辑
-func _snake_follow(delta: float) -> void:
+func _snake_follow() -> void:
 	# 如果目标路径点队列为空，直接跟随目标
 	if target_path_points.is_empty():
+		if _using_path_points:
+			_using_path_points = false
+			_log_spacing_event("path_points_became_empty")
 		_direct_follow()
 		return
+	elif not _using_path_points:
+		_using_path_points = true
+		_log_spacing_event("path_points_available", {"points": target_path_points.size()})
 	
 	# 获取当前目标点
 	if current_path_index >= target_path_points.size():
 		current_path_index = target_path_points.size() - 1
+		_log_spacing_event("clamp_path_index", {"new_index": current_path_index})
 	
 	if current_path_index < 0:
 		return
 	
 	var target_point = target_path_points[current_path_index]
 	var distance_to_point = global_position.distance_to(target_point)
+	var near_final_segment = current_path_index >= max(0, target_path_points.size() - 2)
+	if near_final_segment and distance_to_point <= follow_distance * 1.2:
+		global_position = target_point
+		velocity = Vector2.ZERO
+		return
 	
 	# 如果接近当前路径点，移动到下一个路径点
 	if distance_to_point < path_record_distance:
+		var previous_index = current_path_index
 		current_path_index += 1
 		if current_path_index >= target_path_points.size():
 			current_path_index = target_path_points.size() - 1
+		_log_spacing_event("advance_path_point", {
+			"distance_to_point": distance_to_point,
+			"from_index": previous_index,
+			"to_index": current_path_index
+		})
 		return
 	
 	# 移动向当前路径点
@@ -117,6 +228,14 @@ func _snake_follow(delta: float) -> void:
 func _direct_follow() -> void:
 	var distance_to_target = global_position.distance_to(follow_target.global_position)
 	
+	var within_follow_distance = distance_to_target <= follow_distance
+	if within_follow_distance != _was_within_follow_distance:
+		_was_within_follow_distance = within_follow_distance
+		if within_follow_distance:
+			_log_spacing_event("direct_follow_within_range", {"distance_to_target": distance_to_target})
+		else:
+			_log_spacing_event("direct_follow_chasing", {"distance_to_target": distance_to_target})
+	
 	if distance_to_target > follow_distance:
 		var direction = (follow_target.global_position - global_position).normalized()
 		velocity = direction * follow_speed
@@ -133,9 +252,79 @@ func _direct_follow() -> void:
 ## 更新目标路径点（由跟随目标调用）
 func update_path_points(points: Array) -> void:
 	target_path_points = points.duplicate()
+	_using_path_points = not target_path_points.is_empty()
+	var previous_index = current_path_index
 	# 确保索引有效
 	if current_path_index >= target_path_points.size():
 		current_path_index = max(0, target_path_points.size() - 1)
+	_retarget_path_index_to_nearest_point()
+	if current_path_index != previous_index:
+		_log_spacing_event("path_index_adjusted", {"from": previous_index, "to": current_path_index})
+
+func ensure_chain_alignment(path_points: Array) -> void:
+	if path_points.is_empty():
+		return
+	var anchor_point: Vector2 = path_points[0]
+	var distance := global_position.distance_to(anchor_point)
+	if not _chain_follow_initialized or path_history.size() <= 1:
+		_start_alignment(anchor_point, path_points, true)
+	elif distance > follow_distance * 8.0:
+		if not _alignment_in_progress or _alignment_target != anchor_point:
+			_start_alignment(anchor_point, path_points, false)
+
+func _start_alignment(anchor_point: Vector2, path_points: Array, immediate: bool) -> void:
+	_chain_follow_initialized = true
+	if immediate:
+		_alignment_in_progress = false
+		global_position = anchor_point
+		velocity = Vector2.ZERO
+		current_path_index = min(1, max(0, path_points.size() - 1))
+		last_recorded_position = anchor_point
+		path_history.clear()
+		path_history.append(anchor_point)
+	else:
+		_alignment_target = anchor_point
+		_alignment_in_progress = true
+		current_path_index = min(1, max(0, path_points.size() - 1))
+		_log_spacing_event("alignment_started", {
+			"distance": global_position.distance_to(anchor_point)
+		})
+
+func _update_alignment(delta: float) -> bool:
+	if not _alignment_in_progress:
+		return false
+	var to_target = _alignment_target - global_position
+	var distance = to_target.length()
+	if distance <= _alignment_snap_distance:
+		global_position = _alignment_target
+		velocity = Vector2.ZERO
+		_alignment_in_progress = false
+		last_recorded_position = global_position
+		path_history.clear()
+		path_history.append(global_position)
+		_log_spacing_event("alignment_completed", {"rest_distance": distance})
+		return false
+	var move_distance = follow_speed * _alignment_fast_speed_multiplier * delta
+	if move_distance <= 0.0:
+		move_distance = distance
+	var step = to_target.normalized() * min(move_distance, distance)
+	global_position += step
+	return true
+
+func _retarget_path_index_to_nearest_point() -> void:
+	if target_path_points.is_empty():
+		return
+	var search_radius: int = 6
+	var start_idx: int = max(0, current_path_index - search_radius)
+	var end_idx: int = min(target_path_points.size() - 1, current_path_index + search_radius)
+	var best_idx: int = current_path_index
+	var best_distance: float = INF
+	for i in range(start_idx, end_idx + 1):
+		var d: float = global_position.distance_squared_to(target_path_points[i])
+		if d < best_distance:
+			best_distance = d
+			best_idx = i
+	current_path_index = best_idx
 
 ## 初始化Ghost
 func initialize(target: Node2D, index: int, player_speed: float, use_existing_data: bool = false) -> void:
@@ -172,6 +361,8 @@ func initialize(target: Node2D, index: int, player_speed: float, use_existing_da
 ## 更新跟随速度（与玩家同步）
 func update_speed(new_speed: float) -> void:
 	follow_speed = new_speed
+	_has_logged_speed = true
+	_last_logged_speed = new_speed
 
 ## 生成随机数据
 func _generate_random_data() -> void:
@@ -263,13 +454,19 @@ func _create_weapons() -> void:
 ## 记录路径点（用于后续Ghost跟随）
 func _record_path_point() -> void:
 	# 如果移动距离超过记录间隔，记录新的路径点
-	if global_position.distance_to(last_recorded_position) >= path_record_distance:
+	var distance_since_last = global_position.distance_to(last_recorded_position)
+	if distance_since_last >= path_record_distance:
 		path_history.append(global_position)
 		last_recorded_position = global_position
 		
 		# 限制路径点数量，删除最旧的路径点
 		if path_history.size() > max_path_points:
 			path_history.pop_front()
+
+func ensure_path_history_capacity(required_points: int) -> void:
+	var target_capacity = clamp(required_points + PATH_HISTORY_MARGIN_POINTS, PATH_HISTORY_MIN_CAPACITY, PATH_HISTORY_MAX_CAPACITY)
+	if target_capacity != max_path_points:
+		max_path_points = target_capacity
 
 ## 连接死亡管理器的信号
 func _connect_death_signals() -> void:
