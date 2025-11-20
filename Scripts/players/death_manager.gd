@@ -220,24 +220,26 @@ func _show_death_ui() -> void:
 	# 暂停游戏
 	get_tree().paused = true
 	
-	# 显示死亡界面（传入当前模式）
-	var current_gold = GameMain.gold
+	# 显示死亡界面（传入当前模式，death_ui会自己检查master_key）
+	var current_gold = GameMain.gold  # 保留参数以保持兼容性
 	var current_mode = GameMain.current_mode_id
 	death_ui.show_death_screen(revive_count, current_gold, current_mode)
 	
-	print("[DeathManager] 显示死亡UI | 模式:", current_mode, " 钥匙:", current_gold, " 复活费用:", 5 * (revive_count + 1))
+	var current_master_key = GameMain.master_key
+	print("[DeathManager] 显示死亡UI | 模式:", current_mode, " 主钥匙:", current_master_key, " 复活费用: 1")
 
 ## 复活请求
 func _on_revive_requested() -> void:
-	var cost = 5 * (revive_count + 1)
+	# 固定复活费用：1个masterkey
+	var cost = 1
 	
-	# 检查钥匙是否足够
-	if GameMain.gold < cost:
-		push_warning("[DeathManager] 钥匙不足，无法复活")
+	# 检查主钥匙是否足够
+	if GameMain.master_key < cost:
+		push_warning("[DeathManager] 主钥匙不足，无法复活")
 		return
 	
-	# 扣除钥匙
-	GameMain.remove_gold(cost)
+	# 扣除主钥匙
+	GameMain.remove_master_key(cost)
 	
 	# 增加复活次数
 	revive_count += 1
@@ -245,7 +247,7 @@ func _on_revive_requested() -> void:
 	# 复活玩家
 	_revive_player()
 	
-	print("[DeathManager] 玩家复活！花费:", cost, " 剩余钥匙:", GameMain.gold, " 累计复活次数:", revive_count)
+	print("[DeathManager] 玩家复活！花费:", cost, " 个主钥匙，剩余主钥匙:", GameMain.master_key, " 累计复活次数:", revive_count)
 
 ## 放弃请求
 func _on_give_up_requested() -> void:
@@ -372,7 +374,8 @@ func get_revive_count() -> int:
 
 ## 获取下次复活费用
 func get_next_revive_cost() -> int:
-	return 5 * (revive_count + 1)
+	# 固定费用：1个masterkey
+	return 1
 
 ## Multi模式下清理所有ghost
 func _cleanup_ghosts_for_multi_mode() -> void:
