@@ -4,7 +4,7 @@ extends Node2D
 ## 
 ## 简化：直接设置武器的player_stats引用，不再手动计算加成
 
-var weapon_radius = 230
+var weapon_radius = 160
 var weapon_num = 0
 var player_ref: Node2D = null
 
