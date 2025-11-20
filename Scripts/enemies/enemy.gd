@@ -102,7 +102,7 @@ func _apply_enemy_data() -> void:
 			$AnimatedSprite2D.sprite_frames = sprite_frames
 			$AnimatedSprite2D.play("default")
 			
-			print("[Enemy] 加载动画: ", enemy_data.enemy_name, " 帧数:", enemy_data.frame_count, " FPS:", enemy_data.animation_speed)
+			#print("[Enemy] 加载动画: ", enemy_data.enemy_name, " 帧数:", enemy_data.frame_count, " FPS:", enemy_data.animation_speed)
 	
 	# 应用震动设置
 	shake_on_death = enemy_data.shake_on_death
@@ -246,13 +246,13 @@ func enemy_hurt(hurt, is_critical: bool = false):
 	# 使用统一的特效管理器
 	CombatEffectManager.play_enemy_hurt(global_position)
 	if self.enemyHP <= 0:
-		print("[Enemy] 死亡 | 位置:", global_position)
+		#print("[Enemy] 死亡 | 位置:", global_position)
 		enemy_dead()
 	pass
 func enemy_dead():
 	# 防止重复调用
 	if is_dead:
-		print("[Enemy] 已经死亡，忽略重复调用 | 位置:", global_position)
+		#print("[Enemy] 已经死亡，忽略重复调用 | 位置:", global_position)
 		return
 	
 	# 检查是否在自爆倒数状态（如果是，不立即死亡）
@@ -261,11 +261,11 @@ func enemy_dead():
 			var exploding = behavior as ExplodingBehavior
 			if exploding.is_in_countdown():
 				# 在倒数状态，不立即死亡，等待爆炸
-				print("[Enemy] 在自爆倒数状态，延迟死亡")
+				#print("[Enemy] 在自爆倒数状态，延迟死亡")
 				return
 	
 	is_dead = true
-	print("[Enemy] enemy_dead() 被调用 | 位置:", global_position)
+	#print("[Enemy] enemy_dead() 被调用 | 位置:", global_position)
 	
 	# 通知技能行为敌人死亡（用于自爆技能的ON_DEATH触发）
 	for behavior in behaviors:
@@ -286,7 +286,7 @@ func enemy_dead():
 		else:  # 双数波次
 			item_name = "gold"
 	
-	print("[Enemy] 准备掉落物品 | 类型:", item_name, " 波次:", current_wave_number, " 位置:", self.global_position)
+	#print("[Enemy] 准备掉落物品 | 类型:", item_name, " 波次:", current_wave_number, " 位置:", self.global_position)
 	GameMain.drop_item_scene_obj.gen_drop_item({
 		#"box":GameMain.duplicate_node,
 		"ani_name": item_name,
@@ -294,7 +294,7 @@ func enemy_dead():
 		"position": self.global_position,
 		"scale":Vector2(4,4)
 	})
-	print("[Enemy] 掉落物品完成")
+	#print("[Enemy] 掉落物品完成")
 	
 	# 发送敌人死亡信号（在queue_free之前）
 	enemy_killed.emit(self)
@@ -309,7 +309,7 @@ func enemy_dead():
 		# 添加到场景根节点,不随怪物一起消失
 		get_tree().root.add_child(particles)
 	
-	print("[Enemy] 准备 queue_free | 位置:", global_position)
+	#print("[Enemy] 准备 queue_free | 位置:", global_position)
 	self.queue_free()
 	pass
 
@@ -322,7 +322,7 @@ func enemy_flash():
 ## 设置无敌状态
 func set_invincible(value: bool) -> void:
 	is_invincible = value
-	print("[Enemy] 无敌状态:", value)
+	#print("[Enemy] 无敌状态:", value)
 
 ## 设置技能行为
 func _setup_skill_behavior() -> void:
@@ -342,21 +342,21 @@ func _setup_skill_behavior() -> void:
 			add_child(charging)
 			charging.initialize(self, enemy_data.skill_config)
 			behaviors.append(charging)
-			print("[Enemy] 添加冲锋技能行为")
+			#print("[Enemy] 添加冲锋技能行为")
 		
 		EnemyData.EnemySkillType.SHOOTING:
 			var shooting = ShootingBehavior.new()
 			add_child(shooting)
 			shooting.initialize(self, enemy_data.skill_config)
 			behaviors.append(shooting)
-			print("[Enemy] 添加射击技能行为")
+			#print("[Enemy] 添加射击技能行为")
 		
 		EnemyData.EnemySkillType.EXPLODING:
 			var exploding = ExplodingBehavior.new()
 			add_child(exploding)
 			exploding.initialize(self, enemy_data.skill_config)
 			behaviors.append(exploding)
-			print("[Enemy] 添加自爆技能行为")
+			#print("[Enemy] 添加自爆技能行为")
 		
 		EnemyData.EnemySkillType.NONE:
 			pass  # 无技能
