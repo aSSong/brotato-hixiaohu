@@ -13,7 +13,7 @@ static var _next_id: int = 0
 func _ready() -> void:
 	item_id = _next_id
 	_next_id += 1
-	print("[DropItem ID:", item_id, "] 创建")
+	#print("[DropItem ID:", item_id, "] 创建")
 	
 	self.hide()
 	self.set_collision_layer_value(5, false)
@@ -58,10 +58,10 @@ func _physics_process(delta: float) -> void:
 ## 拾取物品
 func _pickup_item() -> void:
 	if is_collected:
-		print("[DropItem ID:", item_id, "] 已被拾取，忽略 | 位置:", global_position)
+		#print("[DropItem ID:", item_id, "] 已被拾取，忽略 | 位置:", global_position)
 		return
 	
-	print("[DropItem ID:", item_id, "] 开始拾取 | 位置:", global_position)
+	#print("[DropItem ID:", item_id, "] 开始拾取 | 位置:", global_position)
 	
 	# 立即标记和停止所有处理
 	is_collected = true
@@ -73,17 +73,17 @@ func _pickup_item() -> void:
 	if has_meta("item_type"):
 		item_type = get_meta("item_type")
 	
-	print("[DropItem ID:", item_id, "] 物品类型:", item_type)
+	#print("[DropItem ID:", item_id, "] 物品类型:", item_type)
 	
 	# 添加到背包
 	if item_type == "masterkey" or item_type == "master_key":
-		print("[DropItem ID:", item_id, "] 调用 GameMain.add_master_key(1)")
+		#print("[DropItem ID:", item_id, "] 调用 GameMain.add_master_key(1)")
 		GameMain.add_master_key(1)
 	else:
-		print("[DropItem ID:", item_id, "] 调用 GameMain.add_gold(1)")
+		#print("[DropItem ID:", item_id, "] 调用 GameMain.add_gold(1)")
 		GameMain.add_gold(1)
 	
-	print("[DropItem ID:", item_id, "] 拾取完成，删除自己")
+	#print("[DropItem ID:", item_id, "] 拾取完成，删除自己")
 	# 删除自己
 	queue_free()
 
