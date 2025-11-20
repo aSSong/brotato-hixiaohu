@@ -569,14 +569,9 @@ func _create_speech_bubble() -> void:
 			speech_bubble = speech_bubble_scene.instantiate()
 			speech_bubble.name = "PlayerSpeechBubble"
 			
-			# 添加到CanvasLayer
-			var canvas_layer = get_tree().root.find_child("game_ui", true, false)
-			if canvas_layer:
-				canvas_layer.add_child(speech_bubble)
-				print("[Player] 说话气泡组件已动态创建并添加到CanvasLayer")
-			else:
-				get_tree().root.add_child(speech_bubble)
-				print("[Player] 说话气泡组件已动态创建并添加到根节点")
+			# 直接添加到Player节点下，作为子节点（与场景中手动添加的效果一致）
+			add_child(speech_bubble)
+			print("[Player] 说话气泡组件已动态创建并添加到Player节点下")
 		else:
 			push_error("[Player] 无法加载说话气泡场景！")
 

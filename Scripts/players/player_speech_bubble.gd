@@ -6,7 +6,7 @@ class_name PlayerSpeechBubble
 
 @onready var background: Panel = $Background
 @onready var label: Label = $Background/Label
-@onready var pointer: Polygon2D = $Pointer  # 气泡下方的小尖尖
+@onready var pointer_line: Line2D = $Line2D  # 气泡下方的小尖尖（Line2D）
 
 ## 气泡显示持续时间
 var duration: float = 5.0
@@ -32,11 +32,9 @@ func _ready() -> void:
 	# 设置初始大小
 	size = Vector2(200, 60)
 	
-	# 初始化指针（如果存在）
-	if pointer:
-		pointer.visible = false
-		# 设置指针颜色与背景一致
-		pointer.color = Color(0.2, 0.2, 0.2, 0.9)
+	# 初始化指针线条（如果存在）
+	if pointer_line:
+		pointer_line.visible = false
 
 func _process(delta: float) -> void:
 	if not is_showing:
@@ -86,21 +84,32 @@ func show_speech(text: String, duration_override: float = 3.0) -> void:
 			var text_size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
 			# 添加内边距
 			var padding = Vector2(40, 20)
-			size = text_size + padding
+			var new_size = text_size + padding
+			
+			# 保存当前中心位置
+			var center_x = position.x + size.x / 2.0
+			var center_y = position.y + size.y / 2.0
+			
+			# 设置新大小
+			size = new_size
+			
+			# 调整位置，使中心位置保持不变（向左右两侧均匀延伸）
+			position.x = center_x - size.x / 2.0
+			position.y = center_y - size.y / 2.0
 			
 			# 更新背景大小
 			if background:
 				background.size = size
 			
-			# 更新三角形指针位置（在气泡底部中央）
-			if pointer:
-				pointer.position = Vector2(size.x / 2.0, size.y)
+			# 更新指针线条位置（在气泡底部中央）
+			if pointer_line:
+				pointer_line.position = Vector2(size.x / 2.0, size.y)
 	
 	# 显示并开始淡入
 	visible = true
-	# 显示指针
-	if pointer:
-		pointer.visible = true
+	# 显示指针线条
+	if pointer_line:
+		pointer_line.visible = true
 	print("[PlayerSpeechBubble] visible设置为true，位置: ", position, " 大小: ", size)
 	_start_fade_in()
 
@@ -110,9 +119,9 @@ func _hide_bubble() -> void:
 	visible = false
 	modulate.a = 0.0
 	elapsed_time = 0.0
-	# 同时隐藏指针
-	if pointer:
-		pointer.visible = false
+	# 同时隐藏指针线条
+	if pointer_line:
+		pointer_line.visible = false
 
 ## 开始淡入动画
 func _start_fade_in() -> void:

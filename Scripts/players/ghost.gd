@@ -374,16 +374,15 @@ func _create_speech_bubble() -> void:
 	speech_bubble = speech_bubble_scene.instantiate()
 	speech_bubble.name = "GhostSpeechBubble"
 	
-	# 添加到CanvasLayer
-	var canvas_layer = get_tree().root.find_child("game_ui", true, false)
-	if canvas_layer:
-		canvas_layer.add_child(speech_bubble)
-		print("[Ghost] 说话气泡组件已添加到CanvasLayer")
-	else:
-		get_tree().root.add_child(speech_bubble)
-		print("[Ghost] 说话气泡组件已添加到根节点")
+	# 设置位置与Player一致
+	speech_bubble.offset_left = -105
+	speech_bubble.offset_top = -288
+	speech_bubble.offset_right = 95
+	speech_bubble.offset_bottom = -228
 	
-	print("[Ghost] 说话气泡组件已创建")
+	# 直接添加到Ghost节点下，作为子节点（与Player一致）
+	add_child(speech_bubble)
+	#print("[Ghost] 说话气泡组件已添加到Ghost节点下，位置已设置")
 
 ## 显示说话气泡
 func show_speech(text: String, duration: float = 3.0) -> void:
