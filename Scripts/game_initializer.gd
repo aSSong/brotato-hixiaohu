@@ -38,6 +38,9 @@ func _ready() -> void:
 	# 创建ESC菜单管理器
 	_create_esc_menu_manager()
 	
+	# 创建说话管理器
+	_create_speech_manager()
+	
 	# 设置胜利条件检测
 	_setup_victory_detection()
 	
@@ -80,6 +83,39 @@ func _create_esc_menu_manager() -> void:
 	esc_manager.set_script(load("res://Scripts/UI/esc_menu_manager.gd"))
 	add_child(esc_manager)
 	print("[GameInitializer] ESC菜单管理器已创建")
+
+## 创建说话管理器
+func _create_speech_manager() -> void:
+	var speech_manager_script = load("res://Scripts/managers/speech_manager.gd")
+	if not speech_manager_script:
+		push_error("[GameInitializer] 无法加载说话管理器脚本！")
+		return
+	
+	var speech_manager = speech_manager_script.new()
+	speech_manager.name = "SpeechManager"
+	add_child(speech_manager)
+	speech_manager.add_to_group("speech_manager")
+	print("[GameInitializer] 说话管理器已创建")
+	
+	# 等待一帧后，主动注册所有Player和Ghost
+	await get_tree().process_frame
+	_register_all_speakers(speech_manager)
+
+## 注册所有说话者到SpeechManager
+func _register_all_speakers(speech_manager: SpeechManager) -> void:
+	# 注册Player
+	if player and is_instance_valid(player):
+		if speech_manager.has_method("register_speaker"):
+			speech_manager.register_speaker(player)
+			print("[GameInitializer] Player已注册到SpeechManager")
+	
+	# 注册所有Ghost
+	var ghosts = get_tree().get_nodes_in_group("ghost")
+	for ghost in ghosts:
+		if ghost and is_instance_valid(ghost):
+			if speech_manager.has_method("register_speaker"):
+				speech_manager.register_speaker(ghost)
+				print("[GameInitializer] Ghost已注册到SpeechManager: ", ghost.name)
 
 ## 设置胜利条件检测
 func _setup_victory_detection() -> void:
@@ -162,4 +198,3 @@ func _trigger_victory() -> void:
 		await SceneCleanupManager.change_scene_to_packed_safely(victory_scene)
 	else:
 		push_error("[GameInitializer] 无法加载胜利UI场景！")
-

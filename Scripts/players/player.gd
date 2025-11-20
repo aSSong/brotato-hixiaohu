@@ -52,6 +52,9 @@ signal hp_changed(current_hp: int, max_hp: int)
 ## 名字显示Label
 var name_label: Label = null
 
+## 说话气泡组件
+var speech_bubble: PlayerSpeechBubble = null
+
 func _ready() -> void:
 	# 初始化属性管理器
 	attribute_manager = AttributeManager.new()
@@ -93,6 +96,12 @@ func _ready() -> void:
 	
 	# 创建头顶名字显示
 	_create_name_label()
+	
+	# 创建说话气泡组件
+	_create_speech_bubble()
+	
+	# 注册到说话管理器
+	call_deferred("_register_to_speech_manager")
 	pass
 
 func choosePlayer(type):
@@ -545,3 +554,49 @@ func _on_dash_timer_timeout() -> void:
 	
 	# 开始冷却计时器
 	dash_cooldown_timer.start()
+
+## 创建说话气泡组件（如果场景中没有手动添加）
+func _create_speech_bubble() -> void:
+	# 尝试从场景中获取已添加的气泡组件
+	speech_bubble = get_node_or_null("PlayerSpeechBubble")
+	
+	if speech_bubble:
+		print("[Player] 从场景中找到说话气泡组件")
+	else:
+		# 如果场景中没有，动态创建（降级方案）
+		var speech_bubble_scene = load("res://scenes/players/player_speech_bubble.tscn")
+		if speech_bubble_scene:
+			speech_bubble = speech_bubble_scene.instantiate()
+			speech_bubble.name = "PlayerSpeechBubble"
+			
+			# 添加到CanvasLayer
+			var canvas_layer = get_tree().root.find_child("game_ui", true, false)
+			if canvas_layer:
+				canvas_layer.add_child(speech_bubble)
+				print("[Player] 说话气泡组件已动态创建并添加到CanvasLayer")
+			else:
+				get_tree().root.add_child(speech_bubble)
+				print("[Player] 说话气泡组件已动态创建并添加到根节点")
+		else:
+			push_error("[Player] 无法加载说话气泡场景！")
+
+## 显示说话气泡
+func show_speech(text: String, duration: float = 3.0) -> void:
+	if speech_bubble:
+		speech_bubble.show_speech(text, duration)
+	else:
+		push_warning("[Player] 说话气泡组件未找到！")
+
+## 注册到说话管理器
+func _register_to_speech_manager() -> void:
+	print("[Player] 尝试注册到说话管理器...")
+	var speech_manager = get_tree().get_first_node_in_group("speech_manager")
+	if speech_manager:
+		print("[Player] 找到SpeechManager: ", speech_manager.name)
+		if speech_manager.has_method("register_speaker"):
+			speech_manager.register_speaker(self)
+			print("[Player] 已注册到SpeechManager")
+		else:
+			push_error("[Player] SpeechManager没有register_speaker方法！")
+	else:
+		push_warning("[Player] 未找到SpeechManager！")

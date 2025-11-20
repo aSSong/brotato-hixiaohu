@@ -47,6 +47,9 @@ var ghost_total_death_count: int = 0
 ## 名字显示Label
 var name_label: Label = null
 
+## 说话气泡组件
+var speech_bubble: PlayerSpeechBubble = null
+
 func _ready() -> void:
 	# Ghost不会与其他物体碰撞（只是视觉效果）
 	collision_layer = 0
@@ -67,6 +70,9 @@ func _ready() -> void:
 	
 	# 监听玩家死亡和复活信号
 	call_deferred("_connect_death_signals")
+	
+	# 注册到说话管理器
+	call_deferred("_register_to_speech_manager")
 
 func _process(delta: float) -> void:
 	if follow_target == null or not is_instance_valid(follow_target):
@@ -168,6 +174,9 @@ func initialize(target: Node2D, index: int, player_speed: float, use_existing_da
 	
 	# 创建名字显示（在所有初始化完成后）
 	call_deferred("_create_name_label")
+	
+	# 创建说话气泡组件
+	call_deferred("_create_speech_bubble")
 
 ## 更新跟随速度（与玩家同步）
 func update_speed(new_speed: float) -> void:
@@ -353,3 +362,38 @@ func _update_name_label() -> void:
 	# 格式：名字 - n世（n为死亡时的total_death_count）
 	var display_name = "%s - 第 %d 世" % [ghost_player_name, ghost_total_death_count]
 	name_label.text = display_name
+
+## 创建说话气泡组件（Ghost动态创建）
+func _create_speech_bubble() -> void:
+	# Ghost需要动态创建气泡（因为Ghost是动态生成的）
+	var speech_bubble_scene = load("res://scenes/players/player_speech_bubble.tscn")
+	if not speech_bubble_scene:
+		push_error("[Ghost] 无法加载说话气泡场景！")
+		return
+	
+	speech_bubble = speech_bubble_scene.instantiate()
+	speech_bubble.name = "GhostSpeechBubble"
+	
+	# 添加到CanvasLayer
+	var canvas_layer = get_tree().root.find_child("game_ui", true, false)
+	if canvas_layer:
+		canvas_layer.add_child(speech_bubble)
+		print("[Ghost] 说话气泡组件已添加到CanvasLayer")
+	else:
+		get_tree().root.add_child(speech_bubble)
+		print("[Ghost] 说话气泡组件已添加到根节点")
+	
+	print("[Ghost] 说话气泡组件已创建")
+
+## 显示说话气泡
+func show_speech(text: String, duration: float = 3.0) -> void:
+	if speech_bubble:
+		speech_bubble.show_speech(text, duration)
+	else:
+		push_warning("[Ghost] 说话气泡组件未找到！")
+
+## 注册到说话管理器
+func _register_to_speech_manager() -> void:
+	var speech_manager = get_tree().get_first_node_in_group("speech_manager")
+	if speech_manager and speech_manager.has_method("register_speaker"):
+		speech_manager.register_speaker(self)
