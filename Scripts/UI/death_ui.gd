@@ -48,22 +48,22 @@ func show_death_screen(revive_count: int, current_gold: int, mode_id: String = "
 		cost_label.visible = true
 		
 		# 更新动态文本（masterkey数量和按钮状态）
-		cost_label.text = "复活费用：%d 主钥匙" % revive_cost
+		cost_label.text = "复活费用：%d 生命钥匙" % revive_cost
 		
 		# 更新复活按钮状态
 		if can_afford:
 			revive_button.disabled = false
-			revive_button.text = "复活 (-%d主钥匙)" % revive_cost
+			revive_button.text = "复活 -%d生命钥匙" % revive_cost
 			restart_button.visible = false
 		else:
 			revive_button.disabled = true
-			revive_button.text = "主钥匙不足"
+			revive_button.text = "生命钥匙不足"
 			restart_button.visible = true
 	
 	# 显示界面
 	show()
 	
-	print("[DeathUI] 显示死亡界面 | 模式:", mode_id, " 复活次数:", revive_count, " 费用:", revive_cost, " 当前主钥匙:", current_master_key)
+	print("[DeathUI] 显示死亡界面 | 模式:", mode_id, " 复活次数:", revive_count, " 费用:", revive_cost, " 当前生命钥匙:", current_master_key)
 
 ## 复活按钮按下
 func _on_revive_pressed() -> void:
