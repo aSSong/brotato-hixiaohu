@@ -299,8 +299,8 @@ func on_enemy_spawned(enemy: Node) -> void:
 	if not enemy.tree_exiting.is_connected(_on_enemy_removed):
 		enemy.tree_exiting.connect(_on_enemy_removed.bind(enemy))
 	
-	print("[WaveSystem V3] 敌人生成：", spawned_enemies_this_wave, "/", total_enemies_this_wave, 
-		  " | 存活：", active_enemies.size())
+	#print("[WaveSystem V3] 敌人生成：", spawned_enemies_this_wave, "/", total_enemies_this_wave, 
+		  #" | 存活：", active_enemies.size())
 	
 	# 检查是否生成完毕
 	if spawned_enemies_this_wave >= total_enemies_this_wave:
@@ -313,7 +313,7 @@ func _on_spawn_complete() -> void:
 	
 	_change_state(WaveState.FIGHTING)
 	print("[WaveSystem V3] ========== 生成完毕，进入战斗 ==========")
-	print("[WaveSystem V3] 场上敌人数：", active_enemies.size())
+	#print("[WaveSystem V3] 场上敌人数：", active_enemies.size())
 
 ## 敌人死亡回调
 func _on_enemy_died(enemy_ref: Node) -> void:
@@ -333,7 +333,7 @@ func _remove_enemy(enemy_ref: Node) -> void:
 		active_enemies.remove_at(index)
 		killed_enemies_this_wave += 1  # 增加击杀计数
 		
-		print("[WaveSystem V3] 敌人移除 | 击杀：", killed_enemies_this_wave, " 剩余：", active_enemies.size(), "/", total_enemies_this_wave)
+		#print("[WaveSystem V3] 敌人移除 | 击杀：", killed_enemies_this_wave, " 剩余：", active_enemies.size(), "/", total_enemies_this_wave)
 		
 		# 发出击杀信号（供UI等监听）
 		enemy_killed.emit(current_wave, killed_enemies_this_wave, total_enemies_this_wave)
@@ -353,7 +353,7 @@ func _check_wave_complete() -> void:
 	# 检查是否所有敌人都被清除
 	if active_enemies.is_empty():
 		print("[WaveSystem V3] ========== 第 ", current_wave, " 波完成！==========")
-		print("[WaveSystem V3] 已生成：", spawned_enemies_this_wave, " 目标：", total_enemies_this_wave)
+		#print("[WaveSystem V3] 已生成：", spawned_enemies_this_wave, " 目标：", total_enemies_this_wave)
 		_change_state(WaveState.WAVE_COMPLETE)
 		wave_completed.emit(current_wave)
 		wave_ended.emit(current_wave)  # 兼容旧系统
