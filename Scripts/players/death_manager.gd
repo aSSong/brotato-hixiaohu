@@ -86,6 +86,9 @@ func _trigger_death() -> void:
 		return
 	
 	is_dead = true
+	# 设置游戏状态为死亡
+	GameState.change_state(GameState.State.PLAYER_DEAD)
+	
 	death_timer = death_delay
 	death_count += 1  # 增加本局死亡次数
 	
@@ -320,6 +323,9 @@ func _revive_player() -> void:
 	# 重置死亡状态
 	is_dead = false
 	death_timer = 0.0
+	
+	# 恢复游戏状态
+	GameState.change_state(GameState.State.WAVE_FIGHTING)
 	
 	# 恢复游戏
 	get_tree().paused = false

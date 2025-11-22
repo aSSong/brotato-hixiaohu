@@ -44,6 +44,9 @@ func _ready() -> void:
 	# 设置胜利条件检测
 	_setup_victory_detection()
 	
+	# 统一设置游戏流程监听
+	_setup_game_flow()
+	
 	print("[GameInitializer] 游戏初始化完成")
 
 ## 创建死亡UI
@@ -157,24 +160,97 @@ func _setup_victory_detection() -> void:
 				GameMain.gold_changed.connect(_on_resource_changed)
 			print("[GameInitializer] 已连接金币变化信号用于胜利检测")
 		"waves":
-			# 波次胜利条件：监听波次结束（重要：在波次结束后才检查胜利）
-			await get_tree().create_timer(0.5).timeout  # 等待波次系统初始化
-			var wave_manager = get_tree().get_first_node_in_group("wave_manager")
-			if wave_manager and wave_manager.has_signal("wave_ended"):
-				if not wave_manager.wave_ended.is_connected(_on_wave_ended):
-					wave_manager.wave_ended.connect(_on_wave_ended)
-				print("[GameInitializer] 已连接波次结束信号用于胜利检测")
-			else:
-				push_warning("[GameInitializer] 未找到wave_manager，波次胜利检测可能不工作")
+			# 波次胜利条件：已在 _setup_game_flow 中统一处理，这里不再连接 wave_ended
+			print("[GameInitializer] 波次胜利检测已委托给 _setup_game_flow")
 
 ## 资源变化回调（用于钥匙胜利条件）
 func _on_resource_changed(_new_val: int, _change: int) -> void:
 	_check_victory()
 
-## 波次结束回调（用于波次胜利条件）
-func _on_wave_ended(_wave_number: int) -> void:
-	print("[GameInitializer] 波次结束回调：wave_number=%d, 开始检查胜利条件" % _wave_number)
-	_check_victory()
+# 已废弃，由 _on_wave_flow_step 接管
+# func _on_wave_ended(_wave_number: int) -> void:
+
+## 统一设置游戏流程监听
+func _setup_game_flow() -> void:
+	# 等待波次系统就绪
+	await get_tree().process_frame
+	var wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	
+	if wave_manager:
+		# 监听商店关闭信号
+		var shop = get_tree().get_first_node_in_group("upgrade_shop")
+		if shop:
+			if not shop.has_signal("shop_closed"):
+				push_error("[GameInitializer] 商店没有shop_closed信号")
+			elif not shop.shop_closed.is_connected(_on_shop_closed):
+				shop.shop_closed.connect(_on_shop_closed)
+				print("[GameInitializer] 已连接商店关闭信号")
+
+		# 连接到我们新的主流程控制函数
+		if wave_manager.has_signal("wave_completed"):
+			if not wave_manager.wave_completed.is_connected(_on_wave_flow_step):
+				wave_manager.wave_completed.connect(_on_wave_flow_step)
+				print("[GameInitializer] 已接管波次流程控制")
+
+## 核心流程控制函数：波次结束后的统筹安排
+func _on_wave_flow_step(wave_number: int) -> void:
+	print("[Flow] 波次 %d 结束，开始流程结算..." % wave_number)
+	
+	# 1. 状态检查：如果玩家已经死了，中断流程
+	if GameState.current_state == GameState.State.PLAYER_DEAD:
+		print("[Flow] 玩家已死亡，终止流程")
+		return
+
+	# 2. 进入清扫阶段（捡东西时间），也就是你想要的延迟
+	GameState.change_state(GameState.State.WAVE_CLEARING)
+	var delay_time = 2.0 # 可以在这里调整延迟秒数
+	print("[Flow] 进入捡落物时间 (%.1f秒)" % delay_time)
+	await get_tree().create_timer(delay_time).timeout
+	
+	# 3. 再次检查死亡（防止延迟期间暴毙）
+	if GameState.current_state == GameState.State.PLAYER_DEAD:
+		return
+
+	# 4. 胜利检测 (仅针对Wave类型，Key类型由资源回调处理)
+	if current_mode and current_mode.victory_condition_type == "waves":
+		if current_mode.check_victory_condition():
+			print("[Flow] 触发胜利！")
+			_trigger_victory()
+			return
+
+	# 5. 既没死也没赢 -> 打开商店
+	print("[Flow] 进入商店阶段")
+	_open_shop_flow()
+
+## 打开商店的统一入口
+func _open_shop_flow() -> void:
+	# 如果正在救援，等待救援结束（简单策略：不打开商店，等下次检查？或者暂时阻塞？）
+	# 这里采用：如果正在救援，稍后重试
+	if GameState.current_state == GameState.State.RESCUING:
+		print("[Flow] 玩家正在救援中，延迟打开商店...")
+		await get_tree().create_timer(1.0).timeout
+		_open_shop_flow()
+		return
+
+	GameState.change_state(GameState.State.SHOPPING)
+	# 通知商店打开
+	get_tree().call_group("upgrade_shop", "open_shop")
+
+## 商店关闭回调
+func _on_shop_closed() -> void:
+	print("[Flow] 商店已关闭，准备下一波")
+	
+	# 切换到空闲/清扫状态，准备下一波
+	GameState.change_state(GameState.State.WAVE_CLEARING)
+	
+	# 停顿2秒开始刷怪
+	print("[Flow] 休息2秒...")
+	await get_tree().create_timer(2.0).timeout
+	
+	# 开始下一波
+	var wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	if wave_manager and wave_manager.has_method("start_next_wave"):
+		wave_manager.start_next_wave()
 
 ## 检查胜利条件
 func _check_victory() -> void:
@@ -201,13 +277,16 @@ func _check_victory() -> void:
 func _trigger_victory() -> void:
 	print("[GameInitializer] 达成胜利条件！准备切换到胜利场景...")
 	
-	# 立即恢复游戏（取消暂停），阻止商店打开
-	if get_tree().paused:
-		get_tree().paused = false
-		print("[GameInitializer] 取消暂停以阻止商店打开")
+	# 设置胜利状态（暂停游戏）
+	GameState.change_state(GameState.State.GAME_VICTORY)
 	
-	# 短暂延迟以显示最后一击的效果
-	await get_tree().create_timer(0.5).timeout
+	# 清场（可选：消灭所有敌人）
+	var wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	if wave_manager and wave_manager.has_method("force_end_wave"):
+		wave_manager.force_end_wave()
+	
+	# 等待1秒（如需求所述）
+	await get_tree().create_timer(1.0).timeout
 	
 	# 加载胜利UI场景
 	var victory_scene = load("res://scenes/UI/victory_ui.tscn")

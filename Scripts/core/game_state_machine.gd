@@ -14,7 +14,9 @@ enum State {
 	PLAYER_DEAD = 7,          # 玩家死亡
 	GAME_PAUSED = 8,          # 游戏暂停
 	GAME_VICTORY = 9,         # 游戏胜利
-	GAME_OVER = 10            # 游戏结束
+	GAME_OVER = 10,            # 游戏结束
+	RESCUING = 11,             # 救援中
+	ESC_MENU = 12              # ESC菜单打开中
 }
 
 signal state_changed(old_state: State, new_state: State)
@@ -60,13 +62,9 @@ func _enter_state(state: State) -> void:
 	print("[GameState] 进入状态: %s" % _state_name(state))
 	
 	match state:
-		State.WAVE_FIGHTING:
+		State.WAVE_FIGHTING, State.WAVE_CLEARING:
 			get_tree().paused = false
-		State.SHOPPING:
-			get_tree().paused = true
-		State.PLAYER_DEAD:
-			get_tree().paused = true
-		State.GAME_PAUSED:
+		State.SHOPPING, State.PLAYER_DEAD, State.GAME_PAUSED, State.RESCUING, State.ESC_MENU:
 			get_tree().paused = true
 		State.GAME_VICTORY, State.GAME_OVER:
 			get_tree().paused = false
@@ -107,6 +105,8 @@ func _state_name(state: State) -> String:
 		State.GAME_PAUSED: return "GAME_PAUSED"
 		State.GAME_VICTORY: return "GAME_VICTORY"
 		State.GAME_OVER: return "GAME_OVER"
+		State.RESCUING: return "RESCUING"
+		State.ESC_MENU: return "ESC_MENU"
 		_: return "UNKNOWN"
 
 ## 重置状态机

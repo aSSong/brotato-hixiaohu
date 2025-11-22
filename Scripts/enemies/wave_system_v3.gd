@@ -357,9 +357,7 @@ func _check_wave_complete() -> void:
 		_change_state(WaveState.WAVE_COMPLETE)
 		wave_completed.emit(current_wave)
 		wave_ended.emit(current_wave)  # 兼容旧系统
-		
-		# 显示商店
-		call_deferred("_show_shop")
+
 
 ## 清理无效的敌人引用
 func _cleanup_invalid_enemies() -> void:
@@ -371,89 +369,13 @@ func _cleanup_invalid_enemies() -> void:
 
 ## 显示商店
 func _show_shop() -> void:
-	if current_state != WaveState.WAVE_COMPLETE:
-		return
-	
-	# 短暂延迟，让胜利检测有机会先执行
-	print("[WaveSystem V3] 波次完成，0.2秒后检查是否打开商店...")
-	
-	# 使用安全的方式等待（避免场景切换时出错）
-	var tree = get_tree()
-	if tree == null:
-		return
-	
-	await tree.create_timer(0.2).timeout
-	
-	# await后再次检查tree和节点（可能在等待期间场景被切换了）
-	tree = get_tree()
-	if tree == null or not is_inside_tree():
-		print("[WaveSystem V3] 节点已不在场景树中，可能已触发胜利，跳过商店")
-		return
-	
-	# 检查玩家是否死亡（如果死亡则不打开商店）
-	var death_manager = tree.get_first_node_in_group("death_manager")
-	if death_manager and death_manager.get("is_dead"):
-		print("[WaveSystem V3] 玩家死亡，延迟打开商店")
-		# 等待玩家复活
-		if death_manager.has_signal("player_revived"):
-			await death_manager.player_revived
-		
-		# 再次检查tree
-		tree = get_tree()
-		if tree == null:
-			return
-		
-		print("[WaveSystem V3] 玩家已复活，继续打开商店")
-	
-	_change_state(WaveState.SHOP_OPEN)
-	print("[WaveSystem V3] ========== 打开商店 ==========")
-	
-	# 暂停游戏
-	tree.paused = true
-	
-	# 查找商店
-	var shop = tree.get_first_node_in_group("upgrade_shop")
-	if shop and shop.has_method("open_shop"):
-		# 连接商店关闭信号
-		if shop.has_signal("shop_closed"):
-			if not shop.shop_closed.is_connected(_on_shop_closed):
-				shop.shop_closed.connect(_on_shop_closed)
-		
-		shop.open_shop()
-	else:
-		push_warning("[WaveSystem V3] 未找到商店，直接进入下一波")
-		_on_shop_closed()
+	# 逻辑已移交至 GameInitializer，不再由此处直接控制
+	pass
 
 ## 商店关闭回调
 func _on_shop_closed() -> void:
-	if current_state != WaveState.SHOP_OPEN:
-		return
-	
-	print("[WaveSystem V3] ========== 商店关闭 ==========")
-	
-	# 恢复游戏
-	var tree = get_tree()
-	if tree and tree.paused:
-		tree.paused = false
-	
-	_change_state(WaveState.IDLE)
-	
-	# 延迟开始下一波
-	tree = get_tree()
-	if tree == null:
-		return
-	
-	await tree.create_timer(1.0).timeout
-	
-	# await后再次检查
-	tree = get_tree()
-	if tree == null:
-		return
-	
-	if current_wave < wave_configs.size():
-		start_next_wave()
-	else:
-		all_waves_completed.emit()
+	# 逻辑已移交至 GameInitializer，不再由此处直接控制
+	pass
 
 ## 清理波次数据
 func _cleanup_wave_data() -> void:

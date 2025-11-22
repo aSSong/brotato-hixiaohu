@@ -218,8 +218,10 @@ func _show_rescue_ui() -> void:
 	
 	# 显示界面
 	if ghost_data:
+		# 设置状态为RESCUING
+		GameState.change_state(GameState.State.RESCUING)
 		rescue_ui.show_rescue_dialog(ghost_data)
-		get_tree().paused = true  # 暂停游戏
+		# get_tree().paused = true  # 暂停游戏 - GameState会自动处理
 		print("[GraveRescue] 显示救援UI")
 
 ## 救援请求
@@ -229,7 +231,7 @@ func _on_rescue_requested() -> void:
 	# 检查masterkey
 	if GameMain.master_key < 1:
 		print("[GraveRescue] Master Key不足")
-		get_tree().paused = false
+		_restore_game_state()
 		return
 	
 	# 消耗masterkey
@@ -242,8 +244,8 @@ func _on_rescue_requested() -> void:
 	# 清除墓碑
 	_cleanup_grave()
 	
-	# 恢复游戏
-	get_tree().paused = false
+	# 恢复游戏状态
+	_restore_game_state()
 	
 	print("[GraveRescue] 救援完成")
 
@@ -254,15 +256,26 @@ func _on_transcend_requested() -> void:
 	# 清除墓碑
 	_cleanup_grave()
 	
-	# 恢复游戏
-	get_tree().paused = false
+	# 恢复游戏状态
+	_restore_game_state()
 	
 	print("[GraveRescue] 超度完成")
 
 ## 取消救援
 func _on_rescue_cancelled() -> void:
 	print("[GraveRescue] 取消救援")
-	get_tree().paused = false
+	_restore_game_state()
+
+## 恢复游戏状态
+func _restore_game_state() -> void:
+	# 如果之前的状态是 WAVE_FIGHTING 或 WAVE_CLEARING，则恢复
+	# 如果是其他状态（比如 PLAYER_DEAD），则不应该恢复为 FIGHTING
+	if GameState.previous_state == GameState.State.WAVE_FIGHTING or GameState.previous_state == GameState.State.WAVE_CLEARING:
+		GameState.change_state(GameState.previous_state)
+	else:
+		# 默认回退到 WAVE_FIGHTING，除非我们确实知道该去哪里
+		# 更安全的做法是检查 GameState 历史或当前逻辑
+		GameState.change_state(GameState.State.WAVE_FIGHTING)
 
 ## 从数据创建Ghost
 func _create_ghost_from_data() -> void:

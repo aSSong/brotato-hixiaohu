@@ -125,7 +125,7 @@ func open_shop() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	# 暂停游戏
-	get_tree().paused = true
+	# get_tree().paused = true # 由 GameState 管理
 	
 	# 显示商店（必须在暂停后）
 	show()
@@ -163,8 +163,8 @@ func open_shop() -> void:
 ## 关闭商店
 func close_shop() -> void:
 	hide()
-	# 恢复游戏
-	get_tree().paused = false
+	# GameState 管理暂停状态，这里不需要手动处理
+	# get_tree().paused = false
 	shop_closed.emit()
 
 ## 生成升级选项（3个）

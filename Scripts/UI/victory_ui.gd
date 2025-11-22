@@ -10,6 +10,10 @@ class_name VictoryUI
 @onready var return_button: Button = $MainPanel/VBoxContainer/ReturnButton
 
 func _ready() -> void:
+	# 确保状态正确
+	if GameState.current_state != GameState.State.GAME_VICTORY:
+		GameState.change_state(GameState.State.GAME_VICTORY)
+	
 	# 显示获得的钥匙数量（动态内容）
 	if gold_label:
 		gold_label.text = "收集钥匙: %d" % GameMain.gold

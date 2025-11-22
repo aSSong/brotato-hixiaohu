@@ -33,13 +33,15 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		# 检查菜单是否已存在且不可见
 		if esc_menu and not esc_menu.visible:
-			# 检查游戏是否已经暂停（其他UI打开）
-			if not get_tree().paused:
-				print("[ESC Manager] 检测到ESC键，打开菜单")
-				esc_menu.show_menu()
-				get_viewport().set_input_as_handled()
-			else:
-				print("[ESC Manager] 游戏已暂停（其他UI打开），不显示ESC菜单")
+			print("[ESC Manager] 检测到ESC键，打开菜单")
+			
+			# 记录打开前的状态，以便恢复
+			# GameState 会自动记录 previous_state
+			GameState.change_state(GameState.State.ESC_MENU)
+			
+			esc_menu.show_menu()
+			get_viewport().set_input_as_handled()
+
 		elif esc_menu and esc_menu.visible:
 			# 菜单已经打开，ESC键会被esc_menu.gd自己处理
 			pass
@@ -47,6 +49,11 @@ func _input(event: InputEvent) -> void:
 ## 继续游戏回调
 func _on_resume() -> void:
 	print("[ESC Manager] 游戏继续")
+	# 恢复到上一个状态
+	if GameState.previous_state != GameState.State.NONE:
+		GameState.change_state(GameState.previous_state)
+	else:
+		GameState.change_state(GameState.State.WAVE_FIGHTING)
 
 ## 返回主菜单回调
 func _on_main_menu() -> void:
