@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="SkillData" load_steps=4 format=3 uid="uid://d4gadioechhm0"]
+[gd_resource type="Resource" script_class="SkillData" load_steps=5 format=3 uid="uid://d4gadioechhm0"]
 
+[ext_resource type="Texture2D" uid="uid://ckbke07k5je2b" path="res://assets/skillicon/6.png" id="1_5qqly"]
 [ext_resource type="Script" uid="uid://cr4jxrshys2c8" path="res://Scripts/data/skill_data.gd" id="1_clssf"]
 [ext_resource type="Script" uid="uid://bvomybpfunsra" path="res://Scripts/AttributeSystem/stats_modifier.gd" id="2_5qqly"]
 
@@ -14,6 +15,7 @@ damage_reduction = 0.5
 script = ExtResource("1_clssf")
 name = "护盾"
 description = "短时间内减少受到的伤害(50%)"
+icon = ExtResource("1_5qqly")
 cooldown = 20.0
 duration = 8.0
 stats_modifier = SubResource("Resource_fmo1s")
