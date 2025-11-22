@@ -8,7 +8,7 @@ script = ExtResource("2_igf1w")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-damage_reduction = 0.050000000000000044
+damage_reduction = 0.05000000000000004
 
 [resource]
 script = ExtResource("1_2kgg0")
@@ -18,4 +18,5 @@ description = "受到的伤害降低5%"
 cost = 3
 icon_path = "res://assets/skillicon/10.png"
 actual_cost = 3
+weight = 200
 stats_modifier = SubResource("Resource_2kgg0")
