@@ -157,7 +157,7 @@ static func _apply_burn(attacker_stats: CombatStats, target, params: Dictionary)
 			false
 		)
 	
-	print("[SpecialEffects] 燃烧效果触发！伤害: %.1f/%.1fs, 持续: %.1fs" % [damage, tick_interval, duration])
+	#print("[SpecialEffects] 燃烧效果触发！伤害: %.1f/%.1fs, 持续: %.1fs" % [damage, tick_interval, duration])
 	return true
 
 ## 应用流血效果
@@ -202,7 +202,7 @@ static func _apply_bleed(attacker_stats: CombatStats, target, params: Dictionary
 			false
 		)
 	
-	print("[SpecialEffects] 流血效果触发！目标: %s, 伤害: %.1f/%.1fs, 持续: %.1fs" % [target.name if target.has_method("get") and "name" in target else "未知", damage, tick_interval, duration])
+	#print("[SpecialEffects] 流血效果触发！目标: %s, 伤害: %.1f/%.1fs, 持续: %.1fs" % [target.name if target.has_method("get") and "name" in target else "未知", damage, tick_interval, duration])
 	return true
 
 ## 应用冰冻效果
@@ -240,7 +240,7 @@ static func _apply_freeze(attacker_stats: CombatStats, target, params: Dictionar
 			false
 		)
 	
-	print("[SpecialEffects] 冰冻效果触发！目标: %s, 持续: %.1fs" % [target.name if target.has_method("get") and "name" in target else "未知", duration])
+	#print("[SpecialEffects] 冰冻效果触发！目标: %s, 持续: %.1fs" % [target.name if target.has_method("get") and "name" in target else "未知", duration])
 	return true
 
 ## 应用减速效果
@@ -283,7 +283,7 @@ static func _apply_slow(attacker_stats: CombatStats, target, params: Dictionary)
 			false
 		)
 	
-	print("[SpecialEffects] 减速效果触发！减速: %.1f%%, 持续: %.1fs" % [slow_percent * 100, duration])
+	#print("[SpecialEffects] 减速效果触发！减速: %.1f%%, 持续: %.1fs" % [slow_percent * 100, duration])
 	return true
 
 ## 应用中毒效果
@@ -328,7 +328,7 @@ static func _apply_poison(attacker_stats: CombatStats, target, params: Dictionar
 			false
 		)
 	
-	print("[SpecialEffects] 中毒效果触发！伤害: %.1f/%.1fs, 持续: %.1fs" % [damage, tick_interval, duration])
+	#print("[SpecialEffects] 中毒效果触发！伤害: %.1f/%.1fs, 持续: %.1fs" % [damage, tick_interval, duration])
 	return true
 
 ## 应用吸血效果
@@ -382,7 +382,7 @@ static func _apply_lifesteal(attacker_stats: CombatStats, target, params: Dictio
 		# 显示吸血跳字（使用统一方法）
 		show_heal_floating_text(attacker, actual_heal)
 		
-		print("[SpecialEffects] 吸血效果触发！恢复: +%d HP (伤害: %d, 比例: %.1f%%)" % [actual_heal, damage_dealt, lifesteal_percent * 100])
+		#print("[SpecialEffects] 吸血效果触发！恢复: +%d HP (伤害: %d, 比例: %.1f%%)" % [actual_heal, damage_dealt, lifesteal_percent * 100])
 	
 	return true
 
@@ -442,7 +442,7 @@ static func _apply_heal(attacker_stats: CombatStats, target, params: Dictionary)
 		# 显示治愈跳字（使用统一方法）
 		show_heal_floating_text(target, actual_heal)
 		
-		print("[SpecialEffects] 治愈: +%d HP" % actual_heal)
+		#print("[SpecialEffects] 治愈: +%d HP" % actual_heal)
 	
 	return true
 
@@ -541,7 +541,7 @@ static func apply_dot_damage(target, tick_data: Dictionary) -> void:
 				true  # is_critical=true，使用大字体
 			)
 	
-	print("[SpecialEffects] DoT伤害: %s - %d (层数: %d)" % [buff_id, damage, stacks])
+	#print("[SpecialEffects] DoT伤害: %s - %d (层数: %d)" % [buff_id, damage, stacks])
 
 ## 应用吸血效果（兼容性方法）
 ## 
