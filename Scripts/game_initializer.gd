@@ -243,11 +243,7 @@ func _on_shop_closed() -> void:
 	# 切换到空闲/清扫状态，准备下一波
 	GameState.change_state(GameState.State.WAVE_CLEARING)
 	
-	# 停顿2秒开始刷怪
-	print("[Flow] 休息2秒...")
-	await get_tree().create_timer(2.0).timeout
-	
-	# 开始下一波
+	# 直接开始下一波（延迟由WaveSystem内部处理）
 	var wave_manager = get_tree().get_first_node_in_group("wave_manager")
 	if wave_manager and wave_manager.has_method("start_next_wave"):
 		wave_manager.start_next_wave()

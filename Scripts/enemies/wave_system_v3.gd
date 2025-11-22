@@ -275,6 +275,17 @@ func start_next_wave() -> void:
 	# Multi模式：刷新墓碑
 	_handle_multi_mode_graves()
 	
+	# 延迟刷怪（给玩家2秒准备时间）
+	print("[WaveSystem V3] 延迟2秒开始刷怪...")
+	var tree = get_tree()
+	if tree:
+		await tree.create_timer(2.0).timeout
+	
+	# 再次检查状态，确保没有在等待期间发生变化（如游戏结束）
+	if current_state != WaveState.SPAWNING:
+		print("[WaveSystem V3] 状态已变更，取消刷怪")
+		return
+	
 	# 请求生成器开始生成（传递完整配置）
 	if enemy_spawner and enemy_spawner.has_method("spawn_wave"):
 		enemy_spawner.spawn_wave(config)
