@@ -14,7 +14,8 @@ func _init() -> void:
 	total_waves = GameConfig.total_waves
 	victory_condition_type = "waves"
 	wave_config_id = "default"  # 使用默认波次配置（从JSON加载）
-	victory_waves = GameConfig.multi_mode_victory_waves  # 从GameConfig读取胜利波数
+	victory_waves = 40  # Multi模式胜利条件：完成40波
+	#victory_waves = GameConfig.multi_mode_victory_waves  # 从GameConfig读取胜利波数
 	allow_revive = false  # Multi模式不允许复活
 
 ## 注意：波次配置已由wave_system_v3从JSON文件（wave_config_id）加载，不再使用硬编码配置
@@ -25,4 +26,3 @@ func can_revive() -> bool:
 	return allow_revive
 
 ## 注意：get_victory_description和get_progress_text已由base_game_mode统一实现
-
