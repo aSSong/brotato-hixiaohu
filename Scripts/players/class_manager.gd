@@ -210,6 +210,17 @@ func get_skill_cooldown(skill_name: String) -> float:
 func is_skill_active(skill_name: String) -> bool:
 	return skill_modifiers.has(skill_name)
 
+## 获取技能剩余持续时间
+func get_skill_remaining_duration(skill_name: String) -> float:
+	if not skill_modifiers.has(skill_name):
+		return 0.0
+	
+	var modifier = skill_modifiers[skill_name]
+	if not modifier:
+		return 0.0
+	
+	return max(0.0, modifier.duration)
+
 ## 获取技能效果值（已废弃）
 @warning_ignore("unused_parameter")
 func get_skill_effect(effect_name: String, default_value = 0.0):

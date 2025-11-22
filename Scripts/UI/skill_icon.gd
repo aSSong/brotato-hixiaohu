@@ -51,6 +51,61 @@ func _get_remaining_cd() -> float:
 	var class_manager = player_ref.class_manager
 	return class_manager.get_skill_cooldown(skill_data.skill_data.name)
 
+## 获取技能剩余持续时间
+func _get_remaining_duration() -> float:
+	if not player_ref or not player_ref.class_manager or not skill_data or not skill_data.skill_data:
+		return 0.0
+	
+	var class_manager = player_ref.class_manager
+	var skill_name = skill_data.skill_data.name
+	return class_manager.get_skill_remaining_duration(skill_name)
+
+## 重写：更新CD显示（自定义显示逻辑）
+func _update_cd_display():
+	if not skill_data or not skill_data.skill_data:
+		# 隐藏CD相关元素
+		if cd_mask:
+			cd_mask.visible = false
+		if cd_text:
+			cd_text.visible = false
+		return
+	
+	var class_manager = player_ref.class_manager if player_ref else null
+	if not class_manager:
+		return
+	
+	var skill_name = skill_data.skill_data.name
+	
+	# 检查技能是否激活
+	var is_active = class_manager.is_skill_active(skill_name)
+	var remaining_duration = _get_remaining_duration()
+	var remaining_cooldown = _get_remaining_cd()
+	
+	if is_active and remaining_duration > 0:
+		# 技能激活中：显示黄色文本倒计时（duration），cdmask 不可见
+		if cd_mask:
+			cd_mask.visible = false
+		if cd_text:
+			cd_text.visible = true
+			cd_text.text = str(ceili(remaining_duration))
+			# 设置黄色文本
+			cd_text.modulate = Color.YELLOW
+	elif remaining_cooldown > 0:
+		# 技能持续时间结束后：cdmask 可见，显示白色倒计时（cooldown）
+		if cd_mask:
+			cd_mask.visible = true
+		if cd_text:
+			cd_text.visible = true
+			cd_text.text = str(ceili(remaining_cooldown))
+			# 设置白色文本
+			cd_text.modulate = Color.WHITE
+	else:
+		# 技能可用：隐藏CD相关元素
+		if cd_mask:
+			cd_mask.visible = false
+		if cd_text:
+			cd_text.visible = false
+
 ## 生成技能描述文本
 func _generate_skill_description(skill_data_resource: SkillData) -> String:
 	if not skill_data_resource:
