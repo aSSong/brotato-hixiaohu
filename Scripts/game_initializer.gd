@@ -117,6 +117,21 @@ func _register_all_speakers(speech_manager: SpeechManager) -> void:
 				speech_manager.register_speaker(ghost)
 				print("[GameInitializer] Ghost已注册到SpeechManager: ", ghost.name)
 
+## 应用模式的初始资源配置
+func _apply_initial_resources(mode: BaseGameMode) -> void:
+	if not mode:
+		return
+	
+	# 设置初始gold（即使为0也设置，确保覆盖之前的值）
+	GameMain.gold = mode.initial_gold
+	if mode.initial_gold > 0:
+		print("[GameInitializer] 应用初始gold: %d" % mode.initial_gold)
+	
+	# 设置初始masterkey（即使为0也设置，确保覆盖之前的值）
+	GameMain.master_key = mode.initial_master_key
+	if mode.initial_master_key > 0:
+		print("[GameInitializer] 应用初始masterkey: %d" % mode.initial_master_key)
+
 ## 设置胜利条件检测
 func _setup_victory_detection() -> void:
 	# 获取当前模式
@@ -130,6 +145,9 @@ func _setup_victory_detection() -> void:
 		return
 	
 	print("[GameInitializer] 设置胜利检测 | 模式: %s | 条件: %s" % [current_mode.mode_name, current_mode.victory_condition_type])
+	
+	# 应用模式的初始资源配置
+	_apply_initial_resources(current_mode)
 	
 	# 根据胜利条件类型连接相应信号
 	match current_mode.victory_condition_type:

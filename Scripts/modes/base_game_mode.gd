@@ -23,6 +23,10 @@ var victory_keys: int = 200  # keys类型胜利条件：需要的钥匙数
 ## 失败条件配置参数
 var allow_revive: bool = true  # 是否允许复活（影响失败判定逻辑）
 
+## 初始资源配置参数
+var initial_gold: int = 0  # 游戏开始时初始获得的gold数量
+var initial_master_key: int = 0  # 游戏开始时初始获得的masterkey数量
+
 ## 初始化模式
 func initialize(config: Dictionary = {}) -> void:
 	mode_id = config.get("mode_id", "")
@@ -34,6 +38,8 @@ func initialize(config: Dictionary = {}) -> void:
 	victory_waves = config.get("victory_waves", 20)
 	victory_keys = config.get("victory_keys", 200)
 	allow_revive = config.get("allow_revive", true)
+	initial_gold = config.get("initial_gold", 0)
+	initial_master_key = config.get("initial_master_key", 0)
 	print("[BaseGameMode] 模式初始化: %s (%s)" % [mode_name, mode_id])
 
 ## 开始模式
