@@ -169,4 +169,3 @@ func _exit_tree() -> void:
 ## 获取当前墓碑数量
 func get_graves_count() -> int:
 	return current_graves.size()
-

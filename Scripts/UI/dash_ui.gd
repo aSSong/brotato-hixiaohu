@@ -28,4 +28,3 @@ func _get_remaining_cd() -> float:
 		return 0.0
 	
 	return timer.time_left
-
