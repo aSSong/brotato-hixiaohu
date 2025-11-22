@@ -16,6 +16,13 @@ var total_waves: int = 20
 var victory_condition_type: String = "waves"  # "waves", "keys", "time", "survival"
 var wave_config_id: String = "default"  # 波次配置ID（对应JSON文件名）
 
+## 胜利条件配置参数
+var victory_waves: int = 20  # waves类型胜利条件：需要完成的波数
+var victory_keys: int = 200  # keys类型胜利条件：需要的钥匙数
+
+## 失败条件配置参数
+var allow_revive: bool = true  # 是否允许复活（影响失败判定逻辑）
+
 ## 初始化模式
 func initialize(config: Dictionary = {}) -> void:
 	mode_id = config.get("mode_id", "")
@@ -23,6 +30,10 @@ func initialize(config: Dictionary = {}) -> void:
 	mode_description = config.get("mode_description", "")
 	total_waves = config.get("total_waves", 20)
 	victory_condition_type = config.get("victory_condition", "waves")
+	wave_config_id = config.get("wave_config_id", "default")
+	victory_waves = config.get("victory_waves", 20)
+	victory_keys = config.get("victory_keys", 200)
+	allow_revive = config.get("allow_revive", true)
 	print("[BaseGameMode] 模式初始化: %s (%s)" % [mode_name, mode_id])
 
 ## 开始模式
@@ -48,23 +59,53 @@ func check_victory_condition() -> bool:
 			return false  # 生存模式没有胜利，只有失败
 	return false
 
-## 检查失败条件
+## 检查失败条件（统一实现，通过配置参数控制）
 func check_defeat_condition() -> bool:
-	return false  # 由子类实现
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not is_instance_valid(player):
+		return false
+	
+	if "is_dead" in player and player.is_dead:
+		# 如果允许复活，检查是否有足够金币复活
+		if allow_revive:
+			var revive_cost = GameConfig.revive_base_cost * (GameMain.revive_count + 1)
+			if GameMain.gold < revive_cost:
+				return true  # 死亡且无法复活，失败
+		else:
+			# 不允许复活，死亡即失败
+			return true
+	
+	return false
 
-## 获取当前波次配置
+## 获取当前波次配置（已废弃，由wave_system_v3从JSON加载）
 func get_wave_config(wave_number: int) -> Dictionary:
-	return {}  # 由子类实现
+	push_warning("[BaseGameMode] get_wave_config已废弃，请使用wave_config_id让wave_system_v3从JSON加载配置")
+	return {}  # 不再使用硬编码配置
 
-## 波次检查（由子类重写）
+## 波次胜利检查（统一实现，通过配置参数控制）
 func _check_waves_victory() -> bool:
-	return false
+	var wave_manager = Engine.get_main_loop().get_first_node_in_group("wave_manager")
+	if not wave_manager or not "current_wave" in wave_manager:
+		print("[BaseGameMode] 胜利检测: 未找到 wave_manager")
+		return false
+	
+	# 已完成的波数 = current_wave（如果波次没在进行）或 current_wave - 1（如果在进行）
+	var completed_waves = wave_manager.current_wave
+	if "is_wave_in_progress" in wave_manager and wave_manager.is_wave_in_progress:
+		completed_waves -= 1
+	
+	var result = completed_waves >= victory_waves
+	print("[BaseGameMode] 胜利检测: current_wave=%d, completed=%d, target=%d, result=%s" % 
+		[wave_manager.current_wave, completed_waves, victory_waves, result])
+	return result
 
+## 钥匙胜利检查（统一实现，通过配置参数控制）
 func _check_keys_victory() -> bool:
-	return GameMain.gold >= GameConfig.keys_required
+	return GameMain.gold >= victory_keys
 
+## 时间胜利检查（统一实现，通过配置参数控制）
 func _check_time_victory() -> bool:
-	return false
+	return false  # 暂未实现
 
 ## 获取模式信息
 func get_mode_info() -> Dictionary:
@@ -76,13 +117,13 @@ func get_mode_info() -> Dictionary:
 		"victory_condition": victory_condition_type
 	}
 
-## 获取胜利条件描述文本
+## 获取胜利条件描述文本（统一实现，通过配置参数控制）
 func get_victory_description() -> String:
 	match victory_condition_type:
 		"keys":
-			return "持有钥匙 %d 把" % GameConfig.keys_required
+			return "持有钥匙 %d 把" % victory_keys
 		"waves":
-			return "完成消灭 %d 波敌人" % total_waves
+			return "完成消灭 %d 波敌人" % victory_waves
 		"time":
 			return "生存指定时间"
 		"survival":

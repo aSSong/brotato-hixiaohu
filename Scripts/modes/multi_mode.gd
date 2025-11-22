@@ -7,107 +7,22 @@ class_name MultiMode
 ## - 每波开始时刷新对应wave死亡的ghost墓碑
 ## - 可以拯救墓碑复活为ghost
 
-## 是否允许复活
-var allow_revive: bool = false
-
 func _init() -> void:
 	mode_id = "multi"
 	mode_name = "Multi模式"
 	mode_description = "无复活模式，拯救墓碑获得援助"
 	total_waves = GameConfig.total_waves
 	victory_condition_type = "waves"
-	wave_config_id = "default"  # 使用默认波次配置
-	allow_revive = false
+	wave_config_id = "default"  # 使用默认波次配置（从JSON加载）
+	victory_waves = GameConfig.multi_mode_victory_waves  # 从GameConfig读取胜利波数
+	allow_revive = false  # Multi模式不允许复活
 
-## 获取当前波次配置（与survival模式一致）
-func get_wave_config(wave_number: int) -> Dictionary:
-	# 计算敌人数量
-	var base_count = GameConfig.wave_first_base_count
-	var increment = GameConfig.wave_enemy_increment
-	var total_enemies = base_count + (wave_number - 1) * increment
-	
-	# 计算不同类型敌人的数量
-	var basic_count = int(total_enemies * GameConfig.enemy_ratio_basic)
-	var fast_count = int(total_enemies * GameConfig.enemy_ratio_fast)
-	var tank_count = int(total_enemies * GameConfig.enemy_ratio_tank)
-	var elite_count = int(total_enemies * GameConfig.enemy_ratio_elite)
-	
-	# 确保至少有基础敌人
-	if basic_count == 0:
-		basic_count = 1
-	
-	return {
-		"wave_number": wave_number,
-		"total_enemies": total_enemies,
-		"enemy_types": {
-			"basic": basic_count,
-			"fast": fast_count,
-			"tank": tank_count,
-			"elite": elite_count
-		},
-		"spawn_interval": 1.0,  # 生成间隔（秒）
-		"spawn_batch_size": 3    # 每批生成数量
-	}
-
-## 检查波次胜利
-func _check_waves_victory() -> bool:
-	# Multi模式：完成指定波数即胜利
-	# 需要在波次结束后才判定，而不是波次开始时
-	var wave_manager = Engine.get_main_loop().get_first_node_in_group("wave_manager")
-	if wave_manager and "current_wave" in wave_manager:
-		# 已完成的波数 = current_wave（如果波次没在进行）或 current_wave - 1（如果在进行）
-		var completed_waves = wave_manager.current_wave
-		var in_progress = false
-		if "is_wave_in_progress" in wave_manager:
-			in_progress = wave_manager.is_wave_in_progress
-			if in_progress:
-				completed_waves -= 1
-		
-		var target = GameConfig.multi_mode_victory_waves
-		var result = completed_waves >= target
-		print("[MultiMode] 胜利检测: current_wave=%d, in_progress=%s, completed=%d, target=%d, result=%s" % 
-			[wave_manager.current_wave, in_progress, completed_waves, target, result])
-		return result
-	
-	print("[MultiMode] 胜利检测: 未找到 wave_manager")
-	return false
-
-## 检查失败条件（Multi模式：玩家死亡即失败）
-func check_defeat_condition() -> bool:
-	var player = get_tree().get_first_node_in_group("player")
-	if not player or not is_instance_valid(player):
-		return false
-	
-	# Multi模式下，玩家死亡即失败（不检查复活条件）
-	if "is_dead" in player and player.is_dead:
-		return true
-	
-	return false
+## 注意：波次配置已由wave_system_v3从JSON文件（wave_config_id）加载，不再使用硬编码配置
+## 注意：胜利失败判定已由base_game_mode统一实现，通过配置参数控制
 
 ## 是否允许复活
 func can_revive() -> bool:
 	return allow_revive
 
-## 重写：获取胜利条件描述
-func get_victory_description() -> String:
-	return "完成消灭 %d 波敌人" % GameConfig.multi_mode_victory_waves
-
-## 重写：获取当前进度
-func get_progress_text() -> String:
-	var wave_manager = Engine.get_main_loop().get_first_node_in_group("wave_manager")
-	if wave_manager and "current_wave" in wave_manager:
-		# 已消灭的波数计算：
-		# - 如果 current_wave = 0（游戏刚开始），已消灭 0 波
-		# - 如果 current_wave = N 且波次在进行中，已消灭 N-1 波
-		# - 如果 current_wave = N 且波次已结束，已消灭 N 波
-		var current = wave_manager.current_wave
-		if current == 0:
-			return "已消灭 0 波"
-		
-		var completed_waves = current
-		if "is_wave_in_progress" in wave_manager and wave_manager.is_wave_in_progress:
-			completed_waves -= 1
-		
-		return "已消灭 %d 波" % completed_waves
-	return "已消灭 0 波"
+## 注意：get_victory_description和get_progress_text已由base_game_mode统一实现
 
