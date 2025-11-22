@@ -43,11 +43,15 @@ func _get_indicator_color() -> Color:
 
 func _on_weapon_initialized() -> void:
 	# 确保有射击位置节点（用于魔法效果位置）
+	# 如果@onready初始化失败，手动获取节点
 	if not shoot_pos:
-		shoot_pos = Marker2D.new()
-		shoot_pos.name = "shoot_pos"
-		shoot_pos.position = Vector2(16.142859, 1.1428572)
-		add_child(shoot_pos)
+		shoot_pos = get_node_or_null("shoot_pos")
+		# 如果节点不存在，创建一个新的
+		if not shoot_pos:
+			shoot_pos = Marker2D.new()
+			shoot_pos.name = "shoot_pos"
+			shoot_pos.position = Vector2(16.142859, 1.1428572)
+			add_child(shoot_pos)
 
 func _process(delta: float) -> void:
 	# 处理正在施法的攻击

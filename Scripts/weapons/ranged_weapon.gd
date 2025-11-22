@@ -9,11 +9,15 @@ var bullet_scene = preload("res://scenes/bullets/bullet.tscn")
 
 func _on_weapon_initialized() -> void:
 	# 确保有射击位置节点
+	# 如果@onready初始化失败，手动获取节点
 	if not shoot_pos:
-		shoot_pos = Marker2D.new()
-		shoot_pos.name = "shoot_pos"
-		shoot_pos.position = Vector2(16.142859, 1.1428572)
-		add_child(shoot_pos)
+		shoot_pos = get_node_or_null("shoot_pos")
+		# 如果节点不存在，创建一个新的
+		if not shoot_pos:
+			shoot_pos = Marker2D.new()
+			shoot_pos.name = "shoot_pos"
+			shoot_pos.position = Vector2(16.142859, 1.1428572)
+			add_child(shoot_pos)
 
 func _perform_attack() -> void:
 	if attack_enemies.is_empty() or weapon_data == null or not shoot_pos:

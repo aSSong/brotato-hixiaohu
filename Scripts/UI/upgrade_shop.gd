@@ -798,7 +798,6 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 			upgrade = _generate_weapon_upgrade()
 		else:
 			# 获取当前波数和幸运值
-			var current_wave = _get_current_wave()
 			var luck_value = _get_player_luck()
 			
 			# 根据幸运值决定品质
@@ -810,7 +809,6 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 			# 如果生成失败，尝试切换类型
 			if is_weapon:
 				# 武器生成失败，尝试生成属性
-				var current_wave = _get_current_wave()
 				var luck_value = _get_player_luck()
 				var quality = _get_quality_by_luck(luck_value, current_wave)
 				upgrade = _generate_attribute_upgrade(quality)

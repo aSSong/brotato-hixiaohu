@@ -49,7 +49,12 @@ func initialize(data: WeaponData, level: int = 1) -> void:
 	weapon_level = clamp(level, 1, 5)
 	
 	if weapon_data == null:
-		push_error("武器数据为空！")
+		push_error("[BaseWeapon] 武器数据为空！")
+		return
+	
+	# 确保在场景树中
+	if not is_inside_tree():
+		push_error("[BaseWeapon] initialize() 调用时节点不在场景树中")
 		return
 	
 	# 刷新武器属性（攻速、范围等）
@@ -218,6 +223,33 @@ func _setup_weapon_appearance() -> void:
 				weaponAni.position = weapon_data.sprite_offset
 
 func _ready() -> void:
+	# 确保在场景树中
+	if not is_inside_tree():
+		push_error("[BaseWeapon] _ready() 调用时节点不在场景树中")
+		return
+	
+	# 【关键修复】手动初始化@onready变量（防止set_script后@onready失效）
+	# 如果@onready初始化失败（通常发生在set_script替换脚本后），手动获取节点引用
+	if not weaponAni:
+		weaponAni = get_node_or_null("AnimatedSprite2D")
+		if not weaponAni:
+			push_error("[BaseWeapon] 无法找到 AnimatedSprite2D 节点")
+	
+	if not timer:
+		timer = get_node_or_null("Timer")
+		if not timer:
+			push_error("[BaseWeapon] 无法找到 Timer 节点")
+	
+	if not detection_area:
+		detection_area = get_node_or_null("Area2D")
+		if not detection_area:
+			push_error("[BaseWeapon] 无法找到 Area2D 节点")
+	
+	# 如果关键节点缺失，无法继续初始化
+	if not weaponAni or not timer or not detection_area:
+		push_error("[BaseWeapon] 关键节点缺失，武器初始化失败")
+		return
+	
 	# 连接信号
 	if detection_area:
 		if not detection_area.body_entered.is_connected(_on_area_2d_body_entered):

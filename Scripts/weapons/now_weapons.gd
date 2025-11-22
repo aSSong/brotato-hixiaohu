@@ -71,6 +71,17 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 	# 检查武器实例是否仍然有效
 	if not is_instance_valid(weapon_instance):
 		push_error("[NowWeapons] 武器实例在添加后变为无效: " + weapon_id)
+		# 注意：如果实例无效，不能再调用它的方法，否则会报错
+		return
+	
+	# 额外检查：确保实例还在场景树中
+	if not weapon_instance.is_inside_tree():
+		push_error("[NowWeapons] 武器实例不在场景树中: " + weapon_id)
+		# 如果不在场景树中，尝试从父节点移除并清理
+		var parent = weapon_instance.get_parent()
+		if parent:
+			parent.remove_child(weapon_instance)
+		weapon_instance.queue_free()
 		return
 	
 	# 设置player_stats引用（新系统）
