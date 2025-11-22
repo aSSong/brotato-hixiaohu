@@ -131,6 +131,14 @@ func _log_stats_diff(old_stats: CombatStats, new_stats: CombatStats) -> void:
 		diffs.append("GlobalDamage: x%.2f -> x%.2f" % [old_stats.global_damage_mult, new_stats.global_damage_mult])
 	if not is_equal_approx(old_stats.global_attack_speed_mult, new_stats.global_attack_speed_mult):
 		diffs.append("GlobalAttackSpeed: x%.2f -> x%.2f" % [old_stats.global_attack_speed_mult, new_stats.global_attack_speed_mult])
+	
+	# 异常效果系数
+	if not is_equal_approx(old_stats.status_duration_mult, new_stats.status_duration_mult):
+		diffs.append("StatusDurationMult: x%.2f -> x%.2f" % [old_stats.status_duration_mult, new_stats.status_duration_mult])
+	if not is_equal_approx(old_stats.status_effect_mult, new_stats.status_effect_mult):
+		diffs.append("StatusEffectMult: x%.2f -> x%.2f" % [old_stats.status_effect_mult, new_stats.status_effect_mult])
+	if not is_equal_approx(old_stats.status_chance_mult, new_stats.status_chance_mult):
+		diffs.append("StatusChanceMult: x%.2f -> x%.2f" % [old_stats.status_chance_mult, new_stats.status_chance_mult])
 		
 	if not diffs.is_empty():
 		var msg = "[AttributeManager] 属性变更:\n  " + "\n  ".join(diffs)

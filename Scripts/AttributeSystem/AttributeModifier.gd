@@ -115,6 +115,11 @@ func apply_to(target_stats: CombatStats) -> void:
 	target_stats.burn_damage_per_second += stats_delta.burn_damage_per_second
 	target_stats.freeze_chance += stats_delta.freeze_chance
 	target_stats.poison_chance += stats_delta.poison_chance
+	
+	# 异常效果系数（乘法属性）
+	target_stats.status_duration_mult *= stats_delta.status_duration_mult
+	target_stats.status_effect_mult *= stats_delta.status_effect_mult
+	target_stats.status_chance_mult *= stats_delta.status_chance_mult
 
 ## 检查修改器是否已过期
 ## 
