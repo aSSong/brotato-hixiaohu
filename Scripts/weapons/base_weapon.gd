@@ -57,6 +57,19 @@ func initialize(data: WeaponData, level: int = 1) -> void:
 		push_error("[BaseWeapon] initialize() 调用时节点不在场景树中")
 		return
 	
+	# 确保@onready节点已准备好（双重检查）
+	if not weaponAni:
+		weaponAni = get_node_or_null("AnimatedSprite2D")
+	if not timer:
+		timer = get_node_or_null("Timer")
+	if not detection_area:
+		detection_area = get_node_or_null("Area2D")
+	
+	# 如果关键节点仍然缺失，无法初始化
+	if not weaponAni or not timer or not detection_area:
+		push_error("[BaseWeapon] initialize() 时关键节点缺失，无法继续")
+		return
+	
 	# 刷新武器属性（攻速、范围等）
 	refresh_weapon_stats()
 	
@@ -248,6 +261,12 @@ func _ready() -> void:
 	# 如果关键节点缺失，无法继续初始化
 	if not weaponAni or not timer or not detection_area:
 		push_error("[BaseWeapon] 关键节点缺失，武器初始化失败")
+		push_error("[BaseWeapon] weaponAni: %s, timer: %s, detection_area: %s" % [
+			"存在" if weaponAni else "缺失",
+			"存在" if timer else "缺失",
+			"存在" if detection_area else "缺失"
+		])
+		# 注意：不销毁实例，让调用者处理
 		return
 	
 	# 连接信号

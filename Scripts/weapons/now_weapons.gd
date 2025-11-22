@@ -62,16 +62,25 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 		push_error("创建武器实例失败: " + weapon_id)
 		return
 	
+	print("[NowWeapons] 武器实例已创建: ", weapon_id, " 实例ID: ", weapon_instance.get_instance_id())
+	
 	# 添加到场景树
 	add_child(weapon_instance)
+	print("[NowWeapons] 武器实例已添加到场景树: ", weapon_id, " 是否在树中: ", weapon_instance.is_inside_tree())
 	
 	# 等待一帧以确保_ready执行完毕
 	await get_tree().process_frame
+	print("[NowWeapons] 等待一帧后，武器实例是否有效: ", is_instance_valid(weapon_instance), " 是否在树中: ", weapon_instance.is_inside_tree() if is_instance_valid(weapon_instance) else "N/A")
 	
 	# 检查武器实例是否仍然有效
 	if not is_instance_valid(weapon_instance):
 		push_error("[NowWeapons] 武器实例在添加后变为无效: " + weapon_id)
 		# 注意：如果实例无效，不能再调用它的方法，否则会报错
+		# 尝试从子节点列表中移除（如果还在的话）
+		var children = get_children()
+		for i in range(children.size() - 1, -1, -1):
+			if not is_instance_valid(children[i]):
+				children.remove_at(i)
 		return
 	
 	# 额外检查：确保实例还在场景树中
@@ -83,6 +92,12 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 			parent.remove_child(weapon_instance)
 		weapon_instance.queue_free()
 		return
+	
+	# 检查武器是否成功初始化（检查weapon_data是否存在）
+	if weapon_instance is BaseWeapon:
+		if not weapon_instance.weapon_data:
+			push_warning("[NowWeapons] 武器 %s 初始化后 weapon_data 为空，可能初始化失败" % weapon_id)
+			# 不销毁实例，让它继续存在（可能稍后会初始化）
 	
 	# 设置player_stats引用（新系统）
 	if weapon_instance is BaseWeapon:
