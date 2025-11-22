@@ -165,11 +165,12 @@ func save_local_data() -> void:
 	var file = FileAccess.open(LOCAL_SAVE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_error("[GhostDatabase] 无法保存本地记录: %s" % LOCAL_SAVE_PATH)
-		return
-	
-	file.store_string(json_string)
-	file.close()
-	print("[GhostDatabase] 本地记录已保存: %d 条" % local_ghosts.size())
+	else:
+		file.store_string(json_string)
+		file.close()
+		print("[GhostDatabase] 本地记录已保存: %d 条" % local_ghosts.size())
+
+	await update_from_server(local_ghosts)
 
 ## 从服务器更新数据（供外部调用，支持热更新）
 func update_from_server(ghost_data_array: Array) -> void:
