@@ -16,6 +16,50 @@ class_name SpecialEffects
 ##       {"chance": 0.3, "tick_interval": 1.0, "damage": 10, "duration": 5.0}
 ##   )
 
+## ========== 异常效果颜色配置（统一管理） ==========
+## 
+## 所有异常效果的颜色、shader参数都在这里统一配置
+## 包括：浮动文字颜色、shader颜色、shader透明度
+
+static var STATUS_COLORS: Dictionary = {
+	"burn": {
+		"text_color": Color(1.0, 0.5, 0.0),      # 橙色 - 浮动文字颜色
+		"shader_color": Color(1.0, 0.5, 0.0, 1.0), # 橙色 - shader颜色
+		"shader_opacity": 0.9                      # shader透明度
+	},
+	"bleed": {
+		"text_color": Color(1.0, 0.0, 0.0),      # 红色 - 浮动文字颜色
+		"shader_color": Color(1.0, 0.0, 0.0, 1.0), # 红色 - shader颜色
+		"shader_opacity": 0.8                      # shader透明度
+	},
+	"freeze": {
+		"text_color": Color(0.3, 0.8, 1.0),      # 蓝色 - 浮动文字颜色
+		"shader_color": Color(0.3, 0.8, 1.0, 1.0), # 蓝色 - shader颜色
+		"shader_opacity": 1.0                      # shader透明度（冰冻效果最明显）
+	},
+	"slow": {
+		"text_color": Color(0.3, 0.6, 1.0, 0.8), # 半透明蓝色 - 浮动文字颜色
+		"shader_color": Color(0.3, 0.6, 1.0, 0.6), # 半透明蓝色 - shader颜色
+		"shader_opacity": 0.7                      # shader透明度
+	},
+	"poison": {
+		"text_color": Color(0.5, 1.0, 0.0),      # 绿色 - 浮动文字颜色
+		"shader_color": Color(0.5, 1.0, 0.0, 1.0), # 绿色 - shader颜色
+		"shader_opacity": 0.7                      # shader透明度
+	}
+}
+
+## 获取异常效果的颜色配置
+## 
+## @param status_id 异常效果ID（"burn", "bleed", "freeze", "slow", "poison"）
+## @return 颜色配置字典，包含text_color、shader_color、shader_opacity
+static func get_status_color_config(status_id: String) -> Dictionary:
+	return STATUS_COLORS.get(status_id, {
+		"text_color": Color.WHITE,
+		"shader_color": Color.WHITE,
+		"shader_opacity": 0.0
+	})
+
 ## 异常效果类型枚举
 enum StatusEffectType {
 	BURN,      ## 燃烧
@@ -105,10 +149,11 @@ static func _apply_burn(attacker_stats: CombatStats, target, params: Dictionary)
 	
 	# 显示效果名称浮动文字
 	if FloatingText:
+		var color_config = get_status_color_config("burn")
 		FloatingText.create_floating_text(
 			target.global_position + Vector2(0, -50),
 			"燃烧",
-			Color(1.0, 0.5, 0.0),  # 橙色
+			color_config["text_color"],
 			false
 		)
 	
@@ -149,10 +194,11 @@ static func _apply_bleed(attacker_stats: CombatStats, target, params: Dictionary
 	
 	# 显示效果名称浮动文字
 	if FloatingText:
+		var color_config = get_status_color_config("bleed")
 		FloatingText.create_floating_text(
 			target.global_position + Vector2(0, -50),
 			"流血",
-			Color(1.0, 0.0, 0.0),  # 红色
+			color_config["text_color"],
 			false
 		)
 	
@@ -186,10 +232,11 @@ static func _apply_freeze(attacker_stats: CombatStats, target, params: Dictionar
 	
 	# 显示效果名称浮动文字
 	if FloatingText:
+		var color_config = get_status_color_config("freeze")
 		FloatingText.create_floating_text(
 			target.global_position + Vector2(0, -50),
 			"冰冻",
-			Color(0.3, 0.8, 1.0),  # 蓝色
+			color_config["text_color"],
 			false
 		)
 	
@@ -228,10 +275,11 @@ static func _apply_slow(attacker_stats: CombatStats, target, params: Dictionary)
 	
 	# 显示效果名称浮动文字
 	if FloatingText:
+		var color_config = get_status_color_config("slow")
 		FloatingText.create_floating_text(
 			target.global_position + Vector2(0, -50),
 			"减速",
-			Color(0.3, 0.6, 1.0, 0.8),  # 半透明蓝色
+			color_config["text_color"],
 			false
 		)
 	
@@ -272,10 +320,11 @@ static func _apply_poison(attacker_stats: CombatStats, target, params: Dictionar
 	
 	# 显示效果名称浮动文字
 	if FloatingText:
+		var color_config = get_status_color_config("poison")
 		FloatingText.create_floating_text(
 			target.global_position + Vector2(0, -50),
 			"中毒",
-			Color(0.5, 1.0, 0.0),  # 绿色
+			color_config["text_color"],
 			false
 		)
 	
@@ -330,12 +379,13 @@ static func _apply_lifesteal(attacker_stats: CombatStats, target, params: Dictio
 		attacker.hp_changed.emit(attacker.now_hp, attacker.max_hp)
 	
 	if actual_heal > 0:
-		# 显示吸血跳字
+		# 显示吸血跳字（字体大一倍）
 		if FloatingText:
 			FloatingText.create_floating_text(
 				attacker.global_position + Vector2(0, -40),
 				"+%d" % actual_heal,
-				Color(0.0, 1.0, 0.0)  # 绿色
+				Color(0.0, 1.0, 0.0),  # 绿色
+				true  # is_critical=true，使用大字体
 			)
 		
 		print("[SpecialEffects] 吸血效果触发！恢复: +%d HP (伤害: %d, 比例: %.1f%%)" % [actual_heal, damage_dealt, lifesteal_percent * 100])
@@ -441,14 +491,8 @@ static func apply_dot_damage(target, tick_data: Dictionary) -> void:
 		return
 	
 	# 根据buff_id确定DoT伤害颜色（与效果名称颜色一致）
-	var dot_color = Color(1.0, 0.0, 0.0)  # 默认红色
-	match buff_id:
-		"burn":
-			dot_color = Color(1.0, 0.5, 0.0)  # 橙色（与"燃烧"一致）
-		"bleed":
-			dot_color = Color(1.0, 0.0, 0.0)  # 红色（与"流血"一致）
-		"poison":
-			dot_color = Color(0.5, 1.0, 0.0)  # 绿色（与"中毒"一致）
+	var color_config = get_status_color_config(buff_id)
+	var dot_color = color_config.get("text_color", Color(1.0, 0.0, 0.0))
 	
 	# 对目标造成伤害（DoT伤害颜色与效果名称一致）
 	if target.has_method("enemy_hurt"):
@@ -460,13 +504,13 @@ static func apply_dot_damage(target, tick_data: Dictionary) -> void:
 			
 			target.enemyHP -= damage
 			
-			# 显示DoT伤害数字（颜色与效果名称一致）
+			# 显示DoT伤害数字（颜色与效果名称一致，字体大一倍）
 			if FloatingText:
 				FloatingText.create_floating_text(
 					target.global_position + Vector2(randf_range(-20, 20), -30),
 					"-" + str(damage),
 					dot_color,
-					false
+					true  # is_critical=true，使用大字体
 				)
 			
 			# 检查死亡
@@ -481,13 +525,13 @@ static func apply_dot_damage(target, tick_data: Dictionary) -> void:
 			if target.now_hp < 0:
 				target.now_hp = 0
 		
-		# 显示DoT伤害数字（颜色与效果名称一致）
+		# 显示DoT伤害数字（颜色与效果名称一致，字体大一倍）
 		if FloatingText:
 			FloatingText.create_floating_text(
 				target.global_position + Vector2(randf_range(-20, 20), -30),
 				"-" + str(damage),
 				dot_color,
-				false
+				true  # is_critical=true，使用大字体
 			)
 	
 	print("[SpecialEffects] DoT伤害: %s - %d (层数: %d)" % [buff_id, damage, stacks])

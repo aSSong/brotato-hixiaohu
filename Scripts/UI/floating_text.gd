@@ -26,7 +26,7 @@ func _ready() -> void:
 		
 		# 根据是否暴击调整字体大小和效果
 		if is_critical:
-			label.add_theme_font_size_override("font_size", 36)
+			label.add_theme_font_size_override("font_size", 56)  # 大一倍：28 * 2 = 56
 			peak_scale = 2.0
 			# 暴击时初始向上的冲力更大
 			velocity.y -= 100
