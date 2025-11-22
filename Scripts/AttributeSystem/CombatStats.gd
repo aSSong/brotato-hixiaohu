@@ -71,6 +71,11 @@ class_name CombatStats
 @export var freeze_chance: float = 0.0  ## 冰冻触发概率（0-1）
 @export var poison_chance: float = 0.0  ## 中毒触发概率（0-1）
 
+# ========== 异常效果系数 ==========
+@export var status_duration_mult: float = 1.0  ## 异常持续时间系数（影响所有异常状态的持续时间）
+@export var status_effect_mult: float = 1.0  ## 异常效果加成系数（影响异常状态的伤害/效果强度）
+@export var status_chance_mult: float = 1.0  ## 异常概率加成系数（影响异常状态的触发概率）
+
 func _init() -> void:
 	pass
 
@@ -216,6 +221,11 @@ func clone() -> CombatStats:
 	result.burn_damage_per_second = burn_damage_per_second
 	result.freeze_chance = freeze_chance
 	result.poison_chance = poison_chance
+	
+	# 异常效果系数
+	result.status_duration_mult = status_duration_mult
+	result.status_effect_mult = status_effect_mult
+	result.status_chance_mult = status_chance_mult
 	
 	return result
 

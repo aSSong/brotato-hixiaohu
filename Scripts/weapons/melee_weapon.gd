@@ -97,22 +97,8 @@ func _check_and_damage_enemies() -> void:
 			if enemy.has_method("enemy_hurt"):
 				enemy.enemy_hurt(final_damage, is_critical)
 			
-			# 吸血效果（使用新系统）
-			if player_stats and player_stats.lifesteal_percent > 0:
-				var player = get_tree().get_first_node_in_group("player")
-				SpecialEffects.apply_lifesteal(player, final_damage, player_stats.lifesteal_percent)
-			
-			# 燃烧效果（使用新系统）
-			if player_stats:
-				SpecialEffects.try_apply_burn(player_stats, enemy)
-			
-			# 冰冻效果
-			if player_stats:
-				SpecialEffects.try_apply_freeze(player_stats, enemy)
-			
-			# 中毒效果
-			if player_stats:
-				SpecialEffects.try_apply_poison(player_stats, enemy)
+			# 应用特殊效果（统一方法）
+			apply_special_effects(enemy, final_damage)
 			
 			# 击退效果（使用新系统）
 			if weapon_data.knockback_force > 0:

@@ -328,3 +328,35 @@ func set_range_multiplier(multiplier: float) -> void:
 		if shape is CircleShape2D:
 			var multipliers = WeaponData.get_level_multipliers(weapon_level)
 			shape.radius = weapon_data.range * multipliers.range_multiplier * range_multiplier
+
+## 应用特殊效果到目标
+## 
+## 统一的方法，所有武器都可以使用
+## 
+## @param target 目标对象
+## @param damage_dealt 造成的伤害（用于吸血等效果）
+## @param effect_configs 效果配置数组，每个元素为 {"type": String, "params": Dictionary}
+##   示例: [{"type": "burn", "params": {"chance": 0.3, "tick_interval": 1.0, "damage": 10, "duration": 5.0}}]
+func apply_special_effects(target: Node, damage_dealt: int = 0, effect_configs: Array = []) -> void:
+	if not player_stats or not target:
+		return
+	
+	# 如果没有提供配置，尝试从weapon_data中读取
+	if effect_configs.is_empty() and weapon_data and weapon_data.has("special_effects"):
+		effect_configs = weapon_data.special_effects.get("effects", [])
+	
+	# 应用每个效果
+	for effect_config in effect_configs:
+		if not effect_config is Dictionary:
+			continue
+		
+		var effect_type = effect_config.get("type", "")
+		var effect_params = effect_config.get("params", {})
+		
+		# 如果是吸血效果，需要传递伤害和攻击者
+		if effect_type == "lifesteal":
+			effect_params["damage_dealt"] = damage_dealt
+			effect_params["attacker"] = get_tree().get_first_node_in_group("player")
+		
+		# 应用效果
+		SpecialEffects.try_apply_status_effect(player_stats, target, effect_type, effect_params)

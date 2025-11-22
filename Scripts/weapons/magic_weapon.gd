@@ -137,16 +137,8 @@ func _execute_cast(cast_data: Dictionary) -> void:
 			var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
 			target.enemy_hurt(damage_to_deal, is_critical)
 			
-			# 吸血效果
-			if player_stats and player_stats.lifesteal_percent > 0:
-				var player = get_tree().get_first_node_in_group("player")
-				SpecialEffects.apply_lifesteal(player, damage_to_deal, player_stats.lifesteal_percent)
-			
-			# 特殊效果
-			if player_stats:
-				SpecialEffects.try_apply_burn(player_stats, target)
-				SpecialEffects.try_apply_freeze(player_stats, target)
-				SpecialEffects.try_apply_poison(player_stats, target)
+			# 应用特殊效果（统一方法）
+			apply_special_effects(target, damage_to_deal)
 		
 		# 爆炸范围伤害
 		if weapon_data.has_explosion_damage and explosion_radius > 0:
@@ -211,24 +203,22 @@ func _execute_immediate_attack(target: Node2D, damage: int, radius: float, show_
 	if show_indicator and radius > 0:
 		_show_explosion_indicator(target.global_position, radius)
 	
-	if is_locked:
-		# 锁敌模式：直接伤害 + 爆炸伤害
-		if target.has_method("enemy_hurt"):
-			# 暴击判定
-			var final_damage = damage
-			var is_critical = false
-			if player_stats:
-				is_critical = DamageCalculator.roll_critical(player_stats)
-				if is_critical:
-					final_damage = DamageCalculator.apply_critical_multiplier(damage, player_stats)
-			
-			var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
-			target.enemy_hurt(damage_to_deal, is_critical)
-			
-			# 吸血效果
-			if player_stats and player_stats.lifesteal_percent > 0:
-				var player = get_tree().get_first_node_in_group("player")
-				SpecialEffects.apply_lifesteal(player, damage_to_deal, player_stats.lifesteal_percent)
+		if is_locked:
+			# 锁敌模式：直接伤害 + 爆炸伤害
+			if target.has_method("enemy_hurt"):
+				# 暴击判定
+				var final_damage = damage
+				var is_critical = false
+				if player_stats:
+					is_critical = DamageCalculator.roll_critical(player_stats)
+					if is_critical:
+						final_damage = DamageCalculator.apply_critical_multiplier(damage, player_stats)
+				
+				var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
+				target.enemy_hurt(damage_to_deal, is_critical)
+				
+				# 应用特殊效果（统一方法）
+				apply_special_effects(target, damage_to_deal)
 		
 		# 爆炸范围伤害（排除主目标）
 		if weapon_data.has_explosion_damage and radius > 0:
@@ -339,6 +329,9 @@ func _explode_at_position(pos: Vector2, radius: float, base_damage: int, exclude
 			
 			if enemy.has_method("enemy_hurt"):
 				enemy.enemy_hurt(final_damage)
+				
+				# 应用特殊效果（统一方法）
+				apply_special_effects(enemy, final_damage)
 
 ## 创建爆炸特效
 func _create_explosion_effect(pos: Vector2) -> void:

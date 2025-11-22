@@ -111,6 +111,21 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "减伤: 0%"
 
+[node name="StatusDurationMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "异常持续时间: ×1.00"
+
+[node name="StatusEffectMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "异常效果加成: ×1.00"
+
+[node name="StatusChanceMult" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "异常概率加成: ×1.00"
+
 [node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
 layout_mode = 2
 

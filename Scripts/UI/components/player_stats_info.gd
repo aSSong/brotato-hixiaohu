@@ -17,6 +17,11 @@ class_name PlayerStatsInfo
 @onready var crit_damage_label: Label = %CritDamage
 @onready var damage_reduction_label: Label = %DamageReduction
 
+# 异常效果系数标签
+@onready var status_duration_mult_label: Label = %StatusDurationMult
+@onready var status_effect_mult_label: Label = %StatusEffectMult
+@onready var status_chance_mult_label: Label = %StatusChanceMult
+
 # 全局武器属性标签
 @onready var global_damage_mult_label: Label = %GlobalDamageMult
 @onready var global_attack_speed_mult_label: Label = %GlobalAttackSpeedMult
@@ -106,6 +111,14 @@ func _on_stats_changed(stats: CombatStats) -> void:
 	crit_chance_label.text = "暴击率: %.1f%%" % (stats.crit_chance * 100)
 	crit_damage_label.text = "暴击伤害: %.1f%%" % (stats.crit_damage * 100)
 	damage_reduction_label.text = "减伤: %.1f%%" % (stats.damage_reduction * 100)
+	
+	# 异常效果系数
+	if status_duration_mult_label:
+		status_duration_mult_label.text = "异常持续时间: ×%.2f" % stats.status_duration_mult
+	if status_effect_mult_label:
+		status_effect_mult_label.text = "异常效果加成: ×%.2f" % stats.status_effect_mult
+	if status_chance_mult_label:
+		status_chance_mult_label.text = "异常概率加成: ×%.2f" % stats.status_chance_mult
 	
 	# 全局武器属性
 	global_damage_mult_label.text = "全局伤害: ×%.2f" % stats.global_damage_mult
