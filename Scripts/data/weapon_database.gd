@@ -15,7 +15,7 @@ static func initialize_weapons() -> void:
 	var pistol = WeaponData.new(
 		"手枪",
 		WeaponData.WeaponType.RANGED,
-		2,  # damage
+		3,  # damage
 		0.4,  # attack_speed
 		800.0,  # range
 		"res://assets/weapon/WeaponPistol.png",
@@ -30,7 +30,7 @@ static func initialize_weapons() -> void:
 		"步枪",
 		WeaponData.WeaponType.RANGED,
 		4,  # damage
-		0.6,  # attack_speed
+		0.7,  # attack_speed
 		900.0,  # range
 		"res://assets/weapon/WeaponShotgun.png",
 		Vector2(1, 1)  # scale (稍大)
@@ -45,10 +45,10 @@ static func initialize_weapons() -> void:
 			{
 				"type": "bleed",
 				"params": {
-					"chance": 0.4,  # 40%触发概率
-					"tick_interval": 1.0,  # 每秒触发1次
+					"chance": 0.2,  # 20%触发概率
+					"tick_interval": 0.5,  # 每秒触发2次
 					"damage": 3.0,  # 每次伤害3点
-					"duration": 5.0  # 持续5秒
+					"duration": 3.0  # 持续3秒
 				}
 			}
 		]
@@ -125,8 +125,8 @@ static func initialize_weapons() -> void:
 			{
 				"type": "lifesteal",
 				"params": {
-					"chance": 0.5,  # 50%触发概率
-					"percent": 0.3  # 30%吸血（触发时）
+					"chance": 0.1,  # 10%触发概率
+					"percent": 0.2  # 20%吸血（触发时）
 				}
 			}
 		]
@@ -156,10 +156,10 @@ static func initialize_weapons() -> void:
 			{
 				"type": "burn",
 				"params": {
-					"chance": 0.5,  # 50%触发概率
-					"tick_interval": 1.0,  # 每秒触发1次
+					"chance": 0.2,  # 20%触发概率
+					"tick_interval": 0.5,  # 每秒触发1次
 					"damage": 5.0,  # 每次伤害5点
-					"duration": 4.0  # 持续4秒
+					"duration": 3.0  # 持续3秒
 				}
 			}
 		]
@@ -171,7 +171,7 @@ static func initialize_weapons() -> void:
 		"冰刺",
 		WeaponData.WeaponType.MAGIC,
 		4,  # damage
-		0.5,  # attack_speed
+		1.0,  # attack_speed
 		900.0,  # range
 		"res://assets/weapon/Weapon_ice.png",
 		Vector2(1, 1)  # scale
@@ -189,8 +189,8 @@ static func initialize_weapons() -> void:
 			{
 				"type": "freeze",
 				"params": {
-					"chance": 0.6,  # 60%触发概率
-					"duration": 2.5  # 持续2.5秒
+					"chance": 0.1,  # 10%触发概率
+					"duration": 2.0  # 持续2.0秒
 				}
 			}
 		]
