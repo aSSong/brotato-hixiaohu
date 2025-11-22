@@ -22,8 +22,15 @@ func _ready() -> void:
 	# 获取玩家引用
 	player_ref = get_tree().get_first_node_in_group("player")
 	
-	# 如果没有预设武器，从GameMain读取选择的武器
-	if get_child_count() == 0:
+	# 检查是否为Ghost的组件
+	var is_ghost_component = false
+	var parent = get_parent()
+	if parent and parent.is_in_group("ghost"):
+		is_ghost_component = true
+		print("[NowWeapons] 父节点是Ghost，跳过自动初始化")
+	
+	# 如果没有预设武器，从GameMain读取选择的武器（仅在非Ghost情况下）
+	if not is_ghost_component and get_child_count() == 0:
 		if GameMain.selected_weapon_ids.size() > 0:
 			# 使用玩家选择的武器（异步等待每个武器创建完成）
 			for weapon_id in GameMain.selected_weapon_ids:
