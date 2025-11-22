@@ -89,6 +89,13 @@ func _trigger_death() -> void:
 	# 设置游戏状态为死亡
 	GameState.change_state(GameState.State.PLAYER_DEAD)
 	
+	# 禁用玩家输入和武器（但不暂停游戏，等待death_delay后再暂停）
+	if player:
+		#player.set_physics_process(false) # 可选：禁用物理处理
+		#player.set_process_input(false) # 可选：禁用输入
+		if player.has_method("disable_weapons"):
+			player.disable_weapons()
+	
 	death_timer = death_delay
 	death_count += 1  # 增加本局死亡次数
 	

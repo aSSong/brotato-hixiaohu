@@ -421,16 +421,21 @@ func player_hurt(damage: int) -> void:
 		canMove = false
 		stop = true
 		
-		# 禁用武器（彻底停止攻击）
-		_disable_weapons()
-		
 		# 隐藏玩家
 		visible = false
+		
+		# 注意：不要在这里禁用武器，这会导致Ghost的武器也失效（如果Ghost引用了Player的disable_weapons）
+		# 也不要在这里调用_disable_weapons，应该让DeathManager来统一管理
+		# DeathManager会在触发死亡时调用disable_weapons
 		
 		# 死亡逻辑由DeathManager处理
 		# hp_changed信号会通知DeathManager
 
 ## 禁用所有武器（彻底停止攻击）
+func disable_weapons() -> void:
+	_disable_weapons()
+
+## 内部禁用武器实现
 func _disable_weapons() -> void:
 	var weapons_node = get_node_or_null("now_weapons")
 	if weapons_node:
