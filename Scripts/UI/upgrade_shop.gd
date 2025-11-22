@@ -303,6 +303,7 @@ func _duplicate_upgrade_data(source: UpgradeData) -> UpgradeData:
 	copy.base_cost = source.base_cost
 	copy.actual_cost = source.actual_cost
 	copy.locked_cost = source.locked_cost  # 保留锁定时的价格
+	copy.weight = source.weight  # 复制权重
 	copy.attribute_changes = source.attribute_changes.duplicate(true)
 	
 	# ⭐ 关键：复制stats_modifier（新属性系统）
@@ -752,7 +753,7 @@ func _get_quality_by_luck(luck_value: float, current_wave: int) -> int:
 	
 	# 从高到低检查品质，使用递减概率
 	var rng = RandomNumberGenerator.new()
-	rng.randomize()
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + int(luck_value))
 	var roll = rng.randf_range(0.0, 100.0)
 	
 	var accumulated_prob = 0.0
@@ -779,7 +780,8 @@ func _get_quality_by_luck(luck_value: float, current_wave: int) -> int:
 ## 生成单个upgrade选项（独立判定）
 func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeData:
 	var rng = RandomNumberGenerator.new()
-	rng.randomize()
+	var current_wave = _get_current_wave()
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + existing_upgrades.size())
 	
 	# 35% 概率生成武器，65% 概率生成属性
 	var is_weapon = rng.randf() < 0.35
@@ -859,7 +861,8 @@ func _generate_weapon_upgrade() -> UpgradeData:
 		all_weapons_max_level = weapons_manager.has_all_weapons_max_level()
 	
 	var rng = RandomNumberGenerator.new()
-	rng.randomize()
+	var current_wave = _get_current_wave()
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + weapon_count)
 	
 	# 决定生成NEW_WEAPON还是WEAPON_LEVEL_UP
 	var can_level_up = weapon_count > 0 and not all_weapons_max_level
@@ -889,7 +892,8 @@ func _generate_new_weapon_upgrade() -> UpgradeData:
 		return null
 	
 	var rng = RandomNumberGenerator.new()
-	rng.randomize()
+	var current_wave = _get_current_wave()
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + all_weapon_ids.size())
 	var weapon_id = all_weapon_ids[rng.randi_range(0, all_weapon_ids.size() - 1)]
 	
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
@@ -916,7 +920,8 @@ func _generate_weapon_level_up_upgrade(weapons_manager) -> UpgradeData:
 		return null
 	
 	var rng = RandomNumberGenerator.new()
-	rng.randomize()
+	var current_wave = _get_current_wave()
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + upgradeable_weapons.size())
 	var weapon_id = upgradeable_weapons[rng.randi_range(0, upgradeable_weapons.size() - 1)]
 	
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
@@ -950,23 +955,50 @@ func _generate_attribute_upgrade(quality: int) -> UpgradeData:
 	# 获取所有upgrade ID
 	var all_upgrade_ids = UpgradeDatabase.get_all_upgrade_ids()
 	
-	# 筛选出指定品质的upgrade
-	var quality_upgrades = []
+	# 筛选出指定品质的upgrade，同时收集权重信息（跳过权重<=0的升级）
+	var quality_upgrades: Array[Dictionary] = []  # [{id: String, weight: int}]
+	var total_weight: int = 0
+	
 	for upgrade_id in all_upgrade_ids:
 		var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
-		if upgrade_data and upgrade_data.quality == quality:
-			quality_upgrades.append(upgrade_id)
+		if not upgrade_data or upgrade_data.quality != quality:
+			continue
+		
+		# 检查权重：权重必须>0才会出现在商店中（0、负数都会被跳过）
+		# 注意：int类型不能为null，未设置时默认值为0，也会被跳过
+		var weight = upgrade_data.weight
+		if weight <= 0:
+			continue
+		
+		quality_upgrades.append({"id": upgrade_id, "weight": weight})
+		total_weight += weight
 	
 	if quality_upgrades.is_empty():
 		print("[UpgradeShop] 警告: 没有品质为 %s 的升级选项" % UpgradeData.get_quality_name(quality))
 		return null
 	
-	# 随机选择一个
+	# 使用加权随机选择
+	var current_wave = _get_current_wave()
 	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	var upgrade_id = quality_upgrades[rng.randi_range(0, quality_upgrades.size() - 1)]
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + quality_upgrades.size())
 	
-	var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
+	# 生成0到总权重之间的随机数
+	var random_value = rng.randi_range(0, total_weight - 1)
+	
+	# 累加权重，找到对应的升级
+	var accumulated_weight = 0
+	var selected_upgrade_id: String = ""
+	for upgrade_info in quality_upgrades:
+		accumulated_weight += upgrade_info["weight"]
+		if random_value < accumulated_weight:
+			selected_upgrade_id = upgrade_info["id"]
+			break
+	
+	# 如果由于浮点误差没有选中，选择最后一个
+	if selected_upgrade_id == "":
+		selected_upgrade_id = quality_upgrades[-1]["id"]
+	
+	var upgrade_data = UpgradeDatabase.get_upgrade_data(selected_upgrade_id)
 	
 	# 创建副本
 	var upgrade_copy = UpgradeData.new(
@@ -979,6 +1011,7 @@ func _generate_attribute_upgrade(quality: int) -> UpgradeData:
 	upgrade_copy.description = upgrade_data.description
 	upgrade_copy.quality = upgrade_data.quality
 	upgrade_copy.actual_cost = upgrade_data.actual_cost
+	upgrade_copy.weight = upgrade_data.weight
 	upgrade_copy.attribute_changes = upgrade_data.attribute_changes.duplicate(true)
 	
 	# ⭐ 关键：复制stats_modifier（新属性系统）

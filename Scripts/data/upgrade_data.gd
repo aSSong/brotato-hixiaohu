@@ -59,6 +59,7 @@ enum UpgradeType {
 @export var base_cost: int = 5  # 武器升级的基础价格
 @export var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
 @export var locked_cost: int = -1  # 锁定时的价格（-1表示未锁定）
+@export var weight: int = 100  # 出现权重（用于加权随机，默认100，权重越高越容易出现）
 
 ## 新属性系统：使用CombatStats表示属性变化
 @export var stats_modifier: CombatStats = null
@@ -83,6 +84,7 @@ func _init(
 	# 初始化品质和价格
 	quality = Quality.WHITE
 	actual_cost = cost
+	weight = 100  # 默认权重100
 	
 	# 初始化新属性系统
 	stats_modifier = CombatStats.new()
