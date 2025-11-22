@@ -277,9 +277,9 @@ func start_next_wave() -> void:
 	
 	# 延迟刷怪（给玩家2秒准备时间）
 	print("[WaveSystem V3] 延迟2秒开始刷怪...")
-	var tree = get_tree()
-	if tree:
-		await tree.create_timer(2.0).timeout
+	var timer_tree = get_tree()
+	if timer_tree:
+		await timer_tree.create_timer(2.0).timeout
 	
 	# 再次检查状态，确保没有在等待期间发生变化（如游戏结束）
 	if current_state != WaveState.SPAWNING:

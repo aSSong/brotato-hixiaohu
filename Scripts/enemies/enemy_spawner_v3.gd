@@ -9,7 +9,7 @@ class_name EnemySpawnerV3
 
 var floor_layer: TileMapLayer = null
 var player: Node = null
-var wave_system: WaveSystemV3 = null
+var wave_system: Node = null
 
 ## ========== 生成参数 ==========
 var min_distance_from_player: float = 300.0
@@ -32,7 +32,7 @@ func _ready() -> void:
 	print("[EnemySpawner V3] 初始化完成")
 
 ## 设置波次系统
-func set_wave_system(system: WaveSystemV3) -> void:
+func set_wave_system(system: Node) -> void:
 	wave_system = system
 	print("[EnemySpawner V3] 连接到波次系统")
 
