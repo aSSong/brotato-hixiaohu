@@ -795,7 +795,7 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 		var upgrade: UpgradeData = null
 		
 		if is_weapon:
-			upgrade = _generate_weapon_upgrade()
+			upgrade = _generate_weapon_upgrade(existing_upgrades)
 		else:
 			# 获取当前波数和幸运值
 			var luck_value = _get_player_luck()
@@ -804,6 +804,9 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 			var quality = _get_quality_by_luck(luck_value, current_wave)
 			
 			upgrade = _generate_attribute_upgrade(quality)
+			# 如果指定品质生成失败（可能该品质没有对应升级），尝试保底使用白色品质
+			if upgrade == null:
+				upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE)
 		
 		if upgrade == null:
 			# 如果生成失败，尝试切换类型
@@ -812,9 +815,12 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 				var luck_value = _get_player_luck()
 				var quality = _get_quality_by_luck(luck_value, current_wave)
 				upgrade = _generate_attribute_upgrade(quality)
+				# 保底策略
+				if upgrade == null:
+					upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE)
 			else:
 				# 属性生成失败，尝试生成武器
-				upgrade = _generate_weapon_upgrade()
+				upgrade = _generate_weapon_upgrade(existing_upgrades)
 			
 			if upgrade == null:
 				continue
@@ -835,7 +841,7 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	return null
 
 ## 生成武器相关upgrade
-func _generate_weapon_upgrade() -> UpgradeData:
+func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeData:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
 	if not weapons_manager:
 		weapons_manager = get_tree().get_first_node_in_group("weapons")
@@ -847,8 +853,11 @@ func _generate_weapon_upgrade() -> UpgradeData:
 	if weapons_manager.has_method("get_weapon_count"):
 		weapon_count = weapons_manager.get_weapon_count()
 	
-	# 统计商店中的new weapon数量（包括锁定的）
-	var new_weapon_count_in_shop = _count_new_weapons_in_shop()
+	# 统计商店中的new weapon数量（包括锁定的和当前生成的）
+	var new_weapon_count_in_shop = 0
+	for up in existing_upgrades:
+		if up and up.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
+			new_weapon_count_in_shop += 1
 	
 	# 检查是否可以生成新武器
 	var can_generate_new_weapon = (weapon_count + new_weapon_count_in_shop) < 6
