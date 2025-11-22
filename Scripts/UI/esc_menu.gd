@@ -18,7 +18,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	# 设置层级，确保遮挡死亡UI（死亡UI默认为1）
-	layer = 100
+	layer = 200
 	
 	# 初始隐藏
 	hide()
