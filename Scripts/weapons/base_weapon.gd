@@ -363,11 +363,6 @@ func apply_special_effects(target: Node, damage_dealt: int = 0, effect_configs: 
 			effect_params["damage_dealt"] = damage_dealt
 			var attacker = get_tree().get_first_node_in_group("player")
 			effect_params["attacker"] = attacker
-			print("[BaseWeapon] 吸血效果准备 | 伤害: %d, 攻击者: %s, 参数: %s" % [damage_dealt, attacker.name if attacker else "null", effect_params])
 		
 		# 应用效果（吸血效果时target可以为null）
-		var success = SpecialEffects.try_apply_status_effect(player_stats, target, effect_type, effect_params)
-		if success:
-			print("[BaseWeapon] 成功应用效果: %s" % effect_type)
-		elif effect_type == "lifesteal":
-			print("[BaseWeapon] 吸血效果失败 | player_stats: %s, damage_dealt: %d" % [player_stats != null, damage_dealt])
+		SpecialEffects.try_apply_status_effect(player_stats, target, effect_type, effect_params)

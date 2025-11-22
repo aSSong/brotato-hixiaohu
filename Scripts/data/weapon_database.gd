@@ -125,7 +125,8 @@ static func initialize_weapons() -> void:
 			{
 				"type": "lifesteal",
 				"params": {
-					"percent": 0.15  # 15%吸血
+					"chance": 0.5,  # 50%触发概率
+					"percent": 0.3  # 30%吸血（触发时）
 				}
 			}
 		]

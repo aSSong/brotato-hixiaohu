@@ -286,30 +286,36 @@ static func _apply_poison(attacker_stats: CombatStats, target, params: Dictionar
 static func _apply_lifesteal(attacker_stats: CombatStats, target, params: Dictionary) -> bool:
 	var damage_dealt = params.get("damage_dealt", 0)
 	var lifesteal_percent = params.get("percent", attacker_stats.lifesteal_percent if attacker_stats else 0.0)
-	
-	print("[SpecialEffects] 吸血效果检查 | damage_dealt: %d, lifesteal_percent: %.2f" % [damage_dealt, lifesteal_percent])
+	var chance = params.get("chance", 1.0)  # 默认100%触发
 	
 	if damage_dealt <= 0:
-		print("[SpecialEffects] 吸血失败: 伤害为0")
 		return false
 	
 	if lifesteal_percent <= 0:
-		print("[SpecialEffects] 吸血失败: 吸血百分比为0")
+		return false
+	
+	# 应用异常概率加成
+	if attacker_stats:
+		chance *= attacker_stats.status_chance_mult
+	
+	# 概率判定
+	if chance <= 0 or not _roll_chance(chance):
 		return false
 	
 	# 获取攻击者（通常是玩家）
 	var attacker = params.get("attacker", null)
 	if not attacker:
-		print("[SpecialEffects] 吸血失败: 攻击者为null")
 		return false
 	
 	# 应用异常效果加成（影响吸血百分比）
-	lifesteal_percent *= attacker_stats.status_effect_mult
+	if attacker_stats:
+		lifesteal_percent *= attacker_stats.status_effect_mult
 	
 	# 计算吸血量
 	var heal_amount = int(damage_dealt * lifesteal_percent)
-	if heal_amount <= 0:
-		return false
+	# 确保至少恢复1点HP
+	if heal_amount < 1:
+		heal_amount = 1
 	
 	# 恢复生命值
 	if not "now_hp" in attacker or not "max_hp" in attacker:
@@ -324,8 +330,6 @@ static func _apply_lifesteal(attacker_stats: CombatStats, target, params: Dictio
 		attacker.hp_changed.emit(attacker.now_hp, attacker.max_hp)
 	
 	if actual_heal > 0:
-		print("[SpecialEffects] 吸血: +%d HP" % actual_heal)
-		
 		# 显示吸血跳字
 		if FloatingText:
 			FloatingText.create_floating_text(
@@ -333,6 +337,8 @@ static func _apply_lifesteal(attacker_stats: CombatStats, target, params: Dictio
 				"+%d" % actual_heal,
 				Color(0.0, 1.0, 0.0)  # 绿色
 			)
+		
+		print("[SpecialEffects] 吸血效果触发！恢复: +%d HP (伤害: %d, 比例: %.1f%%)" % [actual_heal, damage_dealt, lifesteal_percent * 100])
 	
 	return true
 
