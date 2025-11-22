@@ -17,6 +17,9 @@ func _ready() -> void:
 	# 设置为暂停时也能处理（关键！）
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
+	# 设置层级，确保遮挡死亡UI（死亡UI默认为1）
+	layer = 100
+	
 	# 初始隐藏
 	hide()
 	
@@ -26,8 +29,8 @@ func _ready() -> void:
 func show_menu() -> void:
 	print("[ESC Menu] 准备打开菜单")
 	
-	# 暂停游戏
-	get_tree().paused = true
+	# 暂停游戏 - 由 GameState 管理
+	# get_tree().paused = true
 	
 	# 显示菜单
 	show()
@@ -52,10 +55,10 @@ func hide_menu() -> void:
 	# 隐藏菜单
 	hide()
 	
-	# 恢复游戏
-	get_tree().paused = false
+	# 恢复游戏 - 由 GameState 管理
+	# get_tree().paused = false
 	
-	print("[ESC Menu] 菜单已关闭，游戏已恢复")
+	print("[ESC Menu] 菜单已关闭")
 
 ## 播放显示动画
 func _play_show_animation() -> void:
