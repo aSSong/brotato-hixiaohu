@@ -32,32 +32,43 @@ func _physics_process(delta: float) -> void:
 
 func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	#print("Collided with: ", body.name, " (type: ", body.get_class(), ")")
-		if body.is_in_group("enemy"):
-			if body.has_method("enemy_hurt"):
-				body.enemy_hurt(hurt, is_critical)
+	if body.is_in_group("enemy"):
+		if body.has_method("enemy_hurt"):
+			body.enemy_hurt(hurt, is_critical)
+			
+			# 应用特殊效果（统一方法）
+			if player_stats:
+				# 吸血效果
+				if player_stats.lifesteal_percent > 0:
+					var player = get_tree().get_first_node_in_group("player")
+					SpecialEffects.try_apply_status_effect(player_stats, null, "lifesteal", {
+						"attacker": player,
+						"damage_dealt": hurt,
+						"percent": player_stats.lifesteal_percent
+					})
 				
-				# 应用特殊效果（统一方法）
-				if player_stats:
-					# 吸血效果
-					if player_stats.lifesteal_percent > 0:
-						var player = get_tree().get_first_node_in_group("player")
-						SpecialEffects.try_apply_status_effect(player_stats, null, "lifesteal", {
-							"attacker": player,
-							"damage_dealt": hurt,
-							"percent": player_stats.lifesteal_percent
-						})
-					
-					# 状态效果（使用旧方法保持兼容，因为子弹没有weapon_data）
-					SpecialEffects.try_apply_burn(player_stats, body)
-					SpecialEffects.try_apply_freeze(player_stats, body)
-					SpecialEffects.try_apply_poison(player_stats, body)
+				# 状态效果（使用统一方法）
+				if player_stats.burn_chance > 0:
+					SpecialEffects.try_apply_status_effect(player_stats, body, "burn", {
+						"chance": player_stats.burn_chance,
+						"tick_interval": 1.0,
+						"damage": player_stats.burn_damage_per_second,
+						"duration": 3.0
+					})
+				
+				if player_stats.freeze_chance > 0:
+					SpecialEffects.try_apply_status_effect(player_stats, body, "freeze", {
+						"chance": player_stats.freeze_chance,
+						"duration": 2.0
+					})
+				
+				if player_stats.poison_chance > 0:
+					SpecialEffects.try_apply_status_effect(player_stats, body, "poison", {
+						"chance": player_stats.poison_chance,
+						"tick_interval": 1.0,
+						"damage": 5.0,
+						"duration": 5.0
+					})
 	
-		#if body is TileMapLayer:
-		#var tile_data := body.get_cell_tile_data(0, body.local_to_map(body.to_local(global_position)))
-		#if tile_data and tile_data.get_custom_data("is_wall"):
-			#queue_free()
-	## 如果还有静态物体（StaticBody2D）做的箱子、柱子，也可一起判断
-	#elif body is StaticBody2D:
-		#queue_free()
+	# 碰撞后销毁子弹
 	queue_free()
-	pass # Replace with function body.

@@ -342,8 +342,9 @@ func apply_special_effects(target: Node, damage_dealt: int = 0, effect_configs: 
 		return
 	
 	# 如果没有提供配置，尝试从weapon_data中读取
-	if effect_configs.is_empty() and weapon_data and weapon_data.has("special_effects"):
-		effect_configs = weapon_data.special_effects.get("effects", [])
+	if effect_configs.is_empty() and weapon_data and weapon_data.special_effects:
+		if weapon_data.special_effects is Dictionary and weapon_data.special_effects.has("effects"):
+			effect_configs = weapon_data.special_effects.get("effects", [])
 	
 	# 应用每个效果
 	for effect_config in effect_configs:

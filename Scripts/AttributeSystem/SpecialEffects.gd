@@ -378,37 +378,10 @@ static func apply_dot_damage(target, tick_data: Dictionary) -> void:
 	
 	print("[SpecialEffects] DoT伤害: %d (层数: %d)" % [damage, stacks])
 
-## ========== 旧方法（兼容性保留） ==========
-
-## 尝试应用燃烧效果（旧方法，已废弃）
-@deprecated("使用 try_apply_status_effect() 替代")
-static func try_apply_burn(attacker_stats: CombatStats, target) -> bool:
-	return try_apply_status_effect(attacker_stats, target, "burn", {
-		"chance": attacker_stats.burn_chance,
-		"tick_interval": 1.0,
-		"damage": attacker_stats.burn_damage_per_second,
-		"duration": 3.0
-	})
-
-## 尝试应用冰冻效果（旧方法，已废弃）
-@deprecated("使用 try_apply_status_effect() 替代")
-static func try_apply_freeze(attacker_stats: CombatStats, target) -> bool:
-	return try_apply_status_effect(attacker_stats, target, "freeze", {
-		"chance": attacker_stats.freeze_chance,
-		"duration": 2.0
-	})
-
-## 尝试应用中毒效果（旧方法，已废弃）
-@deprecated("使用 try_apply_status_effect() 替代")
-static func try_apply_poison(attacker_stats: CombatStats, target) -> bool:
-	return try_apply_status_effect(attacker_stats, target, "poison", {
-		"chance": attacker_stats.poison_chance,
-		"tick_interval": 1.0,
-		"damage": 5.0,
-		"duration": 5.0
-	})
-
-## 应用吸血效果（旧方法，保留兼容性）
+## 应用吸血效果（兼容性方法）
+## 
+## 保留此方法以兼容旧代码
+## 新代码应使用 try_apply_status_effect() 方法
 static func apply_lifesteal(attacker, damage_dealt: int, lifesteal_percent: float) -> void:
 	if not attacker:
 		return
@@ -417,6 +390,8 @@ static func apply_lifesteal(attacker, damage_dealt: int, lifesteal_percent: floa
 	var temp_stats = CombatStats.new()
 	temp_stats.lifesteal_percent = lifesteal_percent
 	temp_stats.status_effect_mult = 1.0  # 默认值
+	temp_stats.status_chance_mult = 1.0  # 默认值
+	temp_stats.status_duration_mult = 1.0  # 默认值
 	
 	try_apply_status_effect(temp_stats, null, "lifesteal", {
 		"attacker": attacker,
