@@ -42,6 +42,9 @@ var is_invincible: bool = false
 ## 技能行为列表
 var behaviors: Array[EnemyBehavior] = []
 
+## Buff系统（用于处理DoT等效果）
+var buff_system: BuffSystem = null
+
 ## 信号：敌人死亡
 signal enemy_killed(enemy_ref: Enemy)
 
@@ -50,10 +53,96 @@ func _ready() -> void:
 	# 注意：不再手动加入enemy组，V3系统会直接追踪实例
 	
 	target = get_tree().get_first_node_in_group("player")
+	
+	# 初始化Buff系统（用于处理DoT伤害）
+	buff_system = BuffSystem.new()
+	buff_system.name = "BuffSystem"
+	add_child(buff_system)
+	buff_system.buff_tick.connect(_on_buff_tick)
+	buff_system.buff_applied.connect(_on_buff_applied)
+	buff_system.buff_expired.connect(_on_buff_expired)
+	
 	# 如果已经设置了敌人数据，应用它
 	if enemy_data != null:
 		_apply_enemy_data()
 	pass # Replace with function body.
+
+## 处理Buff Tick（DoT伤害）
+func _on_buff_tick(buff_id: String, tick_data: Dictionary) -> void:
+	SpecialEffects.apply_dot_damage(self, tick_data)
+
+## Buff应用时的处理（应用shader效果）
+func _on_buff_applied(buff_id: String) -> void:
+	_apply_status_shader(buff_id)
+
+## Buff过期时的处理（移除shader效果）
+func _on_buff_expired(buff_id: String) -> void:
+	_remove_status_shader(buff_id)
+
+## 应用状态shader效果
+func _apply_status_shader(buff_id: String) -> void:
+	if not $AnimatedSprite2D or not $AnimatedSprite2D.material:
+		return
+	
+	var sprite = $AnimatedSprite2D
+	match buff_id:
+		"freeze":
+			# 冰冻：蓝色flash效果
+			sprite.material.set_shader_parameter("flash_color", Color(0.3, 0.8, 1.0, 1.0))  # 蓝色
+			sprite.material.set_shader_parameter("flash_opacity", 1.0)
+		"slow":
+			# 减速：半透明蓝色
+			sprite.material.set_shader_parameter("flash_color", Color(0.3, 0.6, 1.0, 0.6))  # 半透明蓝色
+			sprite.material.set_shader_parameter("flash_opacity", 0.8)
+		"burn":
+			# 燃烧：橙色
+			sprite.material.set_shader_parameter("flash_color", Color(1.0, 0.5, 0.0, 1.0))  # 橙色
+			sprite.material.set_shader_parameter("flash_opacity", 0.9)
+		"bleed":
+			# 流血：红色
+			sprite.material.set_shader_parameter("flash_color", Color(1.0, 0.0, 0.0, 1.0))  # 红色
+			sprite.material.set_shader_parameter("flash_opacity", 0.8)
+		"poison":
+			# 中毒：绿色
+			sprite.material.set_shader_parameter("flash_color", Color(0.5, 1.0, 0.0, 1.0))  # 绿色
+			sprite.material.set_shader_parameter("flash_opacity", 0.7)
+
+## 移除状态shader效果
+func _remove_status_shader(buff_id: String) -> void:
+	if not $AnimatedSprite2D or not $AnimatedSprite2D.material:
+		return
+	
+	# 检查是否还有其他状态效果，按优先级应用
+	# 优先级：freeze > slow > burn > bleed > poison
+	if buff_system:
+		var priority_order = ["freeze", "slow", "burn", "bleed", "poison"]
+		for status_id in priority_order:
+			if buff_system.has_buff(status_id):
+				# 应用优先级最高的状态效果
+				_apply_status_shader(status_id)
+				return
+	
+	# 如果没有其他状态效果，恢复原状
+	var sprite = $AnimatedSprite2D
+	sprite.material.set_shader_parameter("flash_color", Color(1.0, 1.0, 1.0, 1.0))
+	sprite.material.set_shader_parameter("flash_opacity", 0.0)
+
+## 检查是否有冰冻Buff（无法移动）
+func is_frozen() -> bool:
+	if not buff_system:
+		return false
+	return buff_system.has_buff("freeze")
+
+## 获取减速倍数（从slow Buff）
+func get_slow_multiplier() -> float:
+	if not buff_system:
+		return 1.0
+	
+	var slow_buff = buff_system.get_buff("slow")
+	if not slow_buff or not slow_buff.special_effects.has("slow_multiplier"):
+		return 1.0
+	
+	return slow_buff.special_effects.get("slow_multiplier", 1.0)
 
 ## 初始化敌人（从敌人数据）
 func initialize(data: EnemyData) -> void:
@@ -141,6 +230,12 @@ func _process(delta: float) -> void:
 	
 	# 如果没有技能控制移动，执行正常移动逻辑
 	if not is_skill_controlling_movement and target:
+		# 检查冰冻状态（无法移动）
+		if is_frozen():
+			velocity = Vector2.ZERO
+			move_and_slide()
+			return
+		
 		## 计算到玩家距离
 		# 检查是否接触到玩家（造成伤害）
 		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
@@ -152,9 +247,10 @@ func _process(delta: float) -> void:
 		
 		if player_distance > min_distance:
 			dir = (target.global_position - self.global_position).normalized()
-			#velocity = dir * speed
+			# 应用减速效果
+			var current_speed = speed * get_slow_multiplier()
 			# 基础移动速度 + 击退速度
-			velocity = dir * speed + knockback_velocity
+			velocity = dir * current_speed + knockback_velocity
 		else:
 			# 距离足够近，停止移动
 			velocity = Vector2.ZERO

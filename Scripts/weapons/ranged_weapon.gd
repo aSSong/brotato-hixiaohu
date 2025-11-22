@@ -47,5 +47,6 @@ func _perform_attack() -> void:
 		weapon_data.bullet_speed,
 		damage,
 		is_critical,
-		player_stats
+		player_stats,
+		weapon_data  # 传递weapon_data以便应用特殊效果
 	)

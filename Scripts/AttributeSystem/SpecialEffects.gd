@@ -44,7 +44,11 @@ static func try_apply_status_effect(
 	effect_type: String, 
 	effect_params: Dictionary
 ) -> bool:
-	if not attacker_stats or not target:
+	if not attacker_stats:
+		return false
+	
+	# 吸血效果不需要target（敌人），只需要attacker（玩家）
+	if effect_type.to_lower() != "lifesteal" and not target:
 		return false
 	
 	# 根据效果类型调用对应的处理方法
@@ -99,6 +103,15 @@ static func _apply_burn(attacker_stats: CombatStats, target, params: Dictionary)
 		"damage": damage
 	}, tick_interval)
 	
+	# 显示效果名称浮动文字
+	if FloatingText:
+		FloatingText.create_floating_text(
+			target.global_position + Vector2(0, -50),
+			"燃烧",
+			Color(1.0, 0.5, 0.0),  # 橙色
+			false
+		)
+	
 	print("[SpecialEffects] 燃烧效果触发！伤害: %.1f/%.1fs, 持续: %.1fs" % [damage, tick_interval, duration])
 	return true
 
@@ -134,7 +147,16 @@ static func _apply_bleed(attacker_stats: CombatStats, target, params: Dictionary
 		"damage": damage
 	}, tick_interval, true)  # 允许堆叠
 	
-	print("[SpecialEffects] 流血效果触发！伤害: %.1f/%.1fs, 持续: %.1fs" % [damage, tick_interval, duration])
+	# 显示效果名称浮动文字
+	if FloatingText:
+		FloatingText.create_floating_text(
+			target.global_position + Vector2(0, -50),
+			"流血",
+			Color(1.0, 0.0, 0.0),  # 红色
+			false
+		)
+	
+	print("[SpecialEffects] 流血效果触发！目标: %s, 伤害: %.1f/%.1fs, 持续: %.1fs" % [target.name if target.has_method("get") and "name" in target else "未知", damage, tick_interval, duration])
 	return true
 
 ## 应用冰冻效果
@@ -162,7 +184,16 @@ static func _apply_freeze(attacker_stats: CombatStats, target, params: Dictionar
 		"can_move": false
 	})
 	
-	print("[SpecialEffects] 冰冻效果触发！持续: %.1fs" % duration)
+	# 显示效果名称浮动文字
+	if FloatingText:
+		FloatingText.create_floating_text(
+			target.global_position + Vector2(0, -50),
+			"冰冻",
+			Color(0.3, 0.8, 1.0),  # 蓝色
+			false
+		)
+	
+	print("[SpecialEffects] 冰冻效果触发！目标: %s, 持续: %.1fs" % [target.name if target.has_method("get") and "name" in target else "未知", duration])
 	return true
 
 ## 应用减速效果
@@ -194,6 +225,15 @@ static func _apply_slow(attacker_stats: CombatStats, target, params: Dictionary)
 	buff_system.add_buff("slow", duration, {
 		"slow_multiplier": 1.0 - slow_percent  # 移动速度倍数
 	})
+	
+	# 显示效果名称浮动文字
+	if FloatingText:
+		FloatingText.create_floating_text(
+			target.global_position + Vector2(0, -50),
+			"减速",
+			Color(0.3, 0.6, 1.0, 0.8),  # 半透明蓝色
+			false
+		)
 	
 	print("[SpecialEffects] 减速效果触发！减速: %.1f%%, 持续: %.1fs" % [slow_percent * 100, duration])
 	return true
@@ -230,20 +270,37 @@ static func _apply_poison(attacker_stats: CombatStats, target, params: Dictionar
 		"damage": damage
 	}, tick_interval, true)  # 允许堆叠
 	
+	# 显示效果名称浮动文字
+	if FloatingText:
+		FloatingText.create_floating_text(
+			target.global_position + Vector2(0, -50),
+			"中毒",
+			Color(0.5, 1.0, 0.0),  # 绿色
+			false
+		)
+	
 	print("[SpecialEffects] 中毒效果触发！伤害: %.1f/%.1fs, 持续: %.1fs" % [damage, tick_interval, duration])
 	return true
 
 ## 应用吸血效果
 static func _apply_lifesteal(attacker_stats: CombatStats, target, params: Dictionary) -> bool:
 	var damage_dealt = params.get("damage_dealt", 0)
-	var lifesteal_percent = params.get("percent", attacker_stats.lifesteal_percent)
+	var lifesteal_percent = params.get("percent", attacker_stats.lifesteal_percent if attacker_stats else 0.0)
 	
-	if damage_dealt <= 0 or lifesteal_percent <= 0:
+	print("[SpecialEffects] 吸血效果检查 | damage_dealt: %d, lifesteal_percent: %.2f" % [damage_dealt, lifesteal_percent])
+	
+	if damage_dealt <= 0:
+		print("[SpecialEffects] 吸血失败: 伤害为0")
+		return false
+	
+	if lifesteal_percent <= 0:
+		print("[SpecialEffects] 吸血失败: 吸血百分比为0")
 		return false
 	
 	# 获取攻击者（通常是玩家）
 	var attacker = params.get("attacker", null)
 	if not attacker:
+		print("[SpecialEffects] 吸血失败: 攻击者为null")
 		return false
 	
 	# 应用异常效果加成（影响吸血百分比）
@@ -357,11 +414,15 @@ static func _roll_chance(chance: float) -> bool:
 ## @param target 受伤的目标
 ## @param tick_data Buff tick数据
 static func apply_dot_damage(target, tick_data: Dictionary) -> void:
-	if not target or not tick_data.has("effects"):
+	if not target:
+		return
+	
+	if not tick_data.has("effects"):
 		return
 	
 	var effects = tick_data["effects"]
 	var stacks = tick_data.get("stacks", 1)
+	var buff_id = tick_data.get("buff_id", "unknown")
 	
 	# 检查是否有DPS数据
 	if not effects.has("dps"):
@@ -370,13 +431,60 @@ static func apply_dot_damage(target, tick_data: Dictionary) -> void:
 	var dps = effects["dps"]
 	var damage = int(dps * stacks)  # 堆叠层数影响伤害
 	
-	# 对目标造成伤害
-	if target.has_method("enemy_hurt"):
-		target.enemy_hurt(damage)
-	elif target.has_method("player_hurt"):
-		target.player_hurt(damage)
+	if damage <= 0:
+		return
 	
-	print("[SpecialEffects] DoT伤害: %d (层数: %d)" % [damage, stacks])
+	# 根据buff_id确定DoT伤害颜色（与效果名称颜色一致）
+	var dot_color = Color(1.0, 0.0, 0.0)  # 默认红色
+	match buff_id:
+		"burn":
+			dot_color = Color(1.0, 0.5, 0.0)  # 橙色（与"燃烧"一致）
+		"bleed":
+			dot_color = Color(1.0, 0.0, 0.0)  # 红色（与"流血"一致）
+		"poison":
+			dot_color = Color(0.5, 1.0, 0.0)  # 绿色（与"中毒"一致）
+	
+	# 对目标造成伤害（DoT伤害颜色与效果名称一致）
+	if target.has_method("enemy_hurt"):
+		# 直接减少HP，不调用enemy_hurt（避免重复显示伤害数字和flash效果）
+		if "enemyHP" in target and not target.is_dead:
+			# 检查无敌状态
+			if target.is_invincible:
+				return
+			
+			target.enemyHP -= damage
+			
+			# 显示DoT伤害数字（颜色与效果名称一致）
+			if FloatingText:
+				FloatingText.create_floating_text(
+					target.global_position + Vector2(randf_range(-20, 20), -30),
+					"-" + str(damage),
+					dot_color,
+					false
+				)
+			
+			# 检查死亡
+			if target.enemyHP <= 0:
+				target.enemyHP = 0
+				if not target.is_dead:
+					target.enemy_dead()
+	elif target.has_method("player_hurt"):
+		# 玩家DoT伤害
+		if "now_hp" in target:
+			target.now_hp -= damage
+			if target.now_hp < 0:
+				target.now_hp = 0
+		
+		# 显示DoT伤害数字（颜色与效果名称一致）
+		if FloatingText:
+			FloatingText.create_floating_text(
+				target.global_position + Vector2(randf_range(-20, 20), -30),
+				"-" + str(damage),
+				dot_color,
+				false
+			)
+	
+	print("[SpecialEffects] DoT伤害: %s - %d (层数: %d)" % [buff_id, damage, stacks])
 
 ## 应用吸血效果（兼容性方法）
 ## 

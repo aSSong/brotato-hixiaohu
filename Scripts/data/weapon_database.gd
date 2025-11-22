@@ -39,6 +39,20 @@ static func initialize_weapons() -> void:
 	rifle.bullet_speed = 2500.0
 	rifle.bullet_lifetime = 4.0
 	rifle.pierce_count = 1  # 穿透1个敌人
+	# 配置流血效果
+	rifle.special_effects = {
+		"effects": [
+			{
+				"type": "bleed",
+				"params": {
+					"chance": 0.4,  # 40%触发概率
+					"tick_interval": 1.0,  # 每秒触发1次
+					"damage": 3.0,  # 每次伤害3点
+					"duration": 5.0  # 持续5秒
+				}
+			}
+		]
+	}
 	weapons["rifle"] = rifle
 	
 	var machine_gun = WeaponData.new(
@@ -105,6 +119,17 @@ static func initialize_weapons() -> void:
 	dagger.knockback_force = 280.0
 	dagger.orbit_radius = 200.0  # 环绕半径（较小）
 	dagger.orbit_speed = 240.0  # 环绕速度（较快）
+	# 配置吸血效果
+	dagger.special_effects = {
+		"effects": [
+			{
+				"type": "lifesteal",
+				"params": {
+					"percent": 0.15  # 15%吸血
+				}
+			}
+		]
+	}
 	weapons["dagger"] = dagger
 	
 	# 魔法武器
@@ -124,6 +149,20 @@ static func initialize_weapons() -> void:
 	fireball.has_explosion_damage = true  # 有爆炸伤害
 	fireball.attack_cast_delay = 0.5  # 0.5秒延迟
 	fireball.is_target_locked = true  # 锁定目标（跟随）
+	# 配置燃烧效果
+	fireball.special_effects = {
+		"effects": [
+			{
+				"type": "burn",
+				"params": {
+					"chance": 0.5,  # 50%触发概率
+					"tick_interval": 1.0,  # 每秒触发1次
+					"damage": 5.0,  # 每次伤害5点
+					"duration": 4.0  # 持续4秒
+				}
+			}
+		]
+	}
 	# 爆炸特效路径已移至 CombatEffectManager 统一管理
 	weapons["fireball"] = fireball
 	
@@ -143,6 +182,18 @@ static func initialize_weapons() -> void:
 	ice_shard.has_explosion_damage = true
 	ice_shard.attack_cast_delay = 0.3  # 0.3秒延迟，更快
 	ice_shard.is_target_locked = false  # 不锁定目标（固定位置）
+	# 配置冰冻效果
+	ice_shard.special_effects = {
+		"effects": [
+			{
+				"type": "freeze",
+				"params": {
+					"chance": 0.6,  # 60%触发概率
+					"duration": 2.5  # 持续2.5秒
+				}
+			}
+		]
+	}
 	# 爆炸特效路径已移至 CombatEffectManager 统一管理
 	weapons["ice_shard"] = ice_shard
 	
