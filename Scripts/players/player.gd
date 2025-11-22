@@ -295,7 +295,13 @@ func _on_stats_changed(new_stats: CombatStats) -> void:
 	
 	# 如果最大HP增加了，同时恢复相应的HP
 	if hp_increase > 0:
+		var old_hp = now_hp
 		now_hp = min(now_hp + hp_increase, max_hp)
+		var actual_heal = now_hp - old_hp
+		
+		# 显示HP恢复的浮动文字（使用统一方法）
+		if actual_heal > 0:
+			SpecialEffects.show_heal_floating_text(self, actual_heal)
 	
 	# 确保当前血量不超过最大血量
 	if now_hp > max_hp:

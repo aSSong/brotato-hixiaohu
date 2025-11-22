@@ -379,18 +379,30 @@ static func _apply_lifesteal(attacker_stats: CombatStats, target, params: Dictio
 		attacker.hp_changed.emit(attacker.now_hp, attacker.max_hp)
 	
 	if actual_heal > 0:
-		# 显示吸血跳字（字体大一倍）
-		if FloatingText:
-			FloatingText.create_floating_text(
-				attacker.global_position + Vector2(0, -40),
-				"+%d" % actual_heal,
-				Color(0.0, 1.0, 0.0),  # 绿色
-				true  # is_critical=true，使用大字体
-			)
+		# 显示吸血跳字（使用统一方法）
+		show_heal_floating_text(attacker, actual_heal)
 		
 		print("[SpecialEffects] 吸血效果触发！恢复: +%d HP (伤害: %d, 比例: %.1f%%)" % [actual_heal, damage_dealt, lifesteal_percent * 100])
 	
 	return true
+
+## 显示HP恢复的浮动文字（统一方法）
+## 
+## 当now_hp增加时调用此方法显示恢复效果
+## 
+## @param target 恢复HP的目标（通常是玩家）
+## @param heal_amount 恢复的HP数量
+static func show_heal_floating_text(target: Node, heal_amount: int) -> void:
+	if not target or heal_amount <= 0:
+		return
+	
+	if FloatingText:
+		FloatingText.create_floating_text(
+			target.global_position + Vector2(0, -40),
+			"+%d" % heal_amount,
+			Color(0.0, 1.0, 0.0),  # 绿色
+			true  # is_critical=true，使用大字体
+		)
 
 ## 应用治愈效果
 static func _apply_heal(attacker_stats: CombatStats, target, params: Dictionary) -> bool:
@@ -427,15 +439,10 @@ static func _apply_heal(attacker_stats: CombatStats, target, params: Dictionary)
 		target.hp_changed.emit(target.now_hp, target.max_hp)
 	
 	if actual_heal > 0:
-		print("[SpecialEffects] 治愈: +%d HP" % actual_heal)
+		# 显示治愈跳字（使用统一方法）
+		show_heal_floating_text(target, actual_heal)
 		
-		# 显示治愈跳字
-		if FloatingText:
-			FloatingText.create_floating_text(
-				target.global_position + Vector2(0, -40),
-				"+%d" % actual_heal,
-				Color(0.0, 1.0, 0.5)  # 青绿色
-			)
+		print("[SpecialEffects] 治愈: +%d HP" % actual_heal)
 	
 	return true
 

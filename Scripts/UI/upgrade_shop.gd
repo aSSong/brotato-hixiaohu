@@ -407,7 +407,14 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 func _apply_heal_upgrade() -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
+		var old_hp = player.now_hp
 		player.now_hp = min(player.now_hp + 10, player.max_hp)
+		var actual_heal = player.now_hp - old_hp
+		
+		# 显示HP恢复的浮动文字（使用统一方法）
+		if actual_heal > 0:
+			SpecialEffects.show_heal_floating_text(player, actual_heal)
+		
 		player.hp_changed.emit(player.now_hp, player.max_hp)
 
 func _apply_new_weapon_upgrade(weapon_id: String) -> void:
