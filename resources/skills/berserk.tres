@@ -8,11 +8,13 @@ script = ExtResource("2_gwsre")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-global_damage_mult = 1.3
-global_attack_speed_mult = 1.5
+melee_damage_mult = 1.3
+melee_speed_mult = 1.3
 
 [resource]
 script = ExtResource("1_pqtk4")
 name = "狂暴"
-description = "短时间内大幅提升攻击速度(+50%)和伤害(+30%)"
+description = "短时间内提升近战攻击速度(+30%)和近战伤害(+30%)"
+cooldown = 10.0
+duration = 5.0
 stats_modifier = SubResource("Resource_f1vrg")

@@ -33,26 +33,46 @@ func _ready() -> void:
 func set_skill_data(class_data: ClassData) -> void:
 	skill_data = class_data
 	
-	if not skill_data or skill_data.skill_name.is_empty():
+	# 优先使用新的 SkillData 系统
+	var actual_skill_data: SkillData = null
+	if class_data and class_data.skill_data:
+		actual_skill_data = class_data.skill_data
+		visible = true
+		
+		# 设置技能名称
+		if name_label:
+			name_label.text = actual_skill_data.name
+		
+		# 加载技能图标
+		var icon_index = skill_icon_map.get(actual_skill_data.name, 1)
+		var icon_path = "res://assets/skillicon/%d.png" % icon_index
+		var texture = load(icon_path)
+		if texture and icon:
+			icon.texture = texture
+		
+		# 设置技能描述
+		if skill_des_label:
+			skill_des_label.text = _generate_skill_description(actual_skill_data)
+	# 兼容旧系统
+	elif skill_data and not skill_data.skill_name.is_empty():
+		visible = true
+		
+		# 设置技能名称
+		if name_label:
+			name_label.text = skill_data.skill_name
+		
+		# 加载技能图标
+		var icon_index = skill_icon_map.get(skill_data.skill_name, 1)
+		var icon_path = "res://assets/skillicon/%d.png" % icon_index
+		var texture = load(icon_path)
+		if texture and icon:
+			icon.texture = texture
+		
+		# 设置技能描述
+		if skill_des_label:
+			skill_des_label.text = _generate_skill_description_legacy()
+	else:
 		visible = false
-		return
-	
-	visible = true
-	
-	# 设置技能名称
-	if name_label:
-		name_label.text = skill_data.skill_name
-	
-	# 加载技能图标
-	var icon_index = skill_icon_map.get(skill_data.skill_name, 1)
-	var icon_path = "res://assets/skillicon/%d.png" % icon_index
-	var texture = load(icon_path)
-	if texture and icon:
-		icon.texture = texture
-	
-	# 设置技能描述
-	if skill_des_label:
-		skill_des_label.text = _generate_skill_description()
 
 ## 重写：获取技能CD剩余时间
 func _get_remaining_cd() -> float:
@@ -61,11 +81,38 @@ func _get_remaining_cd() -> float:
 	
 	var class_manager = player_ref.class_manager
 	
-	# ⭐ 新系统：直接用技能名称作为键（不加 "_cd" 后缀）
-	return class_manager.get_skill_cooldown(skill_data.skill_name)
+	# 优先使用新的 SkillData 系统
+	if skill_data.skill_data:
+		return class_manager.get_skill_cooldown(skill_data.skill_data.name)
+	# 兼容旧系统
+	elif not skill_data.skill_name.is_empty():
+		return class_manager.get_skill_cooldown(skill_data.skill_name)
+	
+	return 0.0
 
-## 生成技能描述文本
-func _generate_skill_description() -> String:
+## 生成技能描述文本（新系统）
+func _generate_skill_description(skill_data_resource: SkillData) -> String:
+	if not skill_data_resource:
+		return ""
+	
+	var lines = []
+	
+	# 持续时间
+	if skill_data_resource.duration > 0:
+		lines.append("持续时间：%.1f秒" % skill_data_resource.duration)
+	
+	# 冷却时间
+	if skill_data_resource.cooldown > 0:
+		lines.append("冷却：%.1f秒" % skill_data_resource.cooldown)
+	
+	# 技能描述
+	if skill_data_resource.description and not skill_data_resource.description.is_empty():
+		lines.append(skill_data_resource.description)
+	
+	return "\n".join(lines)
+
+## 生成技能描述文本（旧系统兼容）
+func _generate_skill_description_legacy() -> String:
 	if not skill_data:
 		return ""
 	

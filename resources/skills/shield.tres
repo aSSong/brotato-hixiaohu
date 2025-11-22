@@ -14,5 +14,6 @@ damage_reduction = 0.5
 script = ExtResource("1_clssf")
 name = "护盾"
 description = "短时间内减少受到的伤害(50%)"
-cooldown = 15.0
+cooldown = 20.0
+duration = 8.0
 stats_modifier = SubResource("Resource_fmo1s")

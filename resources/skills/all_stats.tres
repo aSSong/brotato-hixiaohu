@@ -6,15 +6,17 @@
 [sub_resource type="Resource" id="Resource_k5lwu"]
 script = ExtResource("2_aasio")
 max_hp = 0
-speed = 80.0
+speed = 0.0
+crit_chance = 0.2
 crit_damage = 0.0
+damage_reduction = 0.2
 global_damage_mult = 1.2
 global_attack_speed_mult = 1.2
 
 [resource]
 script = ExtResource("1_cttwp")
 name = "全面强化"
-description = "短时间内提升所有属性(+20%)"
-cooldown = 20.0
-duration = 8.0
+description = "短时间内提升全局速度(+20%)、全局伤害(+20%)、暴击率(+20%)、减伤(+20%)"
+cooldown = 15.0
+duration = 6.0
 stats_modifier = SubResource("Resource_k5lwu")

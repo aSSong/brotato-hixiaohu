@@ -14,7 +14,7 @@ magic_explosion_radius_mult = 2.0
 [resource]
 script = ExtResource("1_ivwmt")
 name = "魔法爆发"
-description = "短时间内提升魔法伤害(+50%)和爆炸范围(x2)"
-cooldown = 15.0
-duration = 4.0
+description = "短时间内提升魔法伤害(+50%)和爆炸范围(+100%)"
+cooldown = 12.0
+duration = 5.0
 stats_modifier = SubResource("Resource_m1wn4")
