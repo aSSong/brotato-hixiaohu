@@ -51,7 +51,7 @@ func _process(delta: float) -> void:
 			ghost.update_speed(current_speed)        # 把修正后的速度发下去
 
 			# ---------- 2. 以下还是原来的路径切片 ----------
-			var path_offset = (i + 1) * ghost_Interval
+			var path_offset = ghost_Interval
 			if i == 0:
 				if player_path.size() > path_offset:
 					var start_index = max(0, player_path.size() - ghost_path_length - path_offset)
