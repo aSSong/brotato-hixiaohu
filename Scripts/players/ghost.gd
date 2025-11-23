@@ -18,7 +18,7 @@ var path_record_distance: float = 5.0
 var target_path_points: Array = []
 
 ## 跟随距离（用于确定路径点队列长度）
-var follow_distance: float = 5.0
+var follow_distance: float = 150.0
 
 ## 跟随速度（与玩家速度同步）
 var follow_speed: float = 400.0
@@ -90,6 +90,14 @@ func _snake_follow(delta: float) -> void:
 	if target_path_points.is_empty():
 		_direct_follow()
 		return
+		
+## 如果跟随目标有效，检查是否距离太近
+	if follow_target and is_instance_valid(follow_target):
+		var distance_to_target = global_position.distance_to(follow_target.global_position)
+		if distance_to_target <= follow_distance:
+			velocity = Vector2.ZERO
+			return
+
 	
 	# 获取当前目标点
 	if current_path_index >= target_path_points.size():

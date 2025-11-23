@@ -315,16 +315,26 @@ func _create_ghost_from_data() -> void:
 	# 先添加到场景（这样_ready会触发，@onready变量会被赋值）
 	get_tree().root.add_child(new_ghost)
 	
+		# 准备目标（在添加自己之前确定目标）
+	var follow_target = player
+	var queue_index = 0
+	
+	# 如果GhostManager已有Ghost，则跟随最后一个Ghost
+	if ghost_manager.ghosts.size() > 0:
+		follow_target = ghost_manager.ghosts[ghost_manager.ghosts.size() - 1]
+		queue_index = ghost_manager.ghosts.size()
+	
 	# 添加到GhostManager
 	ghost_manager.ghosts.append(new_ghost)
 	
-	# 延迟初始化Ghost（等待_ready完成后）
-	if player:
-		var queue_index = ghost_manager.ghosts.size() - 1
+	# 初始化Ghost
+	if follow_target:
+
 		var player_speed = ghost_manager._get_player_speed() if ghost_manager.has_method("_get_player_speed") else 400.0
-		new_ghost.call_deferred("initialize", player, queue_index, player_speed, true)  # use_existing_data = true
+		new_ghost.call_deferred("initialize", follow_target, queue_index, player_speed, true)  # use_existing_data = true
 	
 	print("[GraveRescue] Ghost创建成功！职业:", ghost_data.class_id, " 武器数:", ghost_data.weapons.size())
+
 
 ## 清除墓碑和相关资源
 func _cleanup_grave() -> void:
