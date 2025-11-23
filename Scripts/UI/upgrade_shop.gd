@@ -792,10 +792,13 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	while attempts < max_attempts:
 		attempts += 1
 		
+		# Generate a unique salt for this attempt to prevent same-seed RNG in fast loops
+		var salt = randi()
+		
 		var upgrade: UpgradeData = null
 		
 		if is_weapon:
-			upgrade = _generate_weapon_upgrade(existing_upgrades)
+			upgrade = _generate_weapon_upgrade(existing_upgrades, salt)
 		else:
 			# 获取当前波数和幸运值
 			var luck_value = _get_player_luck()
@@ -803,10 +806,10 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 			# 根据幸运值决定品质
 			var quality = _get_quality_by_luck(luck_value, current_wave)
 			
-			upgrade = _generate_attribute_upgrade(quality)
+			upgrade = _generate_attribute_upgrade(quality, salt)
 			# 如果指定品质生成失败（可能该品质没有对应升级），尝试保底使用白色品质
 			if upgrade == null:
-				upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE)
+				upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, salt)
 		
 		if upgrade == null:
 			# 如果生成失败，尝试切换类型
@@ -814,13 +817,13 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 				# 武器生成失败，尝试生成属性
 				var luck_value = _get_player_luck()
 				var quality = _get_quality_by_luck(luck_value, current_wave)
-				upgrade = _generate_attribute_upgrade(quality)
+				upgrade = _generate_attribute_upgrade(quality, salt)
 				# 保底策略
 				if upgrade == null:
-					upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE)
+					upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, salt)
 			else:
 				# 属性生成失败，尝试生成武器
-				upgrade = _generate_weapon_upgrade(existing_upgrades)
+				upgrade = _generate_weapon_upgrade(existing_upgrades, salt)
 			
 			if upgrade == null:
 				continue
@@ -841,7 +844,7 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	return null
 
 ## 生成武器相关upgrade
-func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeData:
+func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int = 0) -> UpgradeData:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
 	if not weapons_manager:
 		weapons_manager = get_tree().get_first_node_in_group("weapons")
@@ -869,7 +872,7 @@ func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	
 	var rng = RandomNumberGenerator.new()
 	var current_wave = _get_current_wave()
-	rng.seed = hash(Time.get_ticks_msec() + current_wave + weapon_count)
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + weapon_count + salt)
 	
 	# 决定生成NEW_WEAPON还是WEAPON_LEVEL_UP
 	var can_level_up = weapon_count > 0 and not all_weapons_max_level
@@ -880,27 +883,27 @@ func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	
 	if can_generate_new_weapon and not can_level_up:
 		# 只能生成新武器
-		return _generate_new_weapon_upgrade()
+		return _generate_new_weapon_upgrade(salt)
 	
 	if not can_generate_new_weapon and can_level_up:
 		# 只能升级武器
-		return _generate_weapon_level_up_upgrade(weapons_manager)
+		return _generate_weapon_level_up_upgrade(weapons_manager, salt)
 	
 	# 两者都可以，随机选择
 	if rng.randf() < 0.5:
-		return _generate_new_weapon_upgrade()
+		return _generate_new_weapon_upgrade(salt)
 	else:
-		return _generate_weapon_level_up_upgrade(weapons_manager)
+		return _generate_weapon_level_up_upgrade(weapons_manager, salt)
 
 ## 生成新武器upgrade
-func _generate_new_weapon_upgrade() -> UpgradeData:
+func _generate_new_weapon_upgrade(salt: int = 0) -> UpgradeData:
 	var all_weapon_ids = WeaponDatabase.get_all_weapon_ids()
 	if all_weapon_ids.is_empty():
 		return null
 	
 	var rng = RandomNumberGenerator.new()
 	var current_wave = _get_current_wave()
-	rng.seed = hash(Time.get_ticks_msec() + current_wave + all_weapon_ids.size())
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + all_weapon_ids.size() + salt)
 	var weapon_id = all_weapon_ids[rng.randi_range(0, all_weapon_ids.size() - 1)]
 	
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
@@ -918,7 +921,7 @@ func _generate_new_weapon_upgrade() -> UpgradeData:
 	return upgrade
 
 ## 生成武器升级upgrade
-func _generate_weapon_level_up_upgrade(weapons_manager) -> UpgradeData:
+func _generate_weapon_level_up_upgrade(weapons_manager, salt: int = 0) -> UpgradeData:
 	if not weapons_manager.has_method("get_upgradeable_weapon_types"):
 		return null
 	
@@ -928,7 +931,7 @@ func _generate_weapon_level_up_upgrade(weapons_manager) -> UpgradeData:
 	
 	var rng = RandomNumberGenerator.new()
 	var current_wave = _get_current_wave()
-	rng.seed = hash(Time.get_ticks_msec() + current_wave + upgradeable_weapons.size())
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + upgradeable_weapons.size() + salt)
 	var weapon_id = upgradeable_weapons[rng.randi_range(0, upgradeable_weapons.size() - 1)]
 	
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
@@ -958,7 +961,7 @@ func _generate_weapon_level_up_upgrade(weapons_manager) -> UpgradeData:
 	return upgrade
 
 ## 生成指定品质的属性upgrade
-func _generate_attribute_upgrade(quality: int) -> UpgradeData:
+func _generate_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
 	# 获取所有upgrade ID
 	var all_upgrade_ids = UpgradeDatabase.get_all_upgrade_ids()
 	
@@ -981,16 +984,17 @@ func _generate_attribute_upgrade(quality: int) -> UpgradeData:
 		total_weight += weight
 	
 	if quality_upgrades.is_empty():
-		print("[UpgradeShop] 警告: 没有品质为 %s 的升级选项" % UpgradeData.get_quality_name(quality))
+		# print("[UpgradeShop] 警告: 没有品质为 %s 的升级选项" % UpgradeData.get_quality_name(quality))
 		return null
 	
 	# 使用加权随机选择
 	var current_wave = _get_current_wave()
 	var rng = RandomNumberGenerator.new()
-	rng.seed = hash(Time.get_ticks_msec() + current_wave + quality_upgrades.size())
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + quality_upgrades.size() + salt)
 	
 	# 生成0到总权重之间的随机数
 	var random_value = rng.randi_range(0, total_weight - 1)
+
 	
 	# 累加权重，找到对应的升级
 	var accumulated_weight = 0
