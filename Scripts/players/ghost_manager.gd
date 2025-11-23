@@ -36,31 +36,24 @@ func _process(delta: float) -> void:
 		for i in range(ghosts.size()):
 			var ghost = ghosts[i]
 			if is_instance_valid(ghost):
-				ghost.update_speed(player_speed)
+				# 基础速度
+				var current_speed = player_speed
 				
-				# 方案3：让Ghost从最新的路径点开始跟随
-				# 每个Ghost使用前方目标的最后N个路径点，而不是前面的旧路径点
-				var path_offset = (i + 1) * ghost_Interval  # 每个Ghost延迟的路径点数
+				# 速度补偿逻辑：如果距离目标过远，加速追赶
+				var target_node = player
+				if i > 0:
+					target_node = ghosts[i-1]
+					
+				if is_instance_valid(target_node):
+					var distance_to_target = ghost.global_position.distance_to(target_node.global_position)
+					var follow_distance = ghost.follow_distance
+					# 如果距离超过 1.3 倍跟随距离，开始加速
+					if distance_to_target > follow_distance * 1.3:
+						# 根据距离比例加速，最大 2 倍速
+						var boost = clamp(distance_to_target / follow_distance, 1.0, 2.0)
+						current_speed *= boost
 				
-				if i == 0:
-					# 第一个Ghost直接使用玩家的最新路径
-					if player_path.size() > path_offset:
-						# 使用路径末尾的最新路径点
-						var start_index = max(0, player_path.size() - ghost_path_length - path_offset)
-						var end_index = player_path.size() - path_offset
-						var ghost_path = player_path.slice(start_index, end_index)
-						ghost.update_path_points(ghost_path)
-				else:
-					# 后续Ghost使用前一个Ghost的路径
-					var prev_ghost = ghosts[i - 1]
-					if is_instance_valid(prev_ghost) and "path_history" in prev_ghost:
-						var prev_path = prev_ghost.path_history
-						if prev_path.size() > path_offset:
-							# 使用前一个Ghost路径的最新部分
-							var start_index = max(0, prev_path.size() - ghost_path_length - path_offset)
-							var end_index = prev_path.size() - path_offset
-							var ghost_path = prev_path.slice(start_index, end_index)
-							ghost.update_path_points(ghost_path)
+				ghost.update_speed(current_speed)
 
 ## 设置玩家引用
 func set_player(p: Node2D) -> void:
