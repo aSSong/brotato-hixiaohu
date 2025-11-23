@@ -783,8 +783,27 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	var current_wave = _get_current_wave()
 	rng.seed = hash(Time.get_ticks_msec() + current_wave + existing_upgrades.size())
 	
-	# 35% 概率生成武器，65% 概率生成属性
-	var is_weapon = rng.randf() < 0.35
+	# 统计现有选项中的武器和属性数量
+	var current_weapon_count = 0
+	var current_attribute_count = 0
+	for up in existing_upgrades:
+		if up != null:
+			if up.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or up.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+				current_weapon_count += 1
+			else:
+				current_attribute_count += 1
+	
+	# 决定生成类型
+	var is_weapon = false
+	
+	# 强制保底逻辑：不要同时出现3个武器，也不要同时出现3个属性（除非没武器可升）
+	if current_weapon_count >= 2:
+		is_weapon = false # 已经有2个武器了，强制生成属性
+	elif current_attribute_count >= 2:
+		is_weapon = true # 已经有2个属性了，强制生成武器
+	else:
+		# 正常随机：35% 概率生成武器，65% 概率生成属性
+		is_weapon = rng.randf() < 0.35
 	
 	var attempts = 0
 	var max_attempts = 50
