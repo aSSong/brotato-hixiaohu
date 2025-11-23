@@ -14,10 +14,10 @@ var ghosts: Array = []
 var player: Node2D = null
 
 ## ghost之间间隔的路径点数目
-var ghost_Interval = 8
+var ghost_Interval = 10
 
 ## 每个Ghost保留的路径点数量（用于跟随）
-var ghost_path_length = 30  # 每个Ghost使用最近的30个路径点
+var ghost_path_length = 31  # 每个Ghost使用最近的30个路径点
 
 func _ready() -> void:
 	# 添加到组中以便查找
