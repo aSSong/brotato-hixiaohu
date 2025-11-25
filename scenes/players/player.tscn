@@ -13,9 +13,9 @@ resource_local_to_scene = true
 shader = ExtResource("4_jwv1m")
 shader_parameter/color = Color(0, 0, 0, 1)
 shader_parameter/width = 3.0000001425
-shader_parameter/pattern = 0
+shader_parameter/pattern = 2
 shader_parameter/inside = false
-shader_parameter/add_margins = true
+shader_parameter/add_margins = false
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kc87p"]
 load_path = "res://.godot/imported/player1-sheet.png-57d31d2b924831737743db6eecd0d6e7.ctex"
@@ -80,11 +80,11 @@ offset_top = -288.3333
 offset_right = 95.00001
 offset_bottom = -228.33331
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(0.11372549, 0.11372549, 0.11372549, 0.7254902)
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.654902)
 z_index = 1
-position = Vector2(-10.000001, 91.666664)
-scale = Vector2(0.7, 0.7)
+position = Vector2(-9.999998, 110.000015)
+scale = Vector2(0.8, 0.7)
 texture = ExtResource("2_edvpf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
