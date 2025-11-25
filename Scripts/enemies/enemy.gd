@@ -7,8 +7,6 @@ var target = null
 var enemyHP = 50  # 当前血量
 var max_enemyHP = 50
 
-@export var death_particles_scene: PackedScene  # 在 Inspector 拖入粒子场景
-
 @export var shake_on_death: bool = true
 @export var shake_duration: float = 0.2
 @export var shake_amount: float = 8.0
@@ -432,12 +430,6 @@ func enemy_dead():
 	# 振屏
 	if shake_on_death:
 		CameraShake.shake(shake_duration, shake_amount)
-	# 生成粒子特效
-	if death_particles_scene != null:
-		var particles = death_particles_scene.instantiate()
-		particles.global_position = global_position
-		# 添加到场景根节点,不随怪物一起消失
-		get_tree().root.add_child(particles)
 	
 	#print("[Enemy] 准备 queue_free | 位置:", global_position)
 	self.queue_free()

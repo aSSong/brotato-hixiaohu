@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4b35vp8k62a"]
+[gd_scene load_steps=9 format=3 uid="uid://c4b35vp8k62a"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d15qw"]
 particles_animation = true
@@ -13,7 +13,13 @@ point_count = 2
 [sub_resource type="CurveTexture" id="CurveTexture_3342k"]
 curve = SubResource("Curve_h7gxk")
 
+[sub_resource type="Curve" id="Curve_d15qw"]
+_limits = [0.0, 100.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="CurveTexture" id="CurveTexture_dipyg"]
+curve = SubResource("Curve_d15qw")
 
 [sub_resource type="Curve" id="Curve_lvlw8"]
 _limits = [0.0, 2.0, 0.0, 1.0]
@@ -42,7 +48,9 @@ anim_offset_min = 0.0177
 anim_offset_max = 0.17549999
 
 [node name="GPUParticles2D_enemy_dead" type="GPUParticles2D"]
+z_index = 12
 material = SubResource("CanvasItemMaterial_d15qw")
+emitting = false
 amount = 40
 lifetime = 7.0
 one_shot = true

@@ -121,9 +121,22 @@ func run_particle_effect(options: Dictionary) -> void:
 	box.add_child(instance)
 	
 	# 启动所有粒子发射器
+	var particle_found = false
+	# 首先检查根节点本身是否是粒子发射器
+	if instance is CPUParticles2D or instance is GPUParticles2D:
+		instance.emitting = true
+		particle_found = true
+		print("[Animations] 启动根节点粒子发射器: %s, 位置: %s" % [instance.name, position])
+	
+	# 然后检查子节点
 	for child in instance.get_children():
 		if child is CPUParticles2D or child is GPUParticles2D:
 			child.emitting = true
+			particle_found = true
+			print("[Animations] 启动子节点粒子发射器: %s" % child.name)
+	
+	if not particle_found:
+		push_warning("[Animations] 未找到粒子发射器节点！")
 	
 	# 自动清理
 	_auto_cleanup_particle(instance)
@@ -208,6 +221,16 @@ func _auto_cleanup_animation(instance: Node, duration: float) -> void:
 func _auto_cleanup_particle(instance: Node) -> void:
 	var max_lifetime = 0.0
 	
+	# 首先检查根节点本身是否是粒子发射器
+	if instance is CPUParticles2D:
+		var total_time = instance.lifetime + instance.explosiveness
+		if total_time > max_lifetime:
+			max_lifetime = total_time
+	elif instance is GPUParticles2D:
+		if instance.lifetime > max_lifetime:
+			max_lifetime = instance.lifetime
+	
+	# 然后检查子节点
 	for child in instance.get_children():
 		if child is CPUParticles2D:
 			var total_time = child.lifetime + child.explosiveness

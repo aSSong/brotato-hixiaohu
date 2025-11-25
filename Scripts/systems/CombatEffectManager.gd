@@ -100,7 +100,7 @@ static func initialize() -> void:
 static func _setup_effect_configs() -> void:
 	# 武器爆炸特效（粒子）
 	effect_configs["陨石_爆炸"] = {
-		"particles": ["res://scenes/effects/meteor_explosion.tscn"],
+		#"particles": ["res://scenes/effects/meteor_explosion.tscn"],
 		#"animations": []  # 可以添加序列帧动画，例如：
 		 "animations": [{
 			 "scene_path": "res://scenes/effects/explosion_sprites.tscn",
@@ -109,7 +109,7 @@ static func _setup_effect_configs() -> void:
 		 }]
 	}
 	effect_configs["火球_爆炸"] = {
-		"particles": ["res://scenes/effects/fireball_explosion.tscn"],
+		#"particles": ["res://scenes/effects/fireball_explosion.tscn"],
 		"animations": [{
 			 "scene_path": "res://scenes/effects/explosion_sprites.tscn",
 			 "ani_name": "fire_explode",
@@ -126,7 +126,7 @@ static func _setup_effect_configs() -> void:
 	
 	# 敌人特效（序列帧动画 - 使用默认场景）
 	effect_configs["敌人_死亡"] = {
-		"particles": [],
+		"particles": ["res://FX/gpu_particles_2d_enemy_dead.tscn"],
 		"animations": ["enemies_dead"]  # 简单格式：使用默认 animations.tscn
 	}
 	effect_configs["敌人_受伤"] = {
@@ -175,6 +175,7 @@ static func play_enemy_death(position: Vector2, scale: float = 1.0) -> void:
 		push_warning("[CombatEffectManager] 未找到敌人死亡特效配置")
 		return
 	
+	print("[CombatEffectManager] 播放敌人死亡特效，位置: %s" % position)
 	var config = effect_configs[config_key]
 	_play_effect_config(config, position, scale)
 
@@ -316,10 +317,12 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 	
 	# 播放粒子特效
 	var particles = config.get("particles", [])
+	print("[CombatEffectManager] 粒子特效配置数量: %d" % particles.size())
 	for particle_path in particles:
 		if particle_path == "":
 			continue
 		
+		print("[CombatEffectManager] 尝试播放粒子特效: %s" % particle_path)
 		# 从预加载的场景字典获取
 		if not effect_scenes.has(particle_path):
 			push_warning("[CombatEffectManager] 特效未预加载: %s" % particle_path)
@@ -330,6 +333,7 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 			push_error("[CombatEffectManager] 特效场景为空: %s" % particle_path)
 			continue
 		
+		print("[CombatEffectManager] 找到粒子场景，准备播放")
 		# 使用 animations.gd 的粒子特效方法
 		if GameMain.animation_scene_obj.has_method("run_particle_effect"):
 			GameMain.animation_scene_obj.run_particle_effect({
@@ -337,6 +341,8 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 				"position": position,
 				"scale": scale
 			})
+		else:
+			push_error("[CombatEffectManager] animation_scene_obj 没有 run_particle_effect 方法")
 	
 	# 播放序列帧动画
 	var animations = config.get("animations", [])
