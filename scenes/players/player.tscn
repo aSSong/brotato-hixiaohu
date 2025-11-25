@@ -1,11 +1,21 @@
-[gd_scene load_steps=16 format=3 uid="uid://cktxl6bnggc0p"]
+[gd_scene load_steps=18 format=3 uid="uid://cktxl6bnggc0p"]
 
 [ext_resource type="Script" uid="uid://vk8vnqvjt832" path="res://Scripts/players/player.gd" id="1_ldeu4"]
 [ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_edvpf"]
 [ext_resource type="PackedScene" uid="uid://do0rhoe37j1sv" path="res://scenes/players/player_speech_bubble.tscn" id="2_sguum"]
 [ext_resource type="Script" uid="uid://fqudu87a8guo" path="res://Scripts/players/trail.gd" id="3_edvpf"]
 [ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_kc87p"]
+[ext_resource type="Shader" uid="uid://b0mpedodgante" path="res://Shaders/weapon2.gdshader" id="4_jwv1m"]
 [ext_resource type="Texture2D" uid="uid://bbb22hdwja8mq" path="res://FX/light_test.png" id="5_olb2f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_phaeh"]
+resource_local_to_scene = true
+shader = ExtResource("4_jwv1m")
+shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/width = 3.0000001425
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kc87p"]
 load_path = "res://.godot/imported/player1-sheet.png-57d31d2b924831737743db6eecd0d6e7.ctex"
@@ -79,7 +89,9 @@ texture = ExtResource("2_edvpf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
+light_mask = 0
 z_index = 5
+material = SubResource("ShaderMaterial_phaeh")
 position = Vector2(-10, -24.999989)
 sprite_frames = SubResource("SpriteFrames_5iv5l")
 autoplay = "default"

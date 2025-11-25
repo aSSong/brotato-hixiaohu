@@ -129,6 +129,20 @@ func choosePlayer(type):
 	playerAni.play("default")
 	pass
 
+## 根据ClassData应用皮肤
+func _update_skin_from_class_data() -> void:
+	if not current_class:
+		return
+		
+	if current_class.skin_frames:
+		# 使用 SpriteFrames 资源
+		playerAni.sprite_frames = current_class.skin_frames
+		playerAni.play("default")
+		playerAni.scale = current_class.scale
+	else:
+		# 降级处理：默认逻辑
+		choosePlayer("player2")
+
 func _process(delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
 	var self_pos = position
@@ -264,6 +278,9 @@ func chooseClass(class_id: String) -> void:
 	
 	current_class = class_data
 	class_manager.set_class(class_data)
+	
+	# 应用外观
+	_update_skin_from_class_data()
 	
 	# 确保class_data的base_stats已同步
 	if not current_class.base_stats or current_class.base_stats.max_hp == 100:

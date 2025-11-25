@@ -17,6 +17,12 @@ class_name ClassData
 @export var name: String = "默认职业"
 @export var description: String = ""
 
+## ===== 进阶外观配置 =====
+## 直接引用编辑器中制作好的 SpriteFrames 资源 (.tres)
+## 优点：支持多动画(idle, run, hurt)，支持编辑器预览，无需代码切图
+@export var skin_frames: SpriteFrames 
+@export var scale: Vector2 = Vector2(1.0, 1.0)
+
 ## 技能数据（新系统）
 @export var skill_data: SkillData
 

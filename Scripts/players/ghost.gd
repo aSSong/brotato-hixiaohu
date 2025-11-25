@@ -18,7 +18,7 @@ var path_record_distance: float = 5.0
 var target_path_points: Array = []
 
 ## 跟随距离（用于确定路径点队列长度）
-var follow_distance: float = 150.0
+var follow_distance: float = 100.0
 
 ## 跟随速度（与玩家速度同步）
 var follow_speed: float = 400.0
@@ -215,12 +215,24 @@ func _generate_random_data() -> void:
 
 ## 设置外观
 func _setup_appearance() -> void:
-	# 直接使用player2外观（与玩家一致）
+	var class_data = ClassDatabase.get_class_data(class_id)
+	
+	# 优先使用 SpriteFrames 资源配置
+	if class_data and class_data.skin_frames:
+		print("[Ghost] 使用SpriteFrames设置外观，职业ID:", class_id)
+		ghostAni.sprite_frames = class_data.skin_frames
+		ghostAni.play("default")
+		ghostAni.scale = class_data.scale
+		# 设置半透明效果，表示这是Ghost
+		ghostAni.modulate = Color(1, 1, 1, 0.7)
+		return
+
+	# 降级方案：直接使用player2外观（与玩家一致）
 	# 职业数据中没有player_type字段，所以统一使用player2
 	var player_type = "player2"
 	var player_path = "res://assets/player/"
 	
-	print("[Ghost] 设置外观，职业ID:", class_id, " 使用外观:", player_type)
+	print("[Ghost] 设置外观(降级)，职业ID:", class_id, " 使用外观:", player_type)
 	
 	ghostAni.sprite_frames.clear_all()
 	

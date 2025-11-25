@@ -13,6 +13,33 @@ static func initialize_classes() -> void:
 	if not classes.is_empty():
 		return
 	
+		# 小美 - 实习生
+	var betty = ClassData.new(
+		"小美",
+		50,  # max_hp
+		400.0,  # speed
+		1.15,  # attack_multiplier（所有武器伤害+15%）
+		2,  # defense
+		0.1,  # crit_chance
+		1.8,  # crit_damage
+		"",  # skill_name (已废弃，使用 skill_data)
+		{}  # skill_params (已废弃，使用 skill_data)
+	)
+	betty.description = "均衡发展的职业，适合所有武器类型"
+	# 平衡者已经通过 attack_multiplier 设置了所有武器伤害+15%
+	# speed 保持 400.0（移动速度0%）
+	# 加载技能数据（新系统）
+	betty.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
+	# 设置皮肤 (需要先在编辑器创建 SpriteFrames 资源)
+	betty.skin_frames = load("res://resources/class_skin/betty01.tres")
+	betty.scale = Vector2(0.6, 0.6)
+	# 同步到新系统
+	betty.sync_to_base_stats()
+	# 自动生成特性描述
+	betty.generate_traits_description()
+	classes["betty"] = betty
+	
+	
 	# 战士 - 高血量、近战加成
 	var warrior = ClassData.new(
 		"战士",
