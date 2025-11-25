@@ -16,6 +16,7 @@ var server_ghosts: Array = []   # 服务器数据（其他玩家）
 func _ready() -> void:
 	_load_prefill_data()
 	_load_local_data()
+	await _save_server_data()
 	await _load_server_data()
 	print("[GhostDatabase] 初始化完成 | 预填充:%d 本地:%d 服务器:%d" % [prefill_ghosts.size(), local_ghosts.size(), server_ghosts.size()])
 
@@ -74,8 +75,17 @@ func _load_server_data() -> void:
 	var data = await ApiManager.load_ghost_data()
 	if data is Dictionary and data.has("ghosts"):
 		server_ghosts = _convert_json_to_ghost_data_array(data["ghosts"])
-	else:
-		await update_from_server(prefill_ghosts)
+
+## 保存服务器数据（缓存）
+func _save_server_data() -> void:
+	var data = {
+		"player_name": SaveManager.get_player_name(),
+		"ghosts": []
+	}
+	for ghost_data in local_ghosts:
+		data["ghosts"].append(_ghost_data_to_dict(ghost_data))
+	var json_string = JSON.stringify(data, "\t")
+	await ApiManager.save_ghost_data(json_string)
 
 ## 将JSON数组转换为GhostData数组
 func _convert_json_to_ghost_data_array(json_array: Array) -> Array:
@@ -170,24 +180,7 @@ func save_local_data() -> void:
 		file.close()
 		print("[GhostDatabase] 本地记录已保存: %d 条" % local_ghosts.size())
 
-	await update_from_server(local_ghosts)
-
-## 从服务器更新数据（供外部调用，支持热更新）
-func update_from_server(ghost_data_array: Array) -> void:
-	server_ghosts.clear()
-	
-	for data in ghost_data_array:
-		if data is GhostData:
-			server_ghosts.append(data)
-		elif data is Dictionary:
-			var ghost_data = _dict_to_ghost_data(data)
-			if ghost_data:
-				server_ghosts.append(ghost_data)
-	
-	# 保存到服务器缓存
-	await _save_server_cache()
-	
-	print("[GhostDatabase] 服务器数据已更新: %d 条（热更新生效）" % server_ghosts.size())
+	await _save_server_data()
 
 ## 保存服务器缓存
 func _save_server_cache() -> void:
