@@ -12,13 +12,13 @@ var current_bubble: Node = null  # 可能是 PlayerSpeechBubble 或 speaker 节�
 var next_speech_timer: Timer = null
 
 ## 最小等待时间（秒）
-var min_wait_time: float = 1.0
+var min_wait_time: float = 6.0
 
 ## 最大等待时间（秒）
-var max_wait_time: float = 3.0
+var max_wait_time: float = 20.0
 
 ## 气泡显示持续时间
-var bubble_duration: float = 5.0
+var bubble_duration: float = 6.0
 
 ## 所有可说话的角色列表（Player和Ghost）
 var speakers: Array = []

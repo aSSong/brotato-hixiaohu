@@ -9,7 +9,7 @@ class_name PlayerSpeechBubble
 @onready var pointer_line: Line2D = $Line2D  # 气泡下方的小尖尖（Line2D）
 
 ## 气泡显示持续时间
-var duration: float = 5.0
+var duration: float = 6.0
 
 ## 当前显示时间
 var elapsed_time: float = 0.0
