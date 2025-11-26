@@ -19,7 +19,7 @@ static func initialize_weapons() -> void:
 		0.4,  # attack_speed
 		800.0,  # range
 		"res://assets/weapon/WeaponPistol.png",
-		Vector2(1, 1)  # scale
+		Vector2(0.7, 0.7)  # scale
 	)
 	pistol.description = "基础远程武器，发射快速子弹"
 	pistol.bullet_speed = 2000.0
@@ -33,7 +33,7 @@ static func initialize_weapons() -> void:
 		0.7,  # attack_speed
 		900.0,  # range
 		"res://assets/weapon/WeaponShotgun.png",
-		Vector2(1, 1)  # scale (稍大)
+		Vector2(0.7, 0.7)  # scale (稍大)
 	)
 	rifle.description = "高伤害远程武器，攻击速度较慢"
 	rifle.bullet_speed = 2500.0
@@ -77,7 +77,7 @@ static func initialize_weapons() -> void:
 		0.5,  # attack_speed
 		240.0,  # range
 		"res://assets/weapon/Weapon_lasersword.png",
-		Vector2(1, 1)  # scale
+		Vector2(0.7, 0.7)  # scale
 	)
 	sword.description = "基础近战武器，旋转攻击"
 	sword.rotation_speed = 360.0
@@ -94,7 +94,7 @@ static func initialize_weapons() -> void:
 		0.8,  # attack_speed
 		280.0,  # range
 		"res://assets/weapon/Weapon_axe.png",
-		Vector2(1, 1)  # scale (更大)
+		Vector2(0.7, 0.7)  # scale (更大)
 	)
 	axe.description = "高伤害近战武器，攻击速度较慢"
 	axe.rotation_speed = 270.0
@@ -111,7 +111,7 @@ static func initialize_weapons() -> void:
 		0.3,  # attack_speed
 		200.0,  # range
 		"res://assets/weapon/Weapon_sword.png",
-		Vector2(1, 1)  # scale (更小)
+		Vector2(0.7, 0.7)  # scale (更小)
 	)
 	dagger.description = "快速攻击的近战武器"
 	dagger.rotation_speed = 540.0
@@ -141,7 +141,7 @@ static func initialize_weapons() -> void:
 		0.7,  # attack_speed
 		800.0,  # range
 		"res://assets/weapon/Weapon_fire.png",
-		Vector2(1, 1)  # scale
+		Vector2(0.7, 0.7)  # scale
 	)
 	fireball.description = "基础魔法武器，造成范围爆炸伤害"
 	fireball.explosion_radius = 150.0
@@ -174,7 +174,7 @@ static func initialize_weapons() -> void:
 		1.0,  # attack_speed
 		900.0,  # range
 		"res://assets/weapon/Weapon_ice.png",
-		Vector2(1, 1)  # scale
+		Vector2(0.7, 0.7)  # scale
 	)
 	ice_shard.description = "快速攻击的魔法武器，较小爆炸范围"
 	ice_shard.explosion_radius = 100.0
@@ -205,7 +205,7 @@ static func initialize_weapons() -> void:
 		1.5,  # attack_speed (很慢)
 		700.0,  # range
 		"res://assets/weapon/Weapon_stone.png",
-		Vector2(1, 1)  # scale (最大)
+		Vector2(0.7, 0.7)  # scale (最大)
 	)
 	meteor.description = "高伤害魔法武器，超大爆炸范围"
 	meteor.explosion_radius = 250.0
