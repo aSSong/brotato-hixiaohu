@@ -192,7 +192,7 @@ func _create_range_circle() -> void:
 	var texture = ImageTexture.create_from_image(image)
 	range_circle.texture = texture
 	range_circle.visible = false
-	range_circle.z_index = 0
+	range_circle.z_index = 1
 	
 	add_child(range_circle)
 
