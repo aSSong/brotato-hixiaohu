@@ -15,7 +15,7 @@ static func initialize_classes() -> void:
 	
 		# 小美 - 实习生
 	var betty = ClassData.new(
-		"小美",
+		"小美 Betty",
 		50,  # max_hp
 		400.0,  # speed
 		1.15,  # attack_multiplier（所有武器伤害+15%）
