@@ -75,15 +75,15 @@ script = ExtResource("1_ldeu4")
 
 [node name="PlayerSpeechBubble" parent="." instance=ExtResource("2_sguum")]
 z_index = 98
-offset_left = -104.99999
-offset_top = -288.3333
-offset_right = 95.00001
-offset_bottom = -228.33331
+offset_left = -118.3333
+offset_top = -315.0003
+offset_right = 81.6667
+offset_bottom = -255.0003
 
 [node name="shadow" type="Sprite2D" parent="."]
-modulate = Color(0, 0, 0, 0.654902)
+modulate = Color(0, 0, 0, 0.45490196)
 z_index = 1
-position = Vector2(-9.999998, 110.000015)
+position = Vector2(-10, 118.33332)
 scale = Vector2(0.8, 0.7)
 texture = ExtResource("2_edvpf")
 
@@ -136,6 +136,16 @@ energy = 0.55
 shadow_enabled = true
 shadow_color = Color(0.05490196, 0.05490196, 0.05490196, 0.5137255)
 texture = ExtResource("5_olb2f")
+
+[node name="NameLabel" type="Label" parent="."]
+offset_left = -135.0
+offset_top = -236.66666
+offset_right = 116.0
+offset_bottom = -184.66666
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 36
+text = "樊万松 第144世"
 
 [connection signal="area_entered" from="stop" to="." method="_on_stop_area_entered"]
 [connection signal="mouse_entered" from="stop" to="." method="_on_stop_mouse_entered"]
