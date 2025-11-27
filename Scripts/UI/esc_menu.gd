@@ -126,10 +126,12 @@ func _input(event: InputEvent) -> void:
 func _on_restart_pressed() -> void:
 		# 恢复游戏（必须在切换场景前）
 	get_tree().paused = false
-	
+	# 保存当前模式，防止reset_game重置为默认的survival
+	var saved_mode = GameMain.current_mode_id
 	# 重置游戏数据
 	GameMain.reset_game()
-	
+	# 恢复之前的模式
+	GameMain.current_mode_id = saved_mode
 	# 发送信号
 	main_menu_requested.emit()
 	
