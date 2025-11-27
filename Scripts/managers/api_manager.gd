@@ -87,17 +87,21 @@ func _get_api_url(path: String) -> String:
 	else:
 		player_name = "0"
 	
-	var api_url = path.replace("{player_id}", player_name)
+	var floor_id = SaveManager.get_floor_id()
+	if floor_id < 0:
+		floor_id = 0
+	
+	var api_url = path.replace("{player_id}", player_name).replace("{floor_id}", str(floor_id))
 	return api_url
 
 func load_ghost_data() -> Dictionary:
-	var res = await _http_get("/api/game/ghost/{player_id}")
+	var res = await _http_get("/api/game/ghosts/{floor_id}/{player_id}")
 	if res.has("error"):
 		return {error = res["error"]}
 	return res["data"]
 
 func save_ghost_data(data: String) -> Dictionary:
-	var res = await _http_post("/api/game/ghost/{player_id}", data)
+	var res = await _http_post("/api/game/ghosts/{floor_id}/{player_id}", data)
 	if res.has("error"):
 		return {error = res["error"]}
 	return {success = true}

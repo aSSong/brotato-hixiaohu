@@ -16,7 +16,9 @@ var server_ghosts: Array = []   # 服务器数据（其他玩家）
 func _ready() -> void:
 	_load_prefill_data()
 	_load_local_data()
-	await _load_server_data()
+	_load_server_data()
+	await upload_to_server()
+	await update_from_server()
 	print("[GhostDatabase] 初始化完成 | 预填充:%d 本地:%d 服务器:%d" % [prefill_ghosts.size(), local_ghosts.size(), server_ghosts.size()])
 
 ## 加载预填充数据（静态配置）
@@ -71,11 +73,28 @@ func _load_local_data() -> void:
 
 ## 加载服务器数据（缓存）
 func _load_server_data() -> void:
-	var data = await ApiManager.load_ghost_data()
+	if not FileAccess.file_exists(SERVER_CACHE_PATH):
+		print("[GhostDatabase] 服务器缓存不存在")
+		return
+
+	var file = FileAccess.open(SERVER_CACHE_PATH, FileAccess.READ)
+	if file == null:
+		push_error("[GhostDatabase] 无法打开服务器缓存: %s" % SERVER_CACHE_PATH)
+		return
+
+	var json_string = file.get_as_text()
+	file.close()
+
+	var json = JSON.new()
+	var parse_result = json.parse(json_string)
+	if parse_result != OK:
+		push_error("[GhostDatabase] 解析服务器缓存失败: %s" % json.get_error_message())
+		return
+
+	var data = json.data
 	if data is Dictionary and data.has("ghosts"):
 		server_ghosts = _convert_json_to_ghost_data_array(data["ghosts"])
-	else:
-		await update_from_server(prefill_ghosts)
+		print("[GhostDatabase] 加载服务器缓存: %d 条" % server_ghosts.size())
 
 ## 将JSON数组转换为GhostData数组
 func _convert_json_to_ghost_data_array(json_array: Array) -> Array:
@@ -165,34 +184,39 @@ func save_local_data() -> void:
 	var file = FileAccess.open(LOCAL_SAVE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_error("[GhostDatabase] 无法保存本地记录: %s" % LOCAL_SAVE_PATH)
-	else:
-		file.store_string(json_string)
-		file.close()
-		print("[GhostDatabase] 本地记录已保存: %d 条" % local_ghosts.size())
+		return
 
-	await update_from_server(local_ghosts)
+	file.store_string(json_string)
+	file.close()
+	print("[GhostDatabase] 本地记录已保存: %d 条" % local_ghosts.size())
+	
+	await upload_to_server()
+
+## 上传到服务器
+func upload_to_server() -> void:
+	var data = {
+		"player_name": SaveManager.get_player_name(),
+		"ghosts": []
+	}
+	for ghost_data in local_ghosts:
+		data["ghosts"].append(_ghost_data_to_dict(ghost_data))
+	var json_string = JSON.stringify(data, "\t")
+	await ApiManager.save_ghost_data(json_string)
 
 ## 从服务器更新数据（供外部调用，支持热更新）
-func update_from_server(ghost_data_array: Array) -> void:
-	server_ghosts.clear()
-	
-	for data in ghost_data_array:
-		if data is GhostData:
-			server_ghosts.append(data)
-		elif data is Dictionary:
-			var ghost_data = _dict_to_ghost_data(data)
-			if ghost_data:
-				server_ghosts.append(ghost_data)
-	
+func update_from_server() -> void:
+	var data = await ApiManager.load_ghost_data()
+	if data is Dictionary and data.has("ghosts"):
+		server_ghosts = _convert_json_to_ghost_data_array(data["ghosts"])
+
 	# 保存到服务器缓存
-	await _save_server_cache()
-	
+	_save_server_cache()
+
 	print("[GhostDatabase] 服务器数据已更新: %d 条（热更新生效）" % server_ghosts.size())
 
 ## 保存服务器缓存
 func _save_server_cache() -> void:
 	var data = {
-		"player_name": SaveManager.get_player_name(),
 		"ghosts": []
 	}
 	
@@ -200,7 +224,14 @@ func _save_server_cache() -> void:
 		data["ghosts"].append(_ghost_data_to_dict(ghost_data))
 	
 	var json_string = JSON.stringify(data, "\t")
-	await ApiManager.save_ghost_data(json_string)
+
+	var file = FileAccess.open(SERVER_CACHE_PATH, FileAccess.WRITE)
+	if file == null:
+		push_error("[GhostDatabase] 无法保存服务器缓存: %s" % SERVER_CACHE_PATH)
+		return
+
+	file.store_string(json_string)
+	file.close()
 
 ## 清空本地记录（调试用）
 func clear_local_data() -> void:
