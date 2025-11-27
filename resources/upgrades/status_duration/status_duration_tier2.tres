@@ -18,5 +18,5 @@ cost = 6
 icon_path = "res://assets/skillicon/10.png"
 quality = 2
 actual_cost = 6
-weight = 200
+weight = 50
 stats_modifier = SubResource("Resource_status_duration_2")

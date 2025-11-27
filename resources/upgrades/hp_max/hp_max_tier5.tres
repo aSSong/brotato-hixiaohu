@@ -17,4 +17,5 @@ cost = 48
 icon_path = "res://assets/skillicon/6.png"
 quality = 5
 actual_cost = 48
+weight = 200
 stats_modifier = SubResource("Resource_gpobx")
