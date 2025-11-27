@@ -1,6 +1,7 @@
 extends CharacterBody2D
 @onready var playerAni: AnimatedSprite2D = %AnimatedSprite2D
 @onready var trail: Trail = %Trail
+@onready var name_label: Label = $NameLabel
 
 var dir = Vector2.ZERO
 var base_speed = 400  # 基础速度
@@ -50,7 +51,7 @@ var original_path_record_distance: float = 3.0  # 保存原始路径记录间隔
 signal hp_changed(current_hp: int, max_hp: int)
 
 ## 名字显示Label
-var name_label: Label = null
+#var name_label: Label = null
 
 ## 说话气泡组件
 var speech_bubble: PlayerSpeechBubble = null
@@ -490,24 +491,24 @@ func get_path_history() -> Array:
 ## 创建头顶名字Label
 func _create_name_label() -> void:
 	# 创建Label节点
-	name_label = Label.new()
-	add_child(name_label)
+	#name_label = Label.new()
+	#add_child(name_label)
 	
 	# 设置Label属性
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	
 	# 设置位置（在角色头顶上方）
-	name_label.position = Vector2(-125, -190)  # 根据角色大小调整
-	name_label.size = Vector2(120, 30)
+	#name_label.position = Vector2(-125, -190)  # 根据角色大小调整
+	#name_label.size = Vector2(120, 30)
 	
 	# 设置字体大小和颜色
-	name_label.add_theme_font_size_override("font_size", 36)
-	name_label.add_theme_color_override("font_color", Color.WHITE)
+	#name_label.add_theme_font_size_override("font_size", 36)
+	#name_label.add_theme_color_override("font_color", Color.WHITE)
 	
 	# 添加黑色描边效果
-	name_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	name_label.add_theme_constant_override("outline_size", 2)
+	#name_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	#name_label.add_theme_constant_override("outline_size", 2)
 	
 	# 设置z_index确保在角色上方显示
 	name_label.z_index = 100
