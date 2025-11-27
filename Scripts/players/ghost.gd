@@ -18,7 +18,7 @@ var path_record_distance: float = 5.0
 var target_path_points: Array = []
 
 ## 跟随距离（用于确定路径点队列长度）
-var follow_distance: float = 100.0
+var follow_distance: float = 180.0
 
 ## 跟随速度（与玩家速度同步）
 var follow_speed: float = 400.0
