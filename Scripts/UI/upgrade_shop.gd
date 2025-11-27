@@ -310,6 +310,9 @@ func _duplicate_upgrade_data(source: UpgradeData) -> UpgradeData:
 	if source.stats_modifier:
 		copy.stats_modifier = source.stats_modifier.clone()
 	
+	# 复制自定义值
+	copy.custom_value = source.custom_value
+	
 	return copy
 
 ## 判断两个升级是否相同
@@ -396,7 +399,7 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 	# 特殊处理：武器相关和恢复HP
 	match upgrade.upgrade_type:
 		UpgradeData.UpgradeType.HEAL_HP:
-			_apply_heal_upgrade()
+			_apply_heal_upgrade(upgrade)
 		UpgradeData.UpgradeType.NEW_WEAPON:
 			await _apply_new_weapon_upgrade(upgrade.weapon_id)
 		UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
@@ -405,11 +408,20 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 			# 使用新属性系统应用升级
 			_apply_attribute_upgrade(upgrade)
 
-func _apply_heal_upgrade() -> void:
+func _apply_heal_upgrade(upgrade: UpgradeData) -> void:
+	var heal_amount = 10 # Default
+	
+	# Try to get heal amount from custom_value (preferred)
+	if upgrade.custom_value > 0:
+		heal_amount = int(upgrade.custom_value)
+	# Fallback: Try to get heal amount from stats_modifier.max_hp (legacy/compatibility)
+	elif upgrade.stats_modifier and upgrade.stats_modifier.max_hp > 0:
+		heal_amount = upgrade.stats_modifier.max_hp
+	
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		var old_hp = player.now_hp
-		player.now_hp = min(player.now_hp + 10, player.max_hp)
+		player.now_hp = min(player.now_hp + heal_amount, player.max_hp)
 		var actual_heal = player.now_hp - old_hp
 		
 		# 显示HP恢复的浮动文字（使用统一方法）
@@ -417,6 +429,7 @@ func _apply_heal_upgrade() -> void:
 			SpecialEffects.show_heal_floating_text(player, actual_heal)
 		
 		player.hp_changed.emit(player.now_hp, player.max_hp)
+		print("[UpgradeShop] 应用治疗: %s, 恢复量: %d (实际: %d)" % [upgrade.name, heal_amount, actual_heal])
 
 func _apply_new_weapon_upgrade(weapon_id: String) -> void:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
@@ -1047,5 +1060,8 @@ func _generate_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
 	# ⭐ 关键：复制stats_modifier（新属性系统）
 	if upgrade_data.stats_modifier:
 		upgrade_copy.stats_modifier = upgrade_data.stats_modifier.clone()
+	
+	# 复制自定义值
+	upgrade_copy.custom_value = upgrade_data.custom_value
 	
 	return upgrade_copy

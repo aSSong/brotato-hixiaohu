@@ -61,6 +61,9 @@ enum UpgradeType {
 @export var locked_cost: int = -1  # 锁定时的价格（-1表示未锁定）
 @export var weight: int = 100  # 出现权重（用于加权随机，默认100，权重越高越容易出现）
 
+## 自定义值（用于特殊效果，如HEAL_HP的恢复量）
+@export var custom_value: float = 0.0
+
 ## 新属性系统：使用CombatStats表示属性变化
 @export var stats_modifier: CombatStats = null
 
