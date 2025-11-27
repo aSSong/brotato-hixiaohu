@@ -42,7 +42,7 @@ static func initialize_classes() -> void:
 	
 	# 战士 - 高血量、近战加成
 	var warrior = ClassData.new(
-		"战士",
+		"雅加婆婆 Baba Yaga",
 		60,  # max_hp
 		350.0,  # speed (稍慢)
 		1.2,  # attack_multiplier
@@ -58,6 +58,8 @@ static func initialize_classes() -> void:
 	warrior.melee_knockback_multiplier = 1.2  # 近战击退+20%
 	# 加载技能数据（新系统）
 	warrior.skill_data = load("res://resources/skills/berserk.tres") as SkillData
+	warrior.skin_frames = load("res://resources/class_skin/babayaga01.tres")
+	warrior.scale = Vector2(0.7, 0.7)
 	# 同步到新系统
 	warrior.sync_to_base_stats()
 	# 自动生成特性描述
@@ -66,7 +68,7 @@ static func initialize_classes() -> void:
 	
 	# 射手 - 高攻击速度、远程加成
 	var ranger = ClassData.new(
-		"射手",
+		"KeyPerson-射手",
 		40,  # max_hp
 		450.0,  # speed (较快)
 		1.0,  # attack_multiplier
@@ -90,7 +92,7 @@ static func initialize_classes() -> void:
 	
 	# 法师 - 低血量、魔法加成、范围伤害
 	var mage = ClassData.new(
-		"法师",
+		"KeyPerson-法师",
 		30,  # max_hp (低血量)
 		400.0,  # speed
 		0.9,  # attack_multiplier (基础攻击稍低)
@@ -115,7 +117,7 @@ static func initialize_classes() -> void:
 	
 	# 平衡者 - 均衡属性
 	var balanced = ClassData.new(
-		"平衡者",
+		"KeyPerson-平衡者",
 		50,  # max_hp
 		400.0,  # speed
 		1.15,  # attack_multiplier（所有武器伤害+15%）
@@ -138,7 +140,7 @@ static func initialize_classes() -> void:
 	
 	# 坦克 - 超高血量、防御
 	var tank = ClassData.new(
-		"坦克",
+		"KeyPerson-坦克",
 		80,  # max_hp (超高)
 		300.0,  # speed (慢)
 		0.8,  # attack_multiplier (低攻击)
