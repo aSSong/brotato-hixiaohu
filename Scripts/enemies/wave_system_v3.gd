@@ -250,6 +250,10 @@ func start_next_wave() -> void:
 	current_wave += 1
 	var config = wave_configs[current_wave - 1]
 	
+	# 同步更新GameMain.current_session.current_wave
+	if GameMain.current_session:
+		GameMain.current_session.current_wave = current_wave
+	
 	# 计算总敌人数
 	total_enemies_this_wave = 0
 	for enemy_group in config.enemies:
