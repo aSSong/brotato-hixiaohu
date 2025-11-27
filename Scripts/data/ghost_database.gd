@@ -190,10 +190,19 @@ func save_local_data() -> void:
 	file.close()
 	print("[GhostDatabase] 本地记录已保存: %d 条" % local_ghosts.size())
 	
-	await upload_to_server()
+	# 上传到服务器并检查结果
+	var upload_success = await upload_to_server()
+	if not upload_success:
+		push_warning("[GhostDatabase] 数据已保存到本地，但服务器上传失败（数据不会丢失）")
 
 ## 上传到服务器
-func upload_to_server() -> void:
+## 返回: bool - true表示上传成功，false表示失败
+func upload_to_server() -> bool:
+	# 如果没有本地记录，跳过上传
+	if local_ghosts.is_empty():
+		print("[GhostDatabase] 没有本地记录，跳过上传")
+		return true
+	
 	var data = {
 		"player_name": SaveManager.get_player_name(),
 		"ghosts": []
@@ -201,7 +210,19 @@ func upload_to_server() -> void:
 	for ghost_data in local_ghosts:
 		data["ghosts"].append(_ghost_data_to_dict(ghost_data))
 	var json_string = JSON.stringify(data, "\t")
-	await ApiManager.save_ghost_data(json_string)
+	
+	print("[GhostDatabase] 开始上传Ghost数据到服务器... (共 %d 条)" % local_ghosts.size())
+	var result = await ApiManager.save_ghost_data(json_string)
+	
+	if result.has("error"):
+		push_error("[GhostDatabase] ✗ 上传失败: %s" % result["error"])
+		return false
+	elif result.has("success") and result["success"]:
+		print("[GhostDatabase] ✓ 上传成功！已上传 %d 条Ghost数据到服务器" % local_ghosts.size())
+		return true
+	else:
+		push_warning("[GhostDatabase] ⚠ 上传返回未知结果: %s" % result)
+		return false
 
 ## 从服务器更新数据（供外部调用，支持热更新）
 func update_from_server() -> void:
