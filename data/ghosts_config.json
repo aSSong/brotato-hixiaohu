@@ -6,7 +6,7 @@
 			"total_death_count": 5,
 			"death_count": 1,
 			"map_id": "model2_stage1",
-			"wave": 3,
+			"wave": 2,
 			"death_position": {
 				"x": 1200,
 				"y": 600
@@ -22,7 +22,7 @@
 			"total_death_count": 8,
 			"death_count": 2,
 			"map_id": "model2_stage1",
-			"wave": 5,
+			"wave": 6,
 			"death_position": {
 				"x": 800,
 				"y": 450
@@ -38,7 +38,7 @@
 			"total_death_count": 12,
 			"death_count": 3,
 			"map_id": "model2_stage1",
-			"wave": 7,
+			"wave": 8,
 			"death_position": {
 				"x": 1500,
 				"y": 800
@@ -54,7 +54,7 @@
 			"total_death_count": 15,
 			"death_count": 4,
 			"map_id": "model2_stage1",
-			"wave": 10,
+			"wave": 11,
 			"death_position": {
 				"x": 950,
 				"y": 550
@@ -70,7 +70,7 @@
 			"total_death_count": 20,
 			"death_count": 5,
 			"map_id": "model2_stage1",
-			"wave": 12,
+			"wave": 15,
 			"death_position": {
 				"x": 1100,
 				"y": 700
@@ -86,7 +86,7 @@
 			"total_death_count": 3,
 			"death_count": 1,
 			"map_id": "model2_stage1",
-			"wave": 5,
+			"wave": 8,
 			"death_position": {
 				"x": 1300,
 				"y": 500
@@ -102,7 +102,7 @@
 			"total_death_count": 7,
 			"death_count": 2,
 			"map_id": "model2_stage1",
-			"wave": 8,
+			"wave": 9,
 			"death_position": {
 				"x": 700,
 				"y": 650
@@ -118,7 +118,7 @@
 			"total_death_count": 10,
 			"death_count": 3,
 			"map_id": "model2_stage1",
-			"wave": 3,
+			"wave": 2,
 			"death_position": {
 				"x": 1400,
 				"y": 400
@@ -134,7 +134,7 @@
 			"total_death_count": 18,
 			"death_count": 4,
 			"map_id": "model2_stage1",
-			"wave": 15,
+			"wave": 3,
 			"death_position": {
 				"x": 900,
 				"y": 750
@@ -150,7 +150,7 @@
 			"total_death_count": 6,
 			"death_count": 2,
 			"map_id": "model2_stage1",
-			"wave": 10,
+			"wave": 11,
 			"death_position": {
 				"x": 1000,
 				"y": 600
