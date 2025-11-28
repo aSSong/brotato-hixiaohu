@@ -5,12 +5,17 @@ class_name ClassChooseUI
 ## 让用户选择职业，然后进入武器选择界面
 
 # ========== UI 节点引用 ==========
-@onready var player_name_edit: LineEdit = $TitleSection/PlayerNameContainer/PlayerNameEdit
-@onready var class_name_cn: Label = $MainContent/LeftSection/ClassNameCN
-@onready var class_name_en: Label = $MainContent/LeftSection/ClassNameEN
+# 标题区域
+@onready var player_portrait: TextureRect = $TitleSection/PlayerNameContainer/QuestionMark/playerportrait
+@onready var player_name_label: Label = $TitleSection/PlayerNameContainer/PlayerName
+
+# 左侧职业名称图片
+@onready var classname_image: TextureRect = $MainContent/LeftSection/classname_image
+
+# 中间角色展示
 @onready var character_sprite: TextureRect = $MainContent/CenterSection/CharacterDisplay/CharacterSprite
-@onready var left_arrow: Button = $MainContent/CenterSection/CharacterDisplay/LeftArrow
-@onready var right_arrow: Button = $MainContent/CenterSection/CharacterDisplay/RightArrow
+@onready var left_arrow: TextureButton = $MainContent/CenterSection/CharacterDisplay/LeftArrow
+@onready var right_arrow: TextureButton = $MainContent/CenterSection/CharacterDisplay/RightArrow
 
 # 右侧信息面板
 @onready var info_text: RichTextLabel = $MainContent/RightSection/InfoContainer/InfoSection/InfoText
@@ -22,19 +27,34 @@ class_name ClassChooseUI
 @onready var defence_bar: ProgressBar = $MainContent/RightSection/InfoContainer/DefenceSection/DefenceBar
 @onready var talent_text: RichTextLabel = $MainContent/RightSection/InfoContainer/TalentSection/TalentText
 @onready var skill_icon: TextureRect = $MainContent/RightSection/InfoContainer/SkillSection/SkillIcon
-@onready var skill_name: Label = $MainContent/RightSection/InfoContainer/SkillSection/SkillInfo/SkillName
+@onready var skill_name_label: Label = $MainContent/RightSection/InfoContainer/SkillSection/SkillInfo/SkillName
 @onready var skill_desc: RichTextLabel = $MainContent/RightSection/InfoContainer/SkillSection/SkillInfo/SkillDesc
 
 # 底部按钮
-@onready var back_button: Button = $BottomSection/BackButton
-@onready var class_portraits: HBoxContainer = $BottomSection/ClassPortraits
-@onready var next_button: Button = $BottomSection/NextButton
+@onready var back_button: TextureButton = $BottomSection/BackButton
+@onready var next_button: TextureButton = $BottomSection/NextButton
+
+# 底部职业按钮（固定6个）
+@onready var btn_betty: TextureRect = $BottomSection/ClassPortraits/"btn-betty"
+@onready var btn_babayaga: TextureRect = $BottomSection/ClassPortraits/"btn-babayaga"
+@onready var btn_mrwill: TextureRect = $BottomSection/ClassPortraits/"btn-mrwill"
+@onready var btn_arm: TextureRect = $BottomSection/ClassPortraits/"btn-arm"
+@onready var btn_mrdot: TextureRect = $BottomSection/ClassPortraits/"btn-mrdot"
+@onready var btn_ky: TextureRect = $BottomSection/ClassPortraits/"btn-ky"
+
+# ========== 资源引用 ==========
+var tex_portrait_choose: Texture2D = preload("res://assets/UI/class_choose/bg-portrait-choose-01.png")
+var tex_portrait_unchoose: Texture2D = preload("res://assets/UI/class_choose/bg-portrait-unchoose-01.png")
 
 # ========== 状态变量 ==========
+# 按钮到职业ID的映射
+var button_to_class: Dictionary = {}
+# 职业ID到按钮的映射
+var class_to_button: Dictionary = {}
+# 职业ID有序列表（用于箭头切换）
 var class_ids: Array = []
 var current_class_index: int = 0
 var selected_class_id: String = ""
-var portrait_buttons: Dictionary = {}
 
 # ========== 常量 ==========
 const WEAPON_CHOOSE_SCENE = "res://scenes/UI/Weapon_choose.tscn"
@@ -43,95 +63,103 @@ func _ready() -> void:
 	# 播放标题BGM
 	BGMManager.play_bgm("title")
 	
-	# 初始化职业列表
-	_initialize_classes()
+	# 初始化按钮映射
+	_initialize_button_mapping()
 	
 	# 连接按钮信号
+	_connect_signals()
+	
+	# 随机选择一个职业
+	_select_random_class()
+
+## 初始化按钮与职业ID的映射
+func _initialize_button_mapping() -> void:
+	# 按钮 -> 职业ID 映射
+	button_to_class = {
+		btn_betty: "betty",
+		btn_babayaga: "warrior",
+		btn_mrwill: "ranger",
+		btn_arm: "mage",
+		btn_mrdot: "balanced",
+		btn_ky: "tank"
+	}
+	
+	# 职业ID -> 按钮 映射
+	for btn in button_to_class.keys():
+		var class_id = button_to_class[btn]
+		class_to_button[class_id] = btn
+	
+	# 有序职业ID列表（用于箭头切换）
+	class_ids = ["betty", "warrior", "ranger", "mage", "balanced", "tank"]
+	
+	# 为每个按钮设置头像纹理
+	for btn in button_to_class.keys():
+		var class_id = button_to_class[btn]
+		var class_data = ClassDatabase.get_class_data(class_id)
+		if class_data and class_data.portrait:
+			var portrait_node = btn.get_node_or_null("portrait")
+			if portrait_node:
+				portrait_node.texture = class_data.portrait
+
+## 连接所有信号
+func _connect_signals() -> void:
+	# 箭头按钮
 	left_arrow.pressed.connect(_on_left_arrow_pressed)
 	right_arrow.pressed.connect(_on_right_arrow_pressed)
+	
+	# 底部按钮
 	back_button.pressed.connect(_on_back_button_pressed)
 	next_button.pressed.connect(_on_next_button_pressed)
 	
-	# 选择第一个职业
-	if class_ids.size() > 0:
-		_select_class(0)
-	
-	# 初始化下一页按钮状态
-	_update_next_button()
+	# 职业选择按钮（使用gui_input实现点击）
+	for btn in button_to_class.keys():
+		btn.gui_input.connect(_on_class_button_input.bind(btn))
+		btn.mouse_filter = Control.MOUSE_FILTER_STOP
 
-## 初始化职业列表
-func _initialize_classes() -> void:
-	class_ids = ClassDatabase.get_all_class_ids()
-	
-	# 创建底部职业头像按钮
-	for i in range(class_ids.size()):
-		var class_id = class_ids[i]
-		var class_data = ClassDatabase.get_class_data(class_id)
-		
-		# 创建头像容器
-		var portrait_container = Panel.new()
-		portrait_container.custom_minimum_size = Vector2(80, 80)
-		
-		# 创建头像图片（使用 TextureRect）
-		var portrait = TextureRect.new()
-		portrait.name = "Portrait"
-		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		portrait.set_anchors_preset(Control.PRESET_FULL_RECT)
-		portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		
-		# TODO: 这里需要填充头像纹理
-		# 如果有 skin_frames，尝试获取第一帧作为头像
-		if class_data.skin_frames and class_data.skin_frames.get_animation_names().size() > 0:
-			var anim_name = class_data.skin_frames.get_animation_names()[0]
-			if class_data.skin_frames.get_frame_count(anim_name) > 0:
-				portrait.texture = class_data.skin_frames.get_frame_texture(anim_name, 0)
-		
-		portrait_container.add_child(portrait)
-		
-		# 设置面板可点击
-		portrait_container.gui_input.connect(_on_portrait_clicked.bind(i))
-		portrait_container.mouse_filter = Control.MOUSE_FILTER_STOP
-		
-		class_portraits.add_child(portrait_container)
-		portrait_buttons[class_id] = portrait_container
+## 随机选择一个职业
+func _select_random_class() -> void:
+	var random_index = randi() % class_ids.size()
+	_select_class_by_index(random_index)
 
-## 选择指定索引的职业
-func _select_class(index: int) -> void:
+## 通过索引选择职业
+func _select_class_by_index(index: int) -> void:
 	if index < 0 or index >= class_ids.size():
 		return
 	
 	current_class_index = index
 	selected_class_id = class_ids[index]
 	
+	_update_class_display()
+
+## 通过职业ID选择职业
+func _select_class_by_id(class_id: String) -> void:
+	var index = class_ids.find(class_id)
+	if index >= 0:
+		_select_class_by_index(index)
+
+## 更新职业显示
+func _update_class_display() -> void:
 	var class_data = ClassDatabase.get_class_data(selected_class_id)
 	if class_data == null:
 		return
 	
-	# 更新职业名称显示
-	var name_parts = class_data.name.split(" ", false, 1)
-	if name_parts.size() >= 2:
-		class_name_cn.text = name_parts[0]
-		class_name_en.text = name_parts[1]
-	else:
-		class_name_cn.text = class_data.name
-		class_name_en.text = ""
+	# 更新海报（中间角色图）
+	if class_data.poster:
+		character_sprite.texture = class_data.poster
 	
-	# 更新角色展示图片
-	# TODO: 这里需要填充角色大图纹理
-	if class_data.skin_frames and class_data.skin_frames.get_animation_names().size() > 0:
-		var anim_name = class_data.skin_frames.get_animation_names()[0]
-		if class_data.skin_frames.get_frame_count(anim_name) > 0:
-			character_sprite.texture = class_data.skin_frames.get_frame_texture(anim_name, 0)
+	# 更新职业名称图片
+	if class_data.name_image:
+		classname_image.texture = class_data.name_image
+	
+	# 更新左上角头像
+	if class_data.portrait:
+		player_portrait.texture = class_data.portrait
 	
 	# 更新信息面板
 	_update_info_panel(class_data)
 	
-	# 更新头像选中状态
-	_update_portrait_selection()
-	
-	# 更新下一页按钮
-	_update_next_button()
+	# 更新底部按钮选中状态
+	_update_portrait_buttons()
 
 ## 更新信息面板
 func _update_info_panel(class_data: ClassData) -> void:
@@ -160,90 +188,62 @@ func _update_info_panel(class_data: ClassData) -> void:
 	
 	# Skill 技能
 	if class_data.skill_data:
-		skill_name.text = class_data.skill_data.name
+		skill_name_label.text = class_data.skill_data.name
 		skill_desc.text = class_data.skill_data.description
-		# TODO: 填充技能图标
 		if class_data.skill_data.icon:
 			skill_icon.texture = class_data.skill_data.icon
 	else:
-		skill_name.text = "无技能"
+		skill_name_label.text = "无技能"
 		skill_desc.text = ""
 
-## 更新头像选中状态
-func _update_portrait_selection() -> void:
-	for class_id in portrait_buttons.keys():
-		var panel = portrait_buttons[class_id] as Panel
-		var style = StyleBoxFlat.new()
-		style.bg_color = Color(0.2, 0.2, 0.3, 1)
+## 更新底部职业按钮选中状态
+func _update_portrait_buttons() -> void:
+	for btn in button_to_class.keys():
+		var class_id = button_to_class[btn]
+		var is_selected = (class_id == selected_class_id)
 		
-		if class_id == selected_class_id:
-			# 选中状态：粉色边框 + 勾选标记
-			style.border_width_left = 4
-			style.border_width_right = 4
-			style.border_width_top = 4
-			style.border_width_bottom = 4
-			style.border_color = Color(1, 0.3, 0.5, 1)
+		# 更新背景图片
+		if is_selected:
+			btn.texture = tex_portrait_choose
 		else:
-			# 未选中：无边框
-			style.border_width_left = 0
-			style.border_width_right = 0
-			style.border_width_top = 0
-			style.border_width_bottom = 0
+			btn.texture = tex_portrait_unchoose
 		
-		panel.add_theme_stylebox_override("panel", style)
-
-## 更新下一页按钮状态
-func _update_next_button() -> void:
-	var can_proceed = selected_class_id != ""
-	next_button.disabled = not can_proceed
-	
-	var style = StyleBoxFlat.new()
-	if can_proceed:
-		# 可点击：渐变橙红色
-		style.bg_color = Color(1, 0.4, 0.3, 1)
-		style.border_width_left = 3
-		style.border_width_right = 3
-		style.border_width_top = 3
-		style.border_width_bottom = 3
-		style.border_color = Color(1, 0.6, 0.4, 1)
-		next_button.modulate = Color(1, 1, 1, 1)
-	else:
-		# 不可点击：灰色
-		style.bg_color = Color(0.3, 0.3, 0.3, 1)
-		next_button.modulate = Color(0.6, 0.6, 0.6, 1)
-	
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_left = 8
-	style.corner_radius_bottom_right = 8
-	
-	next_button.add_theme_stylebox_override("normal", style)
-	next_button.add_theme_stylebox_override("hover", style)
-	next_button.add_theme_stylebox_override("pressed", style)
-	next_button.add_theme_stylebox_override("disabled", style)
+		# 更新头像缩放
+		var portrait_node = btn.get_node_or_null("portrait")
+		if portrait_node:
+			if is_selected:
+				portrait_node.scale = Vector2(0.8, 0.8)
+			else:
+				portrait_node.scale = Vector2(0.6, 0.6)
+		
+		# 更新选中标记可见性
+		var choose_node = btn.get_node_or_null("choose")
+		if choose_node:
+			choose_node.visible = is_selected
 
 # ========== 信号回调 ==========
 
 func _on_left_arrow_pressed() -> void:
 	var new_index = current_class_index - 1
 	if new_index < 0:
-		new_index = class_ids.size() - 1
-	_select_class(new_index)
+		new_index = class_ids.size() - 1  # 循环到最后
+	_select_class_by_index(new_index)
 
 func _on_right_arrow_pressed() -> void:
 	var new_index = current_class_index + 1
 	if new_index >= class_ids.size():
-		new_index = 0
-	_select_class(new_index)
+		new_index = 0  # 循环到第一个
+	_select_class_by_index(new_index)
 
-func _on_portrait_clicked(event: InputEvent, index: int) -> void:
+func _on_class_button_input(event: InputEvent, btn: TextureRect) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		_select_class(index)
+		var class_id = button_to_class.get(btn, "")
+		if class_id != "":
+			_select_class_by_id(class_id)
 
 func _on_back_button_pressed() -> void:
-	# 返回主菜单或上一个界面
-	# TODO: 根据实际需求调整返回目标
-	get_tree().change_scene_to_file("res://scenes/UI/main_menu.tscn")
+	# 返回主菜单
+	get_tree().change_scene_to_file("res://scenes/UI/main_title.tscn")
 
 func _on_next_button_pressed() -> void:
 	if selected_class_id == "":
@@ -253,9 +253,9 @@ func _on_next_button_pressed() -> void:
 	GameMain.selected_class_id = selected_class_id
 	
 	# 保存玩家名字（如果有输入）
-	var player_name = player_name_edit.text.strip_edges()
-	if player_name != "":
-		# TODO: 保存玩家名字到 GameMain 或其他位置
+	var player_name = player_name_label.text.strip_edges()
+	if player_name != "" and player_name != "Key Person":
+		# 可以保存到 GameMain 或其他位置
 		pass
 	
 	# 跳转到武器选择界面

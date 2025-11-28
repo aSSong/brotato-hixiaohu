@@ -151,8 +151,8 @@ static func initialize_classes() -> void:
 	# 加载技能数据（新系统）
 	balanced.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
 	# UI 资源配置
-	balanced.portrait = load("res://assets/UI/class_poster/portrait-ky-01.png")
-	balanced.poster = load("res://assets/UI/class_poster/pose-ky-01.png")
+	balanced.portrait = load("res://assets/UI/class_poster/portrait-mrdot-01.png")
+	balanced.poster = load("res://assets/UI/class_poster/pose-mrdot-01.png")
 	balanced.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	balanced.sync_to_base_stats()
