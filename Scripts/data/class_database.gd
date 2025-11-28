@@ -29,10 +29,14 @@ static func initialize_classes() -> void:
 	# 平衡者已经通过 attack_multiplier 设置了所有武器伤害+15%
 	# speed 保持 400.0（移动速度0%）
 	# 加载技能数据（新系统）
-	betty.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
+	betty.skill_data = load("res://resources/skills/shield.tres") as SkillData
 	# 设置皮肤 (需要先在编辑器创建 SpriteFrames 资源)
 	betty.skin_frames = load("res://resources/class_skin/betty01.tres")
 	betty.scale = Vector2(0.6, 0.6)
+	# UI 资源配置
+	betty.portrait = load("res://assets/UI/class_poster/portrait-betty-01.png")
+	betty.poster = load("res://assets/UI/class_poster/pose-betty-01.png")
+	betty.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	betty.sync_to_base_stats()
 	# 自动生成特性描述
@@ -60,6 +64,10 @@ static func initialize_classes() -> void:
 	warrior.skill_data = load("res://resources/skills/berserk.tres") as SkillData
 	warrior.skin_frames = load("res://resources/class_skin/babayaga01.tres")
 	warrior.scale = Vector2(0.7, 0.7)
+	# UI 资源配置
+	warrior.portrait = load("res://assets/UI/class_poster/portrait-babayaga-01.png")
+	warrior.poster = load("res://assets/UI/class_poster/pose-babayaga-01.png")
+	warrior.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	warrior.sync_to_base_stats()
 	# 自动生成特性描述
@@ -84,6 +92,10 @@ static func initialize_classes() -> void:
 	ranger.attack_speed_multiplier = 1.2  # 攻击速度+20%
 	# 加载技能数据（新系统）
 	ranger.skill_data = load("res://resources/skills/precision.tres") as SkillData
+	# UI 资源配置
+	ranger.portrait = load("res://assets/UI/class_poster/portrait-mrwill-01.png")
+	ranger.poster = load("res://assets/UI/class_poster/pose-mrwill-01.png")
+	ranger.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	ranger.sync_to_base_stats()
 	# 自动生成特性描述
@@ -111,6 +123,10 @@ static func initialize_classes() -> void:
 	mage.skill_data = load("res://resources/skills/magic_burst.tres") as SkillData
 	mage.skin_frames = load("res://resources/class_skin/armstrong01.tres")
 	mage.scale = Vector2(0.6, 0.6)
+	# UI 资源配置
+	mage.portrait = load("res://assets/UI/class_poster/portrait-arm-01.png")
+	mage.poster = load("res://assets/UI/class_poster/pose-arm-01.png")
+	mage.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	mage.sync_to_base_stats()
 	# 自动生成特性描述
@@ -134,6 +150,10 @@ static func initialize_classes() -> void:
 	# speed 保持 400.0（移动速度0%）
 	# 加载技能数据（新系统）
 	balanced.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
+	# UI 资源配置
+	balanced.portrait = load("res://assets/UI/class_poster/portrait-ky-01.png")
+	balanced.poster = load("res://assets/UI/class_poster/pose-ky-01.png")
+	balanced.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	balanced.sync_to_base_stats()
 	# 自动生成特性描述
@@ -157,6 +177,10 @@ static func initialize_classes() -> void:
 	tank.damage_reduction_multiplier = 0.8  # 受到伤害-20%（减伤系数0.8）
 	# 加载技能数据（新系统）
 	tank.skill_data = load("res://resources/skills/shield.tres") as SkillData
+	# UI 资源配置
+	tank.portrait = load("res://assets/UI/class_poster/portrait-ky-01.png")
+	tank.poster = load("res://assets/UI/class_poster/pose-ky-01.png")
+	tank.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	tank.sync_to_base_stats()
 	# 自动生成特性描述

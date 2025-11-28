@@ -23,6 +23,12 @@ class_name ClassData
 @export var skin_frames: SpriteFrames 
 @export var scale: Vector2 = Vector2(1.0, 1.0)
 
+## ===== UI 资源配置 =====
+## 职业选择界面使用的图片资源
+@export var portrait: Texture2D  # 头像资源
+@export var poster: Texture2D  # 海报资源
+@export var name_image: Texture2D  # 名字资源
+
 ## 技能数据（新系统）
 @export var skill_data: SkillData
 
