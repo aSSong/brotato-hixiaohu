@@ -92,7 +92,7 @@ static func initialize_classes() -> void:
 	
 	# 法师 - 低血量、魔法加成、范围伤害
 	var mage = ClassData.new(
-		"KeyPerson-法师",
+		"大壮-Armstrong",
 		30,  # max_hp (低血量)
 		400.0,  # speed
 		0.9,  # attack_multiplier (基础攻击稍低)
@@ -109,6 +109,8 @@ static func initialize_classes() -> void:
 	mage.magic_speed_multiplier = 0.8  # 魔法冷却-20%（速度降低=冷却减少）
 	# 加载技能数据（新系统）
 	mage.skill_data = load("res://resources/skills/magic_burst.tres") as SkillData
+	mage.skin_frames = load("res://resources/class_skin/armstrong01.tres")
+	mage.scale = Vector2(0.6, 0.6)
 	# 同步到新系统
 	mage.sync_to_base_stats()
 	# 自动生成特性描述
