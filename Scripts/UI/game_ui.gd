@@ -12,6 +12,7 @@ extends CanvasLayer
 @onready var wave_label: Label = %WaveLabel
 @onready var kpi_label: Label = $KPI
 @onready var player_stats_info: PlayerStatsInfo = $PlayerStatsInfo
+@onready var damage_flash: DamageFlash = %DamageFlash
 
 # 内部引用
 var hp_label: Label = null  # HP标签
@@ -106,6 +107,11 @@ func _setup_hp_display() -> void:
 func _on_player_hp_changed(current_hp: int, max_hp: int) -> void:
 	if not hp_value_bar:
 		return
+	
+	# 检测是否受伤（血量减少）- 触发闪红效果
+	var old_hp = hp_value_bar.value
+	if current_hp < old_hp and damage_flash:
+		damage_flash.flash()
 	
 	# 更新ProgressBar
 	hp_value_bar.max_value = max_hp
