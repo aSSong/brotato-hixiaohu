@@ -1,4 +1,24 @@
-[gd_scene format=3 uid="uid://cp3uspdkmrgxt"]
+[gd_scene load_steps=20 format=3 uid="uid://cp3uspdkmrgxt"]
+
+[ext_resource type="Script" uid="uid://bhy28alx8jccx" path="res://Scripts/UI/class_choose.gd" id="1_class"]
+[ext_resource type="Texture2D" uid="uid://bc0lbov8wglen" path="res://assets/UI/class_choose/classchoose-bg-01.png" id="2_h8tvr"]
+[ext_resource type="Texture2D" uid="uid://cwf5um53xfis5" path="res://assets/UI/class_choose/classchoose-title-01.png" id="3_gregr"]
+[ext_resource type="Texture2D" uid="uid://ndwve8bq6t6d" path="res://assets/UI/class_choose/unchoose-class.png" id="4_7t88g"]
+[ext_resource type="Texture2D" uid="uid://ecy5k54h8wsu" path="res://assets/UI/class_choose/namelabel.png" id="5_7w0xs"]
+[ext_resource type="Texture2D" uid="uid://bcovh6euo7v00" path="res://assets/UI/class_choose/btn-arrow-l-white-01.png" id="6_ajwbv"]
+[ext_resource type="Texture2D" uid="uid://c2ac7s54o5nn0" path="res://assets/UI/class_choose/name-babayaga-01.png" id="6_eydfx"]
+[ext_resource type="Texture2D" uid="uid://c8aoeqg0q7dx" path="res://assets/UI/class_choose/bg-classinfo-01.png" id="6_kcc6e"]
+[ext_resource type="Texture2D" uid="uid://b4xgibahk4h0u" path="res://assets/UI/class_choose/btn-back-gray-01.png" id="6_ww5ek"]
+[ext_resource type="Texture2D" uid="uid://bktar6yyii70h" path="res://assets/UI/class_choose/btn-arrow-r-white-01.png" id="7_eydfx"]
+[ext_resource type="Texture2D" uid="uid://tpynlqo2yorf" path="res://assets/UI/class_choose/btn-back-white-01.png" id="7_p3yxr"]
+[ext_resource type="Texture2D" uid="uid://dxenabr8khac6" path="res://assets/UI/class_poster/pose-mrwill-01.png" id="8_oxlqc"]
+[ext_resource type="Texture2D" uid="uid://co5kwsisnk6y8" path="res://assets/UI/class_choose/btn-next-red-01.png" id="8_tjlwp"]
+[ext_resource type="Texture2D" uid="uid://cuv4ryakt3udj" path="res://assets/UI/class_choose/btn-next-darkred-01.png" id="9_kcc6e"]
+[ext_resource type="Texture2D" uid="uid://cgbjvv7iuevmc" path="res://assets/UI/class_choose/ui-shadow.png" id="9_oxlqc"]
+[ext_resource type="Texture2D" uid="uid://shsx7i8spnvk" path="res://assets/UI/class_choose/bg-portrait-choose-01.png" id="12_ncn5a"]
+[ext_resource type="Texture2D" uid="uid://grbttrsb6vs2" path="res://assets/UI/class_choose/bg-portrait-unchoose-01.png" id="12_oxlqc"]
+[ext_resource type="Texture2D" uid="uid://c78yiaya06kpp" path="res://assets/UI/class_poster/portrait-betty-01.png" id="13_wjeio"]
+[ext_resource type="Texture2D" uid="uid://bfnwdgtlxrlii" path="res://assets/UI/class_choose/check-red-01.png" id="14_wjeio"]
 
 [node name="ClassChoose" type="Control"]
 layout_mode = 3
@@ -7,3 +27,607 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_class")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_h8tvr")
+
+[node name="TitleSection" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_bottom = 233.0
+
+[node name="TextureRect" type="TextureRect" parent="TitleSection"]
+layout_mode = 0
+offset_right = 691.0
+offset_bottom = 233.0
+texture = ExtResource("3_gregr")
+
+[node name="TitleLabel" type="Label" parent="TitleSection/TextureRect"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+offset_left = 35.0
+offset_top = 8.0
+offset_right = 435.0
+offset_bottom = 99.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 70
+text = "选择你的职业"
+
+[node name="PlayerNameContainer" type="HBoxContainer" parent="TitleSection"]
+layout_mode = 1
+offset_left = 49.0
+offset_top = 100.0
+offset_right = 359.0
+offset_bottom = 200.0
+theme_override_constants/separation = 10
+
+[node name="QuestionMark" type="TextureRect" parent="TitleSection/PlayerNameContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+texture = ExtResource("4_7t88g")
+
+[node name="TextureRect" type="TextureRect" parent="TitleSection/PlayerNameContainer/QuestionMark"]
+layout_mode = 0
+offset_left = 99.0
+offset_top = 31.0
+offset_right = 318.0
+offset_bottom = 73.0
+texture = ExtResource("5_7w0xs")
+
+[node name="PlayerName" type="Label" parent="TitleSection/PlayerNameContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "Key Person"
+
+[node name="MainContent" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 100.0
+offset_right = -30.0
+offset_bottom = -150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftSection" type="Control" parent="MainContent"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -304.5
+offset_right = 397.0
+offset_bottom = 304.5
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainContent/LeftSection"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 48.0
+offset_top = -224.0
+offset_right = 445.0
+offset_bottom = 225.0
+grow_vertical = 2
+texture = ExtResource("6_eydfx")
+
+[node name="CenterSection" type="Control" parent="MainContent"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -53.0
+offset_bottom = -53.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="CharacterDisplay" type="Control" parent="MainContent/CenterSection"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="LeftArrow" type="TextureButton" parent="MainContent/CenterSection/CharacterDisplay"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -431.0
+offset_top = -40.0
+offset_right = -371.0
+offset_bottom = 41.0
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture_normal = ExtResource("6_ajwbv")
+texture_pressed = ExtResource("6_ajwbv")
+texture_hover = ExtResource("6_ajwbv")
+texture_disabled = ExtResource("6_ajwbv")
+texture_focused = ExtResource("6_ajwbv")
+
+[node name="CharacterSprite" type="TextureRect" parent="MainContent/CenterSection/CharacterDisplay"]
+z_index = 5
+custom_minimum_size = Vector2(400, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -308.0
+offset_top = -400.0
+offset_right = 192.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+texture = ExtResource("8_oxlqc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="shadow" type="TextureRect" parent="MainContent/CenterSection/CharacterDisplay/CharacterSprite"]
+z_index = -1
+layout_mode = 0
+offset_top = 684.0
+offset_right = 548.0
+offset_bottom = 810.0
+texture = ExtResource("9_oxlqc")
+
+[node name="RightArrow" type="TextureButton" parent="MainContent/CenterSection/CharacterDisplay"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 203.0
+offset_top = -40.0
+offset_right = 263.0
+offset_bottom = 41.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("7_eydfx")
+texture_pressed = ExtResource("7_eydfx")
+texture_hover = ExtResource("7_eydfx")
+texture_disabled = ExtResource("7_eydfx")
+texture_focused = ExtResource("7_eydfx")
+
+[node name="RightSection" type="Control" parent="MainContent"]
+custom_minimum_size = Vector2(400, 0)
+anchors_preset = 0
+offset_left = 1460.0
+offset_right = 1860.0
+offset_bottom = 830.0
+
+[node name="TextureRect" type="TextureRect" parent="MainContent/RightSection"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -677.0
+offset_top = -432.0
+offset_bottom = 222.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("6_kcc6e")
+
+[node name="InfoContainer" type="VBoxContainer" parent="MainContent/RightSection"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = 144.0
+offset_right = -30.0
+offset_bottom = -186.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="InfoSection" type="VBoxContainer" parent="MainContent/RightSection/InfoContainer"]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="MainContent/RightSection/InfoContainer/InfoSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Info"
+
+[node name="InfoText" type="RichTextLabel" parent="MainContent/RightSection/InfoContainer/InfoSection"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+bbcode_enabled = true
+text = "职业描述文字"
+fit_content = true
+scroll_active = false
+
+[node name="HPSection" type="HBoxContainer" parent="MainContent/RightSection/InfoContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HPLabel" type="Label" parent="MainContent/RightSection/InfoContainer/HPSection"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "HP"
+
+[node name="HPValue" type="Label" parent="MainContent/RightSection/InfoContainer/HPSection"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "80"
+
+[node name="HPBar" type="ProgressBar" parent="MainContent/RightSection/InfoContainer/HPSection"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+value = 80.0
+show_percentage = false
+
+[node name="SpeedSection" type="HBoxContainer" parent="MainContent/RightSection/InfoContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="SpeedLabel" type="Label" parent="MainContent/RightSection/InfoContainer/SpeedSection"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Speed"
+
+[node name="SpeedValue" type="Label" parent="MainContent/RightSection/InfoContainer/SpeedSection"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "360"
+
+[node name="SpeedBar" type="ProgressBar" parent="MainContent/RightSection/InfoContainer/SpeedSection"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+max_value = 600.0
+value = 360.0
+show_percentage = false
+
+[node name="DefenceSection" type="HBoxContainer" parent="MainContent/RightSection/InfoContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="DefenceLabel" type="Label" parent="MainContent/RightSection/InfoContainer/DefenceSection"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Defence"
+
+[node name="DefenceValue" type="Label" parent="MainContent/RightSection/InfoContainer/DefenceSection"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "5"
+
+[node name="DefenceBar" type="ProgressBar" parent="MainContent/RightSection/InfoContainer/DefenceSection"]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+max_value = 20.0
+value = 5.0
+show_percentage = false
+
+[node name="TalentSection" type="VBoxContainer" parent="MainContent/RightSection/InfoContainer"]
+layout_mode = 2
+
+[node name="TalentLabel" type="Label" parent="MainContent/RightSection/InfoContainer/TalentSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Talent"
+
+[node name="TalentText" type="RichTextLabel" parent="MainContent/RightSection/InfoContainer/TalentSection"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.5, 0.3, 1)
+bbcode_enabled = true
+text = "近战伤害 +20%
+近战范围 +20%"
+fit_content = true
+scroll_active = false
+
+[node name="SkillSection" type="HBoxContainer" parent="MainContent/RightSection/InfoContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="SkillLabel" type="Label" parent="MainContent/RightSection/InfoContainer/SkillSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Skill"
+
+[node name="SkillIcon" type="TextureRect" parent="MainContent/RightSection/InfoContainer/SkillSection"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SkillInfo" type="VBoxContainer" parent="MainContent/RightSection/InfoContainer/SkillSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SkillName" type="Label" parent="MainContent/RightSection/InfoContainer/SkillSection/SkillInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "技能名称"
+
+[node name="SkillDesc" type="RichTextLabel" parent="MainContent/RightSection/InfoContainer/SkillSection/SkillInfo"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.2, 0.8, 1, 1)
+bbcode_enabled = true
+text = "技能描述"
+fit_content = true
+scroll_active = false
+
+[node name="BottomSection" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -130.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ClassPortraits" type="HBoxContainer" parent="BottomSection"]
+z_index = 5
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -751.0
+offset_top = -239.0
+offset_right = 751.0
+offset_bottom = -39.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="btn-betty" type="TextureRect" parent="BottomSection/ClassPortraits"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_ncn5a")
+
+[node name="portrait" type="TextureRect" parent="BottomSection/ClassPortraits/btn-betty"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -93.0
+offset_right = 112.0
+offset_bottom = 107.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("13_wjeio")
+
+[node name="choose" type="TextureRect" parent="BottomSection/ClassPortraits/btn-betty"]
+layout_mode = 0
+offset_left = 105.0
+offset_right = 167.0
+offset_bottom = 63.0
+texture = ExtResource("14_wjeio")
+
+[node name="btn-babayaga" type="TextureRect" parent="BottomSection/ClassPortraits"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_oxlqc")
+
+[node name="portrait" type="TextureRect" parent="BottomSection/ClassPortraits/btn-babayaga"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.0
+offset_top = -67.0
+offset_right = 133.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("13_wjeio")
+
+[node name="choose" type="TextureRect" parent="BottomSection/ClassPortraits/btn-babayaga"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = -23.0
+offset_right = 152.0
+offset_bottom = 40.0
+texture = ExtResource("14_wjeio")
+
+[node name="btn-mrwill" type="TextureRect" parent="BottomSection/ClassPortraits"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_oxlqc")
+
+[node name="portrait" type="TextureRect" parent="BottomSection/ClassPortraits/btn-mrwill"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.0
+offset_top = -67.0
+offset_right = 133.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("13_wjeio")
+
+[node name="choose" type="TextureRect" parent="BottomSection/ClassPortraits/btn-mrwill"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = -23.0
+offset_right = 152.0
+offset_bottom = 40.0
+texture = ExtResource("14_wjeio")
+
+[node name="btn-arm" type="TextureRect" parent="BottomSection/ClassPortraits"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_oxlqc")
+
+[node name="portrait" type="TextureRect" parent="BottomSection/ClassPortraits/btn-arm"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.0
+offset_top = -67.0
+offset_right = 133.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("13_wjeio")
+
+[node name="choose" type="TextureRect" parent="BottomSection/ClassPortraits/btn-arm"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = -23.0
+offset_right = 152.0
+offset_bottom = 40.0
+texture = ExtResource("14_wjeio")
+
+[node name="btn-mrdot" type="TextureRect" parent="BottomSection/ClassPortraits"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_oxlqc")
+
+[node name="portrait" type="TextureRect" parent="BottomSection/ClassPortraits/btn-mrdot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.0
+offset_top = -67.0
+offset_right = 133.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("13_wjeio")
+
+[node name="choose" type="TextureRect" parent="BottomSection/ClassPortraits/btn-mrdot"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = -23.0
+offset_right = 152.0
+offset_bottom = 40.0
+texture = ExtResource("14_wjeio")
+
+[node name="btn-ky" type="TextureRect" parent="BottomSection/ClassPortraits"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_oxlqc")
+
+[node name="portrait" type="TextureRect" parent="BottomSection/ClassPortraits/btn-ky"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.0
+offset_top = -67.0
+offset_right = 133.0
+offset_bottom = 133.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("13_wjeio")
+
+[node name="choose" type="TextureRect" parent="BottomSection/ClassPortraits/btn-ky"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = -23.0
+offset_right = 152.0
+offset_bottom = 40.0
+texture = ExtResource("14_wjeio")
+
+[node name="BackButton" type="TextureButton" parent="BottomSection"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -170.0
+offset_right = 314.0
+offset_bottom = -60.0
+grow_vertical = 0
+texture_normal = ExtResource("6_ww5ek")
+texture_pressed = ExtResource("7_p3yxr")
+texture_hover = ExtResource("7_p3yxr")
+texture_disabled = ExtResource("6_ww5ek")
+texture_focused = ExtResource("7_p3yxr")
+
+[node name="NextButton" type="TextureButton" parent="BottomSection"]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -332.0
+offset_top = -172.0
+offset_bottom = -60.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("8_tjlwp")
+texture_pressed = ExtResource("9_kcc6e")
+texture_hover = ExtResource("8_tjlwp")
+texture_disabled = ExtResource("9_kcc6e")
+texture_focused = ExtResource("8_tjlwp")

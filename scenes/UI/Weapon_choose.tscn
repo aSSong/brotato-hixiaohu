@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dhpmorc3nh0rx"]
+[gd_scene load_steps=2 format=3 uid="uid://dhpmorc3nh0rx"]
+
+[ext_resource type="Script" uid="uid://cbbs20aohqtja" path="res://Scripts/UI/weapon_choose.gd" id="1_weapon"]
 
 [node name="WeaponChoose" type="Control"]
 layout_mode = 3
@@ -7,3 +9,393 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_weapon")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.25, 0.15, 0.35, 1)
+
+[node name="TitleSection" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 30.0
+offset_top = 20.0
+offset_right = -30.0
+offset_bottom = 80.0
+grow_horizontal = 2
+theme_override_constants/separation = 30
+
+[node name="TitleLabel" type="Label" parent="TitleSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "选择两把武器"
+
+[node name="Spacer" type="Control" parent="TitleSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerInfo" type="HBoxContainer" parent="TitleSection"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlayerPortrait" type="TextureRect" parent="TitleSection/PlayerInfo"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerName" type="Label" parent="TitleSection/PlayerInfo"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 20
+text = "玩家名字"
+vertical_alignment = 1
+
+[node name="MainContent" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 100.0
+offset_right = -30.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="WeaponGridSection" type="Panel" parent="MainContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="WeaponGrid" type="GridContainer" parent="MainContent/WeaponGridSection"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
+columns = 5
+
+[node name="WeaponDetailSection" type="VBoxContainer" parent="MainContent"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Weapon1Panel" type="Panel" parent="MainContent/WeaponDetailSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Weapon1Container" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Weapon1Header" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container"]
+layout_mode = 2
+
+[node name="Weapon1Title" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "武器1"
+
+[node name="Weapon1Name" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="Weapon1Content" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="Weapon1Icon" type="TextureRect" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Weapon1Stats" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DamageSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
+layout_mode = 2
+
+[node name="DamageLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "伤害"
+
+[node name="DamageValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="DamageBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection"]
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+max_value = 15.0
+show_percentage = false
+
+[node name="SpeedSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/SpeedSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "攻速"
+
+[node name="SpeedValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/SpeedSection"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="SpeedBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/SpeedSection"]
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+max_value = 500.0
+show_percentage = false
+
+[node name="RangeSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
+layout_mode = 2
+
+[node name="RangeLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "范围"
+
+[node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="RangeBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection"]
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+max_value = 1000.0
+show_percentage = false
+
+[node name="EffectSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
+layout_mode = 2
+
+[node name="EffectLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/EffectSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "效果"
+
+[node name="EffectText" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/EffectSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "无"
+
+[node name="Weapon2Panel" type="Panel" parent="MainContent/WeaponDetailSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Weapon2Container" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Weapon2Header" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container"]
+layout_mode = 2
+
+[node name="Weapon2Title" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "武器2"
+
+[node name="Weapon2Name" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="Weapon2Placeholder" type="Panel" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlaceholderContent" type="CenterContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Placeholder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlusIcon" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Placeholder/PlaceholderContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.5, 1)
+theme_override_font_sizes/font_size = 48
+text = "+"
+
+[node name="Weapon2Content" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="Weapon2Icon" type="TextureRect" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Weapon2Stats" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DamageSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
+layout_mode = 2
+
+[node name="DamageLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "伤害"
+
+[node name="DamageValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="DamageBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection"]
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+max_value = 15.0
+show_percentage = false
+
+[node name="SpeedSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "攻速"
+
+[node name="SpeedValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="SpeedBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection"]
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+max_value = 500.0
+show_percentage = false
+
+[node name="RangeSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
+layout_mode = 2
+
+[node name="RangeLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "范围"
+
+[node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="RangeBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection"]
+custom_minimum_size = Vector2(120, 16)
+layout_mode = 2
+max_value = 1000.0
+show_percentage = false
+
+[node name="EffectSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
+layout_mode = 2
+
+[node name="EffectLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "效果"
+
+[node name="EffectText" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "无"
+
+[node name="BottomSection" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -80.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="BackButton" type="Button" parent="BottomSection"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "返回"
+
+[node name="Spacer" type="Control" parent="BottomSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StartButton" type="Button" parent="BottomSection"]
+custom_minimum_size = Vector2(200, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "开战"
