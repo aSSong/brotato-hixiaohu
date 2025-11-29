@@ -409,10 +409,10 @@ func enemy_dead():
 	
 	if is_last_enemy_in_wave:
 		# 最后一只敌人：单数波掉Master Key，双数波掉Gold
-		if current_wave_number % 2 == 1:  # 单数波次
-			item_name = "masterkey"
-		else:  # 双数波次
-			item_name = "gold"
+		# if current_wave_number % 2 == 1:  # 单数波次
+		item_name = "masterkey"
+		# else:  # 双数波次
+			# item_name = "gold"
 	
 	#print("[Enemy] 准备掉落物品 | 类型:", item_name, " 波次:", current_wave_number, " 位置:", self.global_position)
 	GameMain.drop_item_scene_obj.gen_drop_item({

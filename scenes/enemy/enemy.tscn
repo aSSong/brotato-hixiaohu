@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://ck1hpfp1alqx7"]
+[gd_scene load_steps=12 format=3 uid="uid://ck1hpfp1alqx7"]
 
 [ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_a3pup"]
 [ext_resource type="Shader" uid="uid://dsun82e56sau7" path="res://Shaders/flash.gdshader" id="2_40wdo"]
-[ext_resource type="PackedScene" uid="uid://c4b35vp8k62a" path="res://FX/gpu_particles_2d_enemy_dead.tscn" id="2_tjssy"]
 [ext_resource type="Texture2D" uid="uid://kjiuodwlmfxa" path="res://assets/enemy/enemy1-sheet.png" id="4_tjssy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tjssy"]
@@ -64,7 +63,6 @@ scale = Vector2(0.6, 0.6)
 collision_layer = 8
 collision_mask = 10
 script = ExtResource("1_a3pup")
-death_particles_scene = ExtResource("2_tjssy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_tjssy")

@@ -229,14 +229,14 @@ func _on_rescue_requested() -> void:
 	print("[GraveRescue] 执行救援...")
 	
 	# 检查masterkey
-	if GameMain.master_key < 1:
+	if GameMain.master_key < 2:
 		print("[GraveRescue] Master Key不足")
 		_restore_game_state()
 		return
 	
 	# 消耗masterkey
-	GameMain.master_key -= 1
-	print("[GraveRescue] 消耗1个Master Key，剩余:", GameMain.master_key)
+	GameMain.master_key -= 2
+	print("[GraveRescue] 消耗2个Master Key，剩余:", GameMain.master_key)
 	
 	# 创建Ghost
 	_create_ghost_from_data()

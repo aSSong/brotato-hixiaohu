@@ -312,6 +312,7 @@ func _get_weapon_effect_text(weapon_data: WeaponData) -> String:
 		return "无"
 	
 	var effects = weapon_data.special_effects.get("effects", [])
+
 	var texts = []
 	
 	for effect in effects:

@@ -31,8 +31,8 @@ func _ready() -> void:
 
 ## 显示死亡界面
 func show_death_screen(revive_count: int, current_gold: int, mode_id: String = "survival") -> void:
-	# 固定复活费用：1个masterkey
-	revive_cost = 1
+	# 固定复活费用：2个masterkey
+	revive_cost = 2
 	var current_master_key = GameMain.master_key
 	can_afford = current_master_key >= revive_cost
 	

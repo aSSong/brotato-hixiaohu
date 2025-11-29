@@ -44,10 +44,10 @@ func show_rescue_dialog(data: GhostData) -> void:
 	
 	# 检查是否有足够的masterkey并更新费用显示
 	var current_keys = GameMain.master_key
-	cost_label.text = "费用：1把 生命钥匙 \n(当前：" + str(current_keys) + "把)"
+	cost_label.text = "费用：2把 生命钥匙 \n(当前：" + str(current_keys) + "把)"
 	
 	# 更新救援按钮状态（动态内容）
-	if current_keys >= 1:
+	if current_keys >= 2:
 		rescue_button.disabled = false
 	else:
 		rescue_button.disabled = true

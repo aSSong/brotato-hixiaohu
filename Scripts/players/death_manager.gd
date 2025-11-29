@@ -245,8 +245,8 @@ func _show_death_ui() -> void:
 
 ## 复活请求
 func _on_revive_requested() -> void:
-	# 固定复活费用：1个masterkey
-	var cost = 1
+	# 固定复活费用：2个masterkey
+	var cost = 2
 	
 	# 检查主钥匙是否足够
 	if GameMain.master_key < cost:
@@ -388,8 +388,8 @@ func get_revive_count() -> int:
 
 ## 获取下次复活费用
 func get_next_revive_cost() -> int:
-	# 固定费用：1个masterkey
-	return 1
+	# 固定费用：2个masterkey
+	return 2
 
 ## Multi模式下清理所有ghost
 func _cleanup_ghosts_for_multi_mode() -> void:
