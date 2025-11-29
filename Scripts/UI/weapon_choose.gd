@@ -85,15 +85,19 @@ func _ready() -> void:
 
 ## 初始化玩家信息显示
 func _initialize_player_info() -> void:
-	# 显示已选择的职业头像
+	# 显示已选择的职业头像（与职业选择界面样式一致）
 	var class_id = GameMain.selected_class_id
 	if class_id != "":
 		var class_data = ClassDatabase.get_class_data(class_id)
 		if class_data and class_data.portrait:
 			player_portrait.texture = class_data.portrait
 	
-	# 显示玩家名字
-	player_name_label.text = "Key Person"
+	# 显示玩家名字（从存档读取）
+	var saved_name = SaveManager.get_player_name()
+	if saved_name != "":
+		player_name_label.text = saved_name
+	else:
+		player_name_label.text = "Key Person"
 
 ## 初始化武器网格（使用 weapon_choose_option 组件）
 func _initialize_weapon_grid() -> void:

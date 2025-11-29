@@ -63,6 +63,9 @@ func _ready() -> void:
 	# 播放标题BGM
 	BGMManager.play_bgm("title")
 	
+	# 显示玩家名字（从存档读取）
+	_initialize_player_name()
+	
 	# 初始化按钮映射
 	_initialize_button_mapping()
 	
@@ -71,6 +74,14 @@ func _ready() -> void:
 	
 	# 随机选择一个职业
 	_select_random_class()
+
+## 初始化玩家名字显示
+func _initialize_player_name() -> void:
+	var saved_name = SaveManager.get_player_name()
+	if saved_name != "":
+		player_name_label.text = saved_name
+	else:
+		player_name_label.text = "Key Person"
 
 ## 初始化按钮与职业ID的映射
 func _initialize_button_mapping() -> void:
