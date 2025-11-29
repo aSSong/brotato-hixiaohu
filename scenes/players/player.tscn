@@ -95,7 +95,6 @@ material = SubResource("ShaderMaterial_phaeh")
 position = Vector2(-10, -24.999989)
 sprite_frames = SubResource("SpriteFrames_5iv5l")
 autoplay = "default"
-frame_progress = 0.5189973
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-11.666668, -15.33334)
@@ -139,9 +138,9 @@ texture = ExtResource("5_olb2f")
 
 [node name="NameLabel" type="Label" parent="."]
 offset_left = -135.0
-offset_top = -236.66666
+offset_top = -233.3334
 offset_right = 116.0
-offset_bottom = -184.66666
+offset_bottom = -181.3334
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 36
