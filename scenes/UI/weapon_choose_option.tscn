@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=3 uid="uid://nyoookp2h5ee"]
+
+[ext_resource type="Texture2D" uid="uid://cdrxy54jfj1cm" path="res://assets/UI/weapon_choose/weaponchoose-choosed-01.png" id="1_27vri"]
+[ext_resource type="Texture2D" uid="uid://evtr7i83o52l" path="res://assets/UI/weapon_choose/weaponchoose-unchoose-01.png" id="2_epsnv"]
+[ext_resource type="Texture2D" uid="uid://cr66ehpdspjr0" path="res://assets/weapon/Weapon_lasersword.png" id="3_g1vc8"]
+[ext_resource type="Texture2D" uid="uid://v0dlskkeu1ha" path="res://assets/UI/weapon_choose/weaponname_bg_01.png" id="4_2g887"]
+[ext_resource type="Texture2D" uid="uid://bfnwdgtlxrlii" path="res://assets/UI/class_choose/check-red-01.png" id="5_vnvmy"]
+
+[node name="WeaponChooseOption" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1675.0
+offset_bottom = -765.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bg_choosed" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_27vri")
+
+[node name="background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_epsnv")
+
+[node name="weapon_icon" type="TextureRect" parent="background"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -78.5
+offset_top = 18.5
+offset_right = 106.5
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.7853982
+texture = ExtResource("3_g1vc8")
+
+[node name="bg_weaponname" type="TextureRect" parent="background"]
+layout_mode = 1
+offset_right = 245.0
+offset_bottom = 315.0
+texture = ExtResource("4_2g887")
+
+[node name="Label" type="Label" parent="background/bg_weaponname"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -59.5
+offset_top = 228.0
+offset_right = 60.5
+offset_bottom = 285.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 30
+text = "连锁闪电"
+
+[node name="choosed" type="TextureRect" parent="background"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -62.0
+offset_bottom = 63.0
+grow_horizontal = 0
+texture = ExtResource("5_vnvmy")
