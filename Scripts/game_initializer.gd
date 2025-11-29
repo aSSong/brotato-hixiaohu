@@ -101,11 +101,22 @@ func _create_speech_manager() -> void:
 	print("[GameInitializer] 说话管理器已创建")
 	
 	# 等待一帧后，主动注册所有Player和Ghost
-	await get_tree().process_frame
+	var tree = get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	
+	# await后重新检查
+	if not is_inside_tree():
+		return
 	_register_all_speakers(speech_manager)
 
 ## 注册所有说话者到SpeechManager
 func _register_all_speakers(speech_manager: SpeechManager) -> void:
+	# 安全检查
+	if not is_inside_tree():
+		return
+	
 	# 注册Player
 	if player and is_instance_valid(player):
 		if speech_manager.has_method("register_speaker"):
@@ -113,7 +124,10 @@ func _register_all_speakers(speech_manager: SpeechManager) -> void:
 			print("[GameInitializer] Player已注册到SpeechManager")
 	
 	# 注册所有Ghost
-	var ghosts = get_tree().get_nodes_in_group("ghost")
+	var tree = get_tree()
+	if tree == null:
+		return
+	var ghosts = tree.get_nodes_in_group("ghost")
 	for ghost in ghosts:
 		if ghost and is_instance_valid(ghost):
 			if speech_manager.has_method("register_speaker"):
@@ -173,12 +187,23 @@ func _on_resource_changed(_new_val: int, _change: int) -> void:
 ## 统一设置游戏流程监听
 func _setup_game_flow() -> void:
 	# 等待波次系统就绪
-	await get_tree().process_frame
-	var wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	var tree = get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	
+	# await后重新检查
+	if not is_inside_tree():
+		return
+	tree = get_tree()
+	if tree == null:
+		return
+	
+	var wave_manager = tree.get_first_node_in_group("wave_manager")
 	
 	if wave_manager:
 		# 监听商店关闭信号
-		var shop = get_tree().get_first_node_in_group("upgrade_shop")
+		var shop = tree.get_first_node_in_group("upgrade_shop")
 		if shop:
 			if not shop.has_signal("shop_closed"):
 				push_error("[GameInitializer] 商店没有shop_closed信号")
@@ -194,6 +219,10 @@ func _setup_game_flow() -> void:
 
 ## 核心流程控制函数：波次结束后的统筹安排
 func _on_wave_flow_step(wave_number: int) -> void:
+	# 安全检查：确保节点仍在树中
+	if not is_inside_tree():
+		return
+	
 	print("[Flow] 波次 %d 结束，开始流程结算..." % wave_number)
 	
 	# 1. 状态检查：如果玩家已经死了，中断流程
@@ -205,7 +234,16 @@ func _on_wave_flow_step(wave_number: int) -> void:
 	GameState.change_state(GameState.State.WAVE_CLEARING)
 	var delay_time = 2.0 # 可以在这里调整延迟秒数
 	print("[Flow] 进入捡落物时间 (%.1f秒)" % delay_time)
-	await get_tree().create_timer(delay_time).timeout
+	
+	# 安全创建计时器
+	var tree = get_tree()
+	if tree == null:
+		return
+	await tree.create_timer(delay_time).timeout
+	
+	# await后重新检查节点状态
+	if not is_inside_tree():
+		return
 	
 	# 3. 再次检查死亡（防止延迟期间暴毙）
 	if GameState.current_state == GameState.State.PLAYER_DEAD:
@@ -224,27 +262,45 @@ func _on_wave_flow_step(wave_number: int) -> void:
 
 ## 打开商店的统一入口
 func _open_shop_flow() -> void:
+	# 安全检查
+	if not is_inside_tree():
+		return
+	
 	# 如果正在救援，等待救援结束（简单策略：不打开商店，等下次检查？或者暂时阻塞？）
 	# 这里采用：如果正在救援，稍后重试
 	if GameState.current_state == GameState.State.RESCUING:
 		print("[Flow] 玩家正在救援中，延迟打开商店...")
-		await get_tree().create_timer(1.0).timeout
+		var tree = get_tree()
+		if tree == null:
+			return
+		await tree.create_timer(1.0).timeout
+		if not is_inside_tree():
+			return
 		_open_shop_flow()
 		return
 
 	GameState.change_state(GameState.State.SHOPPING)
 	# 通知商店打开
-	get_tree().call_group("upgrade_shop", "open_shop")
+	var tree = get_tree()
+	if tree:
+		tree.call_group("upgrade_shop", "open_shop")
 
 ## 商店关闭回调
 func _on_shop_closed() -> void:
+	# 安全检查
+	if not is_inside_tree():
+		return
+	
 	print("[Flow] 商店已关闭，准备下一波")
 	
 	# 切换到空闲/清扫状态，准备下一波
 	GameState.change_state(GameState.State.WAVE_CLEARING)
 	
 	# 直接开始下一波（延迟由WaveSystem内部处理）
-	var wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	var tree = get_tree()
+	if tree == null:
+		return
+	var wave_manager = tree.get_first_node_in_group("wave_manager")
 	if wave_manager and wave_manager.has_method("start_next_wave"):
 		wave_manager.start_next_wave()
 
@@ -271,18 +327,32 @@ func _check_victory() -> void:
 
 ## 触发胜利
 func _trigger_victory() -> void:
+	# 安全检查
+	if not is_inside_tree():
+		return
+	
 	print("[GameInitializer] 达成胜利条件！准备切换到胜利场景...")
 	
 	# 设置胜利状态（暂停游戏）
 	GameState.change_state(GameState.State.GAME_VICTORY)
 	
 	# 清场（可选：消灭所有敌人）
-	var wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	var tree = get_tree()
+	if tree == null:
+		return
+	var wave_manager = tree.get_first_node_in_group("wave_manager")
 	if wave_manager and wave_manager.has_method("force_end_wave"):
 		wave_manager.force_end_wave()
 	
 	# 等待1秒（如需求所述）
-	await get_tree().create_timer(1.0).timeout
+	tree = get_tree()
+	if tree == null:
+		return
+	await tree.create_timer(1.0).timeout
+	
+	# await后重新检查
+	if not is_inside_tree():
+		return
 	
 	# 加载胜利UI场景
 	var victory_scene = load("res://scenes/UI/victory_ui.tscn")

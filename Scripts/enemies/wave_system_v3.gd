@@ -82,8 +82,13 @@ func _handle_multi_mode_graves() -> void:
 	if GameMain.current_mode_id != "multi":
 		return
 	
+	# 安全检查
+	var tree = get_tree()
+	if tree == null:
+		return
+	
 	# 查找MultiGravesManager
-	var graves_manager = get_tree().get_first_node_in_group("multi_graves_manager")
+	var graves_manager = tree.get_first_node_in_group("multi_graves_manager")
 	if not graves_manager:
 		print("[WaveSystem V3] Multi模式但未找到MultiGravesManager")
 		return
@@ -340,6 +345,10 @@ func _on_enemy_removed(enemy_ref: Node) -> void:
 
 ## 从追踪列表中移除敌人
 func _remove_enemy(enemy_ref: Node) -> void:
+	# 安全检查：确保节点仍在树中
+	if not is_inside_tree():
+		return
+	
 	if not is_instance_valid(enemy_ref):
 		return
 	
@@ -358,6 +367,10 @@ func _remove_enemy(enemy_ref: Node) -> void:
 
 ## 检查波次是否完成
 func _check_wave_complete() -> void:
+	# 安全检查：确保节点仍在树中
+	if not is_inside_tree():
+		return
+	
 	# 只在战斗状态检查
 	if current_state != WaveState.FIGHTING:
 		return

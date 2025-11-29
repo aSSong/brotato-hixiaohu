@@ -227,8 +227,13 @@ func _show_death_ui() -> void:
 		push_error("[DeathManager] 死亡UI未设置！")
 		return
 	
+	# 安全检查
+	var tree = get_tree()
+	if tree == null:
+		return
+	
 	# 暂停游戏
-	get_tree().paused = true
+	tree.paused = true
 	
 	# 显示死亡界面（传入当前模式，death_ui会自己检查master_key）
 	var current_gold = GameMain.gold  # 保留参数以保持兼容性
@@ -272,11 +277,8 @@ func _on_give_up_requested() -> void:
 	# 发出游戏结束信号
 	game_over.emit()
 	
-	# 等待一下再切换场景
-	await get_tree().create_timer(0.1).timeout
-	
-	# 使用安全的场景切换（带清理）
-	await SceneCleanupManager.change_scene_safely("res://scenes/UI/main_title.tscn")
+	# 直接使用安全的场景切换（带清理）
+	SceneCleanupManager.change_scene_safely("res://scenes/UI/main_title.tscn")
 
 ## 再战请求
 func _on_restart_requested() -> void:
@@ -292,11 +294,8 @@ func _on_restart_requested() -> void:
 	# 发出游戏结束信号
 	game_over.emit()
 	
-	# 等待一下再切换场景
-	await get_tree().create_timer(0.1).timeout
-	
-	# 使用安全的场景切换（带清理，保留模式）
-	await SceneCleanupManager.change_scene_safely_keep_mode("res://scenes/UI/Class_choose.tscn")
+	# 直接使用安全的场景切换（带清理，保留模式）
+	SceneCleanupManager.change_scene_safely_keep_mode("res://scenes/UI/Class_choose.tscn")
 
 ## 复活玩家
 func _revive_player() -> void:
@@ -335,7 +334,9 @@ func _revive_player() -> void:
 	GameState.change_state(GameState.State.WAVE_FIGHTING)
 	
 	# 恢复游戏
-	get_tree().paused = false
+	var tree = get_tree()
+	if tree:
+		tree.paused = false
 	
 	# 发出复活信号
 	player_revived.emit()
@@ -394,8 +395,13 @@ func get_next_revive_cost() -> int:
 func _cleanup_ghosts_for_multi_mode() -> void:
 	print("[DeathManager] Multi模式 - 开始清理Ghost和墓碑")
 	
+	# 安全检查
+	var tree = get_tree()
+	if tree == null:
+		return
+	
 	# 查找GhostManager
-	var ghost_manager = get_tree().get_first_node_in_group("ghost_manager")
+	var ghost_manager = tree.get_first_node_in_group("ghost_manager")
 	if ghost_manager:
 		if ghost_manager.has_method("clear_all_ghosts"):
 			ghost_manager.clear_all_ghosts()
@@ -406,7 +412,7 @@ func _cleanup_ghosts_for_multi_mode() -> void:
 		print("[DeathManager] Multi模式 - 未找到GhostManager")
 	
 	# 清理Multi模式的墓碑（如果有）
-	var graves_manager = get_tree().get_first_node_in_group("multi_graves_manager")
+	var graves_manager = tree.get_first_node_in_group("multi_graves_manager")
 	if graves_manager:
 		if graves_manager.has_method("clear_all_graves"):
 			graves_manager.clear_all_graves()

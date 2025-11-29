@@ -111,8 +111,7 @@ func _return_to_main_menu() -> void:
 	
 	print("[ESC Menu] 正在返回主菜单...")
 	
-	# 切换到主菜单场景
-	await get_tree().create_timer(0.1).timeout
+	# 直接切换场景，不使用await（避免场景销毁期间信号触发问题）
 	get_tree().change_scene_to_file("res://scenes/UI/main_title.tscn")
 
 ## 处理ESC键输入（关闭菜单）
@@ -124,7 +123,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _on_restart_pressed() -> void:
-		# 恢复游戏（必须在切换场景前）
+	# 恢复游戏（必须在切换场景前）
 	get_tree().paused = false
 	# 保存当前模式，防止reset_game重置为默认的survival
 	var saved_mode = GameMain.current_mode_id
@@ -135,8 +134,7 @@ func _on_restart_pressed() -> void:
 	# 发送信号
 	main_menu_requested.emit()
 	
-	print("[ESC Menu] 正在返回主菜单...")
+	print("[ESC Menu] 正在返回职业选择...")
 	
-	# 切换到主菜单场景
-	await get_tree().create_timer(0.1).timeout
+	# 直接切换场景，不使用await（避免场景销毁期间信号触发问题）
 	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
