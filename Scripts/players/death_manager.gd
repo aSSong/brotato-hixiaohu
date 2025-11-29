@@ -296,7 +296,7 @@ func _on_restart_requested() -> void:
 	await get_tree().create_timer(0.1).timeout
 	
 	# 使用安全的场景切换（带清理，保留模式）
-	await SceneCleanupManager.change_scene_safely_keep_mode("res://scenes/UI/start_menu.tscn")
+	await SceneCleanupManager.change_scene_safely_keep_mode("res://scenes/UI/Class_choose.tscn")
 
 ## 复活玩家
 func _revive_player() -> void:

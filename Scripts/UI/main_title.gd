@@ -42,7 +42,7 @@ func _on_btn_single_play_pressed() -> void:
 	GameMain.current_mode_id = "survival"
 	
 	if player_name != "":
-		get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+		get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
 	else:
 		get_tree().change_scene_to_file("res://scenes/UI/cutscene_0.tscn")
 
@@ -51,7 +51,7 @@ func _on_btn_multi_play_pressed() -> void:
 	# 设置为multi模式
 	GameMain.current_mode_id = "multi"
 	# 跳过剧情，直接进入start_menu
-	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
 	print("[MainTitle] 进入Multi模式")
 
 

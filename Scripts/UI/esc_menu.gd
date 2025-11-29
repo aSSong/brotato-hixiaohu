@@ -139,4 +139,4 @@ func _on_restart_pressed() -> void:
 	
 	# 切换到主菜单场景
 	await get_tree().create_timer(0.1).timeout
-	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")

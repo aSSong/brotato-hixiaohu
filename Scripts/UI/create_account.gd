@@ -67,4 +67,4 @@ func _on_fight_pressed() -> void:
 	print("[CreateAccount] 已保存用户数据: 名字=%s, 楼层=%s" % [player_name, FLOOR_NAMES[current_floor_id]])
 	
 	# 切换到下一个场景
-	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
