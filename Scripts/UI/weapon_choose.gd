@@ -12,8 +12,9 @@ class_name WeaponChooseUI
 # 武器网格
 @onready var weapon_grid: GridContainer = $MainContent/WeaponGridSection/WeaponGrid
 
-# 武器1详情
-@onready var weapon1_name: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Header/Weapon1Name
+# 武器1面板
+@onready var weapon1_panel: TextureRect = $MainContent/WeaponDetailSection/Weapon1Panel
+@onready var weapon1_name: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/NameSection/Weapon1Name
 @onready var weapon1_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Icon
 @onready var weapon1_damage_value: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection/DamageValue
 @onready var weapon1_damage_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection/DamageBar
@@ -22,11 +23,12 @@ class_name WeaponChooseUI
 @onready var weapon1_range_value: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection/RangeValue
 @onready var weapon1_range_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection/RangeBar
 @onready var weapon1_effect_text: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/EffectSection/EffectText
+@onready var weapon1_content: HBoxContainer = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content
 
-# 武器2详情
-@onready var weapon2_name: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Header/Weapon2Name
-@onready var weapon2_placeholder: Panel = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Placeholder
+# 武器2面板
+@onready var weapon2_panel: TextureRect = $MainContent/WeaponDetailSection/Weapon2Panel
 @onready var weapon2_content: HBoxContainer = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content
+@onready var weapon2_name: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/NameSection/Weapon2Name
 @onready var weapon2_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Icon
 @onready var weapon2_damage_value: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection/DamageValue
 @onready var weapon2_damage_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection/DamageBar
@@ -43,6 +45,10 @@ class_name WeaponChooseUI
 # ========== 资源引用 ==========
 var weapon_option_scene: PackedScene = preload("res://scenes/UI/weapon_choose_option.tscn")
 
+# 面板纹理资源
+var tex_panel_choosed: Texture2D = preload("res://assets/UI/weapon_choose/weaponchoose-info-choosed-01.png")
+var tex_panel_unchoosed: Texture2D = preload("res://assets/UI/weapon_choose/weaponchoose-info-unchoosed-01.png")
+
 # ========== 状态变量 ==========
 var weapon_ids: Array = []
 var selected_weapon_ids: Array = []
@@ -54,7 +60,7 @@ const CLASS_CHOOSE_SCENE = "res://scenes/UI/Class_choose.tscn"
 ## 预定义的武器列表（10个武器，每行5个，共2行）
 var available_weapons: Array = [
 	"pistol", "rifle", "machine_gun", "sword", "axe",  # 第一行
-	"dagger", "fireball", "ice_shard", "meteor", "pistol"  # 第二行（最后一个可以替换为其他武器）
+	"dagger", "fireball", "ice_shard", "meteor"  # 第二行
 ]
 
 func _ready() -> void:
@@ -200,24 +206,32 @@ func _update_card_selection() -> void:
 
 ## 更新武器详情面板
 func _update_weapon_details() -> void:
-	# 武器1
+	# 武器1面板
 	if selected_weapon_ids.size() >= 1:
 		var weapon_id = selected_weapon_ids[0]
 		var weapon_data = WeaponDatabase.get_weapon(weapon_id)
 		_update_weapon_panel(1, weapon_data)
+		# 选中状态
+		weapon1_panel.texture = tex_panel_choosed
+		weapon1_content.visible = true
 	else:
 		_clear_weapon_panel(1)
+		# 未选中状态
+		weapon1_panel.texture = tex_panel_unchoosed
+		weapon1_content.visible = false
 	
-	# 武器2
+	# 武器2面板
 	if selected_weapon_ids.size() >= 2:
 		var weapon_id = selected_weapon_ids[1]
 		var weapon_data = WeaponDatabase.get_weapon(weapon_id)
 		_update_weapon_panel(2, weapon_data)
-		weapon2_placeholder.visible = false
+		# 选中状态
+		weapon2_panel.texture = tex_panel_choosed
 		weapon2_content.visible = true
 	else:
 		_clear_weapon_panel(2)
-		weapon2_placeholder.visible = true
+		# 未选中状态
+		weapon2_panel.texture = tex_panel_unchoosed
 		weapon2_content.visible = false
 
 ## 更新武器面板
@@ -254,31 +268,39 @@ func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 		effect_text = weapon2_effect_text
 	
 	# 更新数据
-	name_label.text = weapon_data.weapon_name
+	if name_label:
+		name_label.text = weapon_data.weapon_name
 	
 	# 加载图标
-	if weapon_data.texture_path != "":
+	if icon and weapon_data.texture_path != "":
 		var tex = load(weapon_data.texture_path)
 		if tex:
 			icon.texture = tex
 	
 	# 伤害
-	damage_value.text = str(weapon_data.damage)
-	damage_bar.value = weapon_data.damage
+	if damage_value:
+		damage_value.text = str(weapon_data.damage)
+	if damage_bar:
+		damage_bar.value = weapon_data.damage
 	
 	# 攻速（转换为每分钟攻击次数）
 	var attacks_per_minute = 60.0 / weapon_data.attack_speed if weapon_data.attack_speed > 0 else 0
-	speed_value.text = str(int(attacks_per_minute))
-	speed_bar.value = attacks_per_minute
+	if speed_value:
+		speed_value.text = str(int(attacks_per_minute))
+	if speed_bar:
+		speed_bar.value = attacks_per_minute
 	
 	# 范围
 	var range_val = weapon_data.range if weapon_data.weapon_type == WeaponData.WeaponType.RANGED else weapon_data.hit_range
-	range_value.text = str(int(range_val))
-	range_bar.value = range_val
+	if range_value:
+		range_value.text = str(int(range_val))
+	if range_bar:
+		range_bar.value = range_val
 	
 	# 特效
 	var effect_str = _get_weapon_effect_text(weapon_data)
-	effect_text.text = effect_str
+	if effect_text:
+		effect_text.text = effect_str
 
 ## 获取武器特效文字
 func _get_weapon_effect_text(weapon_data: WeaponData) -> String:
@@ -312,25 +334,43 @@ func _get_weapon_effect_text(weapon_data: WeaponData) -> String:
 ## 清空武器面板
 func _clear_weapon_panel(slot: int) -> void:
 	if slot == 1:
-		weapon1_name.text = ""
-		weapon1_icon.texture = null
-		weapon1_damage_value.text = "0"
-		weapon1_damage_bar.value = 0
-		weapon1_speed_value.text = "0"
-		weapon1_speed_bar.value = 0
-		weapon1_range_value.text = "0"
-		weapon1_range_bar.value = 0
-		weapon1_effect_text.text = "无"
+		if weapon1_name:
+			weapon1_name.text = ""
+		if weapon1_icon:
+			weapon1_icon.texture = null
+		if weapon1_damage_value:
+			weapon1_damage_value.text = "0"
+		if weapon1_damage_bar:
+			weapon1_damage_bar.value = 0
+		if weapon1_speed_value:
+			weapon1_speed_value.text = "0"
+		if weapon1_speed_bar:
+			weapon1_speed_bar.value = 0
+		if weapon1_range_value:
+			weapon1_range_value.text = "0"
+		if weapon1_range_bar:
+			weapon1_range_bar.value = 0
+		if weapon1_effect_text:
+			weapon1_effect_text.text = "无"
 	else:
-		weapon2_name.text = ""
-		weapon2_icon.texture = null
-		weapon2_damage_value.text = "0"
-		weapon2_damage_bar.value = 0
-		weapon2_speed_value.text = "0"
-		weapon2_speed_bar.value = 0
-		weapon2_range_value.text = "0"
-		weapon2_range_bar.value = 0
-		weapon2_effect_text.text = "无"
+		if weapon2_name:
+			weapon2_name.text = ""
+		if weapon2_icon:
+			weapon2_icon.texture = null
+		if weapon2_damage_value:
+			weapon2_damage_value.text = "0"
+		if weapon2_damage_bar:
+			weapon2_damage_bar.value = 0
+		if weapon2_speed_value:
+			weapon2_speed_value.text = "0"
+		if weapon2_speed_bar:
+			weapon2_speed_bar.value = 0
+		if weapon2_range_value:
+			weapon2_range_value.text = "0"
+		if weapon2_range_bar:
+			weapon2_range_bar.value = 0
+		if weapon2_effect_text:
+			weapon2_effect_text.text = "无"
 
 ## 更新开战按钮状态
 func _update_start_button() -> void:
