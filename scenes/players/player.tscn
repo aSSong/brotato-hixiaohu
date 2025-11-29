@@ -81,9 +81,9 @@ offset_right = 81.6667
 offset_bottom = -255.0003
 
 [node name="shadow" type="Sprite2D" parent="."]
-modulate = Color(0, 0, 0, 0.45490196)
+modulate = Color(0, 0, 0, 0.24313726)
 z_index = 1
-position = Vector2(-10, 118.33332)
+position = Vector2(-10, 111.66668)
 scale = Vector2(0.8, 0.7)
 texture = ExtResource("2_edvpf")
 
