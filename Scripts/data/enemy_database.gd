@@ -14,7 +14,34 @@ static func initialize_enemies() -> void:
 	# 基础敌人 - 标准属性
 	# 假设sheet有5帧，横向排列，每帧240x240
 	var basic_enemy = EnemyData.new(
-		"基础敌人",
+		"基础敌人-爬虫",
+		10,  # max_hp
+		5,  # attack_damage
+		330.0,  # move_speed
+		"res://assets/enemy/creeper-run-Sheet.png",
+		634,  # frame_width
+		500,  # frame_height
+		7     # frame_count（根据你的实际帧数修改）
+	)
+	basic_enemy.description = "标准敌人，平衡的属性"
+	basic_enemy.scale = Vector2(0.2, 0.2)  # 1.2倍大小
+	basic_enemy.animation_speed = 14.0  # 8 FPS
+	# 配置shadow：由于敌人scale是0.5，需要补偿shadow的scale使其可见
+	# 场景默认shadow scale是Vector2(1.1, 0.8)，补偿后应该是Vector2(2.2, 1.6)
+	basic_enemy.shadow_scale = Vector2(0.6, 0.4)
+	basic_enemy.shadow_offset = Vector2(20,-115) # 使用默认位置
+	enemies["basic"] = basic_enemy
+	
+	## 示例1：只设置shadow大小
+	#enemy.shadow_scale = Vector2(2.0, 1.5)  # 自定义大小
+	#enemy.shadow_offset = Vector2.ZERO  # 使用默认位置
+	#
+	## 示例2：只设置shadow位置偏移
+	#enemy.shadow_scale = Vector2.ZERO  # 使用默认大小
+	#enemy.shadow_offset = Vector2(10, 20)  # 相对默认位置偏移(10, 20)
+	
+	var basic00_enemy = EnemyData.new(
+		"基础敌人-绿史莱姆",
 		10,  # max_hp
 		5,  # attack_damage
 		300.0,  # move_speed
@@ -23,13 +50,30 @@ static func initialize_enemies() -> void:
 		240,  # frame_height
 		5     # frame_count（根据你的实际帧数修改）
 	)
-	basic_enemy.description = "标准敌人，平衡的属性"
-	basic_enemy.animation_speed = 8.0  # 8 FPS
-	enemies["basic"] = basic_enemy
+	basic00_enemy.description = "标准敌人，平衡的属性"
+	basic00_enemy.animation_speed = 8.0  # 8 FPS
+	enemies["basic00"] = basic00_enemy
 	
 	# 快速敌人 - 低血量，高速度
 	var fast_enemy = EnemyData.new(
-		"快速敌人",
+		"快速敌人-蚊子",
+		8,  # max_hp
+		3,  # attack_damage
+		520.0,  # move_speed（更快）
+		"res://assets/enemy/masquito-run-Sheet.png",
+		321,
+		500,
+		4
+	)
+	fast_enemy.description = "快速但脆弱的敌人"
+	fast_enemy.scale = Vector2(0.3, 0.3)  # 1.2倍大小
+	fast_enemy.shadow_offset = Vector2(30,-100) 
+	fast_enemy.animation_speed = 8.0  # 8 FPS
+	enemies["fast"] = fast_enemy
+	
+	# 快速敌人 - 低血量，高速度
+	var fast00_enemy = EnemyData.new(
+		"快速敌人-紫翅膀史莱姆",
 		8,  # max_hp
 		3,  # attack_damage
 		500.0,  # move_speed（更快）
@@ -38,9 +82,9 @@ static func initialize_enemies() -> void:
 		240,
 		5
 	)
-	fast_enemy.description = "快速但脆弱的敌人"
-	fast_enemy.animation_speed = 12.0  # 更快的动画
-	enemies["fast"] = fast_enemy
+	fast00_enemy.description = "快速但脆弱的敌人"
+	fast00_enemy.animation_speed = 12.0  # 更快的动画
+	enemies["fast00"] = fast00_enemy
 	
 	# 坦克敌人 - 高血量，低速度
 	var tank_enemy = EnemyData.new(

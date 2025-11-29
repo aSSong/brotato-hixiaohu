@@ -193,6 +193,18 @@ func _apply_enemy_data() -> void:
 	# 应用外观
 	self.scale = enemy_data.scale
 	
+	# 应用Shadow配置
+	if $shadow:
+		# 如果配置了shadow_scale，则应用（需要补偿父节点scale）
+		if enemy_data.shadow_scale != Vector2.ZERO:
+			$shadow.scale = enemy_data.shadow_scale / enemy_data.scale
+		# 如果配置了shadow_offset，则应用（需要补偿父节点scale）
+		if enemy_data.shadow_offset != Vector2.ZERO:
+			# shadow_offset是相对于场景默认位置的偏移
+			# 场景默认position是Vector2(-19.999998, 136.66666)
+			var base_shadow_position = Vector2(-19.999998, 136.66666)
+			$shadow.position = (base_shadow_position + enemy_data.shadow_offset) / enemy_data.scale
+	
 	# 设置动画贴图（支持多帧）
 	if $AnimatedSprite2D and enemy_data.texture_path != "":
 		var texture = load(enemy_data.texture_path)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://ck1hpfp1alqx7"]
+[gd_scene load_steps=13 format=3 uid="uid://ck1hpfp1alqx7"]
 
 [ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_a3pup"]
 [ext_resource type="Shader" uid="uid://dsun82e56sau7" path="res://Shaders/flash.gdshader" id="2_40wdo"]
+[ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="4_gl05p"]
 [ext_resource type="Texture2D" uid="uid://kjiuodwlmfxa" path="res://assets/enemy/enemy1-sheet.png" id="4_tjssy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tjssy"]
@@ -58,18 +59,27 @@ radius = 110.05048
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
 z_index = 8
-position = Vector2(22, 0)
 scale = Vector2(0.6, 0.6)
 collision_layer = 8
 collision_mask = 10
 script = ExtResource("1_a3pup")
 
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.45490196)
+z_index = 7
+z_as_relative = false
+position = Vector2(-6.6666656, -3.3333333)
+scale = Vector2(1.1, 0.8)
+texture = ExtResource("4_gl05p")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+y_sort_enabled = true
 material = SubResource("ShaderMaterial_tjssy")
-position = Vector2(-10, 0)
 sprite_frames = SubResource("SpriteFrames_cwlon")
 frame_progress = 0.01654145
+offset = Vector2(0, -90)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-23.333332, 10)
+position = Vector2(-11.666666, -78.33333)
 shape = SubResource("CircleShape2D_tjssy")

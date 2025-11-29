@@ -30,6 +30,10 @@ enum EnemySkillType {
 
 @export var scale: Vector2 = Vector2(0.6, 0.6)  # 敌人缩放
 
+## Shadow配置（可选，如果为Vector2.ZERO则使用场景默认值）
+@export var shadow_scale: Vector2 = Vector2.ZERO  # Shadow缩放，Vector2.ZERO表示使用场景默认值
+@export var shadow_offset: Vector2 = Vector2.ZERO  # Shadow相对偏移，Vector2.ZERO表示使用场景默认值
+
 ## 属性
 @export var max_hp: int = 50  # 最大血量
 @export var attack_damage: int = 5  # 攻击力
