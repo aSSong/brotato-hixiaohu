@@ -317,7 +317,7 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 	
 	# 播放粒子特效
 	var particles = config.get("particles", [])
-	print("[CombatEffectManager] 粒子特效配置数量: %d" % particles.size())
+	# print("[CombatEffectManager] 粒子特效配置数量: %d" % particles.size())
 	for particle_path in particles:
 		if particle_path == "":
 			continue
