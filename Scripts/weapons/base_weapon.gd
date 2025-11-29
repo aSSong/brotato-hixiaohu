@@ -111,6 +111,10 @@ func get_damage() -> int:
 	if not weapon_data:
 		return 0
 	
+	# 如果武器基础伤害 <= 0，直接返回（不造成伤害）
+	if weapon_data.damage <= 0:
+		return weapon_data.damage
+	
 	if player_stats:
 		# 新系统：使用DamageCalculator
 		return DamageCalculator.calculate_weapon_damage(
@@ -122,7 +126,9 @@ func get_damage() -> int:
 	else:
 		# 降级方案：使用旧系统
 		var multipliers = WeaponData.get_level_multipliers(weapon_level)
-		return int(weapon_data.damage * multipliers.damage_multiplier * damage_multiplier)
+		var damage = float(weapon_data.damage) * multipliers.damage_multiplier * damage_multiplier
+		# 保险：只要触发伤害（原始伤害 > 0），最终伤害最小为1
+		return int(max(1.0, damage))
 
 ## 获取最终攻击速度（攻击间隔）
 func get_attack_speed() -> float:

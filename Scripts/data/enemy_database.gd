@@ -59,15 +59,15 @@ static func initialize_enemies() -> void:
 		"快速敌人-蚊子",
 		8,  # max_hp
 		3,  # attack_damage
-		520.0,  # move_speed（更快）
+		500.0,  # move_speed（更快）
 		"res://assets/enemy/masquito-run-Sheet.png",
 		321,
 		500,
 		4
 	)
 	fast_enemy.description = "快速但脆弱的敌人"
-	fast_enemy.scale = Vector2(0.3, 0.3)  # 1.2倍大小
-	fast_enemy.shadow_offset = Vector2(30,-100) 
+	fast_enemy.scale = Vector2(0.4, 0.4)  # 1.2倍大小
+	fast_enemy.shadow_offset = Vector2(30,-80) 
 	fast_enemy.animation_speed = 8.0  # 8 FPS
 	enemies["fast"] = fast_enemy
 	

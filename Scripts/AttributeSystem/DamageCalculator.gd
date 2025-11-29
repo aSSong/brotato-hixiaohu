@@ -34,6 +34,10 @@ static func calculate_weapon_damage(
 	weapon_type: int,
 	attacker_stats: CombatStats
 ) -> int:
+	# 如果原始伤害 <= 0，直接返回（不造成伤害）
+	if weapon_base_damage <= 0:
+		return weapon_base_damage
+	
 	if not attacker_stats:
 		return weapon_base_damage
 	
@@ -55,7 +59,9 @@ static func calculate_weapon_damage(
 		2:  # WeaponData.WeaponType.MAGIC
 			damage = damage * (1.0 + attacker_stats.magic_damage_add) * attacker_stats.magic_damage_mult
 	
-	return int(damage)
+	# 保险：只要触发伤害（原始伤害 > 0），最终伤害最小为1
+	# 即使经过削减后小于1，也至少造成1点伤害
+	return int(max(1.0, damage))
 
 ## 计算防御减伤后的伤害
 ## 
@@ -70,6 +76,10 @@ static func calculate_defense_reduction(
 	raw_damage: int,
 	defender_stats: CombatStats
 ) -> int:
+	# 如果原始伤害 <= 0，直接返回（不造成伤害）
+	if raw_damage <= 0:
+		return raw_damage
+	
 	if not defender_stats:
 		return raw_damage
 	
@@ -81,7 +91,7 @@ static func calculate_defense_reduction(
 	# 2. 百分比减伤
 	damage = damage * (1.0 - defender_stats.damage_reduction)
 	
-	# 确保至少1点伤害
+	# 保险：只要触发伤害（原始伤害 > 0），最终伤害最小为1
 	return int(max(1.0, damage))
 
 ## 暴击判定

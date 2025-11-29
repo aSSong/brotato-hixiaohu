@@ -393,6 +393,10 @@ func get_weapon_type_multiplier(weapon_type: WeaponData.WeaponType) -> float:
 
 ## 玩家受伤
 func player_hurt(damage: int) -> void:
+	# 如果伤害 <= 0，直接返回（不造成伤害）
+	if damage <= 0:
+		return
+	
 	# 使用新的DamageCalculator计算最终伤害
 	var final_damage = damage
 	
@@ -401,6 +405,8 @@ func player_hurt(damage: int) -> void:
 			damage,
 			attribute_manager.final_stats
 		)
+		# 保险：只要触发伤害（原始伤害 > 0），最终伤害最小为1
+		final_damage = max(1, final_damage)
 	else:
 		# 降级方案：使用旧系统
 		var actual_damage = damage

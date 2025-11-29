@@ -339,6 +339,14 @@ func enemy_hurt(hurt, is_critical: bool = false):
 	if is_invincible:
 		return
 	
+	# 保险：只要触发伤害，最小值为1
+	# 如果原始伤害 > 0，确保最终伤害至少为1
+	if hurt > 0:
+		hurt = max(1, hurt)
+	else:
+		# 如果伤害 <= 0，直接返回（不造成伤害）
+		return
+	
 	# 检查是否有自爆技能，如果这次伤害会导致HP降到阈值以下，先触发自爆
 	for behavior in behaviors:
 		if is_instance_valid(behavior) and behavior is ExplodingBehavior:
@@ -366,9 +374,8 @@ func enemy_hurt(hurt, is_critical: bool = false):
 	if is_critical:
 		text_color = Color(0.2, 0.8, 0.8, 1.0)  # 表示暴击
 	
-	# 忽略0伤害
-	if hurt <= 0:
-		return
+	# 注意：hurt已经在函数开头处理过，确保 >= 1（如果 > 0）
+	# 这里不需要再次检查
 
 	# 显示伤害跳字
 	var text_content = "-" + str(hurt)
