@@ -152,6 +152,8 @@ static func initialize_classes() -> void:
 	# speed 保持 400.0（移动速度0%）
 	# 加载技能数据（新系统）
 	balanced.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
+	balanced.skin_frames = load("res://resources/class_skin/mrdot01.tres")
+	balanced.scale = Vector2(0.6, 0.6)
 	# UI 资源配置
 	balanced.portrait = load("res://assets/UI/class_poster/portrait-mrdot-01.png")
 	balanced.poster = load("res://assets/UI/class_poster/pose-mrdot-01.png")
@@ -179,6 +181,8 @@ static func initialize_classes() -> void:
 	tank.damage_reduction_multiplier = 0.8  # 受到伤害-20%（减伤系数0.8）
 	# 加载技能数据（新系统）
 	tank.skill_data = load("res://resources/skills/shield.tres") as SkillData
+	tank.skin_frames = load("res://resources/class_skin/ky01.tres")
+	tank.scale = Vector2(0.6, 0.6)
 	# UI 资源配置
 	tank.portrait = load("res://assets/UI/class_poster/portrait-ky-01.png")
 	tank.poster = load("res://assets/UI/class_poster/pose-ky-01.png")

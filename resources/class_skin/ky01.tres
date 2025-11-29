@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dumo8n7nvv8s3"]
+
+[ext_resource type="Texture2D" uid="uid://yabcg0dkystg" path="res://assets/player/ky-run-Sheet.png" id="1_k1h5v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4xnts"]
+atlas = ExtResource("1_k1h5v")
+region = Rect2(0, 0, 295, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ocg53"]
+atlas = ExtResource("1_k1h5v")
+region = Rect2(295, 0, 295, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufd5n"]
+atlas = ExtResource("1_k1h5v")
+region = Rect2(590, 0, 295, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mywmo"]
+atlas = ExtResource("1_k1h5v")
+region = Rect2(885, 0, 295, 500)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4xnts")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ocg53")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ufd5n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mywmo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
