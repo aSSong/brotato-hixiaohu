@@ -6,6 +6,7 @@ class_name Ghost
 ## 武器会自动攻击敌人，但Ghost本身不会受到伤害
 
 @onready var ghostAni: AnimatedSprite2D = $AnimatedSprite2D
+@onready var shadow: Sprite2D = $shadow
 @onready var weapons_node: Node2D = $now_weapons
 
 ## 跟随目标（玩家或前一个Ghost）
@@ -225,6 +226,10 @@ func _setup_appearance() -> void:
 		ghostAni.scale = class_data.scale
 		# 设置半透明效果，表示这是Ghost
 		ghostAni.modulate = Color(1, 1, 1, 0.7)
+		
+		# 同步缩放阴影
+		if shadow:
+			shadow.scale = Vector2(0.8, 0.7) * class_data.scale
 		return
 
 	# 降级方案：直接使用player2外观（与玩家一致）
@@ -256,6 +261,9 @@ func _setup_appearance() -> void:
 	
 	# 设置半透明效果，表示这是Ghost
 	ghostAni.modulate = Color(1, 1, 1, 0.7)
+	
+	if shadow:
+		shadow.scale = Vector2(0.8, 0.7)
 
 ## 创建武器
 func _create_weapons() -> void:

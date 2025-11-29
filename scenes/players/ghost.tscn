@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://cmcv1hguonesw"]
+[gd_scene load_steps=11 format=3 uid="uid://cmcv1hguonesw"]
 
 [ext_resource type="Script" uid="uid://bqq462we7v53t" path="res://Scripts/players/ghost.gd" id="1_ghost"]
+[ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_shadow"]
 [ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_ghost"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kc87p"]
@@ -52,6 +53,13 @@ scale = Vector2(0.6, 0.6)
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_ghost")
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.24313726)
+z_index = 1
+position = Vector2(-10, 111.66668)
+scale = Vector2(0.9, 0.7)
+texture = ExtResource("2_shadow")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-10, -24.999989)
