@@ -76,7 +76,7 @@ static func initialize_classes() -> void:
 	
 	# 射手 - 高攻击速度、远程加成
 	var ranger = ClassData.new(
-		"KeyPerson-射手",
+		"威儿先生 Mr.Will",
 		40,  # max_hp
 		450.0,  # speed (较快)
 		1.0,  # attack_multiplier
@@ -92,6 +92,8 @@ static func initialize_classes() -> void:
 	ranger.attack_speed_multiplier = 1.2  # 攻击速度+20%
 	# 加载技能数据（新系统）
 	ranger.skill_data = load("res://resources/skills/precision.tres") as SkillData
+	ranger.skin_frames = load("res://resources/class_skin/mrwill01.tres")
+	ranger.scale = Vector2(0.6, 0.6)
 	# UI 资源配置
 	ranger.portrait = load("res://assets/UI/class_poster/portrait-mrwill-01.png")
 	ranger.poster = load("res://assets/UI/class_poster/pose-mrwill-01.png")
@@ -104,7 +106,7 @@ static func initialize_classes() -> void:
 	
 	# 法师 - 低血量、魔法加成、范围伤害
 	var mage = ClassData.new(
-		"大壮-Armstrong",
+		"大壮 Armstrong",
 		30,  # max_hp (低血量)
 		400.0,  # speed
 		0.9,  # attack_multiplier (基础攻击稍低)
