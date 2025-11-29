@@ -63,7 +63,7 @@ static func initialize_classes() -> void:
 	# 加载技能数据（新系统）
 	warrior.skill_data = load("res://resources/skills/berserk.tres") as SkillData
 	warrior.skin_frames = load("res://resources/class_skin/babayaga01.tres")
-	warrior.scale = Vector2(0.7, 0.7)
+	warrior.scale = Vector2(0.6, 0.6)
 	# UI 资源配置
 	warrior.portrait = load("res://assets/UI/class_poster/portrait-babayaga-01.png")
 	warrior.poster = load("res://assets/UI/class_poster/pose-babayaga-01.png")
