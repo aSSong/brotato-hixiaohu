@@ -5,8 +5,11 @@ class_name WeaponChooseUI
 ## 让用户选择2把武器，然后开始游戏
 
 # ========== UI 节点引用 ==========
-@onready var player_portrait: TextureRect = $TitleSection/PlayerInfo/PlayerPortrait
-@onready var player_name_label: Label = $TitleSection/PlayerInfo/PlayerName
+# 标题区域
+@onready var player_portrait: TextureRect = $TitleSection/PlayerNameContainer/QuestionMark/playerportrait
+@onready var player_name_label: Label = $TitleSection/PlayerNameContainer/PlayerName
+
+# 武器网格
 @onready var weapon_grid: GridContainer = $MainContent/WeaponGridSection/WeaponGrid
 
 # 武器1详情
@@ -33,23 +36,25 @@ class_name WeaponChooseUI
 @onready var weapon2_range_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection/RangeBar
 @onready var weapon2_effect_text: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection/EffectText
 
-# 底部按钮
-@onready var back_button: Button = $BottomSection/BackButton
-@onready var start_button: Button = $BottomSection/StartButton
+# 底部按钮（TextureButton）
+@onready var back_button: TextureButton = $BottomSection/BackButton
+@onready var start_button: TextureButton = $BottomSection/NextButton
+
+# ========== 资源引用 ==========
+var weapon_option_scene: PackedScene = preload("res://scenes/UI/weapon_choose_option.tscn")
 
 # ========== 状态变量 ==========
 var weapon_ids: Array = []
 var selected_weapon_ids: Array = []
-var weapon_cards: Dictionary = {}
+var weapon_cards: Dictionary = {}  # weapon_id -> Control（weapon_choose_option 实例）
 
 const MAX_WEAPONS = 2
 const CLASS_CHOOSE_SCENE = "res://scenes/UI/Class_choose.tscn"
 
-## 预定义的武器列表（与 start_menu 保持一致）
+## 预定义的武器列表（10个武器，每行5个，共2行）
 var available_weapons: Array = [
-	"pistol", "rifle", "machine_gun",  # 远程
-	"sword", "axe", "dagger",  # 近战
-	"fireball", "ice_shard", "meteor"  # 魔法
+	"pistol", "rifle", "machine_gun", "sword", "axe",  # 第一行
+	"dagger", "fireball", "ice_shard", "meteor", "pistol"  # 第二行（最后一个可以替换为其他武器）
 ]
 
 func _ready() -> void:
@@ -63,10 +68,13 @@ func _ready() -> void:
 	back_button.pressed.connect(_on_back_button_pressed)
 	start_button.pressed.connect(_on_start_button_pressed)
 	
+	# 默认不选中任何武器
+	selected_weapon_ids.clear()
+	
 	# 初始化开战按钮状态
 	_update_start_button()
 	
-	# 初始化武器详情面板
+	# 初始化武器详情面板（空状态）
 	_update_weapon_details()
 
 ## 初始化玩家信息显示
@@ -75,108 +83,79 @@ func _initialize_player_info() -> void:
 	var class_id = GameMain.selected_class_id
 	if class_id != "":
 		var class_data = ClassDatabase.get_class_data(class_id)
-		if class_data and class_data.skin_frames:
-			var anim_names = class_data.skin_frames.get_animation_names()
-			if anim_names.size() > 0:
-				var anim_name = anim_names[0]
-				if class_data.skin_frames.get_frame_count(anim_name) > 0:
-					player_portrait.texture = class_data.skin_frames.get_frame_texture(anim_name, 0)
+		if class_data and class_data.portrait:
+			player_portrait.texture = class_data.portrait
 	
-	# TODO: 显示玩家名字（如果有保存）
-	player_name_label.text = "玩家名字"
+	# 显示玩家名字
+	player_name_label.text = "Key Person"
 
-## 初始化武器网格
+## 初始化武器网格（使用 weapon_choose_option 组件）
 func _initialize_weapon_grid() -> void:
-	weapon_ids = available_weapons.duplicate()
+	# 清空现有内容
+	for child in weapon_grid.get_children():
+		child.queue_free()
 	
-	for weapon_id in weapon_ids:
+	weapon_ids.clear()
+	weapon_cards.clear()
+	
+	# 获取所有可用武器（去重）
+	var unique_weapons: Array = []
+	for weapon_id in available_weapons:
+		if not unique_weapons.has(weapon_id):
+			unique_weapons.append(weapon_id)
+	
+	# 填充武器网格（2行5列 = 10个格子）
+	var index = 0
+	for weapon_id in unique_weapons:
+		if index >= 10:
+			break
+		
 		var weapon_data = WeaponDatabase.get_weapon(weapon_id)
 		if weapon_data == null:
 			continue
 		
-		# 创建武器卡片
-		var card = _create_weapon_card(weapon_id, weapon_data)
-		weapon_grid.add_child(card)
-		weapon_cards[weapon_id] = card
+		# 实例化武器选项组件
+		var option = weapon_option_scene.instantiate()
+		_setup_weapon_option(option, weapon_id, weapon_data)
+		
+		weapon_grid.add_child(option)
+		weapon_ids.append(weapon_id)
+		weapon_cards[weapon_id] = option
+		index += 1
 
-## 创建武器卡片
-func _create_weapon_card(weapon_id: String, weapon_data: WeaponData) -> Panel:
-	# 主卡片面板
-	var card = Panel.new()
-	card.custom_minimum_size = Vector2(140, 180)
+## 设置武器选项组件
+func _setup_weapon_option(option: Control, weapon_id: String, weapon_data: WeaponData) -> void:
+	# 获取子节点引用
+	var bg_choosed = option.get_node_or_null("bg_choosed")
+	var background = option.get_node_or_null("background")
 	
-	# 卡片样式
-	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0.9, 0.9, 0.95, 1)
-	style.corner_radius_top_left = 5
-	style.corner_radius_top_right = 5
-	style.corner_radius_bottom_left = 0
-	style.corner_radius_bottom_right = 0
-	card.add_theme_stylebox_override("panel", style)
+	if background:
+		# 设置武器图标
+		var weapon_icon = background.get_node_or_null("weapon_icon")
+		if weapon_icon and weapon_data.texture_path != "":
+			var tex = load(weapon_data.texture_path)
+			if tex:
+				weapon_icon.texture = tex
+		
+		# 设置武器名称
+		var bg_weaponname = background.get_node_or_null("bg_weaponname")
+		if bg_weaponname:
+			var weapon_name_label = bg_weaponname.get_node_or_null("weapon_name")
+			if weapon_name_label:
+				weapon_name_label.text = weapon_data.weapon_name
+		
+		# 初始状态：未选中
+		var choosed = background.get_node_or_null("choosed")
+		if choosed:
+			choosed.visible = false
 	
-	# 创建垂直布局
-	var vbox = VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
-	vbox.add_theme_constant_override("separation", 0)
-	card.add_child(vbox)
+	# 初始状态：bg_choosed 不可见
+	if bg_choosed:
+		bg_choosed.visible = false
 	
-	# 武器图片区域（紫色背景）
-	var image_panel = Panel.new()
-	image_panel.custom_minimum_size = Vector2(0, 130)
-	image_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var image_style = StyleBoxFlat.new()
-	image_style.bg_color = Color(0.35, 0.2, 0.5, 1)
-	image_panel.add_theme_stylebox_override("panel", image_style)
-	vbox.add_child(image_panel)
-	
-	# 武器图标
-	var icon = TextureRect.new()
-	icon.set_anchors_preset(Control.PRESET_FULL_RECT)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# 加载武器图标
-	if weapon_data.texture_path != "":
-		var tex = load(weapon_data.texture_path)
-		if tex:
-			icon.texture = tex
-	image_panel.add_child(icon)
-	
-	# 选中勾选标记（初始隐藏）
-	var check_mark = Label.new()
-	check_mark.name = "CheckMark"
-	check_mark.text = "✓"
-	check_mark.add_theme_font_size_override("font_size", 24)
-	check_mark.add_theme_color_override("font_color", Color(1, 0.3, 0.5, 1))
-	check_mark.position = Vector2(110, 5)
-	check_mark.visible = false
-	image_panel.add_child(check_mark)
-	
-	# 武器名称区域（黑色背景）
-	var name_panel = Panel.new()
-	name_panel.custom_minimum_size = Vector2(0, 50)
-	name_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	var name_style = StyleBoxFlat.new()
-	name_style.bg_color = Color(0.1, 0.1, 0.12, 1)
-	name_panel.add_theme_stylebox_override("panel", name_style)
-	vbox.add_child(name_panel)
-	
-	# 武器名称标签
-	var name_label = Label.new()
-	name_label.text = weapon_data.weapon_name
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	name_label.set_anchors_preset(Control.PRESET_FULL_RECT)
-	name_label.add_theme_font_size_override("font_size", 18)
-	name_label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-	name_panel.add_child(name_label)
-	
-	# 让卡片可点击
-	card.gui_input.connect(_on_weapon_card_clicked.bind(weapon_id))
-	card.mouse_filter = Control.MOUSE_FILTER_STOP
-	
-	return card
+	# 设置点击事件
+	option.gui_input.connect(_on_weapon_option_clicked.bind(weapon_id))
+	option.mouse_filter = Control.MOUSE_FILTER_STOP
 
 ## 切换武器选择
 func _toggle_weapon(weapon_id: String) -> void:
@@ -188,52 +167,36 @@ func _toggle_weapon(weapon_id: String) -> void:
 		if selected_weapon_ids.size() < MAX_WEAPONS:
 			selected_weapon_ids.append(weapon_id)
 		else:
-			return  # 已达上限
+			return  # 已达上限，不做处理
 	
-	# 更新卡片选中状态
+	# 更新所有卡片的选中状态
 	_update_card_selection()
 	
-	# 更新武器详情
+	# 更新武器详情面板
 	_update_weapon_details()
 	
-	# 更新开战按钮
+	# 更新开战按钮状态
 	_update_start_button()
 
-## 更新卡片选中状态
+## 更新所有卡片的选中状态
 func _update_card_selection() -> void:
 	for weapon_id in weapon_cards.keys():
-		var card = weapon_cards[weapon_id] as Panel
+		var option = weapon_cards[weapon_id] as Control
 		var is_selected = selected_weapon_ids.has(weapon_id)
 		
-		# 更新边框
-		var style = StyleBoxFlat.new()
-		style.bg_color = Color(0.9, 0.9, 0.95, 1)
-		style.corner_radius_top_left = 5
-		style.corner_radius_top_right = 5
+		# 获取子节点
+		var bg_choosed = option.get_node_or_null("bg_choosed")
+		var background = option.get_node_or_null("background")
 		
-		if is_selected:
-			# 选中：粉色边框
-			style.border_width_left = 4
-			style.border_width_right = 4
-			style.border_width_top = 4
-			style.border_width_bottom = 4
-			style.border_color = Color(1, 0.3, 0.5, 1)
-		else:
-			style.border_width_left = 0
-			style.border_width_right = 0
-			style.border_width_top = 0
-			style.border_width_bottom = 0
+		# 更新 bg_choosed 可见性
+		if bg_choosed:
+			bg_choosed.visible = is_selected
 		
-		card.add_theme_stylebox_override("panel", style)
-		
-		# 更新勾选标记
-		var vbox = card.get_child(0) as VBoxContainer
-		if vbox:
-			var image_panel = vbox.get_child(0) as Panel
-			if image_panel:
-				var check_mark = image_panel.get_node_or_null("CheckMark")
-				if check_mark:
-					check_mark.visible = is_selected
+		# 更新 choosed 标记可见性
+		if background:
+			var choosed = background.get_node_or_null("choosed")
+			if choosed:
+				choosed.visible = is_selected
 
 ## 更新武器详情面板
 func _update_weapon_details() -> void:
@@ -373,35 +336,10 @@ func _clear_weapon_panel(slot: int) -> void:
 func _update_start_button() -> void:
 	var can_start = selected_weapon_ids.size() == MAX_WEAPONS
 	start_button.disabled = not can_start
-	
-	var style = StyleBoxFlat.new()
-	if can_start:
-		# 可点击：渐变橙红色
-		style.bg_color = Color(1, 0.4, 0.3, 1)
-		style.border_width_left = 3
-		style.border_width_right = 3
-		style.border_width_top = 3
-		style.border_width_bottom = 3
-		style.border_color = Color(1, 0.6, 0.4, 1)
-		start_button.modulate = Color(1, 1, 1, 1)
-	else:
-		# 不可点击：灰色
-		style.bg_color = Color(0.3, 0.3, 0.3, 1)
-		start_button.modulate = Color(0.6, 0.6, 0.6, 1)
-	
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_left = 8
-	style.corner_radius_bottom_right = 8
-	
-	start_button.add_theme_stylebox_override("normal", style)
-	start_button.add_theme_stylebox_override("hover", style)
-	start_button.add_theme_stylebox_override("pressed", style)
-	start_button.add_theme_stylebox_override("disabled", style)
 
 # ========== 信号回调 ==========
 
-func _on_weapon_card_clicked(event: InputEvent, weapon_id: String) -> void:
+func _on_weapon_option_clicked(event: InputEvent, weapon_id: String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_toggle_weapon(weapon_id)
 
@@ -416,7 +354,7 @@ func _on_start_button_pressed() -> void:
 	# 保存选择的武器
 	GameMain.selected_weapon_ids = selected_weapon_ids.duplicate()
 	
-	# 根据当前mode_id选择目标场景（与 start_menu 保持一致）
+	# 根据当前mode_id选择目标场景
 	var mode_id = GameMain.current_mode_id
 	var target_scene = ""
 	
@@ -435,4 +373,3 @@ func _on_start_button_pressed() -> void:
 		get_tree().change_scene_to_packed(game_scene)
 	else:
 		push_error("[WeaponChoose] 无法加载游戏场景: %s" % target_scene)
-

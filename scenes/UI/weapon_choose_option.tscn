@@ -7,25 +7,28 @@
 [ext_resource type="Texture2D" uid="uid://bfnwdgtlxrlii" path="res://assets/UI/class_choose/check-red-01.png" id="5_vnvmy"]
 
 [node name="WeaponChooseOption" type="Control"]
+custom_minimum_size = Vector2(245, 315)
 layout_mode = 3
+anchors_preset = 0
+offset_right = 245.0
+offset_bottom = 315.0
+
+[node name="bg_choosed" type="TextureRect" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1675.0
-offset_bottom = -765.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="bg_choosed" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 texture = ExtResource("1_27vri")
 
 [node name="background" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_epsnv")
 
 [node name="weapon_icon" type="TextureRect" parent="background"]
@@ -50,7 +53,7 @@ offset_right = 245.0
 offset_bottom = 315.0
 texture = ExtResource("4_2g887")
 
-[node name="Label" type="Label" parent="background/bg_weaponname"]
+[node name="weapon_name" type="Label" parent="background/bg_weaponname"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -61,7 +64,7 @@ offset_right = 60.5
 offset_bottom = 285.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 30
-text = "连锁闪电"
+text = "武器名"
 
 [node name="choosed" type="TextureRect" parent="background"]
 layout_mode = 1
