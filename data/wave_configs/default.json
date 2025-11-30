@@ -2,2056 +2,2058 @@
   "config_id": "default",
   "total_waves": 100,
   "waves": [
-    {
-      "wave": 1,
-      "spawn_interval": 0.5,
-      "hp_growth": 0.0,
-      "damage_growth": 0.0,
-      "total_count": 15,
-      "enemies": {
-        "basic": 0.6,
-        "fast": 0.2,
-        "tank": 0.1,
-        "elite": 0.1
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 2,
-      "spawn_interval": 0.5,
-      "hp_growth": 0.02,
-      "damage_growth": 0.02,
-      "total_count": 16,
-      "enemies": {
-        "basic": 0.6,
-        "fast": 0.2,
-        "tank": 0.1,
-        "elite": 0.1
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 3,
-      "spawn_interval": 0.48,
-      "hp_growth": 0.03,
-      "damage_growth": 0.03,
-      "total_count": 17,
-      "enemies": {
-        "basic": 0.55,
-        "fast": 0.25,
-        "tank": 0.1,
-        "elite": 0.1
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 4,
-      "spawn_interval": 0.46,
-      "hp_growth": 0.04,
-      "damage_growth": 0.04,
-      "total_count": 18,
-      "enemies": {
-        "basic": 0.5,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.1
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 5,
-      "spawn_interval": 0.45,
-      "hp_growth": 0.05,
-      "damage_growth": 0.05,
-      "total_count": 19,
-      "enemies": {
-        "basic": 0.5,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.1
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 6,
-      "spawn_interval": 0.44,
-      "hp_growth": 0.06,
-      "damage_growth": 0.06,
-      "total_count": 21,
-      "enemies": {
-        "basic": 0.45,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.1,
-        "charging_enemy": 0.05
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 7,
-      "spawn_interval": 0.43,
-      "hp_growth": 0.065,
-      "damage_growth": 0.065,
-      "total_count": 22,
-      "enemies": {
-        "basic": 0.4,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.1,
-        "charging_enemy": 0.05,
-        "shooting_enemy": 0.05
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 8,
-      "spawn_interval": 0.42,
-      "hp_growth": 0.07,
-      "damage_growth": 0.07,
-      "total_count": 23,
-      "enemies": {
-        "basic": 0.35,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.1,
-        "charging_enemy": 0.05,
-        "shooting_enemy": 0.05,
-        "exploding_enemy": 0.05
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 9,
-      "spawn_interval": 0.41,
-      "hp_growth": 0.075,
-      "damage_growth": 0.075,
-      "total_count": 24,
-      "enemies": {
-        "basic": 0.35,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.1,
-        "charging_enemy": 0.05,
-        "shooting_enemy": 0.05,
-        "exploding_enemy": 0.05
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 10,
-      "spawn_interval": 0.4,
-      "hp_growth": 0.08,
-      "damage_growth": 0.08,
-      "total_count": 25,
-      "enemies": {
-        "basic": 0.3,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.15,
-        "charging_enemy": 0.05,
-        "shooting_enemy": 0.05,
-        "exploding_enemy": 0.05
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 11,
-      "spawn_interval": 0.39,
-      "hp_growth": 0.09,
-      "damage_growth": 0.09,
-      "total_count": 27,
-      "enemies": {
-        "basic": 0.3,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.15,
-        "charging_enemy": 0.05,
-        "shooting_enemy": 0.05,
-        "exploding_enemy": 0.05
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 12,
-      "spawn_interval": 0.38,
-      "hp_growth": 0.1,
-      "damage_growth": 0.1,
-      "total_count": 29,
-      "enemies": {
-        "basic": 0.25,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.15,
-        "charging_enemy": 0.07,
-        "shooting_enemy": 0.07,
-        "exploding_enemy": 0.06
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 13,
-      "spawn_interval": 0.37,
-      "hp_growth": 0.11,
-      "damage_growth": 0.11,
-      "total_count": 31,
-      "enemies": {
-        "basic": 0.25,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.15,
-        "charging_enemy": 0.07,
-        "shooting_enemy": 0.07,
-        "exploding_enemy": 0.06
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 14,
-      "spawn_interval": 0.36,
-      "hp_growth": 0.12,
-      "damage_growth": 0.12,
-      "total_count": 33,
-      "enemies": {
-        "basic": 0.25,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.15,
-        "charging_enemy": 0.07,
-        "shooting_enemy": 0.07,
-        "exploding_enemy": 0.06
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 15,
-      "spawn_interval": 0.35,
-      "hp_growth": 0.13,
-      "damage_growth": 0.13,
-      "total_count": 35,
-      "enemies": {
-        "basic": 0.2,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.07,
-        "shooting_enemy": 0.07,
-        "exploding_enemy": 0.06
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 16,
-      "spawn_interval": 0.34,
-      "hp_growth": 0.15,
-      "damage_growth": 0.15,
-      "total_count": 39,
-      "enemies": {
-        "basic": 0.2,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.07,
-        "shooting_enemy": 0.07,
-        "exploding_enemy": 0.06
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 17,
-      "spawn_interval": 0.33,
-      "hp_growth": 0.17,
-      "damage_growth": 0.17,
-      "total_count": 43,
-      "enemies": {
-        "basic": 0.2,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.07,
-        "shooting_enemy": 0.07,
-        "exploding_enemy": 0.06
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 18,
-      "spawn_interval": 0.32,
-      "hp_growth": 0.19,
-      "damage_growth": 0.19,
-      "total_count": 47,
-      "enemies": {
-        "basic": 0.15,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.09,
-        "shooting_enemy": 0.08,
-        "exploding_enemy": 0.08
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 19,
-      "spawn_interval": 0.31,
-      "hp_growth": 0.21,
-      "damage_growth": 0.21,
-      "total_count": 50,
-      "enemies": {
-        "basic": 0.15,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.09,
-        "shooting_enemy": 0.08,
-        "exploding_enemy": 0.08
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 20,
-      "spawn_interval": 0.3,
-      "hp_growth": 0.23,
-      "damage_growth": 0.23,
-      "total_count": 53,
-      "enemies": {
-        "basic": 0.15,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.09,
-        "shooting_enemy": 0.08,
-        "exploding_enemy": 0.08
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 21,
-      "spawn_interval": 0.3,
-      "hp_growth": 0.24,
-      "damage_growth": 0.24,
-      "total_count": 56,
-      "enemies": {
-        "basic": 0.15,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.09,
-        "shooting_enemy": 0.08,
-        "exploding_enemy": 0.08
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 22,
-      "spawn_interval": 0.3,
-      "hp_growth": 0.25,
-      "damage_growth": 0.25,
-      "total_count": 59,
-      "enemies": {
-        "basic": 0.15,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.09,
-        "shooting_enemy": 0.08,
-        "exploding_enemy": 0.08
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 23,
-      "spawn_interval": 0.29,
-      "hp_growth": 0.26,
-      "damage_growth": 0.26,
-      "total_count": 62,
-      "enemies": {
-        "basic": 0.12,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.1,
-        "shooting_enemy": 0.09,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 24,
-      "spawn_interval": 0.29,
-      "hp_growth": 0.27,
-      "damage_growth": 0.27,
-      "total_count": 65,
-      "enemies": {
-        "basic": 0.12,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.1,
-        "shooting_enemy": 0.09,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 25,
-      "spawn_interval": 0.29,
-      "hp_growth": 0.28,
-      "damage_growth": 0.28,
-      "total_count": 68,
-      "enemies": {
-        "basic": 0.12,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.1,
-        "shooting_enemy": 0.09,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 26,
-      "spawn_interval": 0.28,
-      "hp_growth": 0.29,
-      "damage_growth": 0.29,
-      "total_count": 71,
-      "enemies": {
-        "basic": 0.12,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.1,
-        "shooting_enemy": 0.09,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 27,
-      "spawn_interval": 0.28,
-      "hp_growth": 0.3,
-      "damage_growth": 0.3,
-      "total_count": 74,
-      "enemies": {
-        "basic": 0.1,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.11,
-        "shooting_enemy": 0.1,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 28,
-      "spawn_interval": 0.28,
-      "hp_growth": 0.31,
-      "damage_growth": 0.31,
-      "total_count": 77,
-      "enemies": {
-        "basic": 0.1,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.11,
-        "shooting_enemy": 0.1,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 29,
-      "spawn_interval": 0.27,
-      "hp_growth": 0.32,
-      "damage_growth": 0.32,
-      "total_count": 80,
-      "enemies": {
-        "basic": 0.1,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.11,
-        "shooting_enemy": 0.1,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 1,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 30,
-      "spawn_interval": 0.27,
-      "hp_growth": 0.33,
-      "damage_growth": 0.33,
-      "total_count": 83,
-      "enemies": {
-        "basic": 0.1,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.11,
-        "shooting_enemy": 0.1,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 31,
-      "spawn_interval": 0.27,
-      "hp_growth": 0.34,
-      "damage_growth": 0.34,
-      "total_count": 86,
-      "enemies": {
-        "basic": 0.08,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.12,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 32,
-      "spawn_interval": 0.26,
-      "hp_growth": 0.35,
-      "damage_growth": 0.35,
-      "total_count": 89,
-      "enemies": {
-        "basic": 0.08,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.12,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 33,
-      "spawn_interval": 0.26,
-      "hp_growth": 0.36,
-      "damage_growth": 0.36,
-      "total_count": 92,
-      "enemies": {
-        "basic": 0.08,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.12,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 34,
-      "spawn_interval": 0.26,
-      "hp_growth": 0.37,
-      "damage_growth": 0.37,
-      "total_count": 95,
-      "enemies": {
-        "basic": 0.08,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.12,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.09
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 35,
-      "spawn_interval": 0.25,
-      "hp_growth": 0.38,
-      "damage_growth": 0.38,
-      "total_count": 98,
-      "enemies": {
-        "basic": 0.05,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 36,
-      "spawn_interval": 0.25,
-      "hp_growth": 0.39,
-      "damage_growth": 0.39,
-      "total_count": 101,
-      "enemies": {
-        "basic": 0.05,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 37,
-      "spawn_interval": 0.25,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 104,
-      "enemies": {
-        "basic": 0.05,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 38,
-      "spawn_interval": 0.25,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 107,
-      "enemies": {
-        "basic": 0.05,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 39,
-      "spawn_interval": 0.24,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 110,
-      "enemies": {
-        "basic": 0.05,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.2,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 40,
-      "spawn_interval": 0.24,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 113,
-      "enemies": {
-        "basic": 0.03,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 41,
-      "spawn_interval": 0.24,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 116,
-      "enemies": {
-        "basic": 0.03,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 42,
-      "spawn_interval": 0.24,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 119,
-      "enemies": {
-        "basic": 0.03,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 43,
-      "spawn_interval": 0.23,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 122,
-      "enemies": {
-        "basic": 0.03,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 44,
-      "spawn_interval": 0.23,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 125,
-      "enemies": {
-        "basic": 0.03,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.13,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 45,
-      "spawn_interval": 0.23,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 128,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.14,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 46,
-      "spawn_interval": 0.23,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 131,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.14,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 47,
-      "spawn_interval": 0.22,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 134,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.14,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 48,
-      "spawn_interval": 0.22,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 137,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.14,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 49,
-      "spawn_interval": 0.22,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 140,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.25,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.14,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 2,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 50,
-      "spawn_interval": 0.22,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 143,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 51,
-      "spawn_interval": 0.21,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 146,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 52,
-      "spawn_interval": 0.21,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 149,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 53,
-      "spawn_interval": 0.21,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 152,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 54,
-      "spawn_interval": 0.21,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 155,
-      "enemies": {
-        "basic": 0.02,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.22,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 55,
-      "spawn_interval": 0.2,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 158,
-      "enemies": {
-        "basic": 0.01,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 56,
-      "spawn_interval": 0.2,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 161,
-      "enemies": {
-        "basic": 0.01,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 57,
-      "spawn_interval": 0.2,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 164,
-      "enemies": {
-        "basic": 0.01,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 58,
-      "spawn_interval": 0.2,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 167,
-      "enemies": {
-        "basic": 0.01,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 59,
-      "spawn_interval": 0.2,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 170,
-      "enemies": {
-        "basic": 0.01,
-        "fast": 0.23,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 60,
-      "spawn_interval": 0.2,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 173,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 61,
-      "spawn_interval": 0.19,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 176,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 62,
-      "spawn_interval": 0.19,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 179,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 63,
-      "spawn_interval": 0.19,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 182,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 64,
-      "spawn_interval": 0.19,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 185,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.15,
-        "shooting_enemy": 0.13,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 65,
-      "spawn_interval": 0.19,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 188,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 66,
-      "spawn_interval": 0.18,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 191,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 67,
-      "spawn_interval": 0.18,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 194,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 68,
-      "spawn_interval": 0.18,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 197,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 69,
-      "spawn_interval": 0.18,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 200,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.15,
-        "elite": 0.23,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 3,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 70,
-      "spawn_interval": 0.18,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 203,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 71,
-      "spawn_interval": 0.17,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 206,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 72,
-      "spawn_interval": 0.17,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 209,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 73,
-      "spawn_interval": 0.17,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 212,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 74,
-      "spawn_interval": 0.17,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 215,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.16,
-        "shooting_enemy": 0.12,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 75,
-      "spawn_interval": 0.17,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 218,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 76,
-      "spawn_interval": 0.16,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 221,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 77,
-      "spawn_interval": 0.16,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 224,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 78,
-      "spawn_interval": 0.16,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 227,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 79,
-      "spawn_interval": 0.16,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 230,
-      "enemies": {
-        "fast": 0.24,
-        "tank": 0.14,
-        "elite": 0.24,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 80,
-      "spawn_interval": 0.16,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 233,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.14,
-        "elite": 0.25,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 81,
-      "spawn_interval": 0.15,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 236,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.14,
-        "elite": 0.25,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 82,
-      "spawn_interval": 0.15,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 239,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.14,
-        "elite": 0.25,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 83,
-      "spawn_interval": 0.15,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 242,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.14,
-        "elite": 0.25,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 84,
-      "spawn_interval": 0.15,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 245,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.14,
-        "elite": 0.25,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 85,
-      "spawn_interval": 0.15,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 248,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.13,
-        "elite": 0.26,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 4,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 86,
-      "spawn_interval": 0.15,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 251,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.13,
-        "elite": 0.26,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 87,
-      "spawn_interval": 0.14,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 254,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.13,
-        "elite": 0.26,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 88,
-      "spawn_interval": 0.14,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 257,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.13,
-        "elite": 0.26,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 89,
-      "spawn_interval": 0.14,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 260,
-      "enemies": {
-        "fast": 0.23,
-        "tank": 0.13,
-        "elite": 0.26,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 90,
-      "spawn_interval": 0.14,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 263,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.13,
-        "elite": 0.27,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 91,
-      "spawn_interval": 0.14,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 266,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.13,
-        "elite": 0.27,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 92,
-      "spawn_interval": 0.14,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 269,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.13,
-        "elite": 0.27,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 93,
-      "spawn_interval": 0.13,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 272,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.13,
-        "elite": 0.27,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 94,
-      "spawn_interval": 0.13,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 275,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.13,
-        "elite": 0.27,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 95,
-      "spawn_interval": 0.13,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 278,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.12,
-        "elite": 0.28,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 96,
-      "spawn_interval": 0.13,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 281,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.12,
-        "elite": 0.28,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 97,
-      "spawn_interval": 0.13,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 284,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.12,
-        "elite": 0.28,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 98,
-      "spawn_interval": 0.12,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 287,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.12,
-        "elite": 0.28,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 99,
-      "spawn_interval": 0.12,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 290,
-      "enemies": {
-        "fast": 0.22,
-        "tank": 0.12,
-        "elite": 0.28,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 5,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      }
-    },
-    {
-      "wave": 100,
-      "spawn_interval": 0.12,
-      "hp_growth": 0.4,
-      "damage_growth": 0.4,
-      "total_count": 293,
-      "enemies": {
-        "fast": 0.21,
-        "tank": 0.12,
-        "elite": 0.29,
-        "charging_enemy": 0.17,
-        "shooting_enemy": 0.11,
-        "exploding_enemy": 0.1
-      },
-      "boss_config": {
-        "count": 6,
-        "enemy_id": "last_enemy",
-        "spawn_at_end": true
-      },
-      "special_spawns": [
-        {
-          "position": 143,
-          "enemy_id": "last_enemy"
-        },
-        {
-          "position": 215,
-          "enemy_id": "last_enemy"
-        }
-      ]
-    }
+	{
+	  "wave": 1,
+	  "spawn_interval": 0.5,
+	  "hp_growth": 0.0,
+	  "damage_growth": 0.0,
+	  "total_count": 15,
+	  "enemies": {
+		"basic": 0.3,
+		"exploding_enemy": 0.3,
+		"fast": 0.2,
+		"tank": 0.1,
+		"elite": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 2,
+	  "spawn_interval": 0.5,
+	  "hp_growth": 0.02,
+	  "damage_growth": 0.02,
+	  "total_count": 16,
+	  "enemies": {
+		"basic": 0.3,
+		"exploding_enemy": 0.3,
+		"fast": 0.2,
+		"tank": 0.1,
+		"elite": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 3,
+	  "spawn_interval": 0.48,
+	  "hp_growth": 0.03,
+	  "damage_growth": 0.03,
+	  "total_count": 17,
+	  "enemies": {
+		"basic": 0.55,
+		"fast": 0.25,
+		"tank": 0.1,
+		"elite": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 4,
+	  "spawn_interval": 0.46,
+	  "hp_growth": 0.04,
+	  "damage_growth": 0.04,
+	  "total_count": 18,
+	  "enemies": {
+		"basic": 0.5,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 5,
+	  "spawn_interval": 0.45,
+	  "hp_growth": 0.05,
+	  "damage_growth": 0.05,
+	  "total_count": 19,
+	  "enemies": {
+		"basic": 0.5,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 6,
+	  "spawn_interval": 0.44,
+	  "hp_growth": 0.06,
+	  "damage_growth": 0.06,
+	  "total_count": 21,
+	  "enemies": {
+		"basic": 0.45,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.1,
+		"charging_enemy": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 7,
+	  "spawn_interval": 0.43,
+	  "hp_growth": 0.065,
+	  "damage_growth": 0.065,
+	  "total_count": 22,
+	  "enemies": {
+		"basic": 0.4,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.1,
+		"charging_enemy": 0.05,
+		"shooting_enemy": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 8,
+	  "spawn_interval": 0.42,
+	  "hp_growth": 0.07,
+	  "damage_growth": 0.07,
+	  "total_count": 23,
+	  "enemies": {
+		"basic": 0.35,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.1,
+		"charging_enemy": 0.05,
+		"shooting_enemy": 0.05,
+		"exploding_enemy": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 9,
+	  "spawn_interval": 0.41,
+	  "hp_growth": 0.075,
+	  "damage_growth": 0.075,
+	  "total_count": 24,
+	  "enemies": {
+		"basic": 0.35,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.1,
+		"charging_enemy": 0.05,
+		"shooting_enemy": 0.05,
+		"exploding_enemy": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 10,
+	  "spawn_interval": 0.4,
+	  "hp_growth": 0.08,
+	  "damage_growth": 0.08,
+	  "total_count": 25,
+	  "enemies": {
+		"basic": 0.3,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.15,
+		"charging_enemy": 0.05,
+		"shooting_enemy": 0.05,
+		"exploding_enemy": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 11,
+	  "spawn_interval": 0.39,
+	  "hp_growth": 0.09,
+	  "damage_growth": 0.09,
+	  "total_count": 27,
+	  "enemies": {
+		"basic": 0.3,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.15,
+		"charging_enemy": 0.05,
+		"shooting_enemy": 0.05,
+		"exploding_enemy": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 12,
+	  "spawn_interval": 0.38,
+	  "hp_growth": 0.1,
+	  "damage_growth": 0.1,
+	  "total_count": 29,
+	  "enemies": {
+		"basic": 0.25,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.15,
+		"charging_enemy": 0.07,
+		"shooting_enemy": 0.07,
+		"exploding_enemy": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 13,
+	  "spawn_interval": 0.37,
+	  "hp_growth": 0.11,
+	  "damage_growth": 0.11,
+	  "total_count": 31,
+	  "enemies": {
+		"basic": 0.25,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.15,
+		"charging_enemy": 0.07,
+		"shooting_enemy": 0.07,
+		"exploding_enemy": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 14,
+	  "spawn_interval": 0.36,
+	  "hp_growth": 0.12,
+	  "damage_growth": 0.12,
+	  "total_count": 33,
+	  "enemies": {
+		"basic": 0.25,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.15,
+		"charging_enemy": 0.07,
+		"shooting_enemy": 0.07,
+		"exploding_enemy": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 15,
+	  "spawn_interval": 0.35,
+	  "hp_growth": 0.13,
+	  "damage_growth": 0.13,
+	  "total_count": 35,
+	  "enemies": {
+		"basic": 0.2,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.07,
+		"shooting_enemy": 0.07,
+		"exploding_enemy": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 16,
+	  "spawn_interval": 0.34,
+	  "hp_growth": 0.15,
+	  "damage_growth": 0.15,
+	  "total_count": 39,
+	  "enemies": {
+		"basic": 0.2,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.07,
+		"shooting_enemy": 0.07,
+		"exploding_enemy": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 17,
+	  "spawn_interval": 0.33,
+	  "hp_growth": 0.17,
+	  "damage_growth": 0.17,
+	  "total_count": 43,
+	  "enemies": {
+		"basic": 0.2,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.07,
+		"shooting_enemy": 0.07,
+		"exploding_enemy": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 18,
+	  "spawn_interval": 0.32,
+	  "hp_growth": 0.19,
+	  "damage_growth": 0.19,
+	  "total_count": 47,
+	  "enemies": {
+		"basic": 0.15,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.09,
+		"shooting_enemy": 0.08,
+		"exploding_enemy": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 19,
+	  "spawn_interval": 0.31,
+	  "hp_growth": 0.21,
+	  "damage_growth": 0.21,
+	  "total_count": 50,
+	  "enemies": {
+		"basic": 0.15,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.09,
+		"shooting_enemy": 0.08,
+		"exploding_enemy": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 20,
+	  "spawn_interval": 0.3,
+	  "hp_growth": 0.23,
+	  "damage_growth": 0.23,
+	  "total_count": 53,
+	  "enemies": {
+		"basic": 0.15,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.09,
+		"shooting_enemy": 0.08,
+		"exploding_enemy": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 21,
+	  "spawn_interval": 0.3,
+	  "hp_growth": 0.24,
+	  "damage_growth": 0.24,
+	  "total_count": 56,
+	  "enemies": {
+		"basic": 0.15,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.09,
+		"shooting_enemy": 0.08,
+		"exploding_enemy": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 22,
+	  "spawn_interval": 0.3,
+	  "hp_growth": 0.25,
+	  "damage_growth": 0.25,
+	  "total_count": 59,
+	  "enemies": {
+		"basic": 0.15,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.09,
+		"shooting_enemy": 0.08,
+		"exploding_enemy": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 23,
+	  "spawn_interval": 0.29,
+	  "hp_growth": 0.26,
+	  "damage_growth": 0.26,
+	  "total_count": 62,
+	  "enemies": {
+		"basic": 0.12,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.1,
+		"shooting_enemy": 0.09,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 24,
+	  "spawn_interval": 0.29,
+	  "hp_growth": 0.27,
+	  "damage_growth": 0.27,
+	  "total_count": 65,
+	  "enemies": {
+		"basic": 0.12,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.1,
+		"shooting_enemy": 0.09,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 25,
+	  "spawn_interval": 0.29,
+	  "hp_growth": 0.28,
+	  "damage_growth": 0.28,
+	  "total_count": 68,
+	  "enemies": {
+		"basic": 0.12,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.1,
+		"shooting_enemy": 0.09,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 26,
+	  "spawn_interval": 0.28,
+	  "hp_growth": 0.29,
+	  "damage_growth": 0.29,
+	  "total_count": 71,
+	  "enemies": {
+		"basic": 0.12,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.1,
+		"shooting_enemy": 0.09,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 27,
+	  "spawn_interval": 0.28,
+	  "hp_growth": 0.3,
+	  "damage_growth": 0.3,
+	  "total_count": 74,
+	  "enemies": {
+		"basic": 0.1,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.11,
+		"shooting_enemy": 0.1,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 28,
+	  "spawn_interval": 0.28,
+	  "hp_growth": 0.31,
+	  "damage_growth": 0.31,
+	  "total_count": 77,
+	  "enemies": {
+		"basic": 0.1,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.11,
+		"shooting_enemy": 0.1,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 29,
+	  "spawn_interval": 0.27,
+	  "hp_growth": 0.32,
+	  "damage_growth": 0.32,
+	  "total_count": 80,
+	  "enemies": {
+		"basic": 0.1,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.11,
+		"shooting_enemy": 0.1,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 30,
+	  "spawn_interval": 0.27,
+	  "hp_growth": 0.33,
+	  "damage_growth": 0.33,
+	  "total_count": 83,
+	  "enemies": {
+		"basic": 0.1,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.11,
+		"shooting_enemy": 0.1,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 31,
+	  "spawn_interval": 0.27,
+	  "hp_growth": 0.34,
+	  "damage_growth": 0.34,
+	  "total_count": 86,
+	  "enemies": {
+		"basic": 0.08,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.12,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 32,
+	  "spawn_interval": 0.26,
+	  "hp_growth": 0.35,
+	  "damage_growth": 0.35,
+	  "total_count": 89,
+	  "enemies": {
+		"basic": 0.08,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.12,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 33,
+	  "spawn_interval": 0.26,
+	  "hp_growth": 0.36,
+	  "damage_growth": 0.36,
+	  "total_count": 92,
+	  "enemies": {
+		"basic": 0.08,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.12,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 34,
+	  "spawn_interval": 0.26,
+	  "hp_growth": 0.37,
+	  "damage_growth": 0.37,
+	  "total_count": 95,
+	  "enemies": {
+		"basic": 0.08,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.12,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 35,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 0.38,
+	  "damage_growth": 0.38,
+	  "total_count": 98,
+	  "enemies": {
+		"basic": 0.05,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 36,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 0.39,
+	  "damage_growth": 0.39,
+	  "total_count": 101,
+	  "enemies": {
+		"basic": 0.05,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 37,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 104,
+	  "enemies": {
+		"basic": 0.05,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 38,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 107,
+	  "enemies": {
+		"basic": 0.05,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 39,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 110,
+	  "enemies": {
+		"basic": 0.05,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.2,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 40,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 113,
+	  "enemies": {
+		"basic": 0.03,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 41,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 116,
+	  "enemies": {
+		"basic": 0.03,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 42,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 119,
+	  "enemies": {
+		"basic": 0.03,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 43,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 122,
+	  "enemies": {
+		"basic": 0.03,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 44,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 125,
+	  "enemies": {
+		"basic": 0.03,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.13,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 45,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 128,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.14,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 46,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 131,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.14,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 47,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 134,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.14,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 48,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 137,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.14,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 49,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 140,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.25,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.14,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 50,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 143,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 51,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 146,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 52,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 149,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 53,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 152,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 54,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 155,
+	  "enemies": {
+		"basic": 0.02,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.22,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 55,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 158,
+	  "enemies": {
+		"basic": 0.01,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 56,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 161,
+	  "enemies": {
+		"basic": 0.01,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 57,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 164,
+	  "enemies": {
+		"basic": 0.01,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 58,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 167,
+	  "enemies": {
+		"basic": 0.01,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 59,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 170,
+	  "enemies": {
+		"basic": 0.01,
+		"fast": 0.23,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 60,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 173,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 61,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 176,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 62,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 179,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 63,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 182,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 64,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 185,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.15,
+		"shooting_enemy": 0.13,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 65,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 188,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 66,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 191,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 67,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 194,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 68,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 197,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 69,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 200,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.15,
+		"elite": 0.23,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 70,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 203,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 71,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 206,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 72,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 209,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 73,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 212,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 74,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 215,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.16,
+		"shooting_enemy": 0.12,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 75,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 218,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 76,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 221,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 77,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 224,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 78,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 227,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 79,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 230,
+	  "enemies": {
+		"fast": 0.24,
+		"tank": 0.14,
+		"elite": 0.24,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 80,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 233,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.14,
+		"elite": 0.25,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 81,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 236,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.14,
+		"elite": 0.25,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 82,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 239,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.14,
+		"elite": 0.25,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 83,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 242,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.14,
+		"elite": 0.25,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 84,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 245,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.14,
+		"elite": 0.25,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 85,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 248,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.13,
+		"elite": 0.26,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 86,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 251,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.13,
+		"elite": 0.26,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 87,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 254,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.13,
+		"elite": 0.26,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 88,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 257,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.13,
+		"elite": 0.26,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 89,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 260,
+	  "enemies": {
+		"fast": 0.23,
+		"tank": 0.13,
+		"elite": 0.26,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 90,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 263,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.13,
+		"elite": 0.27,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 91,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 266,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.13,
+		"elite": 0.27,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 92,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 269,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.13,
+		"elite": 0.27,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 93,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 272,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.13,
+		"elite": 0.27,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 94,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 275,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.13,
+		"elite": 0.27,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 95,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 278,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.12,
+		"elite": 0.28,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 96,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 281,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.12,
+		"elite": 0.28,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 97,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 284,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.12,
+		"elite": 0.28,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 98,
+	  "spawn_interval": 0.12,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 287,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.12,
+		"elite": 0.28,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 99,
+	  "spawn_interval": 0.12,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 290,
+	  "enemies": {
+		"fast": 0.22,
+		"tank": 0.12,
+		"elite": 0.28,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 100,
+	  "spawn_interval": 0.12,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 293,
+	  "enemies": {
+		"fast": 0.21,
+		"tank": 0.12,
+		"elite": 0.29,
+		"charging_enemy": 0.17,
+		"shooting_enemy": 0.11,
+		"exploding_enemy": 0.1
+	  },
+	  "boss_config": {
+		"count": 6,
+		"enemy_id": "last_enemy",
+		"spawn_at_end": true
+	  },
+	  "special_spawns": [
+		{
+		  "position": 143,
+		  "enemy_id": "last_enemy"
+		},
+		{
+		  "position": 215,
+		  "enemy_id": "last_enemy"
+		}
+	  ]
+	}
   ]
 }
