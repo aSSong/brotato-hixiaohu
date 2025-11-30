@@ -19,11 +19,11 @@ class_name ClassChooseUI
 
 # 右侧信息面板
 @onready var info_text: RichTextLabel = $MainContent/RightSection/InfoContainer/InfoSection/InfoText
-@onready var hp_value: Label = $MainContent/RightSection/InfoContainer/HPSection/HPValue
+@onready var hp_value: Label = $MainContent/RightSection/InfoContainer/HPSection/HPBar/HPValue
 @onready var hp_bar: ProgressBar = $MainContent/RightSection/InfoContainer/HPSection/HPBar
-@onready var speed_value: Label = $MainContent/RightSection/InfoContainer/SpeedSection/SpeedValue
+@onready var speed_value: Label = $MainContent/RightSection/InfoContainer/SpeedSection/SpeedBar/SpeedValue
 @onready var speed_bar: ProgressBar = $MainContent/RightSection/InfoContainer/SpeedSection/SpeedBar
-@onready var defence_value: Label = $MainContent/RightSection/InfoContainer/DefenceSection/DefenceValue
+@onready var defence_value: Label = $MainContent/RightSection/InfoContainer/DefenceSection/DefenceBar/DefenceValue
 @onready var defence_bar: ProgressBar = $MainContent/RightSection/InfoContainer/DefenceSection/DefenceBar
 @onready var talent_text: RichTextLabel = $MainContent/RightSection/InfoContainer/TalentSection/TalentText
 @onready var skill_icon: TextureRect = $MainContent/RightSection/InfoContainer/SkillSection/SkillIcon

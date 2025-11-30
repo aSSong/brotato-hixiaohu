@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dhpmorc3nh0rx"]
+[gd_scene load_steps=16 format=3 uid="uid://dhpmorc3nh0rx"]
 
 [ext_resource type="Script" uid="uid://cbbs20aohqtja" path="res://Scripts/UI/weapon_choose.gd" id="1_weapon"]
 [ext_resource type="Texture2D" uid="uid://cv60hkdkrm472" path="res://assets/UI/weapon_choose/weaponchoose-bg-01.png" id="2_s4hvt"]
@@ -10,7 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://tpynlqo2yorf" path="res://assets/UI/class_choose/btn-back-white-01.png" id="7_g7k44"]
 [ext_resource type="Texture2D" uid="uid://josbodbe1aju" path="res://assets/UI/weapon_choose/weaponchoose-info-bg-01.png" id="7_wiwm1"]
 [ext_resource type="Texture2D" uid="uid://co5kwsisnk6y8" path="res://assets/UI/class_choose/btn-next-red-01.png" id="8_fp288"]
+[ext_resource type="StyleBox" uid="uid://ma8mp05kvbte" path="res://scenes/UI/weapon_state_bar_bg.tres" id="8_g7k44"]
 [ext_resource type="Texture2D" uid="uid://b5m4okwxeae3k" path="res://assets/UI/weapon_choose/weaponchoose-info-unchoosed-01.png" id="8_ysnaf"]
+[ext_resource type="StyleBox" uid="uid://brjva4kavfa5r" path="res://scenes/UI/weapon_state_bar_fill.tres" id="9_fp288"]
 [ext_resource type="Texture2D" uid="uid://bvn8auipbm3g2" path="res://assets/UI/weapon_choose/weaponchoose-info-bg-02.png" id="9_g7k44"]
 [ext_resource type="Texture2D" uid="uid://cuv4ryakt3udj" path="res://assets/UI/class_choose/btn-next-darkred-01.png" id="9_lfaaf"]
 
@@ -180,6 +182,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
 text = "名称"
 
 [node name="Weapon1Name" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/NameSection"]
@@ -195,21 +198,31 @@ layout_mode = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "伤害"
-
-[node name="DamageValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "0"
 
 [node name="DamageBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection"]
 custom_minimum_size = Vector2(120, 16)
 layout_mode = 2
+theme_override_styles/background = ExtResource("8_g7k44")
+theme_override_styles/fill = ExtResource("9_fp288")
 max_value = 15.0
 show_percentage = false
+
+[node name="DamageValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection/DamageBar"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -11.5
+offset_right = 50.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
 
 [node name="SpeedSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
 layout_mode = 2
@@ -218,21 +231,31 @@ layout_mode = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "攻速"
-
-[node name="SpeedValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/SpeedSection"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "0"
 
 [node name="SpeedBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/SpeedSection"]
 custom_minimum_size = Vector2(120, 16)
 layout_mode = 2
+theme_override_styles/background = ExtResource("8_g7k44")
+theme_override_styles/fill = ExtResource("9_fp288")
 max_value = 500.0
 show_percentage = false
+
+[node name="SpeedValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/SpeedSection/SpeedBar"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -11.5
+offset_right = 50.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
 
 [node name="RangeSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
 layout_mode = 2
@@ -241,21 +264,31 @@ layout_mode = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "范围"
-
-[node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "0"
 
 [node name="RangeBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection"]
 custom_minimum_size = Vector2(120, 16)
 layout_mode = 2
+theme_override_styles/background = ExtResource("8_g7k44")
+theme_override_styles/fill = ExtResource("9_fp288")
 max_value = 1000.0
 show_percentage = false
+
+[node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection/RangeBar"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -11.5
+offset_right = 50.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
 
 [node name="EffectSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
 layout_mode = 2
@@ -264,12 +297,12 @@ layout_mode = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "效果"
 
 [node name="EffectText" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/EffectSection"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_colors/font_color = Color(0.9882353, 0.039215688, 0.54509807, 1)
 theme_override_font_sizes/font_size = 14
 text = "无"
 
@@ -303,7 +336,6 @@ custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="Weapon2Content" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 15
@@ -326,13 +358,13 @@ layout_mode = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
 text = "名称"
 
 [node name="Weapon2Name" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/NameSection"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.3, 1)
 theme_override_font_sizes/font_size = 22
-text = ""
 
 [node name="DamageSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
 layout_mode = 2
@@ -341,21 +373,31 @@ layout_mode = 2
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "伤害"
-
-[node name="DamageValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "0"
 
 [node name="DamageBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection"]
 custom_minimum_size = Vector2(120, 16)
 layout_mode = 2
+theme_override_styles/background = ExtResource("8_g7k44")
+theme_override_styles/fill = ExtResource("9_fp288")
 max_value = 15.0
 show_percentage = false
+
+[node name="DamageValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection/DamageBar"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -11.5
+offset_right = 50.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
 
 [node name="SpeedSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
 layout_mode = 2
@@ -363,21 +405,32 @@ layout_mode = 2
 [node name="SpeedLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
 text = "攻速"
-
-[node name="SpeedValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "0"
 
 [node name="SpeedBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection"]
 custom_minimum_size = Vector2(120, 16)
 layout_mode = 2
+theme_override_styles/background = ExtResource("8_g7k44")
+theme_override_styles/fill = ExtResource("9_fp288")
 max_value = 500.0
 show_percentage = false
+
+[node name="SpeedValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection/SpeedBar"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -11.5
+offset_right = 50.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
 
 [node name="RangeSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
 layout_mode = 2
@@ -385,21 +438,32 @@ layout_mode = 2
 [node name="RangeLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
 text = "范围"
-
-[node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.5, 1)
-theme_override_font_sizes/font_size = 16
-text = "0"
 
 [node name="RangeBar" type="ProgressBar" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection"]
 custom_minimum_size = Vector2(120, 16)
 layout_mode = 2
+theme_override_styles/background = ExtResource("8_g7k44")
+theme_override_styles/fill = ExtResource("9_fp288")
 max_value = 1000.0
 show_percentage = false
+
+[node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection/RangeBar"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -11.5
+offset_right = 50.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0"
 
 [node name="EffectSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
 layout_mode = 2
@@ -407,12 +471,13 @@ layout_mode = 2
 [node name="EffectLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
 text = "效果"
 
 [node name="EffectText" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.8, 1, 1)
+theme_override_colors/font_color = Color(0.9882353, 0.039215688, 0.54509807, 1)
 theme_override_font_sizes/font_size = 14
 text = "无"
 
