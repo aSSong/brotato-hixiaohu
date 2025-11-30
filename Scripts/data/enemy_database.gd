@@ -66,7 +66,7 @@ static func initialize_enemies() -> void:
 		4
 	)
 	fast_enemy.description = "快速但脆弱的敌人"
-	fast_enemy.scale = Vector2(0.4, 0.4)  # 1.2倍大小
+	fast_enemy.scale = Vector2(0.4, 0.4)  # 0.4倍大小
 	fast_enemy.shadow_offset = Vector2(30,-80) 
 	fast_enemy.animation_speed = 8.0  # 8 FPS
 	enemies["fast"] = fast_enemy
@@ -197,12 +197,16 @@ static func initialize_enemies() -> void:
 		12,  # max_hp（较低，因为会自爆）
 		3,   # attack_damage
 		280.0,  # move_speed
-		"res://assets/enemy/slime-red-sheet.png",
-		357,
-		240,
-		5
+		"res://assets/enemy/mashroom-run-Sheet.png",
+		425,
+		500,
+		11
 	)
 	exploding_enemy.description = "低血量时会自爆的敌人"
+	exploding_enemy.scale = Vector2(0.4, 0.4)  # 0.4倍大小
+	exploding_enemy.shadow_offset = Vector2(17,-87) 
+	exploding_enemy.shadow_scale = Vector2(0.8, 0.6)
+	exploding_enemy.animation_speed = 16.0  # FPS
 	exploding_enemy.skill_type = EnemyData.EnemySkillType.EXPLODING
 	exploding_enemy.skill_config = {
 		"trigger_condition": "low_hp",  # 触发条件：低血量
@@ -212,6 +216,29 @@ static func initialize_enemies() -> void:
 		"countdown_duration": 3.0        # 倒数时长（秒）
 	}
 	enemies["exploding_enemy"] = exploding_enemy
+	
+	
+	# 自爆敌人 - 带有自爆技能
+	var exploding00_enemy = EnemyData.new(
+		"自爆敌人",
+		12,  # max_hp（较低，因为会自爆）
+		3,   # attack_damage
+		280.0,  # move_speed
+		"res://assets/enemy/slime-red-sheet.png",
+		357,
+		240,
+		5
+	)
+	exploding00_enemy.description = "低血量时会自爆的敌人"
+	exploding00_enemy.skill_type = EnemyData.EnemySkillType.EXPLODING
+	exploding00_enemy.skill_config = {
+		"trigger_condition": "low_hp",  # 触发条件：低血量
+		"explosion_range": 300.0,        # 爆炸范围
+		"explosion_damage": 30,          # 爆炸伤害
+		"low_hp_threshold": 0.3,        # 低血量阈值（30%）
+		"countdown_duration": 3.0        # 倒数时长（秒）
+	}
+	enemies["exploding00_enemy"] = exploding00_enemy
 
 ## 获取敌人数据
 static func get_enemy_data(enemy_id: String) -> EnemyData:
