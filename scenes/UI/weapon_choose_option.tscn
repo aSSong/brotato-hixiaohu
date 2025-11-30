@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://nyoookp2h5ee"]
+[gd_scene load_steps=7 format=3 uid="uid://nyoookp2h5ee"]
 
 [ext_resource type="Texture2D" uid="uid://cdrxy54jfj1cm" path="res://assets/UI/weapon_choose/weaponchoose-choosed-01.png" id="1_27vri"]
 [ext_resource type="Texture2D" uid="uid://evtr7i83o52l" path="res://assets/UI/weapon_choose/weaponchoose-unchoose-01.png" id="2_epsnv"]
 [ext_resource type="Texture2D" uid="uid://cr66ehpdspjr0" path="res://assets/weapon/Weapon_lasersword.png" id="3_g1vc8"]
 [ext_resource type="Texture2D" uid="uid://v0dlskkeu1ha" path="res://assets/UI/weapon_choose/weaponname_bg_01.png" id="4_2g887"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="5_epsnv"]
 [ext_resource type="Texture2D" uid="uid://bfnwdgtlxrlii" path="res://assets/UI/class_choose/check-red-01.png" id="5_vnvmy"]
 
 [node name="WeaponChooseOption" type="Control"]
@@ -63,8 +64,10 @@ offset_top = 228.0
 offset_right = 60.5
 offset_bottom = 285.0
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("5_epsnv")
 theme_override_font_sizes/font_size = 30
 text = "武器名"
+horizontal_alignment = 1
 
 [node name="choosed" type="TextureRect" parent="background"]
 layout_mode = 1

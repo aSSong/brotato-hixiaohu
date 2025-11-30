@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://cp3uspdkmrgxt"]
+[gd_scene load_steps=23 format=3 uid="uid://cp3uspdkmrgxt"]
 
 [ext_resource type="Script" uid="uid://bhy28alx8jccx" path="res://Scripts/UI/class_choose.gd" id="1_class"]
 [ext_resource type="Texture2D" uid="uid://bc0lbov8wglen" path="res://assets/UI/class_choose/classchoose-bg-01.png" id="2_h8tvr"]
 [ext_resource type="Texture2D" uid="uid://cwf5um53xfis5" path="res://assets/UI/class_choose/classchoose-title-01.png" id="3_gregr"]
 [ext_resource type="Texture2D" uid="uid://ndwve8bq6t6d" path="res://assets/UI/class_choose/unchoose-class.png" id="4_7t88g"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="4_sq8rm"]
 [ext_resource type="Texture2D" uid="uid://ecy5k54h8wsu" path="res://assets/UI/class_choose/namelabel.png" id="5_7w0xs"]
 [ext_resource type="Texture2D" uid="uid://bcovh6euo7v00" path="res://assets/UI/class_choose/btn-arrow-l-white-01.png" id="6_ajwbv"]
 [ext_resource type="Texture2D" uid="uid://c2ac7s54o5nn0" path="res://assets/UI/class_choose/name-babayaga-01.png" id="6_eydfx"]
@@ -59,6 +60,7 @@ offset_top = 8.0
 offset_right = 435.0
 offset_bottom = 99.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_sq8rm")
 theme_override_font_sizes/font_size = 70
 text = "选择你的职业"
 
