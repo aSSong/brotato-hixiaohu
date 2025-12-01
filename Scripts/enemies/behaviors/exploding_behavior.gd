@@ -35,7 +35,8 @@ var is_invincible: bool = false  # 倒数期间无敌
 
 ## 范围指示器
 var range_indicator: Sprite2D = null
-var range_indicator_texture: Texture2D = null
+## 预加载的范围圈纹理（与grave_rescue_manager共用资源）
+static var _range_circle_texture = preload("res://assets/others/rescue_range_circle.png")
 
 ## 闪烁相关
 var flash_timer: float = 0.0
@@ -213,48 +214,23 @@ func _explode() -> void:
 				enemy.set_invincible(false)
 			enemy.enemy_dead()
 
-## 创建范围指示器纹理
-func _create_range_indicator_texture() -> void:
-	if range_indicator_texture != null:
-		return
-	
-	var size = int(explosion_range * 2) + 100  # 稍微大一点，确保完整显示
-	var image = Image.create(size, size, false, Image.FORMAT_RGBA8)
-	image.fill(Color.TRANSPARENT)
-	
-	var center = Vector2(size / 2, size / 2)
-	var radius = explosion_range
-	
-	# 绘制黄色圆环（只绘制边缘，不填充）
-	var ring_thickness = 8  # 圆环厚度
-	for x in range(size):
-		for y in range(size):
-			var distance = Vector2(x, y).distance_to(center)
-			if distance >= radius - ring_thickness and distance <= radius + ring_thickness:
-				# 边缘软化
-				var alpha = 1.0
-				if distance < radius:
-					alpha = (distance - (radius - ring_thickness)) / ring_thickness
-				else:
-					alpha = ((radius + ring_thickness) - distance) / ring_thickness
-				image.set_pixel(x, y, Color(1.0, 1.0, 0.0, alpha * 0.8))  # 黄色，80%透明度
-	
-	range_indicator_texture = ImageTexture.create_from_image(image)
-
-## 创建范围指示器节点
+## 创建范围指示器节点（使用预加载的纹理，与grave_rescue_manager一致）
 func _create_range_indicator() -> void:
 	if range_indicator:
 		return
 	
-	# 先创建纹理（如果还没有）
-	if range_indicator_texture == null:
-		_create_range_indicator_texture()
-	
 	range_indicator = Sprite2D.new()
-	range_indicator.texture = range_indicator_texture
+	range_indicator.texture = _range_circle_texture
+	
+	# 根据explosion_range调整缩放（与grave_rescue_manager相同的计算方式）
+	var target_diameter = explosion_range * 2
+	var texture_size = _range_circle_texture.get_size().x  # 假设图片是正方形
+	if texture_size > 0:
+		range_indicator.scale = Vector2.ONE * (target_diameter / texture_size)
+	
 	range_indicator.visible = false
 	range_indicator.z_index = 1  # 在敌人下方
-	range_indicator.modulate = Color(1.0, 1.0, 0.0, 0.6)  # 黄色，60%透明度
+	range_indicator.modulate = Color(1.0, 0.0, 0.0, 0.5)  # 红色，50%透明度
 	
 	# 添加到场景树（作为敌人的兄弟节点，这样不会随敌人旋转）
 	if enemy and enemy.get_parent():
