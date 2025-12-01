@@ -14,7 +14,7 @@
 		"stapler": 0.2,
 		"fast": 0.1,
 		"tank": 0.1,
-		"elite": 0.1
+		"ent": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -34,7 +34,7 @@
 		"stapler": 0.2,
 		"fast": 0.1,
 		"tank": 0.1,
-		"elite": 0.1
+		"ent": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -52,7 +52,7 @@
 		"basic": 0.55,
 		"fast": 0.25,
 		"tank": 0.1,
-		"elite": 0.1
+		"ent": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,

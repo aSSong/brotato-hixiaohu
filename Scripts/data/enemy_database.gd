@@ -58,6 +58,26 @@ static func initialize_enemies() -> void:
 	stapler_enemy.animation_speed = 12.0  #  FPS
 	enemies["stapler"] = stapler_enemy
 	
+	
+		# 树怪敌人
+	var ent_enemy = EnemyData.new(
+		"树精",
+		50,  # max_hp（更高）
+		8,  # attack_damage（更高）
+		330.0,  # move_speed（更慢）
+		"res://assets/enemy/ent-run-Sheet.png",
+		510,
+		500,
+		9
+	)
+	ent_enemy.description = "这是一只树怪"
+	ent_enemy.animation_speed = 20.0  
+	ent_enemy.scale = Vector2(0.9, 0.9)  # 0.4倍大小
+	ent_enemy.shadow_offset = Vector2(15.0,-35) 
+	ent_enemy.shadow_scale = Vector2(1.8, 1.0)
+	enemies["ent"] = ent_enemy
+	
+	
 	var basic00_enemy = EnemyData.new(
 		"基础敌人-绿史莱姆",
 		10,  # max_hp
