@@ -10,8 +10,9 @@
 	  "total_count": 15,
 	  "enemies": {
 		"basic": 0.3,
-		"exploding_enemy": 0.3,
-		"fast": 0.2,
+		"exploding_enemy": 0.2,
+		"stapler": 0.2,
+		"fast": 0.1,
 		"tank": 0.1,
 		"elite": 0.1
 	  },
@@ -29,8 +30,9 @@
 	  "total_count": 16,
 	  "enemies": {
 		"basic": 0.3,
-		"exploding_enemy": 0.3,
-		"fast": 0.2,
+		"exploding_enemy": 0.2,
+		"stapler": 0.2,
+		"fast": 0.1,
 		"tank": 0.1,
 		"elite": 0.1
 	  },

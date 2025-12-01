@@ -40,6 +40,24 @@ static func initialize_enemies() -> void:
 	#enemy.shadow_scale = Vector2.ZERO  # 使用默认大小
 	#enemy.shadow_offset = Vector2(10, 20)  # 相对默认位置偏移(10, 20)
 	
+		# 订书机
+	var stapler_enemy = EnemyData.new(
+		"订书机",
+		20,  # max_hp
+		4,  # attack_damage
+		400.0,  # move_speed（更快）
+		"res://assets/enemy/stapler-run-Sheet.png",
+		664,
+		500,
+		4
+	)
+	stapler_enemy.description = "这是一个订书机"
+	stapler_enemy.scale = Vector2(0.4, 0.4)  # 0.4倍大小
+	stapler_enemy.shadow_offset = Vector2(15.0,-95) 
+	stapler_enemy.shadow_scale = Vector2(1.0, 0.5)
+	stapler_enemy.animation_speed = 12.0  #  FPS
+	enemies["stapler"] = stapler_enemy
+	
 	var basic00_enemy = EnemyData.new(
 		"基础敌人-绿史莱姆",
 		10,  # max_hp
