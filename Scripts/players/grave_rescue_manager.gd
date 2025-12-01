@@ -4,6 +4,9 @@ class_name GraveRescueManager
 ## 墓碑救援管理器
 ## 处理玩家与墓碑的交互：范围检测、读条、救援界面
 
+## 预加载的范围圈纹理（所有实例共享，避免每次创建都重新加载）
+static var _range_circle_texture = preload("res://assets/others/rescue_range_circle.png")
+
 ## 引用
 var player: CharacterBody2D = null
 var grave_sprite: Sprite2D = null
@@ -167,30 +170,19 @@ func _create_progress_bar() -> void:
 	
 	add_child(progress_bar)
 
-## 创建范围圈
+## 创建范围圈（使用预加载的纹理，避免运行时计算）
 func _create_range_circle() -> void:
-	# 创建一个简单的圆形精灵作为范围指示
 	range_circle = Sprite2D.new()
+	range_circle.texture = _range_circle_texture
 	
-	# 根据RESCUE_RANGE创建对应大小的圆形纹理
-	var circle_diameter = int(RESCUE_RANGE * 2)  # 直径 = 范围 * 2
-	var image = Image.create(circle_diameter, circle_diameter, false, Image.FORMAT_RGBA8)
-	image.fill(Color.TRANSPARENT)
+	# 根据RESCUE_RANGE调整缩放（假设原图设计尺寸需要适配到 RESCUE_RANGE * 2 的直径）
+	var target_diameter = RESCUE_RANGE * 2  # 目标直径 800
+	var texture_size = _range_circle_texture.get_size().x  # 假设图片是正方形
+	if texture_size > 0:
+		range_circle.scale = Vector2.ONE * (target_diameter / texture_size)
 	
-	var center = circle_diameter / 2
-	var ring_thickness = 4  # 圆环厚度
-	
-	# 绘制圆环
-	for x in range(circle_diameter):
-		for y in range(circle_diameter):
-			var dx = x - center
-			var dy = y - center
-			var dist = sqrt(dx * dx + dy * dy)
-			if dist >= RESCUE_RANGE - ring_thickness and dist <= RESCUE_RANGE + ring_thickness:
-				image.set_pixel(x, y, Color(1, 1, 0, 0.5))  # 半透明黄色
-	
-	var texture = ImageTexture.create_from_image(image)
-	range_circle.texture = texture
+	#range_circle.modulate = Color(1, 1, 0, 0.5)  # 半透明黄色
+	range_circle.modulate.a = 0.5  # 半透明
 	range_circle.visible = false
 	range_circle.z_index = 1
 	
