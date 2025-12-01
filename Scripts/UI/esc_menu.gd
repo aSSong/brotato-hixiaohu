@@ -125,16 +125,11 @@ func _input(event: InputEvent) -> void:
 func _on_restart_pressed() -> void:
 	# 恢复游戏（必须在切换场景前）
 	get_tree().paused = false
-	# 保存当前模式，防止reset_game重置为默认的survival
-	var saved_mode = GameMain.current_mode_id
-	# 重置游戏数据
-	GameMain.reset_game()
-	# 恢复之前的模式
-	GameMain.current_mode_id = saved_mode
+	
 	# 发送信号
 	main_menu_requested.emit()
 	
 	print("[ESC Menu] 正在返回职业选择...")
 	
-	# 直接切换场景，不使用await（避免场景销毁期间信号触发问题）
-	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
+	# 使用SceneCleanupManager安全切换场景（会清理所有游戏对象并重置GameState，同时保留模式信息）
+	SceneCleanupManager.change_scene_safely_keep_mode("res://scenes/UI/Class_choose.tscn")

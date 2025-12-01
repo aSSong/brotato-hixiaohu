@@ -81,6 +81,11 @@ static func _cleanup_bullets() -> void:
 static func _reset_game_data() -> void:
 	print("[SceneCleanup] 重置游戏数据")
 	
+	# 重置GameState状态机（重要！防止状态残留）
+	if GameState:
+		GameState.reset()
+		print("[SceneCleanup] GameState已重置")
+	
 	# 重置GameMain
 	if GameMain:
 		GameMain.reset_game()

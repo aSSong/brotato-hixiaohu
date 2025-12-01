@@ -14,6 +14,14 @@ func _ready() -> void:
 	# 等待场景完全加载
 	await get_tree().process_frame
 	
+	# 确保GameState处于正确的初始状态（防止从ESC菜单或死亡UI进入时状态残留）
+	if GameState.current_state != GameState.State.NONE and GameState.current_state != GameState.State.GAME_INITIALIZING:
+		print("[GameInitializer] 检测到GameState状态异常: %s，重置状态机" % GameState.current_state)
+		GameState.reset()
+	
+	# 设置游戏初始化状态
+	GameState.change_state(GameState.State.GAME_INITIALIZING)
+	
 	# 播放战斗BGM
 	BGMManager.play_bgm("fight")
 	print("[GameInitializer] 开始播放战斗BGM")

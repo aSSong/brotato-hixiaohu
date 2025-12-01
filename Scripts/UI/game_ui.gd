@@ -24,9 +24,11 @@ func _ready() -> void:
 	# 获取当前游戏模式
 	_setup_game_mode()
 	
-	# 连接信号
-	GameMain.gold_changed.connect(_on_gold_changed)
-	GameMain.master_key_changed.connect(_on_master_key_changed)
+	# 连接信号（检查是否已连接，防止重复连接）
+	if not GameMain.gold_changed.is_connected(_on_gold_changed):
+		GameMain.gold_changed.connect(_on_gold_changed)
+	if not GameMain.master_key_changed.is_connected(_on_master_key_changed):
+		GameMain.master_key_changed.connect(_on_master_key_changed)
 	
 	# 初始化显示
 	if gold_counter:
@@ -229,3 +231,25 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("info"):
 		if player_stats_info:
 			player_stats_info.toggle_visibility()
+
+## 节点退出时断开信号连接（防止信号残留）
+func _exit_tree() -> void:
+	# 断开GameMain信号
+	if GameMain.gold_changed.is_connected(_on_gold_changed):
+		GameMain.gold_changed.disconnect(_on_gold_changed)
+	if GameMain.master_key_changed.is_connected(_on_master_key_changed):
+		GameMain.master_key_changed.disconnect(_on_master_key_changed)
+	
+	# 断开玩家信号
+	if player_ref and is_instance_valid(player_ref):
+		if player_ref.hp_changed.is_connected(_on_player_hp_changed):
+			player_ref.hp_changed.disconnect(_on_player_hp_changed)
+	
+	# 断开波次管理器信号
+	if wave_manager_ref and is_instance_valid(wave_manager_ref):
+		if wave_manager_ref.has_signal("enemy_killed") and wave_manager_ref.enemy_killed.is_connected(_on_wave_enemy_killed):
+			wave_manager_ref.enemy_killed.disconnect(_on_wave_enemy_killed)
+		if wave_manager_ref.has_signal("wave_started") and wave_manager_ref.wave_started.is_connected(_on_wave_started):
+			wave_manager_ref.wave_started.disconnect(_on_wave_started)
+		if wave_manager_ref.has_signal("wave_ended") and wave_manager_ref.wave_ended.is_connected(_on_wave_ended):
+			wave_manager_ref.wave_ended.disconnect(_on_wave_ended)
