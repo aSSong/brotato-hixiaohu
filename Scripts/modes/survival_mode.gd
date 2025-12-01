@@ -15,8 +15,8 @@ func _init() -> void:
 	#victory_keys = 200  # 生存模式胜利条件：收集200把钥匙
 	#victory_keys = GameConfig.keys_required  # 从GameConfig读取胜利钥匙数
 	allow_revive = true  # 生存模式允许复活
-	initial_gold = 10  # 生存模式初始gold数量
-	initial_master_key = 1  # 生存模式初始masterkey数量
+	initial_gold = 100  # 生存模式初始gold数量
+	initial_master_key = 100  # 生存模式初始masterkey数量
 
 ## 注意：波次配置已由wave_system_v3从JSON文件（wave_config_id）加载，不再使用硬编码配置
 ## 注意：胜利失败判定已由base_game_mode统一实现，通过配置参数控制

@@ -55,15 +55,26 @@ func _perform_attack() -> void:
 	if weapon_data == null:
 		return
 	
-	# 开始攻击
-	is_attacking = true
-	attack_timer = weapon_data.attack_speed
-	has_dealt_damage = false  # 重置伤害标记
+	# 开始攻击动画
+	_start_attack_animation()
+	
+	# 联网模式：通过 NetworkPlayerManager 广播攻击动画
+	if GameMain.current_mode_id == "online":
+		NetworkPlayerManager.broadcast_melee_attack(owner_peer_id)
 	
 	# 立即检查并造成伤害（只造成一次）
 	_check_and_damage_enemies()
 
-## 检测并伤害范围内的敌人
+
+## 开始攻击动画
+func _start_attack_animation() -> void:
+	if weapon_data == null:
+		return
+	is_attacking = true
+	attack_timer = weapon_data.attack_speed
+	has_dealt_damage = false
+
+## 检测并伤害范围内的敌人和 Boss 玩家
 func _check_and_damage_enemies() -> void:
 	if weapon_data == null:
 		return
@@ -71,6 +82,11 @@ func _check_and_damage_enemies() -> void:
 	# 使用新系统获取伤害
 	var base_damage = get_damage()
 	var hit_range = weapon_data.hit_range
+	
+	# 联网模式：攻击可攻击的玩家（PvP）
+	var hit_players = NetworkPlayerManager.handle_melee_collision(owner_peer_id, global_position, hit_range, base_damage)
+	for hit_player in hit_players:
+		apply_special_effects(hit_player, base_damage)
 	
 	# 获取所有敌人
 	var enemies = get_tree().get_nodes_in_group("enemy")
@@ -95,7 +111,7 @@ func _check_and_damage_enemies() -> void:
 			
 			# 造成伤害
 			if enemy.has_method("enemy_hurt"):
-				enemy.enemy_hurt(final_damage, is_critical)
+				enemy.enemy_hurt(final_damage, is_critical, owner_peer_id)
 			
 			# 应用特殊效果（统一方法）
 			apply_special_effects(enemy, final_damage)

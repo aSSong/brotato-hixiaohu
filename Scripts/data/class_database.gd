@@ -162,6 +162,105 @@ static func initialize_classes() -> void:
 	# 自动生成特性描述
 	tank.generate_traits_description()
 	classes["tank"] = tank
+	
+	# Boss
+	register_boss_class()
+
+	# Player 1-4
+	var colors = [
+		Color(1.0, 0.4, 0.4),   # 红
+		Color(1.0, 0.8, 0.2),   # 黄
+		Color(0.2, 0.6, 1.0),   # 蓝
+		Color(0.4, 1.0, 0.4),   # 绿
+	]
+	for i in colors.size():
+		register_player_class(i + 1, colors[i])
+
+static func register_boss_class() -> void:
+	var boss = ClassData.new(
+		"KeyPerson-Boss",
+		100,  # max_hp
+		500.0,  # speed
+		1.5,  # attack_multiplier（所有武器伤害+50%）
+		5,  # defense
+		0.1,  # crit_chance
+		1.8,  # crit_damage
+		"",  # skill_name (已废弃，使用 skill_data)
+		{}  # skill_params (已废弃，使用 skill_data)
+	)
+	boss.description = "均衡发展的职业，适合所有武器类型"
+	# 加载技能数据（新系统）
+	boss.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
+	boss.skin_frames = boss_sprite_frames()
+	boss.scale = Vector2(1.2, 1.2)
+	boss.color = Color(0.4, 1.0, 0.4)
+	# 同步到新系统
+	boss.sync_to_base_stats()
+	# 自动生成特性描述
+	boss.generate_traits_description()
+	classes["boss"] = boss
+
+static func register_player_class(n: int, color: Color) -> void:
+	var player = ClassData.new(
+		"KeyPerson-Player%d" % n,
+		50,  # max_hp
+		400.0,  # speed
+		1.15,  # attack_multiplier（所有武器伤害+15%）
+		2,  # defense
+		0.1,  # crit_chance
+		1.8,  # crit_damage
+		"",  # skill_name (已废弃，使用 skill_data)
+		{}  # skill_params (已废弃，使用 skill_data)
+	)
+	player.description = "均衡发展的职业，适合所有武器类型"
+	# 平衡者已经通过 attack_multiplier 设置了所有武器伤害+15%
+	# speed 保持 400.0（移动速度0%）
+	# 加载技能数据（新系统）
+	player.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
+	player.skin_frames = player_sprite_frames("player%d" % n)
+	player.color = color
+	# 同步到新系统
+	player.sync_to_base_stats()
+	# 自动生成特性描述
+	player.generate_traits_description()
+	classes["player%d" % n] = player
+
+static func player_sprite_frames(skin: String) -> SpriteFrames:
+	var player_path = "res://assets/player/"
+	
+	var sprite_frame_custom = SpriteFrames.new()
+	var texture_size = Vector2(520, 240)
+	var sprite_size = Vector2(130, 240)
+	var full_texture: Texture = load(player_path + skin + "-sheet.png")
+	
+	var num_columns = int(texture_size.x / sprite_size.x)
+	var num_row = int(texture_size.y / sprite_size.y)
+	
+	for x in range(num_columns):
+		for y in range(num_row):
+			var frame = AtlasTexture.new()
+			frame.atlas = full_texture
+			frame.region = Rect2(Vector2(x, y) * sprite_size, sprite_size)
+			sprite_frame_custom.add_frame("default", frame)
+	
+	return sprite_frame_custom
+
+static func boss_sprite_frames() -> SpriteFrames:
+	var boss_path = "res://assets/enemy/boss01-sheet.png"
+	
+	var sprite_frame_custom = SpriteFrames.new()
+	var frame_width = 360
+	var frame_height = 240
+	var frame_count = 4
+	var full_texture: Texture = load(boss_path)
+	
+	for i in range(frame_count):
+		var frame = AtlasTexture.new()
+		frame.atlas = full_texture
+		frame.region = Rect2(i * frame_width, 0, frame_width, frame_height)
+		sprite_frame_custom.add_frame("default", frame)
+	
+	return sprite_frame_custom
 
 ## 获取职业（重命名以避免与Node.get_class()冲突）
 static func get_class_data(class_id: String) -> ClassData:

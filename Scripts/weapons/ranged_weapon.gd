@@ -21,15 +21,17 @@ func _on_weapon_initialized() -> void:
 
 func _perform_attack() -> void:
 	if attack_enemies.is_empty() or weapon_data == null or not shoot_pos:
+		if GameMain.current_mode_id == "online" and NetworkManager.is_server():
+			print("[RangedWeapon] 攻击条件不满足: enemies=%d, weapon_data=%s, shoot_pos=%s" % [
+				attack_enemies.size(), weapon_data != null, shoot_pos != null
+			])
 		return
 	
 	var target_enemy = attack_enemies[0]
 	if not is_instance_valid(target_enemy):
+		if GameMain.current_mode_id == "online" and NetworkManager.is_server():
+			print("[RangedWeapon] 目标无效，跳过攻击")
 		return
-	
-	# 创建子弹
-	var bullet = bullet_scene.instantiate()
-	get_tree().root.add_child(bullet)
 	
 	# 计算方向
 	var direction = (target_enemy.global_position - shoot_pos.global_position).normalized()
@@ -44,13 +46,32 @@ func _perform_attack() -> void:
 		if is_critical:
 			damage = DamageCalculator.apply_critical_multiplier(damage, player_stats)
 	
-	# 发射子弹
+	# 联网模式：通过 NetworkPlayerManager 广播
+	if GameMain.current_mode_id == "online":
+		NetworkPlayerManager.broadcast_spawn_bullet(
+			shoot_pos.global_position,
+			direction,
+			weapon_data.bullet_speed,
+			damage,
+			is_critical,
+			owner_peer_id
+		)
+	else:
+		_spawn_bullet_local(shoot_pos.global_position, direction, damage, is_critical)
+
+
+## 本地创建子弹（单机模式使用）
+func _spawn_bullet_local(start_pos: Vector2, direction: Vector2, damage: int, is_critical: bool) -> void:
+	var bullet = bullet_scene.instantiate()
+	get_tree().root.add_child(bullet)
+	
 	bullet.start(
-		shoot_pos.global_position,
+		start_pos,
 		direction,
 		weapon_data.bullet_speed,
 		damage,
 		is_critical,
 		player_stats,
-		weapon_data  # 传递weapon_data以便应用特殊效果
+		weapon_data,
+		owner_peer_id
 	)

@@ -23,6 +23,8 @@ class_name ClassData
 @export var skin_frames: SpriteFrames 
 @export var scale: Vector2 = Vector2(1.0, 1.0)
 
+@export var color: Color = Color.WHITE
+
 ## 技能数据（新系统）
 @export var skill_data: SkillData
 

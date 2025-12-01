@@ -11,6 +11,7 @@ signal main_menu_requested
 ## 节点引用
 @onready var resume_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/ResumeButton
 @onready var main_menu_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton
+@onready var restart_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/restart
 @onready var background: ColorRect = $Background
 
 func _ready() -> void:
@@ -31,6 +32,13 @@ func show_menu() -> void:
 	
 	# 暂停游戏 - 由 GameState 管理
 	# get_tree().paused = true
+	
+	# 联机模式下不暂停整个场景，只显示菜单
+	if GameMain.current_mode_id == "online":
+		get_tree().paused = false
+		if restart_button:
+			restart_button.visible = false
+			restart_button.disabled = true
 	
 	# 显示菜单
 	show()
@@ -103,6 +111,9 @@ func _return_to_main_menu() -> void:
 	# 恢复游戏（必须在切换场景前）
 	get_tree().paused = false
 	
+	# 联机模式主动断开网络连接
+	_stop_connection()
+	
 	# 重置游戏数据
 	GameMain.reset_game()
 	
@@ -140,3 +151,13 @@ func _on_restart_pressed() -> void:
 	# 切换到主菜单场景
 	await get_tree().create_timer(0.1).timeout
 	get_tree().change_scene_to_file("res://scenes/UI/start_menu.tscn")
+
+
+func _stop_connection() -> void:
+	# 联机模式主动断开网络连接
+	if GameMain.current_mode_id == "online":
+		if NetworkManager.has_method("stop_network"):
+			print("[ESC Menu] 停止网络连接")
+			NetworkManager.stop_network()
+		else:
+			print("[ESC Menu] 未找到 NetworkManager 或缺少 stop_network 方法")

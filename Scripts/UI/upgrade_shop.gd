@@ -42,6 +42,28 @@ signal shop_closed()
 ## 升级选项预制（用于UI显示）
 var upgrade_option_scene = preload("res://scenes/UI/upgrade_option.tscn")
 
+
+## 获取本地玩家（兼容单机和联网模式）
+func _get_local_player() -> Node:
+	if GameMain.current_mode_id == "online":
+		return NetworkPlayerManager.local_player
+	else:
+		return get_tree().get_first_node_in_group("player")
+
+
+## 获取本地玩家的武器管理器（兼容单机和联网模式）
+func _get_local_weapons_manager() -> Node:
+	if GameMain.current_mode_id == "online":
+		var local_player = NetworkPlayerManager.local_player
+		if local_player:
+			return local_player.get_node_or_null("now_weapons")
+		return null
+	else:
+		var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
+		if not weapons_manager:
+			weapons_manager = get_tree().get_first_node_in_group("weapons")
+		return weapons_manager
+
 ## 计算带波次修正的价格
 ## 公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
 static func calculate_wave_adjusted_cost(base_cost: int) -> int:
@@ -151,6 +173,7 @@ func open_shop() -> void:
 	print("容器子节点数（生成前）: ", upgrade_container.get_child_count())
 	
 	# 生成初始升级选项（异步，需要等待）
+	# 注：Boss 玩家只会生成血量和移动速度相关的升级选项
 	await generate_upgrades()
 	
 	# 更新武器列表显示
@@ -160,6 +183,32 @@ func open_shop() -> void:
 	print("容器子节点数（生成后）: ", upgrade_container.get_child_count())
 	print("打开后可见性: ", visible, " process_mode: ", process_mode)
 
+
+## 检查本地玩家是否是 Boss
+func _is_local_player_boss() -> bool:
+	if GameMain.current_mode_id != "online":
+		return false
+	
+	var local_player = NetworkPlayerManager.local_player
+	if not local_player:
+		return false
+	
+	var role = local_player.get("player_role_id")
+	return role == NetworkPlayerManager.ROLE_BOSS
+
+
+## Boss 可购买的升级类型（血量和移动速度相关）
+const BOSS_ALLOWED_UPGRADE_TYPES := [
+	UpgradeData.UpgradeType.HP_MAX,       # HP上限
+	UpgradeData.UpgradeType.MOVE_SPEED,   # 移动速度
+	UpgradeData.UpgradeType.HEAL_HP,      # 恢复HP
+]
+
+
+## 检查升级类型是否对 Boss 可用
+func _is_upgrade_allowed_for_boss(upgrade_type: int) -> bool:
+	return upgrade_type in BOSS_ALLOWED_UPGRADE_TYPES
+
 ## 关闭商店
 func close_shop() -> void:
 	hide()
@@ -167,10 +216,29 @@ func close_shop() -> void:
 	# get_tree().paused = false
 	shop_closed.emit()
 
+func set_close_button_enabled(enabled: bool) -> void:
+	if close_button:
+		close_button.disabled = not enabled
+
+func update_close_button_text(text: String) -> void:
+	if close_button:
+		close_button.text = text
+
 ## 生成升级选项（3个）
+var _is_generating: bool = false  # 防止并发调用
+
 func generate_upgrades() -> void:
+	# 防止并发调用
+	if _is_generating:
+		return
+	
+	_is_generating = true
+	
 	# 清除现有选项
 	_clear_upgrades()
+	
+	# 等待一帧确保 queue_free() 的节点被完全删除
+	await get_tree().process_frame
 	
 	# 先处理锁定的升级，确保它们保持在相同位置
 	var selected: Array[UpgradeData] = []
@@ -220,6 +288,7 @@ func generate_upgrades() -> void:
 			final_selected.append(upgrade)
 	
 	current_upgrades = final_selected
+	_is_generating = false
 
 ## 创建升级选项UI
 func _create_upgrade_option_ui(upgrade: UpgradeData) -> UpgradeOption:
@@ -247,6 +316,10 @@ func _create_upgrade_option_ui(upgrade: UpgradeData) -> UpgradeOption:
 	
 	# 等待一帧确保@onready变量已初始化
 	await get_tree().process_frame
+	
+	# 检查 option_ui 是否仍然有效（可能在等待期间被删除）
+	if not option_ui or not is_instance_valid(option_ui) or not option_ui.is_inside_tree():
+		return null
 	
 	# 现在设置数据（此时@onready变量已经初始化）
 	if option_ui.has_method("set_upgrade_data"):
@@ -344,6 +417,12 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	else:
 		adjusted_cost = calculate_wave_adjusted_cost(upgrade.actual_cost)
 	
+	# 联网模式：发送购买请求到服务器
+	if GameMain.current_mode_id == "online":
+		await _purchase_upgrade_online(upgrade, adjusted_cost)
+		return
+	
+	# 单机模式：原有逻辑
 	if GameMain.gold < adjusted_cost:
 		print("钥匙不足！需要 %d，当前 %d" % [adjusted_cost, GameMain.gold])
 		return
@@ -371,6 +450,201 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	
 	upgrade_purchased.emit(upgrade)
 	
+	# 移除已购买的选项
+	_remove_purchased_upgrade_ui(upgrade)
+
+
+## 联网模式：购买升级
+var _pending_purchase: UpgradeData = null  # 待确认的购买
+
+
+func _purchase_upgrade_online(upgrade: UpgradeData, cost: int) -> void:
+	if _pending_purchase != null:
+		print("[UpgradeShop] 已有购买请求进行中，请稍候")
+		return
+	
+	var local_player = NetworkPlayerManager.local_player
+	if not local_player:
+		print("[UpgradeShop] 联网购买失败: 找不到本地玩家")
+		return
+	
+	# 检查本地钥匙是否足够（预检查，服务器还会再验证）
+	var player_gold = local_player.get("gold")
+	if player_gold == null or player_gold < cost:
+		print("[UpgradeShop] 钥匙不足！需要 %d，当前 %d" % [cost, player_gold if player_gold else 0])
+		return
+	
+	# 准备属性数据（如果是属性升级）
+	var stats_data: Dictionary = {}
+	if upgrade.stats_modifier:
+		stats_data = _stats_to_dict(upgrade.stats_modifier)
+	
+	# 记录待确认的购买
+	_pending_purchase = upgrade
+	
+	# 发送购买请求到服务器
+	print("[UpgradeShop] 发送购买请求: %s, cost=%d" % [upgrade.name, cost])
+	NetworkPlayerManager.rpc_id(1, "rpc_request_purchase", 
+		upgrade.upgrade_type, 
+		upgrade.name, 
+		cost, 
+		upgrade.weapon_id, 
+		upgrade.custom_value,
+		stats_data
+	)
+
+
+## 联网模式：处理服务器购买响应
+func on_purchase_result(success: bool, message: String) -> void:
+	if _pending_purchase == null:
+		return
+	
+	var upgrade = _pending_purchase
+	_pending_purchase = null
+	
+	if success:
+		# 购买成功，更新 UI
+		# 移除锁定状态（如果该升级被锁定）
+		for position_index in locked_upgrades.keys():
+			var locked_upgrade = locked_upgrades[position_index]
+			if _is_same_upgrade(locked_upgrade, upgrade):
+				locked_upgrades.erase(position_index)
+				print("[UpgradeShop] 已购买的升级从锁定列表中移除: %s" % upgrade.name)
+				break
+		
+		upgrade_purchased.emit(upgrade)
+		
+		# 移除已购买的选项
+		_remove_purchased_upgrade_ui(upgrade)
+		
+		# 更新武器列表（如果是武器类型）
+		if upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+			# 等待一帧确保武器已添加
+			await get_tree().process_frame
+			_update_weapon_list()
+		
+		print("[UpgradeShop] 购买成功: %s" % upgrade.name)
+	else:
+		# 购买失败
+		print("[UpgradeShop] 购买失败: %s - %s" % [upgrade.name, message])
+
+
+## 将 CombatStats 转换为 Dictionary（用于 RPC 传输）
+## 注意：对于升级系统，stats_modifier 表示的是增量，默认值都被清零
+## 所以只需要检查非零值（加法属性）和非1值（乘法属性）
+func _stats_to_dict(stats: CombatStats) -> Dictionary:
+	if stats == null:
+		return {}
+	
+	var data: Dictionary = {}
+	
+	# 基础属性（增量，检查非零）
+	if stats.max_hp != 0:
+		data["max_hp"] = stats.max_hp
+	if stats.speed != 0.0:
+		data["speed"] = stats.speed
+	if stats.defense != 0:
+		data["defense"] = stats.defense
+	if stats.luck != 0.0:
+		data["luck"] = stats.luck
+	
+	# 通用战斗属性
+	if stats.crit_chance != 0.0:
+		data["crit_chance"] = stats.crit_chance
+	if stats.crit_damage != 0.0:  # 增量，默认为 0
+		data["crit_damage"] = stats.crit_damage
+	if stats.damage_reduction != 0.0:
+		data["damage_reduction"] = stats.damage_reduction
+	
+	# 全局武器属性
+	if stats.global_damage_add != 0.0:
+		data["global_damage_add"] = stats.global_damage_add
+	if stats.global_damage_mult != 1.0:
+		data["global_damage_mult"] = stats.global_damage_mult
+	if stats.global_attack_speed_add != 0.0:
+		data["global_attack_speed_add"] = stats.global_attack_speed_add
+	if stats.global_attack_speed_mult != 1.0:
+		data["global_attack_speed_mult"] = stats.global_attack_speed_mult
+	
+	# 近战武器属性
+	if stats.melee_damage_add != 0.0:
+		data["melee_damage_add"] = stats.melee_damage_add
+	if stats.melee_damage_mult != 1.0:
+		data["melee_damage_mult"] = stats.melee_damage_mult
+	if stats.melee_speed_add != 0.0:
+		data["melee_speed_add"] = stats.melee_speed_add
+	if stats.melee_speed_mult != 1.0:
+		data["melee_speed_mult"] = stats.melee_speed_mult
+	if stats.melee_range_add != 0.0:
+		data["melee_range_add"] = stats.melee_range_add
+	if stats.melee_range_mult != 1.0:
+		data["melee_range_mult"] = stats.melee_range_mult
+	if stats.melee_knockback_add != 0.0:
+		data["melee_knockback_add"] = stats.melee_knockback_add
+	if stats.melee_knockback_mult != 1.0:
+		data["melee_knockback_mult"] = stats.melee_knockback_mult
+	
+	# 远程武器属性
+	if stats.ranged_damage_add != 0.0:
+		data["ranged_damage_add"] = stats.ranged_damage_add
+	if stats.ranged_damage_mult != 1.0:
+		data["ranged_damage_mult"] = stats.ranged_damage_mult
+	if stats.ranged_speed_add != 0.0:
+		data["ranged_speed_add"] = stats.ranged_speed_add
+	if stats.ranged_speed_mult != 1.0:
+		data["ranged_speed_mult"] = stats.ranged_speed_mult
+	if stats.ranged_range_add != 0.0:
+		data["ranged_range_add"] = stats.ranged_range_add
+	if stats.ranged_range_mult != 1.0:
+		data["ranged_range_mult"] = stats.ranged_range_mult
+	if stats.ranged_penetration != 0:
+		data["ranged_penetration"] = stats.ranged_penetration
+	if stats.ranged_projectile_count != 0:
+		data["ranged_projectile_count"] = stats.ranged_projectile_count
+	
+	# 魔法武器属性
+	if stats.magic_damage_add != 0.0:
+		data["magic_damage_add"] = stats.magic_damage_add
+	if stats.magic_damage_mult != 1.0:
+		data["magic_damage_mult"] = stats.magic_damage_mult
+	if stats.magic_speed_add != 0.0:
+		data["magic_speed_add"] = stats.magic_speed_add
+	if stats.magic_speed_mult != 1.0:
+		data["magic_speed_mult"] = stats.magic_speed_mult
+	if stats.magic_range_add != 0.0:
+		data["magic_range_add"] = stats.magic_range_add
+	if stats.magic_range_mult != 1.0:
+		data["magic_range_mult"] = stats.magic_range_mult
+	if stats.magic_explosion_radius_add != 0.0:
+		data["magic_explosion_radius_add"] = stats.magic_explosion_radius_add
+	if stats.magic_explosion_radius_mult != 1.0:
+		data["magic_explosion_radius_mult"] = stats.magic_explosion_radius_mult
+	
+	# 特殊效果属性
+	if stats.lifesteal_percent != 0.0:
+		data["lifesteal_percent"] = stats.lifesteal_percent
+	if stats.burn_chance != 0.0:
+		data["burn_chance"] = stats.burn_chance
+	if stats.burn_damage_per_second != 0.0:
+		data["burn_damage_per_second"] = stats.burn_damage_per_second
+	if stats.freeze_chance != 0.0:
+		data["freeze_chance"] = stats.freeze_chance
+	if stats.poison_chance != 0.0:
+		data["poison_chance"] = stats.poison_chance
+	
+	# 异常效果系数（乘法，默认 1.0）
+	if stats.status_duration_mult != 1.0:
+		data["status_duration_mult"] = stats.status_duration_mult
+	if stats.status_effect_mult != 1.0:
+		data["status_effect_mult"] = stats.status_effect_mult
+	if stats.status_chance_mult != 1.0:
+		data["status_chance_mult"] = stats.status_chance_mult
+	
+	return data
+
+
+## 移除已购买的升级选项 UI
+func _remove_purchased_upgrade_ui(upgrade: UpgradeData) -> void:
 	# 移除已购买的选项
 	for i in range(current_upgrades.size() - 1, -1, -1):
 		if current_upgrades[i] == upgrade:
@@ -573,14 +847,67 @@ func _reapply_weapon_bonuses() -> void:
 
 ## 刷新按钮
 func _on_refresh_button_pressed() -> void:
+	# 联网模式：通过服务器处理钥匙扣除
+	if GameMain.current_mode_id == "online":
+		await _refresh_shop_online()
+		return
+	
+	# 单机模式
 	if GameMain.gold < refresh_cost:
 		print("钥匙不足！")
 		return
-	
 	GameMain.remove_gold(refresh_cost)
+	
 	refresh_cost *= 2  # 下次刷新费用x2
 	_update_refresh_cost_display()
 	await generate_upgrades()
+
+
+## 联网模式：通过服务器刷新商店
+var _pending_refresh_cost: int = 0  # 待确认的刷新费用
+var _waiting_for_refresh_response: bool = false  # 是否正在等待服务器响应
+
+
+func _refresh_shop_online() -> void:
+	if _waiting_for_refresh_response:
+		print("[UpgradeShop] 已在等待刷新响应，请稍候")
+		return
+	
+	var local_player = NetworkPlayerManager.local_player
+	if not local_player:
+		print("[UpgradeShop] 刷新失败: 找不到本地玩家")
+		return
+	
+	# 预检查钥匙（服务器还会再验证）
+	var player_gold = local_player.get("gold")
+	if player_gold == null or player_gold < refresh_cost:
+		print("[UpgradeShop] 钥匙不足！需要 %d，当前 %d" % [refresh_cost, player_gold if player_gold else 0])
+		return
+	
+	# 记录待确认的刷新费用
+	_pending_refresh_cost = refresh_cost
+	_waiting_for_refresh_response = true
+	
+	# 发送刷新请求到服务器
+	print("[UpgradeShop] 发送刷新请求: cost=%d" % refresh_cost)
+	NetworkPlayerManager.rpc_id(1, "rpc_request_shop_refresh", refresh_cost)
+
+
+## 联网模式：处理服务器刷新响应
+func on_refresh_result(success: bool, message: String) -> void:
+	_waiting_for_refresh_response = false
+	
+	if success:
+		# 刷新成功，更新本地状态
+		refresh_cost = _pending_refresh_cost * 2
+		_update_refresh_cost_display()
+		generate_upgrades()  # 异步生成新选项
+		print("[UpgradeShop] 刷新成功，下次费用: %d" % refresh_cost)
+	else:
+		# 刷新失败
+		print("[UpgradeShop] 刷新失败: %s" % message)
+	
+	_pending_refresh_cost = 0
 
 ## 关闭按钮
 func _on_close_button_pressed() -> void:
@@ -619,10 +946,8 @@ func _update_weapon_list() -> void:
 	if not weapon6_label:
 		weapon6_label = get_node_or_null("WeaponList/VBoxContainer/weapon6/Weapon6Label")
 	
-	# 获取武器管理器
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
+	# 获取武器管理器（使用辅助函数，兼容单机和联网模式）
+	var weapons_manager = _get_local_weapons_manager()
 	
 	if not weapons_manager:
 		print("[UpgradeShop] 无法找到武器管理器")
@@ -700,9 +1025,9 @@ func _get_current_wave() -> int:
 	
 	return current_wave
 
-## 获取玩家幸运值
+## 获取玩家幸运值（兼容单机和联网模式）
 func _get_player_luck() -> float:
-	var player = get_tree().get_first_node_in_group("player")
+	var player = _get_local_player()
 	var luck_value = 0.0
 	if player and player.current_class:
 		luck_value = player.current_class.luck
@@ -796,6 +1121,11 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	var current_wave = _get_current_wave()
 	rng.seed = hash(Time.get_ticks_msec() + current_wave + existing_upgrades.size())
 	
+	# Boss 模式：只生成血量和移动速度相关的升级
+	var is_boss = _is_local_player_boss()
+	if is_boss:
+		return _generate_boss_upgrade(existing_upgrades, rng.randi())
+	
 	# 统计现有选项中的武器和属性数量
 	var current_weapon_count = 0
 	var current_attribute_count = 0
@@ -877,9 +1207,8 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 
 ## 生成武器相关upgrade
 func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int = 0) -> UpgradeData:
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
+	# 获取本地玩家的武器管理器（兼容单机和联网模式）
+	var weapons_manager = _get_local_weapons_manager()
 	
 	if not weapons_manager:
 		return null
@@ -1064,4 +1393,113 @@ func _generate_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
 	# 复制自定义值
 	upgrade_copy.custom_value = upgrade_data.custom_value
 	
+	return upgrade_copy
+
+
+## Boss 专用：生成血量和移动速度相关的升级
+func _generate_boss_upgrade(existing_upgrades: Array[UpgradeData], salt: int = 0) -> UpgradeData:
+	var current_wave = _get_current_wave()
+	var luck_value = _get_player_luck()
+	var quality = _get_quality_by_luck(luck_value, current_wave)
+	
+	var attempts = 0
+	var max_attempts = 50
+	
+	while attempts < max_attempts:
+		attempts += 1
+		var attempt_salt = salt + attempts
+		
+		var upgrade = _generate_boss_attribute_upgrade(quality, attempt_salt)
+		
+		# 如果指定品质生成失败，尝试白色品质
+		if upgrade == null:
+			upgrade = _generate_boss_attribute_upgrade(UpgradeData.Quality.WHITE, attempt_salt)
+		
+		if upgrade == null:
+			continue
+		
+		# 检查是否与已有选项重复
+		var is_duplicate = false
+		for existing in existing_upgrades:
+			if existing == null:
+				continue
+			if _is_same_upgrade(existing, upgrade):
+				is_duplicate = true
+				break
+		
+		if not is_duplicate:
+			return upgrade
+	
+	print("[UpgradeShop] Boss 升级生成失败: 尝试 %d 次后仍无法生成" % max_attempts)
+	return null
+
+
+## Boss 专用：生成指定品质的属性升级（仅限血量和移动速度）
+func _generate_boss_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
+	var all_upgrade_ids = UpgradeDatabase.get_all_upgrade_ids()
+	
+	# 筛选出指定品质且 Boss 可用的升级
+	var boss_upgrades: Array[Dictionary] = []
+	var total_weight: int = 0
+	
+	for upgrade_id in all_upgrade_ids:
+		var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
+		if not upgrade_data or upgrade_data.quality != quality:
+			continue
+		
+		# 检查是否是 Boss 可用的升级类型
+		if not _is_upgrade_allowed_for_boss(upgrade_data.upgrade_type):
+			continue
+		
+		# 检查权重
+		var weight = upgrade_data.weight
+		if weight <= 0:
+			continue
+		
+		boss_upgrades.append({"id": upgrade_id, "weight": weight})
+		total_weight += weight
+	
+	if boss_upgrades.is_empty():
+		return null
+	
+	# 加权随机选择
+	var current_wave = _get_current_wave()
+	var rng = RandomNumberGenerator.new()
+	rng.seed = hash(Time.get_ticks_msec() + current_wave + boss_upgrades.size() + salt)
+	
+	var random_value = rng.randi_range(0, total_weight - 1)
+	
+	var accumulated_weight = 0
+	var selected_upgrade_id: String = ""
+	for upgrade_info in boss_upgrades:
+		accumulated_weight += upgrade_info["weight"]
+		if random_value < accumulated_weight:
+			selected_upgrade_id = upgrade_info["id"]
+			break
+	
+	if selected_upgrade_id == "":
+		selected_upgrade_id = boss_upgrades[-1]["id"]
+	
+	var upgrade_data = UpgradeDatabase.get_upgrade_data(selected_upgrade_id)
+	
+	# 创建副本
+	var upgrade_copy = UpgradeData.new(
+		upgrade_data.upgrade_type,
+		upgrade_data.name,
+		upgrade_data.cost,
+		upgrade_data.icon_path,
+		upgrade_data.weapon_id
+	)
+	upgrade_copy.description = upgrade_data.description
+	upgrade_copy.quality = upgrade_data.quality
+	upgrade_copy.actual_cost = upgrade_data.actual_cost
+	upgrade_copy.weight = upgrade_data.weight
+	upgrade_copy.attribute_changes = upgrade_data.attribute_changes.duplicate(true)
+	
+	if upgrade_data.stats_modifier:
+		upgrade_copy.stats_modifier = upgrade_data.stats_modifier.clone()
+	
+	upgrade_copy.custom_value = upgrade_data.custom_value
+	
+	print("[UpgradeShop] Boss 升级生成: %s (品质: %s)" % [upgrade_copy.name, UpgradeData.get_quality_name(quality)])
 	return upgrade_copy

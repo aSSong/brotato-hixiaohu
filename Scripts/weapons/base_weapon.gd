@@ -31,6 +31,9 @@ var damage_multiplier: float = 1.0
 var attack_speed_multiplier: float = 1.0
 var range_multiplier: float = 1.0
 
+var owner_player: PlayerCharacter = null
+var owner_peer_id: int = 0
+
 ## 武器等级（1-5级）
 var weapon_level: int = 1
 
@@ -315,25 +318,50 @@ func _on_timer_timeout() -> void:
 		return
 	
 	# 清理无效的敌人
+	var before_count = attack_enemies.size()
 	attack_enemies = attack_enemies.filter(func(enemy): return is_instance_valid(enemy))
+	var after_count = attack_enemies.size()
+	
+	if before_count != after_count:
+		print("[BaseWeapon] 清理无效敌人: %d -> %d" % [before_count, after_count])
 	
 	if attack_enemies.is_empty():
 		return
 	
 	# 调用子类的攻击方法
-	_perform_attack()
+	if GameMain.current_mode_id == "online":
+		if not NetworkManager.is_server():
+			return
+		# 服务器执行攻击（子类负责广播给客户端）
+		print("[BaseWeapon] 服务器执行攻击, 目标数量: %d, owner_peer_id: %d" % [attack_enemies.size(), owner_peer_id])
+		_perform_attack()
+	else:
+		_perform_attack()
 
 ## 敌人进入检测范围
 func _on_area_2d_body_entered(body: Node2D) -> void:
+	var added = false
 	if body.is_in_group("enemy") and not attack_enemies.has(body):
 		attack_enemies.append(body)
 		sort_enemy()
+		added = true
+	
+	# 联网模式：Boss 玩家也是攻击目标（PvP）
+	if NetworkPlayerManager.is_valid_pvp_target(owner_peer_id, body) and not attack_enemies.has(body):
+		attack_enemies.append(body)
+		sort_enemy()
+		added = true
+	
+	if added and GameMain.current_mode_id == "online" and NetworkManager.is_server():
+		print("[BaseWeapon] 目标进入: %s, 目标数: %d, owner: %d" % [body.name, attack_enemies.size(), owner_peer_id])
 
 ## 敌人离开检测范围
 func _on_area_2d_body_exited(body: Node2D) -> void:
-	if body.is_in_group("enemy") and attack_enemies.has(body):
+	if attack_enemies.has(body):
 		attack_enemies.erase(body)
 		sort_enemy()
+		if GameMain.current_mode_id == "online" and NetworkManager.is_server():
+			print("[BaseWeapon] 目标离开: %s, 剩余: %d, owner: %d" % [body.name, attack_enemies.size(), owner_peer_id])
 
 ## 排序敌人（按距离）
 func sort_enemy() -> void:
@@ -350,6 +378,15 @@ func sort_enemy() -> void:
 ## 虚函数：子类实现具体的攻击逻辑
 func _perform_attack() -> void:
 	push_error("_perform_attack() 必须在子类中实现！")
+
+
+## 已废弃：不再使用 rpc_perform_attack
+## 改为由服务器直接执行 _perform_attack，然后通过子类的 RPC 广播效果
+
+func set_owner_player(player: PlayerCharacter) -> void:
+	owner_player = player
+	owner_peer_id = player.peer_id if player else 0
+
 
 ## 虚函数：武器初始化时的额外设置
 func _on_weapon_initialized() -> void:

@@ -23,6 +23,7 @@ static func initialize_enemies() -> void:
 		240,  # frame_height
 		5     # frame_count（根据你的实际帧数修改）
 	)
+	basic_enemy.id = "basic"
 	basic_enemy.description = "标准敌人，平衡的属性"
 	basic_enemy.animation_speed = 8.0  # 8 FPS
 	enemies["basic"] = basic_enemy
@@ -38,6 +39,7 @@ static func initialize_enemies() -> void:
 		240,
 		5
 	)
+	fast_enemy.id = "fast"
 	fast_enemy.description = "快速但脆弱的敌人"
 	fast_enemy.animation_speed = 12.0  # 更快的动画
 	enemies["fast"] = fast_enemy
@@ -53,6 +55,7 @@ static func initialize_enemies() -> void:
 		240,
 		5
 	)
+	tank_enemy.id = "tank"
 	tank_enemy.description = "高血量但移动缓慢的敌人"
 	tank_enemy.animation_speed = 6.0  # 更慢的动画
 	enemies["tank"] = tank_enemy
@@ -68,6 +71,7 @@ static func initialize_enemies() -> void:
 		240,
 		5
 	)
+	elite_enemy.id = "elite"
 	elite_enemy.description = "强化的精英敌人"
 	elite_enemy.shake_amount = 12.0  # 更强的震动
 	elite_enemy.animation_speed = 10.0
@@ -84,6 +88,7 @@ static func initialize_enemies() -> void:
 		240,  # frame_height
 		4     # frame_count（根据boss的实际帧数修改）
 	)
+	last_enemy.id = "last_enemy"
 	last_enemy.description = "每波最后的首领，掉落Master Key"
 	last_enemy.shake_amount = 15.0  # 强震动
 	last_enemy.scale = Vector2(1.2, 1.2)  # 1.2倍大小
@@ -113,6 +118,7 @@ static func initialize_enemies() -> void:
 		240,
 		5
 	)
+	charging_enemy.id = "charging_enemy"
 	charging_enemy.description = "会冲锋攻击的敌人"
 	charging_enemy.skill_type = EnemyData.EnemySkillType.CHARGING
 	charging_enemy.skill_config = {
@@ -136,6 +142,7 @@ static func initialize_enemies() -> void:
 		240,
 		5
 	)
+	shooting_enemy.id = "shooting_enemy"
 	shooting_enemy.description = "会远程射击的敌人"
 	shooting_enemy.skill_type = EnemyData.EnemySkillType.SHOOTING
 	shooting_enemy.skill_config = {
@@ -158,6 +165,7 @@ static func initialize_enemies() -> void:
 		240,
 		5
 	)
+	exploding_enemy.id = "exploding_enemy"
 	exploding_enemy.description = "低血量时会自爆的敌人"
 	exploding_enemy.skill_type = EnemyData.EnemySkillType.EXPLODING
 	exploding_enemy.skill_config = {

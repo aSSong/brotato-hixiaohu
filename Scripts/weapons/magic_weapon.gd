@@ -103,6 +103,16 @@ func _cancel_cast(cast_data: Dictionary) -> void:
 
 ## 执行施法
 func _execute_cast(cast_data: Dictionary) -> void:
+	# 客户端视觉效果：只显示爆炸，不处理伤害
+	if cast_data.get("is_client_visual", false):
+		var explosion_position = cast_data.target_position
+		_create_explosion_effect(explosion_position)
+		
+		# 清理指示器
+		if cast_data.indicator and is_instance_valid(cast_data.indicator):
+			cast_data.indicator.hide_and_remove()
+		return
+	
 	var base_damage = cast_data.damage
 	var explosion_radius = weapon_data.explosion_radius if weapon_data else 150.0
 	
@@ -139,7 +149,7 @@ func _execute_cast(cast_data: Dictionary) -> void:
 		# 对目标造成直接伤害
 		if target.has_method("enemy_hurt"):
 			var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
-			target.enemy_hurt(damage_to_deal, is_critical)
+			target.enemy_hurt(damage_to_deal, is_critical, owner_peer_id)
 			
 			# 应用特殊效果（统一方法）
 			apply_special_effects(target, damage_to_deal)
@@ -191,13 +201,21 @@ func _perform_attack() -> void:
 		if not is_instance_valid(target):
 			continue
 		
+		var target_pos = target.global_position
+		
 		# 如果有延迟，创建施法攻击
 		if cast_delay > 0:
-			# 现在每个目标都显示指示器
+			# 服务器本地显示指示器
 			_start_cast(target, damage, explosion_radius, cast_delay, true)
+			# 联网模式：通过 NetworkPlayerManager 广播
+			if GameMain.current_mode_id == "online":
+				NetworkPlayerManager.broadcast_magic_cast(target_pos, explosion_radius, cast_delay, owner_peer_id)
 		else:
 			# 无延迟，立即攻击
 			_execute_immediate_attack(target, damage, explosion_radius, true)
+			# 联网模式：通过 NetworkPlayerManager 广播
+			if GameMain.current_mode_id == "online":
+				NetworkPlayerManager.broadcast_magic_execute(target_pos, explosion_radius, owner_peer_id)
 
 ## 立即执行攻击（无延迟）
 func _execute_immediate_attack(target: Node2D, damage: int, radius: float, show_indicator: bool) -> void:
@@ -219,7 +237,7 @@ func _execute_immediate_attack(target: Node2D, damage: int, radius: float, show_
 						final_damage = DamageCalculator.apply_critical_multiplier(damage, player_stats)
 				
 				var damage_to_deal = int(final_damage * weapon_data.explosion_damage_multiplier)
-				target.enemy_hurt(damage_to_deal, is_critical)
+				target.enemy_hurt(damage_to_deal, is_critical, owner_peer_id)
 				
 				# 应用特殊效果（统一方法）
 				apply_special_effects(target, damage_to_deal)
@@ -332,10 +350,15 @@ func _explode_at_position(pos: Vector2, radius: float, base_damage: int, exclude
 			var final_damage = int(base_damage * explosion_damage_mult * weapon_data.explosion_damage_multiplier)
 			
 			if enemy.has_method("enemy_hurt"):
-				enemy.enemy_hurt(final_damage)
+				enemy.enemy_hurt(final_damage, owner_peer_id)
 				
 				# 应用特殊效果（统一方法）
 				apply_special_effects(enemy, final_damage)
+	
+	# 联网模式：爆炸范围攻击可攻击的玩家（PvP）
+	var hit_players = NetworkPlayerManager.handle_explosion_collision(owner_peer_id, pos, radius, base_damage, weapon_data.explosion_damage_multiplier)
+	for hit_player in hit_players:
+		apply_special_effects(hit_player, base_damage)
 
 ## 创建爆炸特效
 func _create_explosion_effect(pos: Vector2) -> void:
@@ -357,3 +380,31 @@ func _show_explosion_indicator(pos: Vector2, radius: float) -> void:
 	
 	if indicator.has_method("show_at"):
 		indicator.show_at(pos, radius, indicator_color, 0.3)
+
+
+## ==================== 联网同步 ====================
+
+## 客户端显示施法效果（由 NetworkPlayerManager 调用）
+func _client_show_cast(target_pos: Vector2, radius: float, delay: float) -> void:
+	# 客户端只显示视觉效果，不处理伤害
+	var indicator = _create_fixed_indicator(target_pos, radius, delay)
+	
+	# 添加到施法列表（仅用于追踪，不处理伤害）
+	casting_attacks.append({
+		"target": null,
+		"target_position": target_pos,
+		"damage": 0,
+		"radius": radius,
+		"timer": delay,
+		"show_indicator": true,
+		"is_locked": false,
+		"indicator": indicator,
+		"is_client_visual": true  # 标记为客户端视觉效果
+	})
+
+
+## 客户端显示立即攻击效果（由 NetworkPlayerManager 调用）
+func _client_show_execute(target_pos: Vector2, radius: float) -> void:
+	# 客户端只显示视觉效果
+	_show_explosion_indicator(target_pos, radius)
+	_create_explosion_effect(target_pos)

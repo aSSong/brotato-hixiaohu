@@ -12,6 +12,7 @@ enum EnemySkillType {
 	EXPLODING  # 自爆技能
 }
 
+@export var id: String = ""  # 敌人ID（用于网络同步识别）
 @export var enemy_name: String = "默认敌人"
 @export var description: String = ""
 

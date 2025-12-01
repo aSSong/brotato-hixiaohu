@@ -19,8 +19,19 @@ func _ready() -> void:
 	add_to_group("weapons_manager")
 	add_to_group("weapons")
 	
-	# 获取玩家引用
-	player_ref = get_tree().get_first_node_in_group("player")
+	# 优先使用父节点作为玩家引用（确保每个玩家的武器指向自身）
+	var parent_node = get_parent()
+	if parent_node is PlayerCharacter:
+		player_ref = parent_node
+	else:
+		# 回退到场景中第一个玩家（单人模式）
+		player_ref = get_tree().get_first_node_in_group("player")
+	
+	# 联网模式跳过自动初始化，等待服务器分配武器
+	var is_online_mode = GameMain.current_mode_id == "online"
+	if is_online_mode:
+		print("[NowWeapons] 联网模式，跳过自动初始化，等待服务器分配武器")
+		return
 	
 	# 检查是否为Ghost的组件
 	var is_ghost_component = false
@@ -41,6 +52,12 @@ func _ready() -> void:
 	
 	# 排列现有武器
 	arrange_weapons()
+	
+	# 确保已有武器也绑定正确的玩家
+	if player_ref is PlayerCharacter:
+		for weapon in get_all_weapons():
+			if weapon and weapon.has_method("set_owner_player"):
+				weapon.set_owner_player(player_ref)
 
 ## 创建测试武器（用于测试）
 func create_test_weapons() -> void:
@@ -109,6 +126,9 @@ func add_weapon(weapon_id: String, level: int = 1) -> void:
 	# 设置player_stats引用（新系统）
 	if weapon_instance is BaseWeapon:
 		_setup_weapon_stats(weapon_instance)
+	
+	if player_ref is PlayerCharacter and weapon_instance.has_method("set_owner_player"):
+		weapon_instance.set_owner_player(player_ref)
 	
 	# 排列武器
 	arrange_weapons()

@@ -82,6 +82,10 @@ func _on_player_hp_changed(current_hp: int, _max_hp: int) -> void:
 
 ## 触发死亡
 func _trigger_death() -> void:
+	# 联网模式下，服务器角色不触发死亡
+	if GameMain.current_mode_id == "online":
+		return
+	
 	if is_dead:
 		return
 	
@@ -263,6 +267,8 @@ func _on_revive_requested() -> void:
 func _on_give_up_requested() -> void:
 	print("[DeathManager] 玩家放弃游戏")
 	
+	_stop_network_if_online("give_up")
+	
 	# 移除墓碑
 	_remove_grave()
 	
@@ -282,6 +288,8 @@ func _on_give_up_requested() -> void:
 func _on_restart_requested() -> void:
 	var current_mode = GameMain.current_mode_id
 	print("[DeathManager] 玩家再战 | 当前模式:", current_mode)
+	
+	_stop_network_if_online("restart")
 	
 	# 移除墓碑
 	_remove_grave()
@@ -452,3 +460,12 @@ func _create_grave_name_label() -> void:
 	name_label.text = display_name
 	
 	print("[DeathManager] 墓碑名字Label已创建:", display_name)
+
+func _stop_network_if_online(context: String) -> void:
+	if GameMain.current_mode_id != "online":
+		return
+	if NetworkManager.has_method("stop_network"):
+		print("[DeathManager] 停止网络连接 | 来源:%s" % context)
+		NetworkManager.stop_network()
+	else:
+		print("[DeathManager] 未找到 NetworkManager 或缺少 stop_network 方法 | 来源:%s" % context)
