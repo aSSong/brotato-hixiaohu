@@ -5,6 +5,9 @@ class_name MultiGravesManager
 ## 负责在每波开始时刷新对应wave的ghost墓碑
 ## 注意：作为场景节点使用，不使用autoload
 
+## 预加载墓碑纹理（避免运行时load导致卡顿）
+var grave_texture = preload("res://assets/others/grave.png")
+
 ## 当前生成的墓碑列表（墓碑精灵节点）
 var current_graves: Array = []
 
@@ -63,10 +66,9 @@ func _create_grave_for_ghost(ghost_data: GhostData) -> void:
 	if not ghost_data:
 		return
 	
-	# 加载墓碑纹理
-	var grave_texture = load("res://assets/others/grave.png")
+	# 使用预加载的墓碑纹理
 	if not grave_texture:
-		push_error("[MultiGravesManager] 无法加载墓碑纹理！")
+		push_error("[MultiGravesManager] 墓碑纹理未加载！")
 		return
 	
 	# 创建墓碑精灵

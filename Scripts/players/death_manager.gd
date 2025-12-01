@@ -17,6 +17,9 @@ var grave_sprite: Sprite2D = null  # 墓碑精灵
 var grave_ghost_data: GhostData = null  # 墓碑关联的Ghost数据
 var grave_rescue_manager: GraveRescueManager = null  # 墓碑救援管理器
 
+## 预加载墓碑纹理（避免运行时load导致卡顿）
+var grave_texture_preload = preload("res://assets/others/grave.png")
+
 ## 状态
 var is_dead: bool = false
 var revive_count: int = 0  # 本局累计复活次数
@@ -144,11 +147,11 @@ func _trigger_death() -> void:
 
 ## 创建墓碑
 func _create_grave() -> void:
-	# 加载墓碑纹理
-	var grave_texture = load("res://assets/others/grave.png")
-	if not grave_texture:
-		push_error("[DeathManager] 无法加载墓碑纹理！")
+	# 使用预加载的墓碑纹理
+	if not grave_texture_preload:
+		push_error("[DeathManager] 墓碑纹理未加载！")
 		return
+	var grave_texture = grave_texture_preload
 	
 	# 创建墓碑精灵
 	grave_sprite = Sprite2D.new()

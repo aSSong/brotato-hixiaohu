@@ -31,29 +31,26 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	if canMoving:
-		# 检查玩家引用是否有效
+		# 检查玩家引用是否有效（只在引用失效时查询一次，不每帧查询）
 		if player == null or not is_instance_valid(player):
-			# 尝试重新获取玩家引用
+			# 尝试重新获取玩家引用（只查询一次）
 			player = get_tree().get_first_node_in_group("player")
-			if player == null or not is_instance_valid(player):
-				# 如果找不到玩家，停止移动
+			if player == null:
+				# 如果找不到玩家，停止移动（不再每帧重试）
 				canMoving = false
 				return
 		
-		# 确保玩家引用有效后再访问
-		if is_instance_valid(player):
-			# 计算距离
-			var distance = global_position.distance_to(player.global_position)
-			
-			# 如果距离足够近，触发拾取
-			if distance <= pickup_distance:
-				_pickup_item()
-				return
-			
-			# 继续移动
-			dir = (player.global_position - self.global_position).normalized()
-			global_position += dir * speed * delta
-	pass
+		# 计算距离
+		var distance = global_position.distance_to(player.global_position)
+		
+		# 如果距离足够近，触发拾取
+		if distance <= pickup_distance:
+			_pickup_item()
+			return
+		
+		# 继续移动
+		dir = (player.global_position - self.global_position).normalized()
+		global_position += dir * speed * delta
 
 ## 拾取物品
 func _pickup_item() -> void:

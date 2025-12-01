@@ -46,6 +46,46 @@ enum EnemySkillType {
 @export var shake_duration: float = 0.2
 @export var shake_amount: float = 8.0
 
+## 缓存的SpriteFrames（避免每个敌人都创建新的）
+var _cached_sprite_frames: SpriteFrames = null
+var _cached_texture: Texture2D = null
+
+## 获取缓存的SpriteFrames（懒加载，只创建一次）
+func get_sprite_frames() -> SpriteFrames:
+	# 如果已经缓存了，直接返回
+	if _cached_sprite_frames != null:
+		return _cached_sprite_frames
+	
+	# 加载纹理（只加载一次）
+	if _cached_texture == null:
+		if texture_path == "":
+			return null
+		_cached_texture = load(texture_path)
+		if _cached_texture == null:
+			push_error("[EnemyData] 无法加载纹理: %s" % texture_path)
+			return null
+	
+	# 创建SpriteFrames
+	_cached_sprite_frames = SpriteFrames.new()
+	_cached_sprite_frames.set_animation_loop("default", true)
+	
+	# 添加所有帧（单行横向排列）
+	for i in range(frame_count):
+		var x = i * frame_width
+		var y = 0  # 单行，y始终为0
+		
+		# 创建AtlasTexture
+		var atlas_texture = AtlasTexture.new()
+		atlas_texture.atlas = _cached_texture
+		atlas_texture.region = Rect2(x, y, frame_width, frame_height)
+		
+		_cached_sprite_frames.add_frame("default", atlas_texture)
+	
+	# 设置动画速度
+	_cached_sprite_frames.set_animation_speed("default", animation_speed)
+	
+	return _cached_sprite_frames
+
 ## 初始化函数
 func _init(
 	p_enemy_name: String = "默认敌人",

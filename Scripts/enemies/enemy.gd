@@ -205,33 +205,12 @@ func _apply_enemy_data() -> void:
 			var base_shadow_position = Vector2(-19.999998, 136.66666)
 			$shadow.position = (base_shadow_position + enemy_data.shadow_offset) / enemy_data.scale
 	
-	# 设置动画贴图（支持多帧）
+	# 设置动画贴图（使用缓存的SpriteFrames，避免每个敌人都创建新的）
 	if $AnimatedSprite2D and enemy_data.texture_path != "":
-		var texture = load(enemy_data.texture_path)
-		if texture:
-			# 创建SpriteFrames
-			var sprite_frames = SpriteFrames.new()
-			#sprite_frames.add_animation("default")
-			sprite_frames.set_animation_loop("default", true)
-			
-			# 添加所有帧（单行横向排列）
-			for i in range(enemy_data.frame_count):
-				var x = i * enemy_data.frame_width
-				var y = 0  # 单行，y始终为0
-				
-				# 创建AtlasTexture
-				var atlas_texture = AtlasTexture.new()
-				atlas_texture.atlas = texture
-				atlas_texture.region = Rect2(x, y, enemy_data.frame_width, enemy_data.frame_height)
-				
-				sprite_frames.add_frame("default", atlas_texture)
-			
-			# 设置动画速度
-			sprite_frames.set_animation_speed("default", enemy_data.animation_speed)
-			
+		var sprite_frames = enemy_data.get_sprite_frames()
+		if sprite_frames:
 			$AnimatedSprite2D.sprite_frames = sprite_frames
 			$AnimatedSprite2D.play("default")
-			
 			#print("[Enemy] 加载动画: ", enemy_data.enemy_name, " 帧数:", enemy_data.frame_count, " FPS:", enemy_data.animation_speed)
 	
 	# 应用震动设置
