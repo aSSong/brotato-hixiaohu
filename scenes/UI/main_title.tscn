@@ -256,7 +256,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.33333334)
 theme_override_font_sizes/font_size = 36
-text = "当前版本号：2i（0.2.9.1）"
+text = "当前版本号：2i++（0.2.9.3）"
 
 [connection signal="pressed" from="menu/VBoxContainer/btn_single_play" to="." method="_on_btn_single_play_pressed"]
 [connection signal="pressed" from="menu/VBoxContainer/btn_multi_play" to="." method="_on_btn_multi_play_pressed"]
