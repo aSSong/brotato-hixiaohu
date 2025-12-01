@@ -1,14 +1,103 @@
 extends Area2D
 
-@export var speed := 400.0      # 子弹速度
-@export var life_time := 3.0    # 最长存活时间（秒）
-@export var damage := 10        # 伤害值
+## 子弹类（重构版）
+## 
+## 支持多种移动类型和传参执行特效
+## 
+## 移动类型：
+##   - STRAIGHT: 直线飞行
+##   - HOMING: 追踪目标
+##   - BOUNCE: 弹跳
+##   - WAVE: 波浪形
+
+## ========== 导出属性（用于编辑器配置默认值） ==========
+@export var speed := 400.0
+@export var life_time := 3.0
+@export var damage := 10
+
+## ========== 运行时变量 ==========
+
+## 基础属性
 var hurt := 1
 var dir: Vector2
 var _velocity := Vector2.ZERO
-var is_critical: bool = false  # 是否暴击
-var player_stats: CombatStats = null  # 玩家属性（用于特效）
-var weapon_data: WeaponData = null  # 武器数据（用于特殊效果）
+var is_critical: bool = false
+
+## 子弹数据
+var bullet_data: BulletData = null
+
+## 玩家属性（用于特效）
+var player_stats: CombatStats = null
+
+## 特殊效果配置
+var special_effects: Array = []
+
+## 结算类型（用于特效伤害计算）
+var calculation_type: int = 0
+
+## 穿透计数
+var pierce_count: int = 0
+var pierced_enemies: Array = []
+
+## ========== 移动相关 ==========
+
+## 移动类型
+var movement_type: int = BulletData.MovementType.STRAIGHT
+
+## 移动参数
+var movement_params: Dictionary = {}
+
+## 追踪目标
+var homing_target: Node2D = null
+
+## 波浪移动
+var wave_time: float = 0.0
+var wave_base_position: Vector2 = Vector2.ZERO
+var wave_perpendicular: Vector2 = Vector2.ZERO
+
+## 弹跳计数
+var bounce_count: int = 0
+var max_bounces: int = 3
+
+## ========== 兼容旧版 ==========
+var weapon_data: WeaponData = null
+
+## ========== 新版初始化方法 ==========
+
+## 使用配置字典初始化子弹（推荐）
+func start_with_config(config: Dictionary) -> void:
+	global_position = config.get("position", Vector2.ZERO)
+	dir = config.get("direction", Vector2.RIGHT)
+	speed = config.get("speed", 2000.0)
+	hurt = config.get("damage", 1)
+	is_critical = config.get("is_critical", false)
+	player_stats = config.get("player_stats", null)
+	special_effects = config.get("special_effects", [])
+	calculation_type = config.get("calculation_type", 0)
+	pierce_count = config.get("pierce_count", 0)
+	bullet_data = config.get("bullet_data", null)
+	
+	# 设置移动类型和参数
+	if bullet_data:
+		movement_type = bullet_data.movement_type
+		movement_params = bullet_data.movement_params.duplicate()
+		life_time = bullet_data.lifetime
+		
+		# 设置外观
+		_setup_appearance()
+	
+	# 初始化移动
+	_init_movement()
+	
+	# 暴击效果
+	if is_critical:
+		modulate = Color(1.5, 1.5, 1.5)
+		scale *= 1.2
+	
+	# 生命周期
+	get_tree().create_timer(life_time).timeout.connect(queue_free)
+
+## ========== 旧版初始化方法（兼容） ==========
 
 func start(pos: Vector2, _dir: Vector2, _speed: float, _hurt: int, _is_critical: bool = false, _player_stats: CombatStats = null, _weapon_data: WeaponData = null) -> void:
 	global_position = pos
@@ -18,84 +107,295 @@ func start(pos: Vector2, _dir: Vector2, _speed: float, _hurt: int, _is_critical:
 	is_critical = _is_critical
 	player_stats = _player_stats
 	weapon_data = _weapon_data
+	
+	movement_type = BulletData.MovementType.STRAIGHT
 	_velocity = dir * speed
 	
-	# 如果是暴击，可以改变子弹颜色或大小
 	if is_critical:
-		modulate = Color(1.5, 1.5, 1.5)  # 变亮
+		modulate = Color(1.5, 1.5, 1.5)
 		scale *= 1.2
-		
+	
 	get_tree().create_timer(life_time).timeout.connect(queue_free)
 
+## ========== 移动逻辑 ==========
+
+func _init_movement() -> void:
+	match movement_type:
+		BulletData.MovementType.STRAIGHT:
+			_velocity = dir * speed
+		
+		BulletData.MovementType.HOMING:
+			_velocity = dir * speed
+			_find_homing_target()
+		
+		BulletData.MovementType.BOUNCE:
+			_velocity = dir * speed
+			max_bounces = movement_params.get("bounce_count", 3)
+		
+		BulletData.MovementType.WAVE:
+			_velocity = dir * speed
+			wave_time = 0.0
+			wave_base_position = global_position
+			wave_perpendicular = dir.rotated(PI / 2)
+		
+		BulletData.MovementType.SPIRAL:
+			_velocity = dir * speed
 
 func _physics_process(delta: float) -> void:
+	match movement_type:
+		BulletData.MovementType.STRAIGHT:
+			_move_straight(delta)
+		
+		BulletData.MovementType.HOMING:
+			_move_homing(delta)
+		
+		BulletData.MovementType.BOUNCE:
+			_move_straight(delta)
+		
+		BulletData.MovementType.WAVE:
+			_move_wave(delta)
+		
+		BulletData.MovementType.SPIRAL:
+			_move_spiral(delta)
+
+## 直线移动
+func _move_straight(delta: float) -> void:
 	global_position += _velocity * delta
 
+## 追踪移动
+func _move_homing(delta: float) -> void:
+	# 检查目标是否有效
+	if not is_instance_valid(homing_target) or homing_target.get("is_dead"):
+		_find_homing_target()
+	
+	if is_instance_valid(homing_target):
+		var target_dir = (homing_target.global_position - global_position).normalized()
+		var turn_speed = movement_params.get("turn_speed", 5.0)
+		var acceleration = movement_params.get("acceleration", 100.0)
+		var max_speed = movement_params.get("max_speed", 2500.0)
+		
+		# 逐渐转向目标
+		dir = dir.lerp(target_dir, turn_speed * delta).normalized()
+		
+		# 加速
+		speed = min(speed + acceleration * delta, max_speed)
+		_velocity = dir * speed
+		
+		# 旋转子弹朝向
+		rotation = dir.angle()
+	
+	global_position += _velocity * delta
+
+## 波浪移动
+func _move_wave(delta: float) -> void:
+	wave_time += delta
+	
+	var amplitude = movement_params.get("amplitude", 40.0)
+	var frequency = movement_params.get("frequency", 4.0)
+	
+	# 沿基础方向移动
+	wave_base_position += dir * speed * delta
+	
+	# 计算波浪偏移
+	var wave_offset = sin(wave_time * frequency) * amplitude
+	global_position = wave_base_position + wave_perpendicular * wave_offset
+
+## 螺旋移动
+func _move_spiral(delta: float) -> void:
+	var spiral_speed = movement_params.get("spiral_speed", 360.0)
+	var spiral_radius = movement_params.get("spiral_radius", 20.0)
+	
+	# 旋转方向
+	dir = dir.rotated(deg_to_rad(spiral_speed * delta))
+	_velocity = dir * speed
+	
+	global_position += _velocity * delta
+
+## 查找追踪目标
+func _find_homing_target() -> void:
+	var enemies = get_tree().get_nodes_in_group("enemy")
+	var closest_dist = INF
+	homing_target = null
+	
+	for enemy in enemies:
+		if not is_instance_valid(enemy) or enemy.get("is_dead"):
+			continue
+		
+		var dist = global_position.distance_to(enemy.global_position)
+		if dist < closest_dist:
+			closest_dist = dist
+			homing_target = enemy
+
+## ========== 外观设置 ==========
+
+func _setup_appearance() -> void:
+	if not bullet_data:
+		return
+	
+	# 设置缩放
+	scale = bullet_data.scale
+	
+	# 设置颜色
+	modulate = bullet_data.modulate
+	
+	# 设置贴图（如果有 Sprite2D 子节点）
+	var sprite = get_node_or_null("Sprite2D")
+	if sprite and bullet_data.texture_path != "":
+		var texture = load(bullet_data.texture_path)
+		if texture:
+			sprite.texture = texture
+
+## ========== 碰撞处理 ==========
 
 func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	#print("Collided with: ", body.name, " (type: ", body.get_class(), ")")
-	if body.is_in_group("enemy"):
-			if body.has_method("enemy_hurt"):
-				body.enemy_hurt(hurt, is_critical)
-				
-				# 应用特殊效果（统一方法）
-				if player_stats:
-					# 优先使用weapon_data中的特殊效果配置
-					var effect_configs: Array = []
-					if weapon_data and weapon_data.special_effects:
-						if weapon_data.special_effects is Dictionary and weapon_data.special_effects.has("effects"):
-							effect_configs = weapon_data.special_effects.get("effects", [])
-					
-					# 应用每个效果
-					for effect_config in effect_configs:
-						if not effect_config is Dictionary:
-							continue
-						
-						var effect_type = effect_config.get("type", "")
-						var effect_params = effect_config.get("params", {})
-						
-						# 如果是吸血效果，需要传递伤害和攻击者
-						if effect_type == "lifesteal":
-							var player = get_tree().get_first_node_in_group("player")
-							effect_params["damage_dealt"] = hurt
-							effect_params["attacker"] = player
-						
-						# 应用效果
-						SpecialEffects.try_apply_status_effect(player_stats, body, effect_type, effect_params)
-					
-					# 如果没有weapon_data配置，使用旧的player_stats逻辑（兼容性）
-					if effect_configs.is_empty():
-						# 吸血效果
-						if player_stats.lifesteal_percent > 0:
-							var player = get_tree().get_first_node_in_group("player")
-							SpecialEffects.try_apply_status_effect(player_stats, null, "lifesteal", {
-								"attacker": player,
-								"damage_dealt": hurt,
-								"percent": player_stats.lifesteal_percent
-							})
-						
-						# 状态效果（使用统一方法）
-						if player_stats.burn_chance > 0:
-							SpecialEffects.try_apply_status_effect(player_stats, body, "burn", {
-								"chance": player_stats.burn_chance,
-								"tick_interval": 1.0,
-								"damage": player_stats.burn_damage_per_second,
-								"duration": 3.0
-							})
-						
-						if player_stats.freeze_chance > 0:
-							SpecialEffects.try_apply_status_effect(player_stats, body, "freeze", {
-								"chance": player_stats.freeze_chance,
-								"duration": 2.0
-							})
-						
-						if player_stats.poison_chance > 0:
-							SpecialEffects.try_apply_status_effect(player_stats, body, "poison", {
-								"chance": player_stats.poison_chance,
-								"tick_interval": 1.0,
-								"damage": 5.0,
-								"duration": 5.0
-							})
+	if not body.is_in_group("enemy"):
+		return
 	
-	# 碰撞后销毁子弹
-	queue_free()
+	# 弹跳子弹碰到障碍物的处理
+	if movement_type == BulletData.MovementType.BOUNCE:
+		if body.is_in_group("wall") or body.is_in_group("obstacle"):
+			_handle_bounce()
+			return
+	
+	# 穿透检查
+	if pierced_enemies.has(body):
+		return
+	
+	# 造成伤害
+	if body.has_method("enemy_hurt"):
+		body.enemy_hurt(hurt, is_critical)
+	
+	# 应用特殊效果（传参执行，无回调）
+	_apply_effects_to_target(body)
+	
+	# 穿透处理
+	if pierce_count > 0:
+		pierced_enemies.append(body)
+		pierce_count -= 1
+		
+		# 弹跳子弹：寻找下一个目标
+		if movement_type == BulletData.MovementType.BOUNCE:
+			_handle_bounce_to_enemy()
+		return
+	
+	# 销毁子弹
+	if bullet_data == null or bullet_data.destroy_on_hit:
+		queue_free()
+
+## 应用特效到目标
+func _apply_effects_to_target(target: Node) -> void:
+	if not player_stats:
+		return
+	
+	# 优先使用配置的特殊效果
+	var effects_to_apply = special_effects
+	
+	# 兼容旧版：从 weapon_data 获取
+	if effects_to_apply.is_empty() and weapon_data and not weapon_data.special_effects.is_empty():
+		effects_to_apply = weapon_data.special_effects
+	
+	# 应用每个效果
+	for effect_config in effects_to_apply:
+		if not effect_config is Dictionary:
+			continue
+		
+		var effect_type = effect_config.get("type", "")
+		var effect_params = effect_config.get("params", {}).duplicate()
+		
+		# 吸血效果需要传递伤害和攻击者
+		if effect_type == "lifesteal":
+			var player = get_tree().get_first_node_in_group("player")
+			effect_params["damage_dealt"] = hurt
+			effect_params["attacker"] = player
+		
+		SpecialEffects.try_apply_status_effect(player_stats, target, effect_type, effect_params)
+	
+	# 兼容旧版：使用 player_stats 中的效果
+	if effects_to_apply.is_empty():
+		_apply_legacy_effects(target)
+
+## 旧版特效应用（兼容）
+func _apply_legacy_effects(target: Node) -> void:
+	if not player_stats:
+		return
+	
+	# 吸血
+	if player_stats.lifesteal_percent > 0:
+		var player = get_tree().get_first_node_in_group("player")
+		SpecialEffects.try_apply_status_effect(player_stats, null, "lifesteal", {
+			"attacker": player,
+			"damage_dealt": hurt,
+			"percent": player_stats.lifesteal_percent
+		})
+	
+	# 燃烧
+	if player_stats.burn_chance > 0:
+		SpecialEffects.try_apply_status_effect(player_stats, target, "burn", {
+			"chance": player_stats.burn_chance,
+			"tick_interval": 1.0,
+			"damage": player_stats.burn_damage_per_second,
+			"duration": 3.0
+		})
+	
+	# 冰冻
+	if player_stats.freeze_chance > 0:
+		SpecialEffects.try_apply_status_effect(player_stats, target, "freeze", {
+			"chance": player_stats.freeze_chance,
+			"duration": 2.0
+		})
+	
+	# 中毒
+	if player_stats.poison_chance > 0:
+		SpecialEffects.try_apply_status_effect(player_stats, target, "poison", {
+			"chance": player_stats.poison_chance,
+			"tick_interval": 1.0,
+			"damage": 5.0,
+			"duration": 5.0
+		})
+
+## ========== 弹跳处理 ==========
+
+func _handle_bounce() -> void:
+	if bounce_count >= max_bounces:
+		queue_free()
+		return
+	
+	bounce_count += 1
+	
+	# 反射速度
+	var bounce_loss = movement_params.get("bounce_loss", 0.9)
+	_velocity = _velocity.bounce(Vector2.UP) * bounce_loss  # 简化：假设垂直反弹
+	dir = _velocity.normalized()
+	speed *= bounce_loss
+
+func _handle_bounce_to_enemy() -> void:
+	if bounce_count >= max_bounces:
+		queue_free()
+		return
+	
+	bounce_count += 1
+	
+	# 寻找下一个目标
+	var search_range = movement_params.get("search_range", 300.0)
+	var enemies = get_tree().get_nodes_in_group("enemy")
+	var closest_enemy: Node2D = null
+	var closest_dist = search_range
+	
+	for enemy in enemies:
+		if not is_instance_valid(enemy) or enemy.get("is_dead"):
+			continue
+		if pierced_enemies.has(enemy):
+			continue
+		
+		var dist = global_position.distance_to(enemy.global_position)
+		if dist < closest_dist:
+			closest_dist = dist
+			closest_enemy = enemy
+	
+	if closest_enemy:
+		dir = (closest_enemy.global_position - global_position).normalized()
+		var bounce_loss = movement_params.get("bounce_loss", 0.9)
+		speed *= bounce_loss
+		_velocity = dir * speed
+	else:
+		queue_free()

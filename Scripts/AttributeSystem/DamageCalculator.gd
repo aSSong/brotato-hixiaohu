@@ -11,10 +11,125 @@ class_name DamageCalculator
 ##   武器伤害 = 基础伤害 × 等级倍数 × (1 + Σadd) × Πmult
 ##   最终伤害 = 武器伤害 - 防御 × (1 - 减伤%)
 ## 
-## 使用示例：
+## 使用示例（新版 - 推荐）：
+##   var damage = DamageCalculator.calculate_damage_by_calc_type(
+##       10, 3, WeaponData.CalculationType.MAGIC, player_stats
+##   )
+## 
+## 使用示例（旧版 - 兼容）：
 ##   var damage = DamageCalculator.calculate_weapon_damage(
 ##       10, 3, WeaponData.WeaponType.MELEE, player_stats
 ##   )
+
+## ========== 新版方法（使用 CalculationType）==========
+
+## 根据结算类型计算伤害
+## 
+## 这是推荐使用的方法，支持行为/结算分离
+## 例如：火焰剑（近战行为 + 魔法结算）
+## 
+## @param base_damage 基础伤害
+## @param weapon_level 武器等级（1-5）
+## @param calculation_type 结算类型（决定使用哪种属性加成）
+## @param attacker_stats 攻击者的战斗属性
+## @return 最终伤害
+static func calculate_damage_by_calc_type(
+	base_damage: int,
+	weapon_level: int,
+	calculation_type: int,
+	attacker_stats: CombatStats
+) -> int:
+	if base_damage <= 0:
+		return base_damage
+	
+	if not attacker_stats:
+		return base_damage
+	
+	var damage = float(base_damage)
+	
+	# 1. 武器等级倍数
+	var level_mults = WeaponData.get_level_multipliers(weapon_level)
+	damage *= level_mults.damage_multiplier
+	
+	# 2. 全局伤害（加法层 + 乘法层）
+	damage = damage * (1.0 + attacker_stats.global_damage_add) * attacker_stats.global_damage_mult
+	
+	# 3. 根据结算类型应用属性加成
+	match calculation_type:
+		0:  # WeaponData.CalculationType.MELEE
+			damage = damage * (1.0 + attacker_stats.melee_damage_add) * attacker_stats.melee_damage_mult
+		1:  # WeaponData.CalculationType.RANGED
+			damage = damage * (1.0 + attacker_stats.ranged_damage_add) * attacker_stats.ranged_damage_mult
+		2:  # WeaponData.CalculationType.MAGIC
+			damage = damage * (1.0 + attacker_stats.magic_damage_add) * attacker_stats.magic_damage_mult
+	
+	return int(max(1.0, damage))
+
+## 根据结算类型计算攻击速度
+static func calculate_attack_speed_by_calc_type(
+	base_attack_speed: float,
+	weapon_level: int,
+	calculation_type: int,
+	attacker_stats: CombatStats
+) -> float:
+	if not attacker_stats:
+		return base_attack_speed
+	
+	var speed = base_attack_speed
+	
+	# 1. 武器等级倍数
+	var level_mults = WeaponData.get_level_multipliers(weapon_level)
+	speed /= level_mults.attack_speed_multiplier
+	
+	# 2. 全局攻速倍数
+	var global_mult = (1.0 + attacker_stats.global_attack_speed_add) * attacker_stats.global_attack_speed_mult
+	speed /= global_mult
+	
+	# 3. 根据结算类型应用攻速倍数
+	var type_mult = 1.0
+	match calculation_type:
+		0:  # MELEE
+			type_mult = (1.0 + attacker_stats.melee_speed_add) * attacker_stats.melee_speed_mult
+		1:  # RANGED
+			type_mult = (1.0 + attacker_stats.ranged_speed_add) * attacker_stats.ranged_speed_mult
+		2:  # MAGIC
+			type_mult = (1.0 + attacker_stats.magic_speed_add) * attacker_stats.magic_speed_mult
+	
+	speed /= type_mult
+	
+	return max(0.05, speed)
+
+## 根据结算类型计算攻击范围
+static func calculate_range_by_calc_type(
+	base_range: float,
+	weapon_level: int,
+	calculation_type: int,
+	attacker_stats: CombatStats
+) -> float:
+	if not attacker_stats:
+		return base_range
+	
+	var range_val = base_range
+	
+	# 1. 武器等级倍数
+	var level_mults = WeaponData.get_level_multipliers(weapon_level)
+	range_val *= level_mults.range_multiplier
+	
+	# 2. 根据结算类型应用范围倍数
+	var type_mult = 1.0
+	match calculation_type:
+		0:  # MELEE
+			type_mult = (1.0 + attacker_stats.melee_range_add) * attacker_stats.melee_range_mult
+		1:  # RANGED
+			type_mult = (1.0 + attacker_stats.ranged_range_add) * attacker_stats.ranged_range_mult
+		2:  # MAGIC
+			type_mult = (1.0 + attacker_stats.magic_range_add) * attacker_stats.magic_range_mult
+	
+	range_val *= type_mult
+	
+	return max(10.0, range_val)
+
+## ========== 旧版方法（保持兼容性）==========
 
 ## 计算武器伤害
 ## 

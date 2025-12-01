@@ -311,7 +311,8 @@ func _get_weapon_effect_text(weapon_data: WeaponData) -> String:
 	if weapon_data.special_effects.is_empty():
 		return "无"
 	
-	var effects = weapon_data.special_effects.get("effects", [])
+	# 新版结构：special_effects 直接是 Array
+	var effects = weapon_data.special_effects
 
 	var texts = []
 	

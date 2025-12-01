@@ -1,0 +1,146 @@
+extends WeaponBehavior
+class_name RangedBehavior
+
+## 远程行为
+## 
+## 实现发射子弹攻击方式
+## 
+## 参数 (params):
+##   - damage: int 基础伤害
+##   - bullet_id: String 子弹ID（引用 BulletDatabase）
+##   - pierce_count: int 穿透数量
+##   - projectile_count: int 每次发射的子弹数量
+##   - spread_angle: float 散射角度（度）
+##   - attack_speed: float 攻击间隔（秒）
+##   - range: float 检测范围
+
+## 子弹场景
+var bullet_scene: PackedScene = null
+
+## 射击位置节点
+var shoot_pos: Marker2D = null
+
+func _on_initialize() -> void:
+	# 加载子弹场景
+	bullet_scene = preload("res://scenes/bullets/bullet.tscn")
+	
+	# 获取或创建射击位置节点
+	if weapon:
+		shoot_pos = weapon.get_node_or_null("shoot_pos")
+		if not shoot_pos:
+			shoot_pos = Marker2D.new()
+			shoot_pos.name = "shoot_pos"
+			shoot_pos.position = Vector2(16, 0)
+			weapon.add_child(shoot_pos)
+
+func get_behavior_type() -> int:
+	return WeaponData.BehaviorType.RANGED
+
+## 获取子弹ID
+func get_bullet_id() -> String:
+	return params.get("bullet_id", "normal_bullet")
+
+## 获取子弹数据
+func get_bullet_data() -> BulletData:
+	return BulletDatabase.get_bullet(get_bullet_id())
+
+## 获取穿透数量
+func get_pierce_count() -> int:
+	var base_pierce = params.get("pierce_count", 0)
+	
+	# 如果有玩家属性，加上远程穿透加成
+	if player_stats:
+		base_pierce += player_stats.ranged_penetration
+	
+	return base_pierce
+
+## 获取每次发射的子弹数量
+func get_projectile_count() -> int:
+	var base_count = params.get("projectile_count", 1)
+	
+	# 如果有玩家属性，加上额外弹药数
+	if player_stats:
+		base_count += player_stats.ranged_projectile_count
+	
+	return max(1, base_count)
+
+## 获取散射角度
+func get_spread_angle() -> float:
+	return params.get("spread_angle", 0.0)
+
+func perform_attack(enemies: Array) -> void:
+	if enemies.is_empty() or not weapon or not shoot_pos:
+		return
+	
+	var target_enemy = enemies[0]
+	if not is_instance_valid(target_enemy):
+		return
+	
+	# 获取子弹数据
+	var bullet_data = get_bullet_data()
+	var projectile_count = get_projectile_count()
+	var spread_angle = get_spread_angle()
+	
+	# 计算基础方向
+	var base_direction = (target_enemy.global_position - shoot_pos.global_position).normalized()
+	
+	# 计算伤害和暴击
+	var base_damage = get_final_damage()
+	var is_critical = roll_critical()
+	var final_damage = base_damage
+	if is_critical:
+		final_damage = apply_critical(base_damage)
+	
+	# 发射多颗子弹
+	for i in range(projectile_count):
+		var direction = base_direction
+		
+		# 如果有多颗子弹，计算散射
+		if projectile_count > 1 and spread_angle > 0:
+			var angle_offset = 0.0
+			if projectile_count > 1:
+				# 均匀分布在散射角度范围内
+				var step = spread_angle / (projectile_count - 1)
+				angle_offset = -spread_angle / 2 + step * i
+			direction = base_direction.rotated(deg_to_rad(angle_offset))
+		
+		# 创建子弹
+		_spawn_bullet(direction, final_damage, is_critical, bullet_data)
+
+## 生成子弹
+func _spawn_bullet(direction: Vector2, damage: int, is_critical: bool, bullet_data: BulletData) -> void:
+	if not bullet_scene or not weapon:
+		return
+	
+	var bullet = bullet_scene.instantiate()
+	weapon.get_tree().root.add_child(bullet)
+	
+	# 配置子弹参数
+	var start_params = {
+		"position": shoot_pos.global_position,
+		"direction": direction,
+		"speed": bullet_data.speed,
+		"damage": damage,
+		"is_critical": is_critical,
+		"player_stats": player_stats,
+		"special_effects": special_effects,
+		"calculation_type": calculation_type,
+		"pierce_count": get_pierce_count(),
+		"bullet_data": bullet_data,
+	}
+	
+	# 调用子弹的初始化方法
+	if bullet.has_method("start_with_config"):
+		bullet.start_with_config(start_params)
+	else:
+		# 兼容旧版子弹
+		bullet.start(
+			shoot_pos.global_position,
+			direction,
+			bullet_data.speed,
+			damage,
+			is_critical,
+			player_stats,
+			null  # 旧版不传 weapon_data
+		)
+
