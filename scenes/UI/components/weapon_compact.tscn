@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgi53yfp8jfnb"]
+
+[ext_resource type="Script" path="res://Scripts/UI/weapon_compact.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b3yui5wfldpre" path="res://assets/UI/common/bg-lilweapon-purple.png" id="1_tlojq"]
+[ext_resource type="Texture2D" uid="uid://cuthak4wn77qp" path="res://assets/weapon/Weapon_sword.png" id="2_ibirs"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_u03l2"]
+
+[node name="WeaponCompact" type="Control"]
+script = ExtResource("1_script")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bg-lilweapon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_tlojq")
+
+[node name="weapon-image" type="TextureRect" parent="bg-lilweapon"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = -56.5
+offset_right = 131.0
+offset_bottom = 43.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_ibirs")
+
+[node name="weapon-name" type="Label" parent="bg-lilweapon"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -35.0
+offset_right = 32.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_u03l2")
+theme_override_font_sizes/font_size = 20
+text = "连锁闪电"

@@ -27,6 +27,7 @@ class_name ClassData
 ## 职业选择界面使用的图片资源
 @export var portrait: Texture2D  # 头像资源
 @export var poster: Texture2D  # 海报资源
+@export var dead_poster: Texture2D  # 死亡海报资源
 @export var name_image: Texture2D  # 名字资源
 
 ## 技能数据（新系统）

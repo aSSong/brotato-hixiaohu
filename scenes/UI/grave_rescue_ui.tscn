@@ -1,24 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://yjtcj0iybywp"]
+[gd_scene load_steps=9 format=3 uid="uid://yjtcj0iybywp"]
 
 [ext_resource type="Script" uid="uid://c8tqf4himll6k" path="res://Scripts/UI/grave_rescue_ui.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://g6gjrtdtayij" path="res://assets/others/grave.png" id="2_4afqu"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r03xt"]
-bg_color = Color(0.16663587, 0.064476065, 1.8049032e-08, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4afqu"]
-bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
+[ext_resource type="Texture2D" uid="uid://by7fwqoe2sm6" path="res://assets/UI/rescue/bg-rescue-01.png" id="2_77vvw"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_thtr0"]
+[ext_resource type="Texture2D" uid="uid://fmigojo57l1" path="res://assets/UI/class_poster/pose-betty-01.png" id="4_i76ly"]
+[ext_resource type="Texture2D" uid="uid://cwh4ath052q28" path="res://assets/UI/rescue/btn-lilred-01.png" id="5_j2mh0"]
+[ext_resource type="Texture2D" uid="uid://o5ymn337opim" path="res://assets/UI/rescue/btn-close-01.png" id="6_50hfg"]
+[ext_resource type="Texture2D" uid="uid://djldbbvdpqhbd" path="res://assets/UI/rescue/btn-lilgray-01.png" id="6_i76ly"]
+[ext_resource type="Texture2D" uid="uid://s2qmk6kfsc0n" path="res://assets/UI/rescue/bg-rescue-name-01.png" id="7_gm5k2"]
 
 [node name="GraveRescueUI" type="CanvasLayer"]
 process_mode = 3
 layer = 100
 script = ExtResource("1")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="TextureRect" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -30,109 +26,175 @@ offset_right = 400.0
 offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_r03xt")
-
-[node name="Grave" type="Sprite2D" parent="Panel"]
-position = Vector2(664, 296)
-scale = Vector2(1.8, 1.8)
-texture = ExtResource("2_4afqu")
+texture = ExtResource("2_77vvw")
 
 [node name="TitleLabel" type="Label" parent="Panel"]
-visible = false
 layout_mode = 0
-offset_top = 45.0
-offset_right = 800.0
-offset_bottom = 90.0
-theme_override_font_sizes/font_size = 50
-text = "Keep Every You ？"
-horizontal_alignment = 1
+offset_left = 101.5
+offset_top = 23.0
+offset_right = 401.5
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_thtr0")
+theme_override_font_sizes/font_size = 60
+text = "拯 救 过 去 ！"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
-custom_minimum_size = Vector2(0, 200)
+visible = false
+custom_minimum_size = Vector2(600, 200)
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-grow_horizontal = 2
-theme_override_font_sizes/normal_font_size = 60
+offset_left = 0.5
+offset_top = -43.0
+offset_right = 600.5
+offset_bottom = 157.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
 text = "[b][font_size=70][color=#FFD700]K[/color][/font_size][/b]eep [b][font_size=70][color=#FFD700]E[/color][/font_size][/b]very [b][font_size=70][color=#FFD700]Y[/color][/font_size][/b]ou[b][font_size=70][color=#FFD700] ?[/color][/font_size][/b]"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonContainer" type="HBoxContainer" parent="Panel"]
+[node name="weaponlist" type="GridContainer" parent="Panel"]
 layout_mode = 0
-offset_top = 477.0
-offset_right = 800.0
-offset_bottom = 527.0
-theme_override_constants/separation = 100
-alignment = 1
+offset_left = 105.5
+offset_top = 133.0
+offset_right = 145.5
+offset_bottom = 173.0
 
-[node name="RescueButton" type="Button" parent="Panel/ButtonContainer"]
-custom_minimum_size = Vector2(150, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxFlat_4afqu")
-text = "救援"
+[node name="centersection" type="Control" parent="Panel"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="dead-poster" type="TextureRect" parent="Panel/centersection"]
+layout_mode = 0
+offset_left = 405.5
+offset_top = -89.0
+offset_right = 788.5
+offset_bottom = 711.0
+texture = ExtResource("4_i76ly")
+
+[node name="ButtonContainer" type="Control" parent="Panel"]
+anchors_preset = 0
+offset_left = 804.5
+offset_top = 503.0
+offset_right = 804.5
+offset_bottom = 503.0
+
+[node name="RescueButton" type="TextureButton" parent="Panel/ButtonContainer"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = -99.0
+offset_right = 396.0
+offset_bottom = -5.0
+texture_normal = ExtResource("5_j2mh0")
+texture_pressed = ExtResource("5_j2mh0")
+texture_hover = ExtResource("5_j2mh0")
+texture_disabled = ExtResource("5_j2mh0")
+texture_focused = ExtResource("5_j2mh0")
 
 [node name="CostLabel" type="Label" parent="Panel/ButtonContainer/RescueButton"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -400.0
-offset_top = -73.0
-offset_right = 400.0
+offset_left = -199.5
+offset_top = -75.0
+offset_right = 200.5
 offset_bottom = -8.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 22
-text = "费用：1个 Master Key 
+text = "费用：1个 生命钥匙 
 (当前：5个)"
 horizontal_alignment = 1
 
-[node name="TranscendButton" type="Button" parent="Panel/ButtonContainer"]
-custom_minimum_size = Vector2(150, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "超度"
-
-[node name="CancelButton" type="Button" parent="Panel/ButtonContainer"]
-custom_minimum_size = Vector2(150, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "关闭"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="rescue-label" type="Label" parent="Panel/ButtonContainer/RescueButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -101.5
-offset_top = -67.5
-offset_right = 101.5
-offset_bottom = 67.5
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 15
-alignment = 1
+theme_override_fonts/font = ExtResource("3_thtr0")
+theme_override_font_sizes/font_size = 40
+text = "拯  救"
 
-[node name="ClassLabel" type="Label" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "职业：战士"
-horizontal_alignment = 1
+[node name="TranscendButton" type="TextureButton" parent="Panel/ButtonContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 178.0
+offset_top = 12.0
+offset_right = 314.0
+offset_bottom = 65.0
+grow_horizontal = 2
+grow_vertical = 0
+texture_normal = ExtResource("6_i76ly")
+texture_pressed = ExtResource("6_i76ly")
+texture_hover = ExtResource("6_i76ly")
+texture_disabled = ExtResource("6_i76ly")
+texture_focused = ExtResource("6_i76ly")
 
-[node name="WeaponsLabel" type="Label" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "武器：剑 Lv.3, 盾 Lv.2"
-horizontal_alignment = 1
-autowrap_mode = 2
+[node name="Transcend-label" type="Label" parent="Panel/ButtonContainer/TranscendButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -19.5
+offset_right = 20.0
+offset_bottom = 4.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_thtr0")
+theme_override_font_sizes/font_size = 24
+text = "超  度"
 
-[node name="DeathLabel" type="Label" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 25
-text = "死亡次数：第 1 次"
+[node name="CancelButton" type="TextureButton" parent="Panel/ButtonContainer"]
+layout_mode = 0
+offset_left = 268.0
+offset_top = -470.0
+offset_right = 268.0
+offset_bottom = -470.0
+texture_normal = ExtResource("6_50hfg")
+texture_pressed = ExtResource("6_50hfg")
+texture_hover = ExtResource("6_50hfg")
+texture_disabled = ExtResource("6_50hfg")
+texture_focused = ExtResource("6_50hfg")
+
+[node name="name" type="Control" parent="Panel"]
+anchors_preset = 0
+offset_left = 682.5
+offset_top = 122.0
+offset_right = 722.5
+offset_bottom = 162.0
+
+[node name="bg-name" type="TextureRect" parent="Panel/name"]
+layout_mode = 1
+offset_right = 569.0
+offset_bottom = 192.0
+texture = ExtResource("7_gm5k2")
+
+[node name="name" type="Label" parent="Panel/name"]
+layout_mode = 1
+offset_left = 113.0
+offset_top = 86.0
+offset_right = 438.0
+offset_bottom = 203.0
+rotation = -0.07679449
+theme_override_fonts/font = ExtResource("3_thtr0")
+theme_override_font_sizes/font_size = 40
+text = "38F 你的名字真多
+第148世"
 horizontal_alignment = 1
