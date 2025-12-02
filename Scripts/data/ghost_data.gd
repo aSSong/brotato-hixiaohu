@@ -151,12 +151,6 @@ func get_class_name() -> String:
 	return "未知职业"
 
 ## 获取楼层显示文本（用于UI显示）
-## floor_id: 0-37 对应 "1F" 到 "38F"，38 对应 "外"
-## 如果楼层数据无效则返回空字符串
+## 使用 FloorConfig 统一解析
 func get_floor_text() -> String:
-	if floor_id >= 0 and floor_id <= 37:
-		return str(floor_id + 1) + "F"
-	elif floor_id == 38:
-		return "外"
-	else:
-		return ""  # 无效楼层不显示
+	return FloorConfig.get_floor_short_text(floor_id)
