@@ -365,7 +365,7 @@ func _trigger_victory() -> void:
 	# 加载胜利UI场景
 	var victory_scene = load("res://scenes/UI/victory_ui.tscn")
 	if victory_scene:
-		# 使用安全的场景切换（带清理）
-		await SceneCleanupManager.change_scene_to_packed_safely(victory_scene)
+		# 使用安全的场景切换（保留玩家信息，用于显示职业海报等）
+		await SceneCleanupManager.change_scene_to_packed_safely_keep_player_info(victory_scene)
 	else:
 		push_error("[GameInitializer] 无法加载胜利UI场景！")

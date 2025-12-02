@@ -1,18 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://mbtojpq22jkk"]
+[gd_scene load_steps=7 format=3 uid="uid://mbtojpq22jkk"]
 
 [ext_resource type="Script" uid="uid://28h8g6pjuvbs" path="res://Scripts/UI/victory_ui.gd" id="1_victory"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.1, 0.1, 0.15, 0.95)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.5, 0.8, 0.3, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[ext_resource type="Texture2D" uid="uid://bw3uaq0t881dt" path="res://assets/UI/victory_ui/text_victory_01.png" id="2_u2ikw"]
+[ext_resource type="Texture2D" uid="uid://deu4chhbm0682" path="res://assets/UI/common/bg-greenkey-01.png" id="2_wnxy2"]
+[ext_resource type="Texture2D" uid="uid://dxenabr8khac6" path="res://assets/UI/class_poster/pose-mrwill-01.png" id="3_uimwy"]
+[ext_resource type="Texture2D" uid="uid://c6nku3xu00b2f" path="res://assets/UI/common/btn-right-white-01.png" id="4_uimwy"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="6_aimmv"]
 
 [node name="VictoryUI" type="Control"]
 layout_mode = 3
@@ -23,67 +16,87 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_victory")
 
-[node name="MainPanel" type="Panel" parent="."]
+[node name="MainPanel" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.20392157, 0.84313726, 0.62352943, 1)
+
+[node name="bg-key" type="TextureRect" parent="MainPanel"]
+z_index = 1
+z_as_relative = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_wnxy2")
+
+[node name="text" type="TextureRect" parent="MainPanel"]
+z_index = 3
+z_as_relative = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
+offset_left = -928.5
+offset_top = -459.5
+offset_right = 928.5
+offset_bottom = 459.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+texture = ExtResource("2_u2ikw")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel"]
+[node name="poster" type="TextureRect" parent="MainPanel"]
+z_index = 4
+z_as_relative = false
+layout_mode = 0
+offset_left = 1167.0001
+offset_top = 48.000004
+offset_right = 1583.0001
+offset_bottom = 848.0
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("3_uimwy")
+stretch_mode = 2
+
+[node name="ReturnButton" type="TextureButton" parent="MainPanel"]
+z_index = 5
+z_as_relative = false
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = -40.0
-offset_bottom = -40.0
+offset_left = -366.0
+offset_top = -151.0
+offset_right = -52.0
+offset_bottom = -52.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("4_uimwy")
+texture_pressed = ExtResource("4_uimwy")
+texture_hover = ExtResource("4_uimwy")
+texture_disabled = ExtResource("4_uimwy")
+texture_focused = ExtResource("4_uimwy")
+
+[node name="backLabel" type="Label" parent="MainPanel/ReturnButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -12.0
+offset_right = 20.5
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="TitleLabel" type="Label" parent="MainPanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5, 0.8, 0.3, 1)
-theme_override_font_sizes/font_size = 72
-text = "胜利！"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MessageLabel" type="Label" parent="MainPanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
-text = "恭喜你收集了足够的钥匙！"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="GoldLabel" type="Label" parent="MainPanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-theme_override_font_sizes/font_size = 40
-text = "收集钥匙: 200"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="MainPanel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="ReturnButton" type="Button" parent="MainPanel/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "返回主菜单"
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_aimmv")
+theme_override_font_sizes/font_size = 50
+text = "返  回"

@@ -167,3 +167,43 @@ static func change_scene_safely_keep_mode(scene_path: String) -> void:
 	var error = tree.change_scene_to_file(scene_path)
 	if error != OK:
 		push_error("[SceneCleanup] 场景切换失败: %d" % error)
+
+## 安全的场景切换（保留玩家信息，用于胜利/结算场景）
+static func change_scene_to_packed_safely_keep_player_info(packed_scene: PackedScene) -> void:
+	print("[SceneCleanup] 安全切换到打包场景（保留玩家信息）")
+	
+	var tree = Engine.get_main_loop() as SceneTree
+	if not tree:
+		push_error("[SceneCleanup] 无法获取场景树")
+		return
+	
+	# 保存玩家信息
+	var saved_class_id = ""
+	var saved_weapon_ids: Array = []
+	var saved_mode = ""
+	if GameMain and GameMain.current_session:
+		saved_class_id = GameMain.current_session.selected_class_id
+		saved_weapon_ids = GameMain.current_session.selected_weapon_ids.duplicate()
+		saved_mode = GameMain.current_session.current_mode_id
+		print("[SceneCleanup] 保存玩家信息: 职业=%s, 武器数=%d, 模式=%s" % [saved_class_id, saved_weapon_ids.size(), saved_mode])
+	
+	# 先清理（只清理场景对象，不重置游戏数据）
+	_cleanup_ghosts()
+	_cleanup_drop_items()
+	_cleanup_enemies()
+	_cleanup_bullets()
+	
+	# 等待一帧确保清理完成
+	await tree.process_frame
+	
+	# 恢复玩家信息
+	if GameMain and GameMain.current_session and saved_class_id != "":
+		GameMain.current_session.selected_class_id = saved_class_id
+		GameMain.current_session.selected_weapon_ids = saved_weapon_ids
+		GameMain.current_session.current_mode_id = saved_mode
+		print("[SceneCleanup] 已恢复玩家信息: 职业=%s" % saved_class_id)
+	
+	# 切换场景
+	var error = tree.change_scene_to_packed(packed_scene)
+	if error != OK:
+		push_error("[SceneCleanup] 场景切换失败: %d" % error)
