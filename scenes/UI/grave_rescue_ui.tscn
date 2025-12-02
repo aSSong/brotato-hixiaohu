@@ -73,6 +73,7 @@ offset_top = -89.0
 offset_right = 788.5
 offset_bottom = 711.0
 texture = ExtResource("4_i76ly")
+stretch_mode = 2
 
 [node name="ButtonContainer" type="Control" parent="Panel"]
 anchors_preset = 0

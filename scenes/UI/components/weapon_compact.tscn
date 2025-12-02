@@ -1,18 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://cgi53yfp8jfnb"]
 
-[ext_resource type="Script" path="res://Scripts/UI/weapon_compact.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://5w5l80ry7ss5" path="res://Scripts/UI/weapon_compact.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://b3yui5wfldpre" path="res://assets/UI/common/bg-lilweapon-purple.png" id="1_tlojq"]
 [ext_resource type="Texture2D" uid="uid://cuthak4wn77qp" path="res://assets/weapon/Weapon_sword.png" id="2_ibirs"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_u03l2"]
 
 [node name="WeaponCompact" type="Control"]
-script = ExtResource("1_script")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
 
 [node name="bg-lilweapon" type="TextureRect" parent="."]
 layout_mode = 0
@@ -35,6 +35,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_ibirs")
+stretch_mode = 2
 
 [node name="weapon-name" type="Label" parent="bg-lilweapon"]
 layout_mode = 1

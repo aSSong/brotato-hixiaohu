@@ -47,6 +47,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.7853982
 texture = ExtResource("3_g1vc8")
+stretch_mode = 4
 
 [node name="bg_weaponname" type="TextureRect" parent="background"]
 layout_mode = 1
