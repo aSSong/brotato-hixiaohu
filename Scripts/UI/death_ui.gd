@@ -46,7 +46,7 @@ func show_death_screen(revive_count: int, current_gold: int, mode_id: String = "
 		revive_button.visible = false
 		cost_label.visible = false
 		restart_button.visible = true
-		info_label.text = "选择"再战"重选角色；\n选择"放弃"，返回标题。"
+		info_label.text = "选择【再战】，重选角色；\n选择【放弃】，返回标题。"
 		print("[DeathUI] Multi模式 - 隐藏复活选项")
 	else:
 		# Survival模式：正常显示复活选项
@@ -61,11 +61,11 @@ func show_death_screen(revive_count: int, current_gold: int, mode_id: String = "
 		if can_afford:
 			revive_button.disabled = false
 			revive_label.text = "复  活"
-			info_label.text = "选择"复活"继续游戏；\n选择"再战"，重选角色；\n选择"放弃"返回标题。"
+			info_label.text = "选择【复活】，继续游戏；\n选择【再战】，重选角色；\n选择【放弃】，返回标题。"
 		else:
 			revive_button.disabled = true
 			revive_label.text = "生命钥匙不足"
-			info_label.text = "选择"再战"重选角色；\n选择"放弃"，返回标题。"
+			info_label.text = "选择【再战】，重选角色；\n选择【放弃】，返回标题。"
 	
 	# 显示界面
 	show()
