@@ -88,11 +88,15 @@ func _update_name_label() -> void:
 		return
 	
 	# 格式："楼层数  名字（换行）第 总死亡次数 世"
-	var floor_text = str(ghost_data.wave) + "F"
+	var floor_text = ghost_data.get_floor_text()
 	var name_text = ghost_data.player_name if ghost_data.player_name else "未知"
 	var death_text = "第" + str(ghost_data.total_death_count) + "世"
 	
-	name_label.text = floor_text + "  " + name_text + "\n" + death_text
+	# 如果楼层有效则显示，否则只显示名字
+	if floor_text != "":
+		name_label.text = floor_text + "  " + name_text + "\n" + death_text
+	else:
+		name_label.text = name_text + "\n" + death_text
 
 ## 填充武器列表
 func _populate_weapon_list() -> void:

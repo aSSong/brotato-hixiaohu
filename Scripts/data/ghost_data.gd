@@ -28,6 +28,9 @@ class_name GhostData
 ## 死于第几波
 @export var wave: int = 0
 
+## 玩家所在楼层ID（0-38，对应 "1楼" 到 "不在漕河泾"）
+@export var floor_id: int = -1
+
 ## 从玩家创建Ghost数据
 static func from_player(player: CharacterBody2D, death_count: int, map_id: String = "", wave: int = 0) -> GhostData:
 	var data = GhostData.new()
@@ -85,7 +88,10 @@ static func from_player(player: CharacterBody2D, death_count: int, map_id: Strin
 	data.map_id = map_id
 	data.wave = wave
 	
-	print("[GhostData] 玩家名字:", data.player_name, " 总死亡次数:", data.total_death_count, " 地图:", map_id, " 波次:", wave)
+	# 保存玩家楼层信息
+	data.floor_id = SaveManager.get_floor_id()
+	
+	print("[GhostData] 玩家名字:", data.player_name, " 总死亡次数:", data.total_death_count, " 地图:", map_id, " 波次:", wave, " 楼层ID:", data.floor_id)
 	
 	return data
 
@@ -143,3 +149,14 @@ func get_class_name() -> String:
 	if class_data:
 		return class_data.name
 	return "未知职业"
+
+## 获取楼层显示文本（用于UI显示）
+## floor_id: 0-37 对应 "1F" 到 "38F"，38 对应 "外"
+## 如果楼层数据无效则返回空字符串
+func get_floor_text() -> String:
+	if floor_id >= 0 and floor_id <= 37:
+		return str(floor_id + 1) + "F"
+	elif floor_id == 38:
+		return "外"
+	else:
+		return ""  # 无效楼层不显示
