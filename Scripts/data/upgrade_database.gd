@@ -60,14 +60,29 @@ static func _load_upgrades_from_dir(path: String) -> int:
 	var file_name = dir.get_next()
 	
 	while file_name != "":
-		if not dir.current_is_dir() and file_name.ends_with(".tres"):
-			var full_path = path + "/" + file_name
+		if dir.current_is_dir():
+			file_name = dir.get_next()
+			continue
+			
+		var full_path = ""
+		var id = ""
+		
+		# 兼容编辑器环境 (.tres) 和导出环境 (.tres.remap)
+		if file_name.ends_with(".tres"):
+			full_path = path + "/" + file_name
+			id = file_name.get_basename()
+		elif file_name.ends_with(".tres.remap"):
+			# 导出后，文本资源可能会被转换为二进制并重命名为 .remap
+			# 加载时需要去掉 .remap 后缀，DirAccess 会返回物理文件名
+			full_path = path + "/" + file_name.trim_suffix(".remap")
+			id = file_name.trim_suffix(".remap").get_basename()
+			
+		if full_path != "":
 			var upgrade = ResourceLoader.load(full_path) as UpgradeData
 			if upgrade:
-				# 使用文件名作为ID (去掉.tres后缀)
-				var id = file_name.get_basename()
 				upgrades[id] = upgrade
 				count += 1
+				
 		file_name = dir.get_next()
 		
 	return count
