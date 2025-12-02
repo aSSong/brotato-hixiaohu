@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ed48d421fl2b"
-path="res://.godot/imported/deadkey.png-f227e966f1997dea35926b4ce2f92527.ctex"
+uid="uid://8nckqj8kk1o0"
+path="res://.godot/imported/btn_mid_gray_01.png-f6e17619f5fba5c03cb8518747c2320d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/deadkey.png"
-dest_files=["res://.godot/imported/deadkey.png-f227e966f1997dea35926b4ce2f92527.ctex"]
+source_file="res://assets/UI/common/btn_mid_gray_01.png"
+dest_files=["res://.godot/imported/btn_mid_gray_01.png-f6e17619f5fba5c03cb8518747c2320d.ctex"]
 
 [params]
 

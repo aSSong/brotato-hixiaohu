@@ -1,98 +1,179 @@
-[gd_scene load_steps=5 format=3 uid="uid://poo5j107el5u"]
+[gd_scene load_steps=8 format=3 uid="uid://poo5j107el5u"]
 
 [ext_resource type="Script" uid="uid://d170ibjmyne1" path="res://Scripts/UI/death_ui.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://ed48d421fl2b" path="res://assets/UI/deadkey.png" id="2_rryu8"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rryu8"]
-bg_color = Color(0.16663587, 0.064476065, 1.8049032e-08, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xgq7h"]
-bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
+[ext_resource type="Texture2D" uid="uid://covbybgf45frm" path="res://assets/UI/death_ui/bg-deathpanel-01.png" id="2_7cw4p"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_sb8yb"]
+[ext_resource type="Texture2D" uid="uid://fmigojo57l1" path="res://assets/UI/class_poster/pose-betty-01.png" id="4_vxqgw"]
+[ext_resource type="Texture2D" uid="uid://cwh4ath052q28" path="res://assets/UI/rescue/btn-lilred-01.png" id="5_qy3gh"]
+[ext_resource type="Texture2D" uid="uid://diebj44vwffon" path="res://assets/UI/common/btn_mid_gred_01.png" id="6_kqsbh"]
+[ext_resource type="Texture2D" uid="uid://8nckqj8kk1o0" path="res://assets/UI/common/btn_mid_gray_01.png" id="7_83ndf"]
 
 [node name="DeathUI" type="CanvasLayer"]
 process_mode = 3
 layer = 100
 script = ExtResource("1")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="TextureRect" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -300.0
-offset_right = 400.0
-offset_bottom = 300.0
+offset_left = -594.5
+offset_top = -304.0
+offset_right = 594.5
+offset_bottom = 304.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_rryu8")
+texture = ExtResource("2_7cw4p")
 
 [node name="TitleLabel" type="Label" parent="Panel"]
-layout_mode = 0
-offset_top = 46.0
-offset_right = 800.0
-offset_bottom = 113.0
-theme_override_font_sizes/font_size = 48
-text = "你钥匙翘翘了！"
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -601.5
+offset_top = 24.0
+offset_right = -132.5
+offset_bottom = 94.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_sb8yb")
+theme_override_font_sizes/font_size = 55
+text = "你 钥 匙 翘 翘 了 ！"
 horizontal_alignment = 1
 
-[node name="Deadkey" type="Sprite2D" parent="Panel/TitleLabel"]
-position = Vector2(394, 210)
-texture = ExtResource("2_rryu8")
+[node name="dead_poster" type="TextureRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -436.0
+offset_top = -400.0
+offset_right = -53.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_vxqgw")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = -191.0
-offset_bottom = -29.0
+offset_left = 36.0
+offset_top = -495.0
+offset_right = 327.0
+offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 20
+theme_override_constants/separation = 5
 alignment = 1
 
 [node name="InfoLabel" type="Label" parent="Panel/VBoxContainer"]
-visible = false
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 20
-text = "选择复活继续游戏，或放弃本局游戏"
+text = "选择复活继续游戏，
+或放弃本局游戏"
 horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="CostLabel" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 24
-text = "复活费用：1 生命钥匙"
+text = "复活费用：2 生命钥匙"
 horizontal_alignment = 1
 
-[node name="ButtonContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="ButtonContainer" type="VBoxContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 40
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="ReviveButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+[node name="ReviveButton" type="TextureButton" parent="Panel/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_xgq7h")
-text = "复活"
+size_flags_horizontal = 4
+texture_normal = ExtResource("5_qy3gh")
+texture_pressed = ExtResource("5_qy3gh")
+texture_hover = ExtResource("5_qy3gh")
+texture_disabled = ExtResource("5_qy3gh")
+texture_focused = ExtResource("5_qy3gh")
 
-[node name="RestartButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(150, 60)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_xgq7h")
-text = "再战"
+[node name="reviveLabel" type="Label" parent="Panel/VBoxContainer/ButtonContainer/ReviveButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -12.0
+offset_right = 20.5
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_sb8yb")
+theme_override_font_sizes/font_size = 55
+text = "复  活"
 
-[node name="GiveUpButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+[node name="RestartButton" type="TextureButton" parent="Panel/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(150, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "放弃"
+size_flags_horizontal = 4
+texture_normal = ExtResource("6_kqsbh")
+texture_pressed = ExtResource("6_kqsbh")
+texture_hover = ExtResource("6_kqsbh")
+texture_disabled = ExtResource("6_kqsbh")
+texture_focused = ExtResource("6_kqsbh")
+
+[node name="restartLabel" type="Label" parent="Panel/VBoxContainer/ButtonContainer/RestartButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -12.0
+offset_right = 20.5
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_sb8yb")
+theme_override_font_sizes/font_size = 40
+text = "再  战"
+
+[node name="GiveUpButton" type="TextureButton" parent="Panel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("7_83ndf")
+texture_pressed = ExtResource("7_83ndf")
+texture_hover = ExtResource("7_83ndf")
+texture_disabled = ExtResource("7_83ndf")
+texture_focused = ExtResource("7_83ndf")
+
+[node name="giveupLabel" type="Label" parent="Panel/VBoxContainer/ButtonContainer/GiveUpButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_sb8yb")
+theme_override_font_sizes/font_size = 32
+text = "放  弃"
