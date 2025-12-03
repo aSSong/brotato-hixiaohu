@@ -1,11 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://dnt2sd4mt6yw8"]
+[gd_scene load_steps=16 format=3 uid="uid://dnt2sd4mt6yw8"]
 
 [ext_resource type="Script" uid="uid://dfrk5jfj3ogys" path="res://Scripts/UI/main_title.gd" id="1_3tovs"]
-[ext_resource type="Texture2D" uid="uid://8u7fpyh5r02f" path="res://assets/UI/maintitle/bg.png" id="2_um0kg"]
+[ext_resource type="Texture2D" uid="uid://dwf4dbg8vqiqd" path="res://assets/UI/maintitle/bg-maintitle-01.png" id="2_um0kg"]
+[ext_resource type="Texture2D" uid="uid://bwxn18efpuf7s" path="res://assets/UI/common/btn-level-normal-01.png" id="3_fraxl"]
 [ext_resource type="Texture2D" uid="uid://b1dqjv2lw154v" path="res://assets/UI/maintitle/title-1.png" id="3_va1ok"]
+[ext_resource type="Texture2D" uid="uid://rkoedninn4cu" path="res://assets/UI/common/btn-level-pressed-01.png" id="4_nb8ff"]
 [ext_resource type="Texture2D" uid="uid://dslocqmem63dh" path="res://assets/UI/maintitle/title-2.png" id="4_phujf"]
+[ext_resource type="Texture2D" uid="uid://c6ru0ufa3c6xp" path="res://assets/UI/common/btn-level-hover-01.png" id="5_adb34"]
 [ext_resource type="Texture2D" uid="uid://dxp6xkay5gvjc" path="res://assets/UI/maintitle/text-03.png" id="5_r3xu7"]
+[ext_resource type="Texture2D" uid="uid://cdigl7d4s25p3" path="res://assets/UI/common/btn-level-disabled-01.png" id="6_h860p"]
 [ext_resource type="Texture2D" uid="uid://lijt3pr5dbop" path="res://assets/UI/maintitle/图层 1.png" id="6_yr50f"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="7_wl6us"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xvm6"]
 bg_color = Color(0.21568628, 0.05490196, 0.08235294, 1)
@@ -142,17 +147,17 @@ grow_vertical = 2
 texture = ExtResource("2_um0kg")
 
 [node name="menu" type="MarginContainer" parent="."]
-custom_minimum_size = Vector2(600, 600)
+custom_minimum_size = Vector2(600, 400)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -506.0
-offset_top = -5.0
-offset_right = 94.0
-offset_bottom = 595.0
+offset_left = -300.0
+offset_top = 32.0
+offset_right = 300.0
+offset_bottom = 432.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -168,6 +173,31 @@ theme_override_constants/shadow_offset_y = 3
 theme_override_font_sizes/font_size = 50
 text = "Name 38F"
 horizontal_alignment = 1
+
+[node name="beginBtn" type="TextureButton" parent="menu/VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("3_fraxl")
+texture_pressed = ExtResource("4_nb8ff")
+texture_hover = ExtResource("5_adb34")
+texture_disabled = ExtResource("6_h860p")
+
+[node name="Label" type="Label" parent="menu/VBoxContainer/beginBtn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -139.0
+offset_top = -31.5
+offset_right = 61.0
+offset_bottom = 69.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.13962634
+theme_override_fonts/font = ExtResource("7_wl6us")
+theme_override_font_sizes/font_size = 80
+text = "进  入"
 
 [node name="btn_single_play" type="Button" parent="menu/VBoxContainer"]
 custom_minimum_size = Vector2(0, 70)
@@ -217,10 +247,12 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_5xvm6")
 text = "Q U I T"
 
 [node name="Title1" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(488, 376)
 texture = ExtResource("3_va1ok")
 
 [node name="Title2" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(1050, 283)
 texture = ExtResource("4_phujf")
 
