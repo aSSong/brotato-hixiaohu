@@ -1,11 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://dhpmorc3nh0rx"]
+[gd_scene load_steps=18 format=3 uid="uid://dhpmorc3nh0rx"]
 
 [ext_resource type="Script" uid="uid://cbbs20aohqtja" path="res://Scripts/UI/weapon_choose.gd" id="1_weapon"]
 [ext_resource type="Texture2D" uid="uid://cv60hkdkrm472" path="res://assets/UI/weapon_choose/weaponchoose-bg-01.png" id="2_s4hvt"]
 [ext_resource type="Texture2D" uid="uid://cwf5um53xfis5" path="res://assets/UI/class_choose/classchoose-title-01.png" id="3_mig43"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="4_lfaaf"]
-[ext_resource type="Texture2D" uid="uid://ndwve8bq6t6d" path="res://assets/UI/class_choose/unchoose-class.png" id="4_rrm4n"]
 [ext_resource type="Texture2D" uid="uid://ecy5k54h8wsu" path="res://assets/UI/class_choose/namelabel.png" id="5_wiwm1"]
+[ext_resource type="Texture2D" uid="uid://copqpwom7gp0" path="res://assets/UI/common/bg-portrait-lilred-01.png" id="5_y6lot"]
+[ext_resource type="Texture2D" uid="uid://c78yiaya06kpp" path="res://assets/UI/class_poster/portrait-betty-01.png" id="6_f26l6"]
 [ext_resource type="Texture2D" uid="uid://cpud3kdqy8w3v" path="res://assets/UI/weapon_choose/weaponchoose-info-choosed-01.png" id="6_rrm4n"]
 [ext_resource type="Texture2D" uid="uid://b4xgibahk4h0u" path="res://assets/UI/class_choose/btn-back-gray-01.png" id="6_ysnaf"]
 [ext_resource type="Texture2D" uid="uid://tpynlqo2yorf" path="res://assets/UI/class_choose/btn-back-white-01.png" id="7_g7k44"]
@@ -57,40 +58,57 @@ theme_override_fonts/font = ExtResource("4_lfaaf")
 theme_override_font_sizes/font_size = 70
 text = "选择两把武器"
 
-[node name="PlayerNameContainer" type="HBoxContainer" parent="TitleSection"]
+[node name="PlayerNameContainer" type="Control" parent="TitleSection"]
 layout_mode = 1
+anchors_preset = 0
 offset_left = 49.0
 offset_top = 100.0
 offset_right = 359.0
 offset_bottom = 200.0
-theme_override_constants/separation = 10
 
 [node name="QuestionMark" type="TextureRect" parent="TitleSection/PlayerNameContainer"]
+z_index = 5
+z_as_relative = false
 custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-texture = ExtResource("4_rrm4n")
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("5_y6lot")
+stretch_mode = 2
 
 [node name="playerportrait" type="TextureRect" parent="TitleSection/PlayerNameContainer/QuestionMark"]
+z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -13.0
+offset_right = -13.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("6_f26l6")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="TextureRect" type="TextureRect" parent="TitleSection/PlayerNameContainer/QuestionMark"]
+z_index = 1
+z_as_relative = false
 layout_mode = 0
-offset_left = 99.0
-offset_top = 31.0
-offset_right = 318.0
-offset_bottom = 73.0
+offset_left = 69.0
+offset_top = 27.0
+offset_right = 288.0
+offset_bottom = 69.0
 texture = ExtResource("5_wiwm1")
 
 [node name="PlayerName" type="Label" parent="TitleSection/PlayerNameContainer"]
+z_index = 2
+z_as_relative = false
 custom_minimum_size = Vector2(200, 40)
-layout_mode = 2
+layout_mode = 0
+offset_left = 83.0
+offset_top = 20.0
+offset_right = 283.0
+offset_bottom = 70.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
 text = "Key Person"

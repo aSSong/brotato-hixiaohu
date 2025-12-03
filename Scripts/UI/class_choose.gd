@@ -223,9 +223,9 @@ func _update_portrait_buttons() -> void:
 		var portrait_node = btn.get_node_or_null("portrait")
 		if portrait_node:
 			if is_selected:
-				portrait_node.scale = Vector2(0.8, 0.8)
+				portrait_node.scale = Vector2(1.0, 1.0)
 			else:
-				portrait_node.scale = Vector2(0.6, 0.6)
+				portrait_node.scale = Vector2(0.8, 0.8)
 		
 		# 更新选中标记可见性
 		var choose_node = btn.get_node_or_null("choose")

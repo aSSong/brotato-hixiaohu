@@ -76,12 +76,13 @@ theme_override_constants/separation = 5
 alignment = 1
 
 [node name="InfoLabel" type="Label" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 20
-text = "选择复活继续游戏，
-或放弃本局游戏"
+text = "选择【复活】，继续游戏；
+选择【放弃】，本局游戏。"
 horizontal_alignment = 1
 autowrap_mode = 2
 
