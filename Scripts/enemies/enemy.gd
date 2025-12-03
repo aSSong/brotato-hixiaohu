@@ -357,9 +357,10 @@ func enemy_hurt(hurt, is_critical: bool = false):
 	# 这里不需要再次检查
 
 	# 显示伤害跳字
-	var text_content = "-" + str(hurt)
+	var text_content = str(hurt)
+	#var text_content = "-" + str(hurt)
 	if is_critical:
-		text_content = "暴击 -" + str(hurt)
+		text_content = "暴击 " + str(hurt)
 		
 	FloatingText.create_floating_text(
 		global_position + Vector2(0, -30),  # 在敌人上方显示
