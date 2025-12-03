@@ -8,10 +8,29 @@ class_name ESCMenu
 signal resume_requested
 signal main_menu_requested
 
-## 节点引用
+## 按钮节点引用
 @onready var resume_button: TextureButton = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/ResumeButton
-@onready var main_menu_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton
+@onready var restart_button: TextureButton = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/restart
+@onready var main_menu_button: TextureButton = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton
 @onready var background: ColorRect = $Background
+
+## Label节点引用
+@onready var resume_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/ResumeButton/resumeLabel
+@onready var restart_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/restart/restartLabel
+@onready var main_menu_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton/mainmenuLabel
+
+## 颜色常量
+const COLOR_NORMAL := Color.BLACK
+const COLOR_HIGHLIGHT := Color.WHITE
+
+## 延迟恢复时间（秒）
+const RESTORE_DELAY := 0.5
+
+## 选中按钮的背景纹理
+var _choosed_texture: Texture2D
+
+## 延迟恢复的Tween引用（用于中断）
+var _restore_tween: Tween = null
 
 func _ready() -> void:
 	# 设置为暂停时也能处理（关键！）
@@ -23,7 +42,110 @@ func _ready() -> void:
 	# 初始隐藏
 	hide()
 	
+	# 加载选中状态的背景纹理
+	_choosed_texture = load("res://assets/UI/esc_ui/btn-esc-choosed.png")
+	
+	# 连接按钮的鼠标进入/移出信号
+	_setup_button_signals()
+	
 	print("[ESC Menu] 菜单已初始化")
+
+## 设置按钮信号连接
+func _setup_button_signals() -> void:
+	# ResumeButton的鼠标事件
+	if resume_button:
+		resume_button.mouse_entered.connect(_on_resume_mouse_entered)
+	
+	# restart按钮的鼠标事件
+	if restart_button:
+		restart_button.mouse_entered.connect(_on_restart_mouse_entered)
+		restart_button.mouse_exited.connect(_on_restart_mouse_exited)
+	
+	# MainMenuButton的鼠标事件
+	if main_menu_button:
+		main_menu_button.mouse_entered.connect(_on_main_menu_mouse_entered)
+		main_menu_button.mouse_exited.connect(_on_main_menu_mouse_exited)
+
+## 鼠标进入ResumeButton
+func _on_resume_mouse_entered() -> void:
+	# 取消延迟恢复（如果有）
+	_cancel_restore_delay()
+	
+	# 立即恢复ResumeButton激活状态
+	_restore_resume_button()
+	
+	# 确保其他按钮的label为黑色
+	if restart_label:
+		restart_label.add_theme_color_override("font_color", COLOR_NORMAL)
+	if main_menu_label:
+		main_menu_label.add_theme_color_override("font_color", COLOR_NORMAL)
+
+## 取消延迟恢复（进入其他按钮时调用）
+func _cancel_restore_delay() -> void:
+	if _restore_tween and _restore_tween.is_valid():
+		_restore_tween.kill()
+		_restore_tween = null
+
+## 恢复ResumeButton为激活状态
+func _restore_resume_button() -> void:
+	if resume_button:
+		resume_button.texture_normal = _choosed_texture
+	if resume_label:
+		resume_label.add_theme_color_override("font_color", COLOR_HIGHLIGHT)
+
+## 启动延迟恢复ResumeButton
+func _start_restore_delay() -> void:
+	# 先取消之前的延迟（如果有）
+	_cancel_restore_delay()
+	
+	# 创建新的延迟Tween
+	_restore_tween = create_tween()
+	_restore_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)  # 暂停时也能运行
+	_restore_tween.tween_callback(_restore_resume_button).set_delay(RESTORE_DELAY)
+
+## 鼠标进入restart按钮
+func _on_restart_mouse_entered() -> void:
+	# 取消延迟恢复（中断之前的延迟）
+	_cancel_restore_delay()
+	
+	# restart按钮激活：label变白
+	if restart_label:
+		restart_label.add_theme_color_override("font_color", COLOR_HIGHLIGHT)
+	# ResumeButton失去激活：texture_normal清空，label变黑
+	if resume_button:
+		resume_button.texture_normal = null
+	if resume_label:
+		resume_label.add_theme_color_override("font_color", COLOR_NORMAL)
+
+## 鼠标移出restart按钮
+func _on_restart_mouse_exited() -> void:
+	# restart按钮恢复：label变黑
+	if restart_label:
+		restart_label.add_theme_color_override("font_color", COLOR_NORMAL)
+	# 延迟0.5秒后恢复ResumeButton激活状态
+	_start_restore_delay()
+
+## 鼠标进入MainMenuButton
+func _on_main_menu_mouse_entered() -> void:
+	# 取消延迟恢复（中断之前的延迟）
+	_cancel_restore_delay()
+	
+	# MainMenuButton激活：label变白
+	if main_menu_label:
+		main_menu_label.add_theme_color_override("font_color", COLOR_HIGHLIGHT)
+	# ResumeButton失去激活：texture_normal清空，label变黑
+	if resume_button:
+		resume_button.texture_normal = null
+	if resume_label:
+		resume_label.add_theme_color_override("font_color", COLOR_NORMAL)
+
+## 鼠标移出MainMenuButton
+func _on_main_menu_mouse_exited() -> void:
+	# MainMenuButton恢复：label变黑
+	if main_menu_label:
+		main_menu_label.add_theme_color_override("font_color", COLOR_NORMAL)
+	# 延迟0.5秒后恢复ResumeButton激活状态
+	_start_restore_delay()
 
 ## 显示菜单
 func show_menu() -> void:
@@ -36,6 +158,9 @@ func show_menu() -> void:
 	show()
 	visible = true
 	
+	# 重置为默认状态：ResumeButton激活，其他按钮正常
+	_reset_to_default_state()
+	
 	# 聚焦到继续按钮
 	if resume_button:
 		resume_button.grab_focus()
@@ -44,6 +169,25 @@ func show_menu() -> void:
 	_play_show_animation()
 	
 	print("[ESC Menu] 菜单已打开，游戏已暂停")
+
+## 重置为默认状态
+func _reset_to_default_state() -> void:
+	# 取消任何延迟恢复
+	_cancel_restore_delay()
+	
+	# ResumeButton激活状态：有背景，白字
+	if resume_button:
+		resume_button.texture_normal = _choosed_texture
+	if resume_label:
+		resume_label.add_theme_color_override("font_color", COLOR_HIGHLIGHT)
+	
+	# restart按钮正常状态：无背景，黑字
+	if restart_label:
+		restart_label.add_theme_color_override("font_color", COLOR_NORMAL)
+	
+	# MainMenuButton正常状态：无背景，黑字
+	if main_menu_label:
+		main_menu_label.add_theme_color_override("font_color", COLOR_NORMAL)
 
 ## 隐藏菜单
 func hide_menu() -> void:
