@@ -19,4 +19,3 @@ class_name SkillData
 ## 技能激活时的属性加成
 ## 建议使用 StatsModifier 资源以确保默认值正确
 @export var stats_modifier: CombatStats
-

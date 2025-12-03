@@ -3,13 +3,13 @@
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 [ext_resource type="Script" uid="uid://bgraqcbpydou6" path="res://Scripts/UI/dash_ui.gd" id="1_dash_ui"]
 [ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
-[ext_resource type="Script" path="res://Scripts/UI/damage_flash.gd" id="10_dmgflash"]
 [ext_resource type="PackedScene" uid="uid://cqi5j0ht5t7pd" path="res://scenes/UI/components/resource_counter.tscn" id="2_5b3ti"]
 [ext_resource type="PackedScene" uid="uid://d3m1tn5m8yxoe" path="res://scenes/UI/components/player_stats_info.tscn" id="2_owrpm"]
 [ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="2_yr8ot"]
 [ext_resource type="Texture2D" uid="uid://d0y4qqnoa48r2" path="res://assets/items/mkey.png" id="3_5b3ti"]
 [ext_resource type="Texture2D" uid="uid://bspq5i4khlok1" path="res://assets/others/dash_icon.png" id="6_cn4gw"]
 [ext_resource type="Texture2D" uid="uid://ib6slp588m2v" path="res://assets/UI/game_ui/player-onhit-effect.png" id="9_r4w1u"]
+[ext_resource type="Script" uid="uid://bhol8gfndxu2u" path="res://Scripts/UI/damage_flash.gd" id="10_dmgflash"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)

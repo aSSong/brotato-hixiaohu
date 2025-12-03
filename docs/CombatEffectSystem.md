@@ -37,7 +37,7 @@ Scripts/
 ├── systems/
 │   └── CombatEffectManager.gd      # 特效管理器（核心）
 └── animations/
-    └── animations.gd                # 动画播放器（底层实现）
+	└── animations.gd                # 动画播放器（底层实现）
 
 scenes/
 ├── effects/                         # 粒子特效场景
@@ -45,8 +45,8 @@ scenes/
 │   ├── fireball_explosion.tscn
 │   └── ice_explosion.tscn
 └── animations/                      # 序列帧动画场景
-    ├── animations.tscn              # 默认场景（敌人死亡/受伤）
-    └── explosion_sprites.tscn      # 自定义场景（爆炸动画）
+	├── animations.tscn              # 默认场景（敌人死亡/受伤）
+	└── explosion_sprites.tscn      # 自定义场景（爆炸动画）
 ```
 
 ### 核心类
@@ -80,10 +80,10 @@ scenes/
 
 ```gdscript
 static func _setup_effect_configs() -> void:
-    effect_configs["武器名_类型"] = {
-        "particles": [...],      # 粒子特效路径数组
-        "animations": [...]      # 序列帧动画配置数组
-    }
+	effect_configs["武器名_类型"] = {
+		"particles": [...],      # 粒子特效路径数组
+		"animations": [...]      # 序列帧动画配置数组
+	}
 ```
 
 ### 2. 配置格式
@@ -92,8 +92,8 @@ static func _setup_effect_configs() -> void:
 
 ```gdscript
 "particles": [
-    "res://scenes/effects/meteor_explosion.tscn",  # 粒子场景路径
-    "res://scenes/effects/smoke.tscn"               # 可以多个粒子
+	"res://scenes/effects/meteor_explosion.tscn",  # 粒子场景路径
+	"res://scenes/effects/smoke.tscn"               # 可以多个粒子
 ]
 ```
 
@@ -103,8 +103,8 @@ static func _setup_effect_configs() -> void:
 
 ```gdscript
 "animations": [
-    "enemies_dead",    # 动画名称（在 animations.tscn 中定义）
-    "enemies_hurt"     # 可以多个动画
+	"enemies_dead",    # 动画名称（在 animations.tscn 中定义）
+	"enemies_hurt"     # 可以多个动画
 ]
 ```
 
@@ -114,9 +114,9 @@ static func _setup_effect_configs() -> void:
 
 ```gdscript
 "animations": [{
-    "scene_path": "res://scenes/effects/explosion_sprites.tscn",  # 场景路径
-    "ani_name": "Meteor_explode",                                  # 动画名称
-    "scale": 1.5                                                   # 自定义scale（可选）
+	"scene_path": "res://scenes/effects/explosion_sprites.tscn",  # 场景路径
+	"ani_name": "Meteor_explode",                                  # 动画名称
+	"scale": 1.5                                                   # 自定义scale（可选）
 }]
 ```
 
@@ -126,8 +126,8 @@ static func _setup_effect_configs() -> void:
 
 ```gdscript
 effect_configs["火球_爆炸"] = {
-    "particles": ["res://scenes/effects/fireball_explosion.tscn"],
-    "animations": []
+	"particles": ["res://scenes/effects/fireball_explosion.tscn"],
+	"animations": []
 }
 ```
 
@@ -135,8 +135,8 @@ effect_configs["火球_爆炸"] = {
 
 ```gdscript
 effect_configs["敌人_死亡"] = {
-    "particles": [],
-    "animations": ["enemies_dead"]
+	"particles": [],
+	"animations": ["enemies_dead"]
 }
 ```
 
@@ -144,12 +144,12 @@ effect_configs["敌人_死亡"] = {
 
 ```gdscript
 effect_configs["陨石_爆炸"] = {
-    "particles": ["res://scenes/effects/meteor_explosion.tscn"],
-    "animations": [{
-        "scene_path": "res://scenes/effects/explosion_sprites.tscn",
-        "ani_name": "Meteor_explode",
-        "scale": 1.5  # 序列帧使用1.5倍大小
-    }]
+	"particles": ["res://scenes/effects/meteor_explosion.tscn"],
+	"animations": [{
+		"scene_path": "res://scenes/effects/explosion_sprites.tscn",
+		"ani_name": "Meteor_explode",
+		"scale": 1.5  # 序列帧使用1.5倍大小
+	}]
 }
 ```
 
@@ -157,19 +157,19 @@ effect_configs["陨石_爆炸"] = {
 
 ```gdscript
 effect_configs["超级爆炸"] = {
-    "particles": [
-        "res://scenes/effects/explosion.tscn",
-        "res://scenes/effects/smoke.tscn",
+	"particles": [
+		"res://scenes/effects/explosion.tscn",
+		"res://scenes/effects/smoke.tscn",
         "res://scenes/effects/sparks.tscn"
-    ],
-    "animations": [
-        "enemies_dead",  # 使用默认场景
-        {                # 使用自定义场景
-            "scene_path": "res://scenes/effects/explosion_sprites.tscn",
-            "ani_name": "big_explode",
-            "scale": 2.0
-        }
-    ]
+	],
+	"animations": [
+		"enemies_dead",  # 使用默认场景
+		{                # 使用自定义场景
+			"scene_path": "res://scenes/effects/explosion_sprites.tscn",
+			"ani_name": "big_explode",
+			"scale": 2.0
+		}
+	]
 }
 ```
 
@@ -207,14 +207,14 @@ CombatEffectManager.play_enemy_hurt(enemy.global_position)
 
 ```gdscript
 var effects = [
-    {
-        "particles": ["res://scenes/effects/hit_particle.tscn"]
-    },
-    {
-        "scene_path": "res://scenes/effects/hit_animation.tscn",
-        "ani_name": "hit",
-        "scale": 1.3
-    }
+	{
+		"particles": ["res://scenes/effects/hit_particle.tscn"]
+	},
+	{
+		"scene_path": "res://scenes/effects/hit_animation.tscn",
+		"ani_name": "hit",
+		"scale": 1.3
+	}
 ]
 
 CombatEffectManager.play_effect_group(effects, hit_position)
@@ -233,24 +233,24 @@ CombatEffectManager.play_effect_group(effects, hit_position)
 2. **创建序列帧动画场景**（如果需要）
    - 在 `scenes/effects/` 或 `scenes/animations/` 目录创建新场景
    - 场景结构：
-     ```
-     Node2D (根节点)
-     └── AnimatedSprite2D (任意名称)
-         └── sprite_frames (SpriteFrames资源)
-             └── 动画名称 (如 "explode")
-     ```
+	 ```
+	 Node2D (根节点)
+	 └── AnimatedSprite2D (任意名称)
+		 └── sprite_frames (SpriteFrames资源)
+			 └── 动画名称 (如 "explode")
+	 ```
    - 注意：节点名称可以是任意名称，系统会自动查找 `AnimatedSprite2D` 节点
 
 3. **在 CombatEffectManager 中添加配置**
 
 ```gdscript
 effect_configs["新武器_爆炸"] = {
-    "particles": ["res://scenes/effects/new_weapon_explosion.tscn"],
-    "animations": [{
-        "scene_path": "res://scenes/effects/new_weapon_animation.tscn",
-        "ani_name": "explode",
-        "scale": 1.0
-    }]
+	"particles": ["res://scenes/effects/new_weapon_explosion.tscn"],
+	"animations": [{
+		"scene_path": "res://scenes/effects/new_weapon_animation.tscn",
+		"ani_name": "explode",
+		"scale": 1.0
+	}]
 }
 ```
 
@@ -267,25 +267,25 @@ CombatEffectManager.play_explosion("新武器", position)
 ```gdscript
 ## 播放击中特效
 static func play_hit_effect(weapon_name: String, position: Vector2, scale: float = 1.0) -> void:
-    var config_key = weapon_name + "_击中"
-    if not effect_configs.has(config_key):
-        push_warning("[CombatEffectManager] 未找到击中特效: %s" % weapon_name)
-        return
-    
-    var config = effect_configs[config_key]
-    _play_effect_config(config, position, scale)
+	var config_key = weapon_name + "_击中"
+	if not effect_configs.has(config_key):
+		push_warning("[CombatEffectManager] 未找到击中特效: %s" % weapon_name)
+		return
+	
+	var config = effect_configs[config_key]
+	_play_effect_config(config, position, scale)
 ```
 
 2. **添加配置**
 
 ```gdscript
 effect_configs["陨石_击中"] = {
-    "particles": ["res://scenes/effects/meteor_hit_particle.tscn"],
-    "animations": [{
-        "scene_path": "res://scenes/effects/hit_animation.tscn",
-        "ani_name": "meteor_hit",
-        "scale": 1.2
-    }]
+	"particles": ["res://scenes/effects/meteor_hit_particle.tscn"],
+	"animations": [{
+		"scene_path": "res://scenes/effects/hit_animation.tscn",
+		"ani_name": "meteor_hit",
+		"scale": 1.2
+	}]
 }
 ```
 
@@ -346,9 +346,9 @@ CombatEffectManager.play_hit_effect("陨石", hit_position)
 
 ```gdscript
 "animations": [{
-    "scene_path": "res://scenes/effects/explosion_sprites.tscn",
-    "ani_name": "explode",
-    "scale": 1.5  # 设置scale为1.5倍
+	"scene_path": "res://scenes/effects/explosion_sprites.tscn",
+	"ani_name": "explode",
+	"scale": 1.5  # 设置scale为1.5倍
 }]
 ```
 
@@ -364,18 +364,18 @@ CombatEffectManager.play_hit_effect("陨石", hit_position)
 
 ```gdscript
 effect_configs["组合特效"] = {
-    "particles": [
-        "res://scenes/effects/particle1.tscn",
+	"particles": [
+		"res://scenes/effects/particle1.tscn",
         "res://scenes/effects/particle2.tscn"
-    ],
-    "animations": [
-        "enemies_dead",
-        {
-            "scene_path": "res://scenes/effects/custom.tscn",
-            "ani_name": "custom_anim",
-            "scale": 1.5
-        }
-    ]
+	],
+	"animations": [
+		"enemies_dead",
+		{
+			"scene_path": "res://scenes/effects/custom.tscn",
+			"ani_name": "custom_anim",
+			"scale": 1.5
+		}
+	]
 }
 ```
 
@@ -417,9 +417,9 @@ CombatEffectManager.play_explosion("陨石", position, 1.0)  # 全局scale = 1.0
 
 # 配置中
 "animations": [{
-    "scene_path": "...",
-    "ani_name": "...",
-    "scale": 1.5  # 序列帧使用1.5倍，粒子使用1.0倍
+	"scene_path": "...",
+	"ani_name": "...",
+	"scale": 1.5  # 序列帧使用1.5倍，粒子使用1.0倍
 }]
 ```
 
@@ -457,8 +457,8 @@ Node2D (根节点)
 ```
 Node2D (根节点)
 └── AnimatedSprite2D (任意名称)
-    └── sprite_frames (SpriteFrames资源)
-        └── 动画名称 (如 "explode", "Meteor_explode")
+	└── sprite_frames (SpriteFrames资源)
+		└── 动画名称 (如 "explode", "Meteor_explode")
 ```
 
 ---
@@ -507,4 +507,3 @@ Node2D (根节点)
 - 控制台日志输出
 - 代码注释
 - 本文档的常见问题部分
-
