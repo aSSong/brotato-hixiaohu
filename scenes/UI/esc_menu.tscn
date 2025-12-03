@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://u4r0uw2dcgyv"]
+[gd_scene load_steps=5 format=3 uid="uid://u4r0uw2dcgyv"]
 
 [ext_resource type="Script" uid="uid://dei6vpqivimfx" path="res://Scripts/UI/esc_menu.gd" id="1_esc"]
+[ext_resource type="Texture2D" uid="uid://ckeombu2oqxcl" path="res://assets/UI/esc_ui/bg-esc-01.png" id="2_jjfny"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_np8wt"]
+[ext_resource type="Texture2D" uid="uid://cj0518csjbemq" path="res://assets/UI/esc_ui/btn-esc-choosed.png" id="4_np8wt"]
 
 [node name="ESCMenu" type="CanvasLayer"]
 process_mode = 3
@@ -22,12 +25,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+[node name="PanelContainer" type="TextureRect" parent="CenterContainer"]
 custom_minimum_size = Vector2(400, 300)
 layout_mode = 2
+texture = ExtResource("2_jjfny")
+stretch_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -351.5
+offset_top = -267.0
+offset_right = 395.5
+offset_bottom = 236.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
@@ -40,47 +56,111 @@ theme_override_constants/separation = 20
 [node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 48
+theme_override_fonts/font = ExtResource("3_np8wt")
+theme_override_font_sizes/font_size = 60
 text = "游戏暂停"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="spacer" type="Control" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="ButtonsContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonsContainer" type="Control" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 15
 
-[node name="ResumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
+[node name="ResumeButton" type="TextureButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(300, 60)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_colors/font_hover_color = Color(0.9, 0.9, 0.5, 1)
-theme_override_font_sizes/font_size = 28
-text = "继续游戏 (ESC)"
+layout_mode = 0
+offset_right = 667.0
+offset_bottom = 83.0
+texture_pressed = ExtResource("4_np8wt")
+texture_hover = ExtResource("4_np8wt")
+texture_focused = ExtResource("4_np8wt")
 
-[node name="restart" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "重选职业武器"
+[node name="resumeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/ResumeButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_np8wt")
+theme_override_font_sizes/font_size = 40
+text = "返回游戏(ESC)"
 
-[node name="MainMenuButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
+[node name="restart" type="TextureButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 109.0
+offset_right = 691.0
+offset_bottom = 192.0
+scale = Vector2(0.98, 0.98)
+texture_pressed = ExtResource("4_np8wt")
+texture_hover = ExtResource("4_np8wt")
+texture_focused = ExtResource("4_np8wt")
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/restart"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -11.5
+offset_right = 32.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_np8wt")
+theme_override_font_sizes/font_size = 40
+text = "重选角色"
+
+[node name="MainMenuButton" type="TextureButton" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer"]
 custom_minimum_size = Vector2(300, 60)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.7, 0.7, 1)
-theme_override_colors/font_pressed_color = Color(0.8, 0.5, 0.5, 1)
-theme_override_colors/font_hover_color = Color(1, 0.5, 0.5, 1)
-theme_override_font_sizes/font_size = 28
-text = "返回主菜单"
+layout_mode = 0
+offset_left = 48.0
+offset_top = 213.0
+offset_right = 715.0
+offset_bottom = 296.0
+scale = Vector2(0.96, 0.96)
+texture_pressed = ExtResource("4_np8wt")
+texture_hover = ExtResource("4_np8wt")
+texture_disabled = ExtResource("4_np8wt")
+texture_focused = ExtResource("4_np8wt")
 
-[node name="HSeparator2" type="HSeparator" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -11.5
+offset_right = 32.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_np8wt")
+theme_override_font_sizes/font_size = 40
+text = "返回标题"
 
-[node name="HintLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="HintLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 88.0
+offset_right = 692.0
+offset_bottom = 111.0
 theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_fonts/font = ExtResource("3_np8wt")
 theme_override_font_sizes/font_size = 18
 text = "提示：返回主菜单将丢失当前进度"
 horizontal_alignment = 1

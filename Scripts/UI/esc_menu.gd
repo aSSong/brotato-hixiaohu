@@ -9,7 +9,7 @@ signal resume_requested
 signal main_menu_requested
 
 ## 节点引用
-@onready var resume_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/ResumeButton
+@onready var resume_button: TextureButton = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/ResumeButton
 @onready var main_menu_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton
 @onready var background: ColorRect = $Background
 
