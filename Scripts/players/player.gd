@@ -197,13 +197,6 @@ func _input(event):
 		# dash输入不应该影响移动状态，让_process中的can_dash()处理
 		return
 	
-	# 检查是否是添加Ghost的输入动作
-	if event.is_action_pressed("Add_ghost"):
-		# 创建Ghost
-		if ghost_manager:
-			ghost_manager.spawn_ghost()
-		return
-	
 	# 处理鼠标左键的移动逻辑
 	# 但需要排除技能和dash输入的情况
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
