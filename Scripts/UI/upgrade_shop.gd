@@ -159,20 +159,15 @@ func close_shop() -> void:
 	shop_closed.emit()
 
 ## 生成升级选项（3个）
+## 优化版：复用现有节点，消除闪烁
 func generate_upgrades() -> void:
-	# 播放翻出动画（只对非锁定的选项）
+	# 1. 播放翻出动画（只对非锁定的选项）
+	# 锁定的选项保持原样，非锁定的翻出并隐藏（scale.x -> 0）
 	await _play_flip_out_animations()
 	
-	# 清除现有选项
-	_clear_upgrades()
-	
-	# 等待一帧确保删除完成
-	await get_tree().process_frame
-	
-	# 先处理锁定的升级，确保它们保持在相同位置
-	var selected: Array[UpgradeData] = []
-	selected.resize(3)  # 预分配3个位置
-	var locked_positions = {}  # 记录哪些位置已被锁定升级占用
+	# 2. 准备新的数据列表
+	var new_upgrades_list: Array[UpgradeData] = []
+	new_upgrades_list.resize(3)
 	
 	# 恢复锁定的升级到对应位置
 	for position_index in range(3):
@@ -180,95 +175,96 @@ func generate_upgrades() -> void:
 			var locked_upgrade = locked_upgrades[position_index]
 			# 创建升级数据的副本（保留锁定价格）
 			var upgrade_copy = _duplicate_upgrade_data(locked_upgrade)
-			selected[position_index] = upgrade_copy
-			locked_positions[position_index] = true
-			# 同步更新字典中的引用为新副本，保持对象一致性
+			new_upgrades_list[position_index] = upgrade_copy
+			# 同步更新字典中的引用为新副本
 			locked_upgrades[position_index] = upgrade_copy
 			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s" % [position_index, upgrade_copy.name])
 	
-	# 逐个生成剩余的空位
+	# 生成新升级填补空位
 	for position_index in range(3):
-		if selected[position_index] != null:
-			continue  # 该位置已被锁定升级占用
-		
-		# 生成单个upgrade（独立判定）
-		var new_upgrade = _generate_single_upgrade(selected)
+		if new_upgrades_list[position_index] != null:
+			continue # 已被锁定占位
+			
+		var new_upgrade = _generate_single_upgrade(new_upgrades_list)
 		if new_upgrade:
-			selected[position_index] = new_upgrade
+			new_upgrades_list[position_index] = new_upgrade
 		else:
 			print("[UpgradeShop] 警告: 无法生成位置 %d 的升级选项" % position_index)
 	
-	# ========== 先创建所有UI实例（不播放动画） ==========
-	var option_uis: Array[UpgradeOption] = []
-	var new_option_indices: Array[int] = []  # 记录需要播放翻入动画的索引
-	var final_selected: Array[UpgradeData] = []
+	# 更新当前数据
+	current_upgrades = new_upgrades_list
 	
-	for position_index in range(selected.size()):
-		if selected[position_index] == null:
-			continue
-		
-		var upgrade = selected[position_index]
-		var is_locked_position = locked_positions.has(position_index)
-		var option_ui = _create_upgrade_option_instance(upgrade, position_index, is_locked_position)
-		
-		if option_ui:
-			# 设置锁定状态
-			if is_locked_position:
-				option_ui.set_lock_state(true)
-			else:
-				# 只有非锁定的选项需要播放翻入动画
-				new_option_indices.append(option_uis.size())
-			option_uis.append(option_ui)
-		
-		final_selected.append(upgrade)
-	
-	# ========== 一次性添加所有UI到容器 ==========
-	for option_ui in option_uis:
-		upgrade_container.add_child(option_ui)
-	
-	# 等待一帧确保所有节点都已添加并初始化
-	await get_tree().process_frame
-	
-	# ========== 只对非锁定的选项播放翻入动画（带延迟） ==========
-	var flip_delay_index = 0
-	for i in new_option_indices:
-		var option_ui = option_uis[i]
-		var flip_delay = flip_delay_index * 0.08  # 每张卡片错开 0.08 秒
-		if option_ui.has_method("play_flip_in_animation"):
-			option_ui.play_flip_in_animation(flip_delay)
-		flip_delay_index += 1
-	
-	current_upgrades = final_selected
-	print("[UpgradeShop] 升级选项生成完成，数量: %d" % option_uis.size())
-
-## 创建升级选项UI实例（不添加到场景树，不播放动画）
-## skip_animation: 如果为true，不设置初始 scale.x = 0（锁定的选项直接显示）
-func _create_upgrade_option_instance(upgrade: UpgradeData, position_index: int, skip_animation: bool = false) -> UpgradeOption:
+	# 3. 同步UI节点（对象池模式）
+	# 确保容器中至少有3个节点
 	if not upgrade_option_scene:
 		push_error("升级选项场景未加载！")
+		return
+		
+	while upgrade_container.get_child_count() < 3:
+		var option_ui = upgrade_option_scene.instantiate() as UpgradeOption
+		upgrade_container.add_child(option_ui)
+		# 初始连接信号
+		if option_ui.has_signal("purchased"):
+			option_ui.purchased.connect(_on_upgrade_purchased)
+		if option_ui.has_signal("lock_state_changed"):
+			option_ui.lock_state_changed.connect(_on_upgrade_lock_state_changed)
+	
+	# 清理多余节点（理论上不应该发生）
+	while upgrade_container.get_child_count() > 3:
+		var child = upgrade_container.get_child(upgrade_container.get_child_count() - 1)
+		child.queue_free()
+	
+	# 确保所有新添加的节点已进入树
+	if not is_inside_tree():
+		await get_tree().process_frame
+	
+	# 4. 更新每个节点的数据和状态
+	for i in range(3):
+		var option_ui = upgrade_container.get_child(i) as UpgradeOption
+		var upgrade_data = new_upgrades_list[i]
+		var is_locked = locked_upgrades.has(i)
+		
+		option_ui.position_index = i
+		
+		# 更新数据
+		# 注意：对于非锁定节点，此时 scale.x 应为 0（由 _play_flip_out_animations 设置）
+		# 所以即使数据变了，玩家也暂时看不到，直到翻入动画播放
+		if upgrade_data:
+			option_ui.set_upgrade_data(upgrade_data)
+		
+		option_ui.set_lock_state(is_locked)
+		
+		if is_locked:
+			# 锁定的节点：确保完全显示
+			option_ui.scale.x = 1.0
+			option_ui.modulate = Color.WHITE
+		else:
+			# 非锁定的节点：确保初始隐藏，然后播放翻入动画
+			option_ui.scale.x = 0.0
+			option_ui.modulate = Color(0.5, 0.5, 0.5) # 初始暗色
+			
+			var delay = i * 0.08
+			if option_ui.has_method("play_flip_in_animation"):
+				option_ui.play_flip_in_animation(delay)
+	
+	print("[UpgradeShop] 升级选项生成完成 (优化模式), 数量: 3")
+
+## 创建升级选项UI实例（辅助函数，仅用于补充节点）
+func _create_upgrade_option_instance(upgrade: UpgradeData, position_index: int, skip_animation: bool = false) -> UpgradeOption:
+	if not upgrade_option_scene:
 		return null
 	
 	var option_ui = upgrade_option_scene.instantiate() as UpgradeOption
-	if not option_ui:
-		push_error("无法实例化升级选项！")
-		return null
-	
-	# 设置位置索引
 	option_ui.position_index = position_index
-	
-	# 设置初始状态（只有需要动画的才设置 scale.x = 0）
 	if not skip_animation:
 		option_ui.scale.x = 0.0
 	
-	# 连接信号
 	if option_ui.has_signal("purchased"):
 		option_ui.purchased.connect(_on_upgrade_purchased)
 	if option_ui.has_signal("lock_state_changed"):
 		option_ui.lock_state_changed.connect(_on_upgrade_lock_state_changed)
 	
-	# 设置数据（在添加到场景树前设置，_ready 后会自动初始化）
 	option_ui.upgrade_data = upgrade
-	
 	return option_ui
 
 ## 播放所有非锁定选项的翻出动画
@@ -278,30 +274,28 @@ func _play_flip_out_animations() -> void:
 	
 	var tweens: Array[Tween] = []
 	
-	# 遍历所有现有选项，对非锁定的播放翻出动画
+	# 遍历所有现有选项
 	for child in upgrade_container.get_children():
 		if child is UpgradeOption:
 			var option = child as UpgradeOption
-			# 检查是否锁定（锁定的不播放翻出动画）
+			# 只有非锁定的才播放翻出动画
 			if not option.is_locked:
 				if option.has_method("play_flip_out_animation"):
 					var tween = option.play_flip_out_animation()
 					if tween:
 						tweens.append(tween)
 	
-	# 等待所有翻出动画完成
+	# 等待动画完成
 	if tweens.size() > 0:
-		# 等待最后一个动画完成（所有动画同时播放，等最长的那个）
 		await tweens[0].finished
 
-## 清除所有升级选项（包括锁定的UI，但保留locked_upgrades数据）
+## 清除所有升级选项
+# 优化版不再频繁调用此函数，保留以备不时之需
 func _clear_upgrades() -> void:
 	if upgrade_container:
 		for child in upgrade_container.get_children():
 			child.queue_free()
-		print("清除所有升级选项，容器子节点数: ", upgrade_container.get_child_count())
 	current_upgrades.clear()
-	# 注意：不清除 locked_upgrades，因为需要在下次生成时保留
 
 ## 处理锁定状态变化
 func _on_upgrade_lock_state_changed(upgrade: UpgradeData, is_locked: bool, position_index: int) -> void:
@@ -354,7 +348,6 @@ func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
 		return upgrade1.weapon_id == upgrade2.weapon_id
 	
 	# 属性类型：需要类型、品质、价格都相同才算重复
-	# 这样允许不同品质的相同属性类型共存（例如：攻击速度+3%白色 和 攻击速度+5%绿色）
 	if upgrade1.quality != upgrade2.quality:
 		return false
 	
@@ -365,6 +358,7 @@ func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
 	return true
 
 ## 购买升级
+## 优化版：只刷新被购买的那一个格子
 func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	# 如果有锁定价格，使用锁定价格；否则计算波次修正后的价格
 	var adjusted_cost: int
@@ -377,26 +371,24 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 		print("钥匙不足！需要 %d，当前 %d" % [adjusted_cost, GameMain.gold])
 		return
 	
-	# 扣除钥匙（使用修正后的价格）
+	# 扣除钥匙
 	GameMain.remove_gold(adjusted_cost)
 	
-	# 更新刷新按钮状态（钥匙变化后）
+	# 更新刷新按钮状态
 	_update_refresh_cost_display()
 	
-	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost])
+	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙" % [upgrade.name, adjusted_cost])
 	
-	# 移除锁定状态（如果该升级被锁定）
+	# 移除锁定状态
 	for position_index in locked_upgrades.keys():
 		var locked_upgrade = locked_upgrades[position_index]
 		if _is_same_upgrade(locked_upgrade, upgrade):
 			locked_upgrades.erase(position_index)
-			print("[UpgradeShop] 已购买的升级从锁定列表中移除: %s" % upgrade.name)
 			break
 	
-	# 应用升级效果（武器相关的是异步的，需要等待）
+	# 应用升级效果
 	if upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
 		await _apply_upgrade(upgrade)
-		# 等待一帧确保武器已完全添加到场景树
 		await get_tree().process_frame
 		_update_weapon_list()
 	else:
@@ -404,58 +396,48 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	
 	upgrade_purchased.emit(upgrade)
 	
-	# 找到被购买选项的UI和位置
+	# 找到被购买选项的UI节点
 	var purchased_option: UpgradeOption = null
-	var purchased_position_index: int = -1
+	var purchased_index: int = -1
 	
 	for child in upgrade_container.get_children():
 		if child is UpgradeOption:
 			var option = child as UpgradeOption
 			if option.upgrade_data == upgrade:
 				purchased_option = option
-				purchased_position_index = option.position_index
+				purchased_index = option.position_index
 				break
 	
-	# 从 current_upgrades 中移除
-	for i in range(current_upgrades.size() - 1, -1, -1):
-		if current_upgrades[i] == upgrade:
-			current_upgrades.remove_at(i)
-			break
-	
-	# 播放翻出动画并等待完成
+	# 局部刷新逻辑
 	if purchased_option:
+		# 1. 翻出动画（只针对这一个）
 		if purchased_option.has_method("play_flip_out_animation"):
-			var tween = purchased_option.play_flip_out_animation()
-			if tween:
-				await tween.finished
-		purchased_option.queue_free()
-	
-	# 等待一帧确保删除完成
-	await get_tree().process_frame
-	
-	# 在原位置生成新选项
-	if purchased_position_index >= 0:
-		var new_upgrade = _generate_single_upgrade(current_upgrades)
-		if new_upgrade:
-			# 创建新选项UI
-			var option_ui = _create_upgrade_option_instance(new_upgrade, purchased_position_index, false)
-			if option_ui:
-				# 插入到正确位置
-				upgrade_container.add_child(option_ui)
-				upgrade_container.move_child(option_ui, purchased_position_index)
+			await purchased_option.play_flip_out_animation().finished
+		
+		# 2. 从 current_upgrades 移除旧数据
+		if purchased_index >= 0 and purchased_index < current_upgrades.size():
+			# 3. 生成新数据
+			# 临时将旧数据置空，防止 _generate_single_upgrade 认为它还在
+			current_upgrades[purchased_index] = null
+			
+			var new_upgrade = _generate_single_upgrade(current_upgrades)
+			
+			# 4. 更新数据到现有节点
+			if new_upgrade:
+				current_upgrades[purchased_index] = new_upgrade
+				purchased_option.set_upgrade_data(new_upgrade)
+				purchased_option.position_index = purchased_index # 保持索引
+				purchased_option.set_lock_state(false) # 新生成的默认不锁定
 				
-				# 等待一帧确保初始化
-				await get_tree().process_frame
-				
-				# 播放翻入动画
-				if option_ui.has_method("play_flip_in_animation"):
-					option_ui.play_flip_in_animation(0.0)
-				
-				current_upgrades.insert(purchased_position_index, new_upgrade)
+				# 5. 翻入动画
+				purchased_option.play_flip_in_animation(0.0)
+			else:
+				print("警告：购买后无法生成新升级")
+				# 隐藏节点
+				purchased_option.visible = false
 
 ## 应用升级效果
 func _apply_upgrade(upgrade: UpgradeData) -> void:
-	# 特殊处理：武器相关和恢复HP
 	match upgrade.upgrade_type:
 		UpgradeData.UpgradeType.HEAL_HP:
 			_apply_heal_upgrade(upgrade)
@@ -464,16 +446,12 @@ func _apply_upgrade(upgrade: UpgradeData) -> void:
 		UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
 			_apply_weapon_level_upgrade(upgrade.weapon_id)
 		_:
-			# 使用新属性系统应用升级
 			_apply_attribute_upgrade(upgrade)
 
 func _apply_heal_upgrade(upgrade: UpgradeData) -> void:
-	var heal_amount = 10 # Default
-	
-	# Try to get heal amount from custom_value (preferred)
+	var heal_amount = 10
 	if upgrade.custom_value > 0:
 		heal_amount = int(upgrade.custom_value)
-	# Fallback: Try to get heal amount from stats_modifier.max_hp (legacy/compatibility)
 	elif upgrade.stats_modifier and upgrade.stats_modifier.max_hp > 0:
 		heal_amount = upgrade.stats_modifier.max_hp
 	
@@ -483,12 +461,10 @@ func _apply_heal_upgrade(upgrade: UpgradeData) -> void:
 		player.now_hp = min(player.now_hp + heal_amount, player.max_hp)
 		var actual_heal = player.now_hp - old_hp
 		
-		# 显示HP恢复的浮动文字（使用统一方法）
 		if actual_heal > 0:
 			SpecialEffects.show_heal_floating_text(player, actual_heal)
 		
 		player.hp_changed.emit(player.now_hp, player.max_hp)
-		print("[UpgradeShop] 应用治疗: %s, 恢复量: %d (实际: %d)" % [upgrade.name, heal_amount, actual_heal])
 
 func _apply_new_weapon_upgrade(weapon_id: String) -> void:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
@@ -496,7 +472,7 @@ func _apply_new_weapon_upgrade(weapon_id: String) -> void:
 		weapons_manager = get_tree().get_first_node_in_group("weapons")
 	
 	if weapons_manager and weapons_manager.has_method("add_weapon"):
-		await weapons_manager.add_weapon(weapon_id, 1)  # 新武器固定1级，必须等待完成
+		await weapons_manager.add_weapon(weapon_id, 1)
 
 func _apply_weapon_level_upgrade(weapon_id: String) -> void:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
@@ -508,120 +484,69 @@ func _apply_weapon_level_upgrade(weapon_id: String) -> void:
 		if weapon and weapon.has_method("upgrade_level"):
 			weapon.upgrade_level()
 
-## 应用属性升级（新系统）
-## 
-## 使用AttributeManager添加永久属性加成
 func _apply_attribute_upgrade(upgrade: UpgradeData) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		push_error("[UpgradeShop] 无法找到玩家节点")
 		return
 	
-	# 检查是否使用新属性系统
 	if player.has_node("AttributeManager"):
-		# 新系统：使用AttributeModifier
 		if upgrade.stats_modifier:
 			var modifier = upgrade.create_modifier()
 			player.attribute_manager.add_permanent_modifier(modifier)
-			print("[UpgradeShop] 使用新系统应用升级: %s" % upgrade.name)
 		else:
-			# 如果升级还没有stats_modifier，尝试使用旧系统
 			push_warning("[UpgradeShop] 升级 %s 没有stats_modifier，降级到旧系统" % upgrade.name)
 			_apply_attribute_changes_old(upgrade)
 	else:
-		# 降级方案：使用旧系统
 		_apply_attribute_changes_old(upgrade)
 
-## 通用属性变化应用函数（旧系统兼容）
-## 
-## 根据 upgrade.attribute_changes 配置应用属性变化
 func _apply_attribute_changes_old(upgrade: UpgradeData) -> void:
 	if upgrade.attribute_changes.is_empty():
-		print("[UpgradeShop] 警告: 升级 %s 没有配置属性变化" % upgrade.name)
 		return
 	
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		push_error("[UpgradeShop] 无法找到玩家节点")
 		return
 	
 	var class_data = player.current_class
-	if not class_data:
-		push_error("[UpgradeShop] 玩家没有职业数据")
-		return
-	
 	var need_reapply_weapons = false
 	
-	# 遍历所有属性变化配置
 	for attr_name in upgrade.attribute_changes.keys():
 		var change_config = upgrade.attribute_changes[attr_name]
-		if not change_config.has("op") or not change_config.has("value"):
-			push_error("[UpgradeShop] 属性变化配置格式错误: %s" % attr_name)
-			continue
-		
 		var op = change_config["op"]
 		var value = change_config["value"]
 		
-		# 特殊处理：max_hp 和 speed（在 player 上）
 		if attr_name == "max_hp":
 			if op == "add":
 				player.max_hp += int(value)
-				# player.now_hp += int(value)  # 同时恢复HP
 				player.hp_changed.emit(player.now_hp, player.max_hp)
-				print("[UpgradeShop] %s: max_hp += %d (当前: %d)" % [upgrade.name, int(value), player.max_hp])
 			continue
 		
 		if attr_name == "speed":
 			if op == "add":
 				player.base_speed += value
 				player.speed += value
-				print("[UpgradeShop] %s: speed += %.1f (当前: %.1f)" % [upgrade.name, value, player.speed])
 			continue
 		
 		# 其他属性在 class_data 上
-		# 检查属性是否存在（Resource 没有 has() 方法，需要检查 property_list）
-		var property_exists = false
-		for prop in class_data.get_property_list():
-			if prop.name == attr_name:
-				property_exists = true
-				break
-		
-		if not property_exists:
-			push_error("[UpgradeShop] 属性不存在: %s" % attr_name)
-			continue
-		
-		var current_value = class_data.get(attr_name)
-		var new_value
-		
-		match op:
-			"add":
-				new_value = current_value + value
-			"multiply":
-				new_value = current_value * value
-			_:
-				push_error("[UpgradeShop] 不支持的操作类型: %s" % op)
-				continue
-		
-		class_data.set(attr_name, new_value)
-		
-		# 检查是否需要重新应用武器加成
-		if attr_name.contains("multiplier") or attr_name == "luck":
-			need_reapply_weapons = true
-		
-		print("[UpgradeShop] %s: %s %s %.2f (%.2f -> %.2f)" % [
-			upgrade.name,
-			attr_name,
-			op,
-			value,
-			current_value,
-			new_value
-		])
+		if class_data:
+			var current_value = class_data.get(attr_name)
+			var new_value
+			
+			match op:
+				"add":
+					new_value = current_value + value
+				"multiply":
+					new_value = current_value * value
+			
+			class_data.set(attr_name, new_value)
+			
+			if attr_name.contains("multiplier") or attr_name == "luck":
+				need_reapply_weapons = true
 	
-	# 如果修改了武器相关属性，重新应用武器加成
 	if need_reapply_weapons:
 		_reapply_weapon_bonuses()
 
-## 重新应用武器加成（当属性改变时）
 func _reapply_weapon_bonuses() -> void:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
 	if not weapons_manager:
@@ -650,24 +575,21 @@ func _update_refresh_cost_display() -> void:
 	if refresh_cost_label:
 		refresh_cost_label.text = " 🔑 %d" % refresh_cost
 	
-	# 检查钥匙是否足够刷新，不足时按钮变灰
 	if refresh_button:
 		var can_afford = GameMain.gold >= refresh_cost
 		if can_afford:
 			refresh_button.modulate = Color.WHITE
 		else:
-			refresh_button.modulate = Color(0.5, 0.5, 0.5)  # 灰色
+			refresh_button.modulate = Color(0.5, 0.5, 0.5)
 
 ## 初始化玩家信息显示
 func _initialize_player_info() -> void:
-	# 显示已选择的职业头像
 	var class_id = GameMain.selected_class_id
 	if class_id != "" and player_portrait:
 		var class_data = ClassDatabase.get_class_data(class_id)
 		if class_data and class_data.portrait:
 			player_portrait.texture = class_data.portrait
 	
-	# 显示玩家名字（从存档读取）
 	if player_name_label:
 		var saved_name = SaveManager.get_player_name()
 		if saved_name != "":
@@ -675,33 +597,25 @@ func _initialize_player_info() -> void:
 		else:
 			player_name_label.text = "玩家"
 
-## 更新武器列表显示（使用 WeaponCompact 组件）
+## 更新武器列表显示
 func _update_weapon_list() -> void:
-	# 确保武器容器存在
 	if not weapon_container:
 		weapon_container = get_node_or_null("%WeaponContainer")
 		if not weapon_container:
-			print("[UpgradeShop] 无法找到武器容器")
 			return
 	
-	# 清空现有武器显示
 	for child in weapon_container.get_children():
 		child.queue_free()
 	
-	# 获取武器管理器
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
 	if not weapons_manager:
 		weapons_manager = get_tree().get_first_node_in_group("weapons")
 	
 	if not weapons_manager:
-		print("[UpgradeShop] 无法找到武器管理器")
 		return
 	
-	# 获取所有武器（按获得顺序）
 	var weapons = weapons_manager.get_all_weapons()
-	print("[UpgradeShop] 找到武器管理器，武器数量: ", weapons.size())
 	
-	# 显示6个武器槽位
 	for i in range(6):
 		if not weapon_compact_scene:
 			continue
@@ -710,7 +624,6 @@ func _update_weapon_list() -> void:
 		weapon_container.add_child(compact)
 		
 		if i < weapons.size() and weapons[i] is BaseWeapon:
-			# 有武器 - 显示武器信息
 			var weapon = weapons[i] as BaseWeapon
 			var weapon_data = weapon.weapon_data
 			var weapon_level = weapon.weapon_level
@@ -721,21 +634,16 @@ func _update_weapon_list() -> void:
 				elif compact.has_method("setup_weapon"):
 					compact.setup_weapon(weapon_data.weapon_id, weapon_level)
 		else:
-			# 空槽位 - 显示"空缺"，不显示图片
 			if compact.has_method("set_weapon_name"):
 				compact.set_weapon_name("空缺")
 			if compact.has_method("set_weapon_texture"):
-				compact.set_weapon_texture(null)  # 不显示图片
+				compact.set_weapon_texture(null)
 			if compact.has_method("set_quality_level"):
-				compact.set_quality_level(1)  # 灰色背景
-	
-	print("[UpgradeShop] 武器列表已更新，当前武器数量: ", weapons.size())
+				compact.set_quality_level(1)
 
 ## ========== 新的商店刷新系统 ==========
 
-## 获取当前波数
 func _get_current_wave() -> int:
-	# 尝试多种方式获取波次管理器
 	var wave_manager = get_tree().get_first_node_in_group("wave_system")
 	if not wave_manager:
 		wave_manager = get_tree().get_first_node_in_group("wave_manager")
@@ -746,7 +654,6 @@ func _get_current_wave() -> int:
 	
 	return current_wave
 
-## 获取玩家幸运值
 func _get_player_luck() -> float:
 	var player = get_tree().get_first_node_in_group("player")
 	var luck_value = 0.0
@@ -754,41 +661,29 @@ func _get_player_luck() -> float:
 		luck_value = player.current_class.luck
 	return luck_value
 
-## 统计商店中的new weapon数量（包括锁定的）
 func _count_new_weapons_in_shop() -> int:
 	var count = 0
-	
-	# 统计当前显示的
 	for upgrade in current_upgrades:
 		if upgrade != null and upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
 			count += 1
-	
-	# 统计锁定的
 	for position_index in locked_upgrades.keys():
 		var locked_upgrade = locked_upgrades[position_index]
 		if locked_upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
 			count += 1
-	
 	return count
 
-## 根据幸运值和波数计算品质
-## 返回品质等级（1-5对应WHITE-ORANGE）
 func _get_quality_by_luck(luck_value: float, current_wave: int) -> int:
-	# 品质配置表
 	var quality_configs = [
-		# [品质, 最低波数, 基础概率, 每波增加, 最高概率]
-		[UpgradeData.Quality.ORANGE, 10, 0.0, 0.23, 8.0],    # Tier 5
-		[UpgradeData.Quality.PURPLE, 8, 0.0, 2.0, 25.0],     # Tier 4
-		[UpgradeData.Quality.BLUE, 4, 0.0, 6.0, 60.0],       # Tier 3
-		[UpgradeData.Quality.GREEN, 2, 0.0, 8.0, 80.0],      # Tier 2
-		[UpgradeData.Quality.WHITE, 1, 100.0, 0.0, 100.0],   # Tier 1
+		[UpgradeData.Quality.ORANGE, 10, 0.0, 0.23, 8.0],
+		[UpgradeData.Quality.PURPLE, 8, 0.0, 2.0, 25.0],
+		[UpgradeData.Quality.BLUE, 4, 0.0, 6.0, 60.0],
+		[UpgradeData.Quality.GREEN, 2, 0.0, 8.0, 80.0],
+		[UpgradeData.Quality.WHITE, 1, 100.0, 0.0, 100.0],
 	]
 	
-	# 幸运值转换为百分比倍率（luck值 / 100）
 	var luck_multiplier = 1.0 + (luck_value / 100.0)
-	
-	# 计算每个品质的概率
 	var quality_probabilities = []
+	
 	for config in quality_configs:
 		var quality = config[0]
 		var min_wave = config[1]
@@ -796,21 +691,16 @@ func _get_quality_by_luck(luck_value: float, current_wave: int) -> int:
 		var wave_increase = config[3]
 		var max_prob = config[4]
 		
-		# 如果当前波数低于最低出现波数，概率为0
 		if current_wave < min_wave:
 			quality_probabilities.append([quality, 0.0])
 			continue
 		
-		# 计算概率：((每波增加 × (当前波数 - 最低波数 - 1)) + 基础概率) × 幸运倍率
 		var wave_bonus = wave_increase * float(current_wave - min_wave - 1)
 		var probability = (base_prob + wave_bonus) * luck_multiplier
-		
-		# 限制在最高概率
 		probability = min(probability, max_prob)
 		
 		quality_probabilities.append([quality, probability])
 	
-	# 从高到低检查品质，使用递减概率
 	var rng = RandomNumberGenerator.new()
 	rng.seed = hash(Time.get_ticks_msec() + current_wave + int(luck_value))
 	var roll = rng.randf_range(0.0, 100.0)
@@ -819,30 +709,21 @@ func _get_quality_by_luck(luck_value: float, current_wave: int) -> int:
 	for i in range(quality_probabilities.size()):
 		var quality = quality_probabilities[i][0]
 		var prob = quality_probabilities[i][1]
-		
-		# 计算实际可用概率（从剩余概率中分配）
 		var available_prob = 100.0 - accumulated_prob
 		var actual_prob = min(prob, available_prob)
 		
 		if roll < accumulated_prob + actual_prob:
-			print("[UpgradeShop] 品质抽取: 波数=%d, 幸运=%d, Roll=%.1f%%, 品质=%s (概率=%.1f%%)" % [
-				current_wave, int(luck_value), roll, 
-				UpgradeData.get_quality_name(quality), actual_prob
-			])
 			return quality
 		
 		accumulated_prob += actual_prob
 	
-	# 保底返回白色
 	return UpgradeData.Quality.WHITE
 
-## 生成单个upgrade选项（独立判定）
 func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeData:
 	var rng = RandomNumberGenerator.new()
 	var current_wave = _get_current_wave()
 	rng.seed = hash(Time.get_ticks_msec() + current_wave + existing_upgrades.size())
 	
-	# 统计现有选项中的武器和属性数量
 	var current_weapon_count = 0
 	var current_attribute_count = 0
 	for up in existing_upgrades:
@@ -852,16 +733,12 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 			else:
 				current_attribute_count += 1
 	
-	# 决定生成类型
 	var is_weapon = false
-	
-	# 强制保底逻辑：不要同时出现3个武器，也不要同时出现3个属性（除非没武器可升）
 	if current_weapon_count >= 2:
-		is_weapon = false # 已经有2个武器了，强制生成属性
+		is_weapon = false
 	elif current_attribute_count >= 2:
-		is_weapon = true # 已经有2个属性了，强制生成武器
+		is_weapon = true
 	else:
-		# 正常随机：35% 概率生成武器，65% 概率生成属性
 		is_weapon = rng.randf() < 0.35
 	
 	var attempts = 0
@@ -869,44 +746,31 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 	
 	while attempts < max_attempts:
 		attempts += 1
-		
-		# Generate a unique salt for this attempt to prevent same-seed RNG in fast loops
 		var salt = randi()
-		
 		var upgrade: UpgradeData = null
 		
 		if is_weapon:
 			upgrade = _generate_weapon_upgrade(existing_upgrades, salt)
 		else:
-			# 获取当前波数和幸运值
 			var luck_value = _get_player_luck()
-			
-			# 根据幸运值决定品质
 			var quality = _get_quality_by_luck(luck_value, current_wave)
-			
 			upgrade = _generate_attribute_upgrade(quality, salt)
-			# 如果指定品质生成失败（可能该品质没有对应升级），尝试保底使用白色品质
 			if upgrade == null:
 				upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, salt)
 		
 		if upgrade == null:
-			# 如果生成失败，尝试切换类型
 			if is_weapon:
-				# 武器生成失败，尝试生成属性
 				var luck_value = _get_player_luck()
 				var quality = _get_quality_by_luck(luck_value, current_wave)
 				upgrade = _generate_attribute_upgrade(quality, salt)
-				# 保底策略
 				if upgrade == null:
 					upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, salt)
 			else:
-				# 属性生成失败，尝试生成武器
 				upgrade = _generate_weapon_upgrade(existing_upgrades, salt)
 			
 			if upgrade == null:
 				continue
 		
-		# 检查是否与已有选项重复
 		var is_duplicate = false
 		for existing in existing_upgrades:
 			if existing == null:
@@ -918,15 +782,12 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 		if not is_duplicate:
 			return upgrade
 	
-	print("[UpgradeShop] 警告: 尝试 %d 次后仍无法生成不重复的升级" % max_attempts)
 	return null
 
-## 生成武器相关upgrade
 func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int = 0) -> UpgradeData:
 	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
 	if not weapons_manager:
 		weapons_manager = get_tree().get_first_node_in_group("weapons")
-	
 	if not weapons_manager:
 		return null
 	
@@ -934,16 +795,12 @@ func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int =
 	if weapons_manager.has_method("get_weapon_count"):
 		weapon_count = weapons_manager.get_weapon_count()
 	
-	# 统计商店中的new weapon数量（包括锁定的和当前生成的）
 	var new_weapon_count_in_shop = 0
 	for up in existing_upgrades:
 		if up and up.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
 			new_weapon_count_in_shop += 1
 	
-	# 检查是否可以生成新武器
 	var can_generate_new_weapon = (weapon_count + new_weapon_count_in_shop) < 6
-	
-	# 检查是否所有武器都满级
 	var all_weapons_max_level = false
 	if weapons_manager.has_method("has_all_weapons_max_level"):
 		all_weapons_max_level = weapons_manager.has_all_weapons_max_level()
@@ -952,28 +809,20 @@ func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int =
 	var current_wave = _get_current_wave()
 	rng.seed = hash(Time.get_ticks_msec() + current_wave + weapon_count + salt)
 	
-	# 决定生成NEW_WEAPON还是WEAPON_LEVEL_UP
 	var can_level_up = weapon_count > 0 and not all_weapons_max_level
 	
 	if not can_generate_new_weapon and not can_level_up:
-		# 既不能生成新武器，也不能升级武器
 		return null
-	
 	if can_generate_new_weapon and not can_level_up:
-		# 只能生成新武器
 		return _generate_new_weapon_upgrade(salt)
-	
 	if not can_generate_new_weapon and can_level_up:
-		# 只能升级武器
 		return _generate_weapon_level_up_upgrade(weapons_manager, salt)
 	
-	# 两者都可以，随机选择
 	if rng.randf() < 0.5:
 		return _generate_new_weapon_upgrade(salt)
 	else:
 		return _generate_weapon_level_up_upgrade(weapons_manager, salt)
 
-## 生成新武器upgrade
 func _generate_new_weapon_upgrade(salt: int = 0) -> UpgradeData:
 	var all_weapon_ids = WeaponDatabase.get_all_weapon_ids()
 	if all_weapon_ids.is_empty():
@@ -995,10 +844,8 @@ func _generate_new_weapon_upgrade(salt: int = 0) -> UpgradeData:
 	upgrade.description = weapon_data.description
 	upgrade.quality = UpgradeData.Quality.WHITE
 	upgrade.actual_cost = upgrade.cost
-	
 	return upgrade
 
-## 生成武器升级upgrade
 func _generate_weapon_level_up_upgrade(weapons_manager, salt: int = 0) -> UpgradeData:
 	if not weapons_manager.has_method("get_upgradeable_weapon_types"):
 		return null
@@ -1013,14 +860,12 @@ func _generate_weapon_level_up_upgrade(weapons_manager, salt: int = 0) -> Upgrad
 	var weapon_id = upgradeable_weapons[rng.randi_range(0, upgradeable_weapons.size() - 1)]
 	
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
-	
-	# 获取当前最低等级的武器
 	var lowest_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
 	if not lowest_weapon:
 		return null
 	
 	var current_level = lowest_weapon.weapon_level
-	var target_level = current_level + 1  # 目标等级
+	var target_level = current_level + 1
 	
 	var upgrade = UpgradeData.new(
 		UpgradeData.UpgradeType.WEAPON_LEVEL_UP,
@@ -1030,66 +875,48 @@ func _generate_weapon_level_up_upgrade(weapons_manager, salt: int = 0) -> Upgrad
 		weapon_id
 	)
 	upgrade.description = "提升武器等级 (当前等级: %d)" % current_level
-	
-	# 动态设置品质和价格（品质 = 目标等级）
 	upgrade.quality = target_level
 	upgrade.base_cost = new_weapon_cost
 	upgrade.calculate_weapon_upgrade_cost()
 	
 	return upgrade
 
-## 生成指定品质的属性upgrade
 func _generate_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
-	# 获取所有upgrade ID
 	var all_upgrade_ids = UpgradeDatabase.get_all_upgrade_ids()
-	
-	# 筛选出指定品质的upgrade，同时收集权重信息（跳过权重<=0的升级）
-	var quality_upgrades: Array[Dictionary] = []  # [{id: String, weight: int}]
+	var quality_upgrades: Array[Dictionary] = []
 	var total_weight: int = 0
 	
 	for upgrade_id in all_upgrade_ids:
 		var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
 		if not upgrade_data or upgrade_data.quality != quality:
 			continue
-		
-		# 检查权重：权重必须>0才会出现在商店中（0、负数都会被跳过）
-		# 注意：int类型不能为null，未设置时默认值为0，也会被跳过
 		var weight = upgrade_data.weight
 		if weight <= 0:
 			continue
-		
 		quality_upgrades.append({"id": upgrade_id, "weight": weight})
 		total_weight += weight
 	
 	if quality_upgrades.is_empty():
-		# print("[UpgradeShop] 警告: 没有品质为 %s 的升级选项" % UpgradeData.get_quality_name(quality))
 		return null
 	
-	# 使用加权随机选择
 	var current_wave = _get_current_wave()
 	var rng = RandomNumberGenerator.new()
 	rng.seed = hash(Time.get_ticks_msec() + current_wave + quality_upgrades.size() + salt)
 	
-	# 生成0到总权重之间的随机数
 	var random_value = rng.randi_range(0, total_weight - 1)
-
-	
-	# 累加权重，找到对应的升级
 	var accumulated_weight = 0
 	var selected_upgrade_id: String = ""
+	
 	for upgrade_info in quality_upgrades:
 		accumulated_weight += upgrade_info["weight"]
 		if random_value < accumulated_weight:
 			selected_upgrade_id = upgrade_info["id"]
 			break
 	
-	# 如果由于浮点误差没有选中，选择最后一个
 	if selected_upgrade_id == "":
 		selected_upgrade_id = quality_upgrades[-1]["id"]
 	
 	var upgrade_data = UpgradeDatabase.get_upgrade_data(selected_upgrade_id)
-	
-	# 创建副本
 	var upgrade_copy = UpgradeData.new(
 		upgrade_data.upgrade_type,
 		upgrade_data.name,
@@ -1103,11 +930,8 @@ func _generate_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
 	upgrade_copy.weight = upgrade_data.weight
 	upgrade_copy.attribute_changes = upgrade_data.attribute_changes.duplicate(true)
 	
-	# ⭐ 关键：复制stats_modifier（新属性系统）
 	if upgrade_data.stats_modifier:
 		upgrade_copy.stats_modifier = upgrade_data.stats_modifier.clone()
 	
-	# 复制自定义值
 	upgrade_copy.custom_value = upgrade_data.custom_value
-	
 	return upgrade_copy

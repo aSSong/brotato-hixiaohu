@@ -221,17 +221,22 @@ func play_flip_in_animation(delay: float = 0.0) -> void:
 	# 设置初始状态
 	scale.x = 0.0
 	pivot_offset = size / 2  # 设置中心点
+	modulate = Color(0.5, 0.5, 0.5)  # 初始稍暗
 	
 	var tween = create_tween()
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_BACK)
+	tween.set_parallel(true)  # 并行执行
 	
 	# 如果有延迟，先等待
 	if delay > 0:
 		tween.tween_interval(delay)
 	
 	# 翻入动画：scale.x 从 0 到 1
-	tween.tween_property(self, "scale:x", 1.0, 0.2)
+	tween.tween_property(self, "scale:x", 1.0, 0.2)\
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK).set_delay(delay)
+	
+	# 亮度恢复动画
+	tween.tween_property(self, "modulate", Color.WHITE, 0.2)\
+		.set_delay(delay)
 
 ## 翻出动画（从 scale.x = 1 翻转收起）
 ## 返回 Tween 对象以便等待完成
@@ -239,10 +244,14 @@ func play_flip_out_animation() -> Tween:
 	pivot_offset = size / 2  # 设置中心点
 	
 	var tween = create_tween()
+	tween.set_parallel(true)
 	tween.set_ease(Tween.EASE_IN)
 	tween.set_trans(Tween.TRANS_BACK)
 	
 	# 翻出动画：scale.x 从 1 到 0
 	tween.tween_property(self, "scale:x", 0.0, 0.15)
+	
+	# 变暗动画
+	tween.tween_property(self, "modulate", Color(0.5, 0.5, 0.5), 0.15)
 	
 	return tween
