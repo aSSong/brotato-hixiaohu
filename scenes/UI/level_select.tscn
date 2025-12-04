@@ -44,11 +44,11 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 50
 
-[node name="level1panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
+[node name="chaper1panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("2_l65nk")
 
-[node name="level1text" type="VBoxContainer" parent="bg/MarginContainer/HBoxContainer/level1panel"]
+[node name="chaper1text" type="VBoxContainer" parent="bg/MarginContainer/HBoxContainer/chaper1panel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -59,7 +59,7 @@ offset_right = 150.0
 offset_bottom = 424.55
 grow_horizontal = 2
 
-[node name="chapter" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="chapter" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.9225877, 0.20633054, 0.75347173, 1)
@@ -73,14 +73,14 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="title" type="Label" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_f431m")
 theme_override_font_sizes/font_size = 60
 text = "最后的防线"
 horizontal_alignment = 1
 
-[node name="englishtitle" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="englishtitle" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.64705884, 0.33333334, 0.9607843, 1)
@@ -94,7 +94,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="RichTextLabel2" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -103,7 +103,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel3" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="RichTextLabel3" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -112,7 +112,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel4" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="RichTextLabel4" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -121,7 +121,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel5" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="RichTextLabel5" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -130,7 +130,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+[node name="RichTextLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_f431m")
@@ -140,7 +140,7 @@ bbcode_enabled = true
 text = "[i]难度：[color=#ea33bf]😌普通[/color][/i]"
 horizontal_alignment = 1
 
-[node name="level1beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/level1panel"]
+[node name="chaper1beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/chaper1panel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -160,7 +160,7 @@ texture_hover = ExtResource("6_aqroq")
 texture_disabled = ExtResource("7_h3adk")
 texture_focused = ExtResource("6_aqroq")
 
-[node name="beginLabel" type="Label" parent="bg/MarginContainer/HBoxContainer/level1panel/level1beginBtn"]
+[node name="beginLabel" type="Label" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1beginBtn"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -178,11 +178,11 @@ theme_override_fonts/font = ExtResource("3_f431m")
 theme_override_font_sizes/font_size = 80
 text = "进  入"
 
-[node name="level2panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
+[node name="chaper2panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("2_l65nk")
 
-[node name="level2text" type="VBoxContainer" parent="bg/MarginContainer/HBoxContainer/level2panel"]
+[node name="chaper2text" type="VBoxContainer" parent="bg/MarginContainer/HBoxContainer/chaper2panel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -193,7 +193,7 @@ offset_right = 150.0
 offset_bottom = 424.55
 grow_horizontal = 2
 
-[node name="chapter" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="chapter" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.9225877, 0.20633054, 0.75347173, 1)
@@ -207,14 +207,14 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="title" type="Label" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_f431m")
 theme_override_font_sizes/font_size = 60
 text = "反击大作战"
 horizontal_alignment = 1
 
-[node name="englishtitle" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="englishtitle" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.64705884, 0.33333334, 0.9607843, 1)
@@ -228,7 +228,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="RichTextLabel2" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -237,7 +237,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel3" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="RichTextLabel3" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -246,7 +246,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel4" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="RichTextLabel4" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -255,7 +255,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel5" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="RichTextLabel5" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 layout_mode = 2
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
@@ -264,7 +264,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+[node name="RichTextLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("3_f431m")
@@ -274,7 +274,7 @@ bbcode_enabled = true
 text = "[i]难度：[color=#ea33bf]☠️困难[/color][/i]"
 horizontal_alignment = 1
 
-[node name="level1beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/level2panel"]
+[node name="chaper2beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/chaper2panel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -294,7 +294,7 @@ texture_hover = ExtResource("6_aqroq")
 texture_disabled = ExtResource("7_h3adk")
 texture_focused = ExtResource("6_aqroq")
 
-[node name="beginLabel" type="Label" parent="bg/MarginContainer/HBoxContainer/level2panel/level1beginBtn"]
+[node name="beginLabel" type="Label" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2beginBtn"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -312,17 +312,18 @@ theme_override_fonts/font = ExtResource("3_f431m")
 theme_override_font_sizes/font_size = 80
 text = "进  入"
 
-[node name="level3panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
+[node name="chaper3panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("8_tt6bj")
 
-[node name="TextureButton" type="TextureButton" parent="bg"]
+[node name="backButton" type="TextureButton" parent="bg"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
+offset_left = 30.0
 offset_top = -180.0
-offset_right = 314.0
+offset_right = 344.0
 offset_bottom = -81.0
 grow_vertical = 0
 texture_normal = ExtResource("9_02328")
