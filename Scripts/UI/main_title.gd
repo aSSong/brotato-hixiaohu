@@ -2,8 +2,10 @@ extends Control
 
 # 获取AnimationPlayer节点的引用
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var player_info: Label = $menu/VBoxContainer/player_info
+@onready var player_info: Label = $player_info
 @onready var begin_btn: TextureButton = $menu/VBoxContainer/beginBtn
+@onready var info_label: Label = $player_info/infoLabel
+@onready var clean_name_btn: Button = $player_info/Button
 
 # 检查存档中的名字
 var player_name = SaveManager.get_player_name()
@@ -17,24 +19,17 @@ func _ready() -> void:
 	if player_name != "":
 		var floor_name = SaveManager.get_floor_name()
 		player_info.text = player_name + "  " + floor_name
-		animation_player.play("kkey")
 	else:
 		player_info.visible = false
-	
+	#信息公告不可见
+	info_label.visible = false
 	# 连接 beginBtn 信号
 	if begin_btn:
 		begin_btn.pressed.connect(_on_begin_btn_pressed)
-
-
-# 处理输入事件
-func _input(event: InputEvent) -> void:
-	# 检测是否按下K键
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_K:
-			# 播放kkey动画
-			if animation_player:
-				animation_player.play("kkey")
-
+	
+	# 连接清空名字按钮信号
+	if clean_name_btn:
+		clean_name_btn.pressed.connect(_on_clean_name_btn_pressed)
 
 func _on_begin_btn_pressed() -> void:
 	# 如果存档信息不为空，进入 cutscene_open 场景
@@ -47,3 +42,12 @@ func _on_begin_btn_pressed() -> void:
 
 func _on_btn_quit_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_clean_name_btn_pressed() -> void:
+	# 清空玩家名字
+	SaveManager.set_player_name("")
+	player_name = ""
+	player_info.visible = false
+	info_label.visible = true
+	print("[MainTitle] 玩家名字已清空")

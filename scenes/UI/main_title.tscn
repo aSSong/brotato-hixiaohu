@@ -1,132 +1,16 @@
-[gd_scene load_steps=14 format=3 uid="uid://dnt2sd4mt6yw8"]
+[gd_scene load_steps=12 format=3 uid="uid://dnt2sd4mt6yw8"]
 
 [ext_resource type="Script" uid="uid://dfrk5jfj3ogys" path="res://Scripts/UI/main_title.gd" id="1_3tovs"]
 [ext_resource type="Texture2D" uid="uid://dwf4dbg8vqiqd" path="res://assets/UI/maintitle/bg-maintitle-01.png" id="2_um0kg"]
 [ext_resource type="Texture2D" uid="uid://bwxn18efpuf7s" path="res://assets/UI/common/btn-level-normal-01.png" id="3_fraxl"]
-[ext_resource type="Texture2D" uid="uid://b1dqjv2lw154v" path="res://assets/UI/maintitle/title-1.png" id="3_va1ok"]
 [ext_resource type="Texture2D" uid="uid://rkoedninn4cu" path="res://assets/UI/common/btn-level-pressed-01.png" id="4_nb8ff"]
-[ext_resource type="Texture2D" uid="uid://dslocqmem63dh" path="res://assets/UI/maintitle/title-2.png" id="4_phujf"]
 [ext_resource type="Texture2D" uid="uid://c6ru0ufa3c6xp" path="res://assets/UI/common/btn-level-hover-01.png" id="5_adb34"]
-[ext_resource type="Texture2D" uid="uid://dxp6xkay5gvjc" path="res://assets/UI/maintitle/text-03.png" id="5_r3xu7"]
 [ext_resource type="Texture2D" uid="uid://cdigl7d4s25p3" path="res://assets/UI/common/btn-level-disabled-01.png" id="6_h860p"]
-[ext_resource type="Texture2D" uid="uid://lijt3pr5dbop" path="res://assets/UI/maintitle/图层 1.png" id="6_yr50f"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="7_wl6us"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xvm6"]
-bg_color = Color(0.21568628, 0.05490196, 0.08235294, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-
-[sub_resource type="Animation" id="Animation_nb8ff"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Text03:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("图层1:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Text03:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Title2:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_fraxl"]
-resource_name = "kkey"
-length = 2.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Text03:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.6333333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("图层1:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.53333336),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Text03:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(1.7666667, 2.1, 2.2666667),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.4, 0.4), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Title2:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.93333334),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(0.54509807, 0.54509807, 0.54509807, 0.7411765)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_adb34"]
-_data = {
-&"RESET": SubResource("Animation_nb8ff"),
-&"kkey": SubResource("Animation_fraxl")
-}
+[ext_resource type="Texture2D" uid="uid://bmgip1e3l7qu0" path="res://assets/UI/maintitle/btn-other-normal-01.png" id="8_fraxl"]
+[ext_resource type="Texture2D" uid="uid://hhrlu5odkkv1" path="res://assets/UI/maintitle/btn-other-pressed-01.png" id="9_nb8ff"]
+[ext_resource type="Texture2D" uid="uid://5xdtdejhi11r" path="res://assets/UI/maintitle/btn-other-hover-01.png" id="10_adb34"]
+[ext_resource type="Texture2D" uid="uid://ceqcch27fc2qw" path="res://assets/UI/maintitle/btn-other-disabled-01.png" id="11_h860p"]
 
 [node name="MainTitle" type="Control"]
 layout_mode = 3
@@ -163,16 +47,7 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="menu"]
 layout_mode = 2
-theme_override_constants/separation = 22
-
-[node name="player_info" type="Label" parent="menu/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 3
-theme_override_font_sizes/font_size = 50
-text = "Name 38F"
-horizontal_alignment = 1
+theme_override_constants/separation = 0
 
 [node name="beginBtn" type="TextureButton" parent="menu/VBoxContainer"]
 layout_mode = 2
@@ -181,7 +56,7 @@ texture_pressed = ExtResource("4_nb8ff")
 texture_hover = ExtResource("5_adb34")
 texture_disabled = ExtResource("6_h860p")
 
-[node name="Label" type="Label" parent="menu/VBoxContainer/beginBtn"]
+[node name="startLabel" type="Label" parent="menu/VBoxContainer/beginBtn"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -199,41 +74,32 @@ theme_override_fonts/font = ExtResource("7_wl6us")
 theme_override_font_sizes/font_size = 80
 text = "进  入"
 
-[node name="btn_Quit" type="Button" parent="menu/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
+[node name="btn_Quit" type="TextureButton" parent="menu/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("8_fraxl")
+texture_pressed = ExtResource("9_nb8ff")
+texture_hover = ExtResource("10_adb34")
+texture_disabled = ExtResource("11_h860p")
+
+[node name="quitLabel" type="Label" parent="menu/VBoxContainer/btn_Quit"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.5
+offset_top = -9.0
+offset_right = 75.5
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.13962634
+theme_override_fonts/font = ExtResource("7_wl6us")
 theme_override_font_sizes/font_size = 40
-theme_override_styles/normal = SubResource("StyleBoxFlat_5xvm6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_5xvm6")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5xvm6")
-text = "Q U I T"
-
-[node name="Title1" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(488, 376)
-texture = ExtResource("3_va1ok")
-
-[node name="Title2" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(1050, 283)
-texture = ExtResource("4_phujf")
-
-[node name="Text03" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(1238, 476)
-texture = ExtResource("5_r3xu7")
-
-[node name="图层1" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(1090.9999, 282)
-rotation = -0.7295476
-scale = Vector2(0.72, 0.72)
-texture = ExtResource("6_yr50f")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_adb34")
-}
+text = "退出游戏"
+horizontal_alignment = 1
 
 [node name="Verson" type="Label" parent="."]
 layout_mode = 1
@@ -250,6 +116,54 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.33333334)
 theme_override_font_sizes/font_size = 36
-text = "当前版本号：2j（0.2.10.1）"
+text = "当前版本号：2k（0.2.11.1）"
+
+[node name="player_info" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -600.0
+offset_top = -146.0
+offset_bottom = -77.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 50
+text = "Name 38F"
+horizontal_alignment = 1
+
+[node name="cleannameButton" type="Button" parent="player_info"]
+layout_mode = 0
+offset_left = 484.0
+offset_top = 9.0
+offset_right = 547.0
+offset_bottom = 72.0
+theme_override_font_sizes/font_size = 40
+text = "📝"
+flat = true
+
+[node name="infoLabel" type="Label" parent="player_info"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -332.0
+offset_top = 13.0
+offset_right = 190.0
+offset_bottom = 68.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.38795537, 0.3197254, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("7_wl6us")
+theme_override_font_sizes/font_size = 40
+text = "注意：PlayerName已为空值"
+horizontal_alignment = 2
 
 [connection signal="pressed" from="menu/VBoxContainer/btn_Quit" to="." method="_on_btn_quit_pressed"]
