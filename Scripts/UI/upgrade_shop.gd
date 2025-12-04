@@ -342,6 +342,9 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	# 扣除钥匙（使用修正后的价格）
 	GameMain.remove_gold(adjusted_cost)
 	
+	# 更新刷新按钮状态（钥匙变化后）
+	_update_refresh_cost_display()
+	
 	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost])
 	
 	# 移除锁定状态（如果该升级被锁定）
@@ -582,6 +585,14 @@ func _on_close_button_pressed() -> void:
 func _update_refresh_cost_display() -> void:
 	if refresh_cost_label:
 		refresh_cost_label.text = " 🔑 %d" % refresh_cost
+	
+	# 检查钥匙是否足够刷新，不足时按钮变灰
+	if refresh_button:
+		var can_afford = GameMain.gold >= refresh_cost
+		if can_afford:
+			refresh_button.modulate = Color.WHITE
+		else:
+			refresh_button.modulate = Color(0.5, 0.5, 0.5)  # 灰色
 
 ## 初始化玩家信息显示
 func _initialize_player_info() -> void:
