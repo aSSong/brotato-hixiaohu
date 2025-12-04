@@ -49,13 +49,16 @@ func _on_floor_selected(id: int):
 
 
 func _on_fight_pressed() -> void:
-	# 获取用户输入的名字
-	var player_name = name_input.text.strip_edges()
+	# 获取用户输入的名字，去除半角空格和全角空格后检查是否为空
+	var raw_name = name_input.text.strip_edges()
+	var check_name = raw_name.replace("　", "").replace(" ", "")
 	
-	# 验证输入
-	if player_name == "":
-		print("[CreateAccount] 警告: 名字为空，使用默认值")
-		player_name = "未命名玩家"
+	# 验证输入：名字为空或仅包含空格则不可继续
+	if check_name == "":
+		print("[CreateAccount] 警告: 名字为空或仅包含空格，无法继续")
+		return
+	
+	var player_name = raw_name
 	
 	if current_floor_id == FloorConfig.FLOOR_ID_INVALID:
 		print("[CreateAccount] 警告: 未选择楼层")
