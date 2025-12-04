@@ -160,8 +160,14 @@ func close_shop() -> void:
 
 ## 生成升级选项（3个）
 func generate_upgrades() -> void:
+	# 播放翻出动画（只对非锁定的选项）
+	await _play_flip_out_animations()
+	
 	# 清除现有选项
 	_clear_upgrades()
+	
+	# 等待一帧确保删除完成
+	await get_tree().process_frame
 	
 	# 先处理锁定的升级，确保它们保持在相同位置
 	var selected: Array[UpgradeData] = []
@@ -178,11 +184,7 @@ func generate_upgrades() -> void:
 			locked_positions[position_index] = true
 			# 同步更新字典中的引用为新副本，保持对象一致性
 			locked_upgrades[position_index] = upgrade_copy
-			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s, 锁定价格: %d" % [
-				position_index, 
-				upgrade_copy.name, 
-				upgrade_copy.locked_cost if upgrade_copy.locked_cost >= 0 else upgrade_copy.actual_cost
-			])
+			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s" % [position_index, upgrade_copy.name])
 	
 	# 逐个生成剩余的空位
 	for position_index in range(3):
@@ -196,52 +198,67 @@ func generate_upgrades() -> void:
 		else:
 			print("[UpgradeShop] 警告: 无法生成位置 %d 的升级选项" % position_index)
 	
-	# 按照位置索引顺序创建UI选项（确保UI顺序正确）
+	# ========== 先创建所有UI实例（不播放动画） ==========
+	var option_uis: Array[UpgradeOption] = []
+	var new_option_indices: Array[int] = []  # 记录需要播放翻入动画的索引
 	var final_selected: Array[UpgradeData] = []
+	
 	for position_index in range(selected.size()):
-		if selected[position_index] != null:
-			var upgrade = selected[position_index]
-			var option_ui = await _create_upgrade_option_ui(upgrade)
-			# 设置位置索引
-			if option_ui:
-				option_ui.position_index = position_index
-				# 如果这个位置是锁定的，设置锁定状态
-				if locked_positions.has(position_index):
-					option_ui.set_lock_state(true)
-			final_selected.append(upgrade)
+		if selected[position_index] == null:
+			continue
+		
+		var upgrade = selected[position_index]
+		var is_locked_position = locked_positions.has(position_index)
+		var option_ui = _create_upgrade_option_instance(upgrade, position_index, is_locked_position)
+		
+		if option_ui:
+			# 设置锁定状态
+			if is_locked_position:
+				option_ui.set_lock_state(true)
+			else:
+				# 只有非锁定的选项需要播放翻入动画
+				new_option_indices.append(option_uis.size())
+			option_uis.append(option_ui)
+		
+		final_selected.append(upgrade)
+	
+	# ========== 一次性添加所有UI到容器 ==========
+	for option_ui in option_uis:
+		upgrade_container.add_child(option_ui)
+	
+	# 等待一帧确保所有节点都已添加并初始化
+	await get_tree().process_frame
+	
+	# ========== 只对非锁定的选项播放翻入动画（带延迟） ==========
+	var flip_delay_index = 0
+	for i in new_option_indices:
+		var option_ui = option_uis[i]
+		var flip_delay = flip_delay_index * 0.08  # 每张卡片错开 0.08 秒
+		if option_ui.has_method("play_flip_in_animation"):
+			option_ui.play_flip_in_animation(flip_delay)
+		flip_delay_index += 1
 	
 	current_upgrades = final_selected
+	print("[UpgradeShop] 升级选项生成完成，数量: %d" % option_uis.size())
 
-## 创建升级选项UI
-func _create_upgrade_option_ui(upgrade: UpgradeData) -> UpgradeOption:
+## 创建升级选项UI实例（不添加到场景树，不播放动画）
+## skip_animation: 如果为true，不设置初始 scale.x = 0（锁定的选项直接显示）
+func _create_upgrade_option_instance(upgrade: UpgradeData, position_index: int, skip_animation: bool = false) -> UpgradeOption:
 	if not upgrade_option_scene:
 		push_error("升级选项场景未加载！")
 		return null
 	
-	var option_ui = upgrade_option_scene.instantiate()
+	var option_ui = upgrade_option_scene.instantiate() as UpgradeOption
 	if not option_ui:
 		push_error("无法实例化升级选项！")
 		return null
 	
-	# 先添加到场景树，确保@onready变量初始化
-	if upgrade_container:
-		upgrade_container.add_child(option_ui)
-	else:
-		# 尝试手动查找
-		var container = get_node_or_null("%UpgradeContainer")
-		if container:
-			upgrade_container = container
-			container.add_child(option_ui)
-		else:
-			push_error("无法找到升级容器节点！")
-			return null
+	# 设置位置索引
+	option_ui.position_index = position_index
 	
-	# 等待一帧确保@onready变量已初始化
-	await get_tree().process_frame
-	
-	# 现在设置数据（此时@onready变量已经初始化）
-	if option_ui.has_method("set_upgrade_data"):
-		option_ui.set_upgrade_data(upgrade)
+	# 设置初始状态（只有需要动画的才设置 scale.x = 0）
+	if not skip_animation:
+		option_ui.scale.x = 0.0
 	
 	# 连接信号
 	if option_ui.has_signal("purchased"):
@@ -249,19 +266,40 @@ func _create_upgrade_option_ui(upgrade: UpgradeData) -> UpgradeOption:
 	if option_ui.has_signal("lock_state_changed"):
 		option_ui.lock_state_changed.connect(_on_upgrade_lock_state_changed)
 	
-	# 确保选项可见
-	option_ui.visible = true
-	option_ui.show()
+	# 设置数据（在添加到场景树前设置，_ready 后会自动初始化）
+	option_ui.upgrade_data = upgrade
 	
-	print("升级选项已添加到容器: ", upgrade.name, " 容器子节点数: ", upgrade_container.get_child_count())
 	return option_ui
 
-## 清除所有升级选项UI
+## 播放所有非锁定选项的翻出动画
+func _play_flip_out_animations() -> void:
+	if not upgrade_container:
+		return
+	
+	var tweens: Array[Tween] = []
+	
+	# 遍历所有现有选项，对非锁定的播放翻出动画
+	for child in upgrade_container.get_children():
+		if child is UpgradeOption:
+			var option = child as UpgradeOption
+			# 检查是否锁定（锁定的不播放翻出动画）
+			if not option.is_locked:
+				if option.has_method("play_flip_out_animation"):
+					var tween = option.play_flip_out_animation()
+					if tween:
+						tweens.append(tween)
+	
+	# 等待所有翻出动画完成
+	if tweens.size() > 0:
+		# 等待最后一个动画完成（所有动画同时播放，等最长的那个）
+		await tweens[0].finished
+
+## 清除所有升级选项（包括锁定的UI，但保留locked_upgrades数据）
 func _clear_upgrades() -> void:
 	if upgrade_container:
 		for child in upgrade_container.get_children():
 			child.queue_free()
-		print("清除升级选项，容器子节点数: ", upgrade_container.get_child_count())
+		print("清除所有升级选项，容器子节点数: ", upgrade_container.get_child_count())
 	current_upgrades.clear()
 	# 注意：不清除 locked_upgrades，因为需要在下次生成时保留
 
@@ -366,28 +404,54 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	
 	upgrade_purchased.emit(upgrade)
 	
-	# 移除已购买的选项
+	# 找到被购买选项的UI和位置
+	var purchased_option: UpgradeOption = null
+	var purchased_position_index: int = -1
+	
+	for child in upgrade_container.get_children():
+		if child is UpgradeOption:
+			var option = child as UpgradeOption
+			if option.upgrade_data == upgrade:
+				purchased_option = option
+				purchased_position_index = option.position_index
+				break
+	
+	# 从 current_upgrades 中移除
 	for i in range(current_upgrades.size() - 1, -1, -1):
 		if current_upgrades[i] == upgrade:
 			current_upgrades.remove_at(i)
 			break
 	
-	for child in upgrade_container.get_children():
-		if child.has_method("get_upgrade_data"):
-			var child_upgrade = child.get_upgrade_data()
-			if child_upgrade == upgrade:
-				child.queue_free()
-				break
+	# 播放翻出动画并等待完成
+	if purchased_option:
+		if purchased_option.has_method("play_flip_out_animation"):
+			var tween = purchased_option.play_flip_out_animation()
+			if tween:
+				await tween.finished
+		purchased_option.queue_free()
 	
-	# 补充新的选项（如果少于3个）
-	if current_upgrades.size() < 3:
-		# 生成新的upgrade选项
+	# 等待一帧确保删除完成
+	await get_tree().process_frame
+	
+	# 在原位置生成新选项
+	if purchased_position_index >= 0:
 		var new_upgrade = _generate_single_upgrade(current_upgrades)
 		if new_upgrade:
-			current_upgrades.append(new_upgrade)
-			var option_ui = await _create_upgrade_option_ui(new_upgrade)
+			# 创建新选项UI
+			var option_ui = _create_upgrade_option_instance(new_upgrade, purchased_position_index, false)
 			if option_ui:
-				option_ui.position_index = current_upgrades.size() - 1
+				# 插入到正确位置
+				upgrade_container.add_child(option_ui)
+				upgrade_container.move_child(option_ui, purchased_position_index)
+				
+				# 等待一帧确保初始化
+				await get_tree().process_frame
+				
+				# 播放翻入动画
+				if option_ui.has_method("play_flip_in_animation"):
+					option_ui.play_flip_in_animation(0.0)
+				
+				current_upgrades.insert(purchased_position_index, new_upgrade)
 
 ## 应用升级效果
 func _apply_upgrade(upgrade: UpgradeData) -> void:

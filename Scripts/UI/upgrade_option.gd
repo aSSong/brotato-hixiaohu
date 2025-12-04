@@ -50,10 +50,10 @@ func _ready() -> void:
 		buy_button.pressed.connect(_on_buy_button_pressed)
 	if lock_button:
 		lock_button.pressed.connect(_on_lock_button_pressed)
-		print("[UpgradeOption] LockButton 已连接信号")
-	else:
-		push_warning("[UpgradeOption] LockButton 未找到！")
-	_update_cost_display()
+	
+	# 如果 upgrade_data 已经在添加到场景树前设置，则初始化 UI
+	if upgrade_data:
+		_initialize_ui()
 
 ## 获取显示价格
 ## 
@@ -77,6 +77,13 @@ func set_upgrade_data(data: UpgradeData) -> void:
 	if not name_label or not cost_label or not description_label or not lock_button:
 		await get_tree().process_frame
 	
+	_initialize_ui()
+
+## 初始化 UI（在 @onready 变量初始化后调用）
+func _initialize_ui() -> void:
+	if not upgrade_data:
+		return
+	
 	# 根据品质设置背景纹理
 	_update_quality_panel()
 	
@@ -86,25 +93,17 @@ func set_upgrade_data(data: UpgradeData) -> void:
 		# 设置名称颜色为品质颜色
 		var quality_color = UpgradeData.get_quality_color(upgrade_data.quality)
 		name_label.add_theme_color_override("font_color", quality_color)
-		print("设置升级名称: %s, 品质: %s, 颜色: %s" % [
-			upgrade_data.name,
-			UpgradeData.get_quality_name(upgrade_data.quality),
-			quality_color
-		])
 	
 	# 设置图标
 	if icon_texture and upgrade_data.icon_path != "":
 		var icon = load(upgrade_data.icon_path)
 		if icon:
 			icon_texture.texture = icon
-		else:
-			print("无法加载图标: ", upgrade_data.icon_path)
 	
 	# 设置描述
 	if description_label:
 		var desc_text = upgrade_data.description if upgrade_data.description != "" else ""
 		description_label.text = desc_text
-		print("设置升级描述: ", desc_text)
 	
 	_update_cost_display()
 	_update_lock_button()
@@ -214,3 +213,36 @@ func _process(_delta: float) -> void:
 	# 实时更新购买按钮状态（钥匙变化时）
 	if upgrade_data:
 		_update_buy_button()
+
+## ========== 翻牌动画 ==========
+
+## 翻入动画（从 scale.x = 0 翻转展开）
+func play_flip_in_animation(delay: float = 0.0) -> void:
+	# 设置初始状态
+	scale.x = 0.0
+	pivot_offset = size / 2  # 设置中心点
+	
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_BACK)
+	
+	# 如果有延迟，先等待
+	if delay > 0:
+		tween.tween_interval(delay)
+	
+	# 翻入动画：scale.x 从 0 到 1
+	tween.tween_property(self, "scale:x", 1.0, 0.2)
+
+## 翻出动画（从 scale.x = 1 翻转收起）
+## 返回 Tween 对象以便等待完成
+func play_flip_out_animation() -> Tween:
+	pivot_offset = size / 2  # 设置中心点
+	
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_IN)
+	tween.set_trans(Tween.TRANS_BACK)
+	
+	# 翻出动画：scale.x 从 1 到 0
+	tween.tween_property(self, "scale:x", 0.0, 0.15)
+	
+	return tween
