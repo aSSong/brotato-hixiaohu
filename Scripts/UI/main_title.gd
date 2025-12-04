@@ -1,11 +1,12 @@
 extends Control
 
 # 获取AnimationPlayer节点的引用
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+#@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var player_info: Label = $player_info
 @onready var begin_btn: TextureButton = $menu/VBoxContainer/beginBtn
 @onready var info_label: Label = $player_info/infoLabel
-@onready var clean_name_btn: Button = $player_info/Button
+@onready var clean_name_btn: Button = $player_info/cleannameButton
+
 
 # 检查存档中的名字
 var player_name = SaveManager.get_player_name()

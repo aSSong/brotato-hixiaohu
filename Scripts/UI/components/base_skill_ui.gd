@@ -8,7 +8,7 @@ class_name BaseSkillUI
 @onready var cd_mask: ColorRect = $CDMask
 @onready var cd_text: Label = $CDText
 @onready var name_label: Label = $NameLabel
-@onready var key_label: Label = $KeyLabel
+#@onready var key_label: Label = $KeyLabel
 
 var update_timer: Timer
 
@@ -48,4 +48,3 @@ func _update_cd_display():
 			cd_mask.visible = false
 		if cd_text:
 			cd_text.visible = false
-
