@@ -59,4 +59,3 @@ func update_hp(current: int, maximum: int) -> void:
 ## 玩家血量变化回调
 func _on_player_hp_changed(current_hp: int, max_hp: int) -> void:
 	update_hp(current_hp, max_hp)
-

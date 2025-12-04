@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cqi5j0ht5t7pd"]
 
-[ext_resource type="Script" path="res://Scripts/UI/components/resource_counter.gd" id="1"]
+[ext_resource type="Script" uid="uid://chst3x1mo4vfw" path="res://Scripts/UI/components/resource_counter.gd" id="1"]
 
 [node name="ResourceCounter" type="Control"]
 custom_minimum_size = Vector2(200, 0)
@@ -18,7 +18,7 @@ offset_bottom = 49.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 35
+theme_override_font_sizes/font_size = 40
 text = "0"
 
 [node name="Control" type="Control" parent="."]
@@ -34,4 +34,3 @@ grow_vertical = 0
 [node name="Sprite2D" type="Sprite2D" parent="Control"]
 position = Vector2(-33, 17)
 scale = Vector2(0.1, 0.1)
-
