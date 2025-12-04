@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SkillData" load_steps=5 format=3 uid="uid://c47n3neo4m75a"]
 
-[ext_resource type="Texture2D" uid="uid://6waeqhrchy2e" path="res://assets/skillicon/4.png" id="1_aasio"]
+[ext_resource type="Texture2D" uid="uid://bijoqd3cifawg" path="res://assets/UI/game_ui/icon-skill2-01.png" id="1_aasio"]
 [ext_resource type="Script" uid="uid://cr4jxrshys2c8" path="res://Scripts/data/skill_data.gd" id="1_cttwp"]
 [ext_resource type="Script" uid="uid://bvomybpfunsra" path="res://Scripts/AttributeSystem/stats_modifier.gd" id="2_aasio"]
 
