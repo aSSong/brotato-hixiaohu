@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c44attsrfmghf"]
+[gd_scene load_steps=19 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 [ext_resource type="Script" uid="uid://bgraqcbpydou6" path="res://Scripts/UI/dash_ui.gd" id="1_dash_ui"]
@@ -7,41 +7,27 @@
 [ext_resource type="PackedScene" uid="uid://d3m1tn5m8yxoe" path="res://scenes/UI/components/player_stats_info.tscn" id="2_owrpm"]
 [ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="2_yr8ot"]
 [ext_resource type="Texture2D" uid="uid://d0y4qqnoa48r2" path="res://assets/items/mkey.png" id="3_5b3ti"]
-[ext_resource type="Texture2D" uid="uid://bspq5i4khlok1" path="res://assets/others/dash_icon.png" id="6_cn4gw"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="6_jqo5s"]
+[ext_resource type="Texture2D" uid="uid://2lva8wut6pmt" path="res://assets/UI/game_ui/lcom-rmb.png" id="8_7klwy"]
+[ext_resource type="StyleBox" uid="uid://ed2fpeb8vfie" path="res://scenes/UI/class_state_bar_fill.tres" id="8_jtm65"]
 [ext_resource type="Texture2D" uid="uid://ib6slp588m2v" path="res://assets/UI/game_ui/player-onhit-effect.png" id="9_r4w1u"]
+[ext_resource type="Texture2D" uid="uid://valm5ab35hcu" path="res://assets/UI/game_ui/icon-dash-01.png" id="10_7klwy"]
 [ext_resource type="Script" uid="uid://bhol8gfndxu2u" path="res://Scripts/UI/damage_flash.gd" id="10_dmgflash"]
+[ext_resource type="Texture2D" uid="uid://83wa773ks6hh" path="res://assets/UI/game_ui/icon-lmb.png" id="11_hvehc"]
+[ext_resource type="Texture2D" uid="uid://b5afcqikftque" path="res://assets/UI/game_ui/panel-keys-01.png" id="14_hvehc"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1sxn"]
-bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
-shadow_color = Color(0.13863817, 0.13863724, 0.13863745, 0.1764706)
-shadow_size = 2
-shadow_offset = Vector2(3.36, 4.69)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_168mx"]
-content_margin_left = 3.0
-content_margin_top = 3.0
-content_margin_right = 3.0
-content_margin_bottom = 3.0
-bg_color = Color(0.8863034, 0.25955498, 0.33542934, 1)
-border_width_right = 1
-border_width_bottom = 5
-border_color = Color(0.6088787, 0.14463472, 0.24539214, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t7mk8"]
+bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
+skew = Vector2(0.4, 0)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ep4d0"]
 bg_color = Color(0.31, 0.31, 0.31, 0.31764707)
@@ -79,23 +65,26 @@ corner_radius_bottom_left = 10
 script = ExtResource("1_168mx")
 
 [node name="PlayerStatsInfo" parent="." instance=ExtResource("2_owrpm")]
+visible = false
 offset_left = 1605.0
 offset_top = 14.0
 offset_right = 1905.0
 offset_bottom = 1064.0
 
 [node name="master_key_counter" parent="." instance=ExtResource("2_5b3ti")]
-offset_left = 335.0
-offset_top = 129.0
-offset_right = 535.0
-offset_bottom = 178.0
+z_index = 5
+offset_left = 1807.0
+offset_top = 45.0
+offset_right = 2007.0
+offset_bottom = 94.0
 icon_texture = ExtResource("3_5b3ti")
 
 [node name="gold_counter" parent="." instance=ExtResource("2_5b3ti")]
-offset_left = 133.0
-offset_top = 129.0
-offset_right = 333.0
-offset_bottom = 178.0
+z_index = 5
+offset_left = 1571.0
+offset_top = 45.0
+offset_right = 1771.0
+offset_bottom = 94.0
 icon_texture = ExtResource("2_yr8ot")
 
 [node name="wave_info" type="MarginContainer" parent="."]
@@ -107,16 +96,19 @@ offset_top = 50.0
 offset_right = 223.5
 offset_bottom = 99.0
 grow_horizontal = 2
+size_flags_horizontal = 4
 
 [node name="WaveLabel" type="Label" parent="wave_info"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 35
-text = "Wave: 0 (0/0)"
-horizontal_alignment = 2
+theme_override_fonts/font = ExtResource("6_jqo5s")
+theme_override_font_sizes/font_size = 40
+text = "WAVE: 0 (消灭: 98 / 总计: 99)"
+horizontal_alignment = 1
 
 [node name="status" type="MarginContainer" parent="."]
 offset_left = 50.0
@@ -151,8 +143,8 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_override_styles/background = SubResource("StyleBoxFlat_c1sxn")
-theme_override_styles/fill = SubResource("StyleBoxFlat_168mx")
+theme_override_styles/background = SubResource("StyleBoxFlat_t7mk8")
+theme_override_styles/fill = ExtResource("8_jtm65")
 value = 50.0
 show_percentage = false
 
@@ -231,9 +223,9 @@ layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 210.0
+offset_left = 1698.0
 offset_top = -157.0
-offset_right = 310.0
+offset_right = 1798.0
 offset_bottom = -57.0
 grow_vertical = 0
 script = ExtResource("1_skill_icon")
@@ -306,6 +298,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="KeyLabel" type="Label" parent="SkillIcon"]
+visible = false
 layout_mode = 0
 offset_left = 12.0
 offset_top = 107.0
@@ -316,6 +309,7 @@ text = "右键"
 horizontal_alignment = 1
 
 [node name="Skill_des" type="Label" parent="SkillIcon"]
+visible = false
 layout_mode = 0
 offset_left = 120.0
 offset_top = -9.0
@@ -327,12 +321,28 @@ Cooldown：
 1.
 2."
 
+[node name="KeyIcon" type="TextureRect" parent="SkillIcon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_top = -29.0
+offset_right = 38.0
+offset_bottom = 28.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_7klwy")
+
 [node name="Dash_ui" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 72.0
+offset_left = 1560.0
 offset_top = 923.0
-offset_right = 172.0
+offset_right = 1660.0
 offset_bottom = 1023.0
 script = ExtResource("1_dash_ui")
 
@@ -341,7 +351,7 @@ layout_mode = 0
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.4, 0.4)
-texture = ExtResource("6_cn4gw")
+texture = ExtResource("10_7klwy")
 
 [node name="CDMask" type="ColorRect" parent="Dash_ui"]
 layout_mode = 0
@@ -374,6 +384,7 @@ theme_override_font_sizes/font_size = 30
 text = "Dash"
 
 [node name="KeyLabel" type="Label" parent="Dash_ui"]
+visible = false
 layout_mode = 0
 offset_left = 2.0
 offset_top = 107.0
@@ -383,25 +394,50 @@ theme_override_font_sizes/font_size = 20
 text = "左键 / 空格"
 horizontal_alignment = 1
 
+[node name="KeyIcon" type="TextureRect" parent="Dash_ui"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_top = -29.0
+offset_right = 38.0
+offset_bottom = 28.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("11_hvehc")
+
 [node name="KPI" type="Label" parent="."]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -161.0
-offset_top = -44.0
-offset_right = 162.0
-offset_bottom = -21.0
+offset_left = -830.0
+offset_top = -967.0
+offset_right = -482.0
+offset_bottom = -930.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 27
-text = "Key Performance Indicator: 持有200把钥匙"
+text = "目标: 消灭40波敌人：39 / 40"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ColorRect" type="ColorRect" parent="KPI"]
+show_behind_parent = true
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 0.5137255)
+
 [node name="DamageFlash" type="TextureRect" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -410,3 +446,28 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("9_r4w1u")
 script = ExtResource("10_dmgflash")
+
+[node name="resource" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -481.0
+offset_top = 38.0
+offset_right = -441.0
+offset_bottom = 78.0
+grow_horizontal = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="resource"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 40
+
+[node name="resourcePanel" type="TextureRect" parent="resource/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("14_hvehc")
+
+[node name="resourcePanel2" type="TextureRect" parent="resource/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("14_hvehc")

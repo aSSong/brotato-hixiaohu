@@ -212,7 +212,7 @@ func _update_wave_display() -> void:
 	var killed = wave_manager_ref.enemies_killed_this_wave
 	var total = wave_manager_ref.enemies_total_this_wave
 	
-	wave_label.text = "Wave: %d    (%d/%d)" % [wave_num, killed, total]
+	wave_label.text = "第 %d 波 (消灭: %d / 总计: %d )" % [wave_num, killed, total]
 
 ## 主钥数量改变回调
 func _on_master_key_changed(new_amount: int, change: int) -> void:
