@@ -36,7 +36,7 @@ static func initialize_classes() -> void:
 	# UI 资源配置
 	betty.portrait = load("res://assets/UI/class_poster/portrait-betty-01.png")
 	betty.poster = load("res://assets/UI/class_poster/pose-betty-01.png")
-	betty.dead_poster = load("res://assets/UI/class_poster/pose-betty-01.png")
+	betty.dead_poster = load("res://assets/UI/class_poster/dead-betty-01.png")
 	betty.name_image = load("res://assets/UI/class_choose/name-betty-01.png")
 	# 同步到新系统
 	betty.sync_to_base_stats()
@@ -68,7 +68,7 @@ static func initialize_classes() -> void:
 	# UI 资源配置
 	warrior.portrait = load("res://assets/UI/class_poster/portrait-babayaga-01.png")
 	warrior.poster = load("res://assets/UI/class_poster/pose-babayaga-01.png")
-	warrior.dead_poster = load("res://assets/UI/class_poster/pose-babayaga-01.png")
+	warrior.dead_poster = load("res://assets/UI/class_poster/dead-babayaga-01.png")
 	warrior.name_image = load("res://assets/UI/class_choose/name-babayaga-01.png")
 	# 同步到新系统
 	warrior.sync_to_base_stats()
@@ -99,7 +99,7 @@ static func initialize_classes() -> void:
 	# UI 资源配置
 	ranger.portrait = load("res://assets/UI/class_poster/portrait-mrwill-01.png")
 	ranger.poster = load("res://assets/UI/class_poster/pose-mrwill-01.png")
-	ranger.dead_poster = load("res://assets/UI/class_poster/pose-mrwill-01.png")
+	ranger.dead_poster = load("res://assets/UI/class_poster/dead-mrwill-01.png")
 	ranger.name_image = load("res://assets/UI/class_choose/name-mrwill-01.png")
 	# 同步到新系统
 	ranger.sync_to_base_stats()
@@ -131,7 +131,7 @@ static func initialize_classes() -> void:
 	# UI 资源配置
 	mage.portrait = load("res://assets/UI/class_poster/portrait-arm-01.png")
 	mage.poster = load("res://assets/UI/class_poster/pose-arm-01.png")
-	mage.dead_poster = load("res://assets/UI/class_poster/pose-arm-01.png")
+	mage.dead_poster = load("res://assets/UI/class_poster/dead-as-01.png")
 	mage.name_image = load("res://assets/UI/class_choose/name-as-01.png")
 	# 同步到新系统
 	mage.sync_to_base_stats()
@@ -161,7 +161,7 @@ static func initialize_classes() -> void:
 	# UI 资源配置
 	balanced.portrait = load("res://assets/UI/class_poster/portrait-mrdot-01.png")
 	balanced.poster = load("res://assets/UI/class_poster/pose-mrdot-01.png")
-	balanced.dead_poster = load("res://assets/UI/class_poster/pose-mrdot-01.png")
+	balanced.dead_poster = load("res://assets/UI/class_poster/dead-mrdot-01.png")
 	balanced.name_image = load("res://assets/UI/class_choose/name-mrdot-01.png")
 	# 同步到新系统
 	balanced.sync_to_base_stats()
@@ -191,7 +191,7 @@ static func initialize_classes() -> void:
 	# UI 资源配置
 	tank.portrait = load("res://assets/UI/class_poster/portrait-ky-01.png")
 	tank.poster = load("res://assets/UI/class_poster/pose-ky-01.png")
-	tank.dead_poster = load("res://assets/UI/class_poster/pose-ky-01.png")
+	tank.dead_poster = load("res://assets/UI/class_poster/dead-kp-01.png")
 	tank.name_image = load("res://assets/UI/class_choose/name-kp-01.png")
 	# 同步到新系统
 	tank.sync_to_base_stats()

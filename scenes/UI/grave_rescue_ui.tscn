@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c8tqf4himll6k" path="res://Scripts/UI/grave_rescue_ui.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://by7fwqoe2sm6" path="res://assets/UI/rescue/bg-rescue-01.png" id="2_77vvw"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_thtr0"]
-[ext_resource type="Texture2D" uid="uid://fmigojo57l1" path="res://assets/UI/class_poster/pose-betty-01.png" id="4_i76ly"]
+[ext_resource type="Texture2D" uid="uid://cpvjea0jon2pr" path="res://assets/UI/class_poster/dead-betty-01.png" id="4_i76ly"]
 [ext_resource type="Texture2D" uid="uid://cwh4ath052q28" path="res://assets/UI/rescue/btn-lilred-01.png" id="5_j2mh0"]
 [ext_resource type="Texture2D" uid="uid://o5ymn337opim" path="res://assets/UI/rescue/btn-close-01.png" id="6_50hfg"]
 [ext_resource type="Texture2D" uid="uid://djldbbvdpqhbd" path="res://assets/UI/rescue/btn-lilgray-01.png" id="6_i76ly"]
@@ -62,16 +62,33 @@ offset_right = 145.5
 offset_bottom = 173.0
 
 [node name="centersection" type="Control" parent="Panel"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 70.0
+offset_top = -20.0
+offset_right = 110.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="dead-poster" type="TextureRect" parent="Panel/centersection"]
-layout_mode = 0
-offset_left = 405.5
-offset_top = -89.0
-offset_right = 788.5
-offset_bottom = 711.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -406.00098
+offset_top = -507.5
+offset_right = 293.99902
+offset_bottom = 507.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
 texture = ExtResource("4_i76ly")
 stretch_mode = 2
 

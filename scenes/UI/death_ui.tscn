@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d170ibjmyne1" path="res://Scripts/UI/death_ui.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://covbybgf45frm" path="res://assets/UI/death_ui/bg-deathpanel-01.png" id="2_7cw4p"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_sb8yb"]
-[ext_resource type="Texture2D" uid="uid://fmigojo57l1" path="res://assets/UI/class_poster/pose-betty-01.png" id="4_vxqgw"]
+[ext_resource type="Texture2D" uid="uid://dcmfnqa10kh11" path="res://assets/UI/class_poster/dead-as-01.png" id="4_7cw4p"]
 [ext_resource type="Texture2D" uid="uid://cwh4ath052q28" path="res://assets/UI/rescue/btn-lilred-01.png" id="5_qy3gh"]
 [ext_resource type="Texture2D" uid="uid://diebj44vwffon" path="res://assets/UI/common/btn_mid_gred_01.png" id="6_kqsbh"]
 [ext_resource type="Texture2D" uid="uid://8nckqj8kk1o0" path="res://assets/UI/common/btn_mid_gray_01.png" id="7_83ndf"]
@@ -56,7 +56,7 @@ offset_right = -53.0
 offset_bottom = 400.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_vxqgw")
+texture = ExtResource("4_7cw4p")
 stretch_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
