@@ -4,7 +4,7 @@ class_name UpgradeShop
 ## 升级商店
 ## 每波结束后弹出，允许玩家购买升级
 
-@onready var upgrade_container: VBoxContainer = %UpgradeContainer
+@onready var upgrade_container: HBoxContainer = %UpgradeContainer
 @onready var refresh_button: Button = %RefreshButton
 @onready var close_button: Button = %CloseButton
 @onready var refresh_cost_label: Label = %RefreshCostLabel

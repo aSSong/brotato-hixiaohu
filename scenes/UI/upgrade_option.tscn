@@ -1,12 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://ba1fb173u5k7q"]
+[gd_scene load_steps=4 format=3 uid="uid://ba1fb173u5k7q"]
 
+[ext_resource type="Texture2D" uid="uid://b8pw755l6n6ln" path="res://assets/UI/shop_ui/panel-shop-gray-01.png" id="1_b3pey"]
 [ext_resource type="Script" uid="uid://c51kw72w3a0re" path="res://Scripts/UI/upgrade_option.gd" id="1_upgrade_option"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3bqk"]
 bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
 
-[node name="UpgradeOption" type="Panel"]
-custom_minimum_size = Vector2(500, 150)
+[node name="UpgradeOption" type="TextureRect"]
+offset_right = 322.0
+offset_bottom = 429.0
+texture = ExtResource("1_b3pey")
 script = ExtResource("1_upgrade_option")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -27,7 +30,7 @@ stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 0
 theme_override_constants/separation = 5
 
 [node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
@@ -39,8 +42,9 @@ text = "升级名称"
 
 [node name="DescriptionLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 6
 theme_override_font_sizes/font_size = 14
 text = "描述"
 autowrap_mode = 2
