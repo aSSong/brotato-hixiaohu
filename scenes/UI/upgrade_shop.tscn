@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmru2nlk6bx6s"]
+[gd_scene load_steps=9 format=3 uid="uid://cmru2nlk6bx6s"]
 
 [ext_resource type="Script" uid="uid://d204d6lsfq0ob" path="res://Scripts/UI/upgrade_shop.gd" id="1_upgrade_shop"]
 [ext_resource type="Texture2D" uid="uid://dyshj6vfwbbpd" path="res://assets/UI/shop_ui/bg-shop-01.jpg" id="2_ow4b2"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fqrne"]
-bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
+[ext_resource type="Texture2D" uid="uid://cwf5um53xfis5" path="res://assets/UI/class_choose/classchoose-title-01.png" id="3_title_bg"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="4_font"]
+[ext_resource type="Texture2D" uid="uid://copqpwom7gp0" path="res://assets/UI/common/bg-portrait-lilred-01.png" id="5_portrait_bg"]
+[ext_resource type="Texture2D" uid="uid://ecy5k54h8wsu" path="res://assets/UI/class_choose/namelabel.png" id="6_namelabel"]
+[ext_resource type="Texture2D" uid="uid://c6nku3xu00b2f" path="res://assets/UI/common/btn-right-white-01.png" id="7_kme6m"]
+[ext_resource type="Texture2D" uid="uid://caaop1fglq53m" path="res://assets/UI/shop_ui/btn-shop-fresh-01.png" id="7_wesum"]
 
 [node name="UpgradeShop" type="Control"]
 process_mode = 3
@@ -26,6 +29,125 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_ow4b2")
 
+[node name="TitleSection" type="Control" parent="."]
+anchors_preset = 0
+offset_bottom = 200.0
+
+[node name="TitleBg" type="TextureRect" parent="TitleSection"]
+layout_mode = 0
+offset_right = 691.0
+offset_bottom = 233.0
+texture = ExtResource("3_title_bg")
+
+[node name="TitleLabel" type="Label" parent="TitleSection/TitleBg"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 1
+offset_left = 35.0
+offset_top = 8.0
+offset_right = 435.0
+offset_bottom = 99.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 70
+text = "升级商店"
+
+[node name="PlayerNameContainer" type="Control" parent="TitleSection"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = 49.0
+offset_top = 100.0
+offset_right = 359.0
+offset_bottom = 200.0
+
+[node name="PortraitFrame" type="TextureRect" parent="TitleSection/PlayerNameContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("5_portrait_bg")
+stretch_mode = 2
+
+[node name="PlayerPortrait" type="TextureRect" parent="TitleSection/PlayerNameContainer/PortraitFrame"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -13.0
+offset_right = -13.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabelBg" type="TextureRect" parent="TitleSection/PlayerNameContainer/PortraitFrame"]
+layout_mode = 0
+offset_left = 69.0
+offset_top = 27.0
+offset_right = 288.0
+offset_bottom = 69.0
+texture = ExtResource("6_namelabel")
+
+[node name="PlayerName" type="Label" parent="TitleSection/PlayerNameContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 0
+offset_left = 83.0
+offset_top = 20.0
+offset_right = 283.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "玩家名字"
+
+[node name="RefreshSection" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -713.0
+offset_top = 116.0
+offset_right = -483.0
+offset_bottom = 166.0
+grow_horizontal = 0
+theme_override_constants/separation = 10
+
+[node name="RefreshCostLabel" type="Label" parent="RefreshSection"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "🔑 2"
+vertical_alignment = 1
+
+[node name="RefreshButton" type="TextureButton" parent="RefreshSection"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+texture_normal = ExtResource("7_wesum")
+texture_pressed = ExtResource("7_wesum")
+texture_hover = ExtResource("7_wesum")
+
+[node name="refreshLabel" type="Label" parent="RefreshSection/RefreshButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -12.0
+offset_right = 20.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 36
+text = "刷新"
+
 [node name="MainPanel" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -33,229 +155,90 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -300.0
-offset_right = 400.0
-offset_bottom = 300.0
+offset_left = -500.0
+offset_top = -150.0
+offset_right = 500.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel"]
+[node name="UpgradeContainer" type="HBoxContainer" parent="MainPanel"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -120.0
+offset_bottom = -120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
-
-[node name="TitleLabel" type="Label" parent="MainPanel/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0.2627451, 1)
-theme_override_font_sizes/font_size = 45
-text = "升级商店"
-horizontal_alignment = 1
-
-[node name="UpgradeContainer" type="HBoxContainer" parent="MainPanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 10
-
-[node name="ButtonContainer" type="HBoxContainer" parent="MainPanel/VBoxContainer"]
-layout_mode = 2
 theme_override_constants/separation = 20
+alignment = 1
 
-[node name="RefreshButton" type="Button" parent="MainPanel/VBoxContainer/ButtonContainer"]
+[node name="BottomSection" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -188.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="WeaponListLabel" type="Label" parent="BottomSection"]
+layout_mode = 0
+offset_left = 230.0
+offset_top = -44.0
+offset_right = 380.00037
+offset_bottom = 2.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 36
+text = "当前武器"
+
+[node name="WeaponContainer" type="GridContainer" parent="BottomSection"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_fqrne")
-text = "刷新"
+layout_mode = 0
+offset_left = 230.0
+offset_top = 20.0
+offset_right = 1130.0029
+offset_bottom = 130.0
+theme_override_constants/h_separation = 10
+columns = 6
 
-[node name="RefreshCostLabel" type="Label" parent="MainPanel/VBoxContainer/ButtonContainer/RefreshButton"]
+[node name="CloseButton" type="TextureButton" parent="BottomSection"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = -30.0
-offset_right = 89.0
-offset_bottom = -10.0
+offset_left = -200.0
+offset_top = -80.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 12
-text = "刷新: 2 钥匙"
+texture_normal = ExtResource("7_kme6m")
+texture_pressed = ExtResource("7_kme6m")
+texture_hover = ExtResource("7_kme6m")
 
-[node name="CloseButton" type="Button" parent="MainPanel/VBoxContainer/ButtonContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_horizontal = 3
-text = "关闭"
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 223.0
-offset_top = 187.0
-offset_right = 423.0
-offset_bottom = 244.0
-theme_override_font_sizes/font_size = 35
-text = "当前武器："
-
-[node name="WeaponList" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 228.0
-offset_top = 254.0
-offset_right = 268.0
-offset_bottom = 754.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="WeaponList"]
-layout_mode = 2
-theme_override_constants/separation = 100
-
-[node name="weapon1" type="Control" parent="WeaponList/VBoxContainer"]
-layout_mode = 2
-
-[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon1"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-color = Color(0.17728807, 0.17728806, 0.17728804, 1)
-
-[node name="Weapon1Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon1/ColorRect"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-
-[node name="Weapon1Label" type="Label" parent="WeaponList/VBoxContainer/weapon1"]
-layout_mode = 0
-offset_left = 172.0
-offset_top = 13.0
-offset_right = 262.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
-text = "武器1：空缺
-品质：无"
-
-[node name="weapon2" type="Control" parent="WeaponList/VBoxContainer"]
-layout_mode = 2
-
-[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon2"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-color = Color(0.17728807, 0.17728806, 0.17728804, 1)
-
-[node name="Weapon2Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon2/ColorRect"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-
-[node name="Weapon2Label" type="Label" parent="WeaponList/VBoxContainer/weapon2"]
-layout_mode = 0
-offset_left = 172.0
-offset_top = 13.0
-offset_right = 262.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
-text = "武器2：空缺
-品质：无"
-
-[node name="weapon3" type="Control" parent="WeaponList/VBoxContainer"]
-layout_mode = 2
-
-[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon3"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-color = Color(0.17728807, 0.17728806, 0.17728804, 1)
-
-[node name="Weapon3Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon3/ColorRect"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-
-[node name="Weapon3Label" type="Label" parent="WeaponList/VBoxContainer/weapon3"]
-layout_mode = 0
-offset_left = 172.0
-offset_top = 13.0
-offset_right = 262.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
-text = "武器3：空缺
-品质：无"
-
-[node name="weapon4" type="Control" parent="WeaponList/VBoxContainer"]
-layout_mode = 2
-
-[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon4"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-color = Color(0.17728807, 0.17728806, 0.17728804, 1)
-
-[node name="Weapon4Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon4/ColorRect"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-
-[node name="Weapon4Label" type="Label" parent="WeaponList/VBoxContainer/weapon4"]
-layout_mode = 0
-offset_left = 172.0
-offset_top = 13.0
-offset_right = 262.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
-text = "武器4：空缺
-品质：无"
-
-[node name="weapon5" type="Control" parent="WeaponList/VBoxContainer"]
-layout_mode = 2
-
-[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon5"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-color = Color(0.17728807, 0.17728806, 0.17728804, 1)
-
-[node name="Weapon5Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon5/ColorRect"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-
-[node name="Weapon5Label" type="Label" parent="WeaponList/VBoxContainer/weapon5"]
-layout_mode = 0
-offset_left = 172.0
-offset_top = 13.0
-offset_right = 262.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
-text = "武器5：空缺
-品质：无"
-
-[node name="weapon6" type="Control" parent="WeaponList/VBoxContainer"]
-layout_mode = 2
-
-[node name="ColorRect" type="ColorRect" parent="WeaponList/VBoxContainer/weapon6"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-color = Color(0.17728807, 0.17728806, 0.17728804, 1)
-
-[node name="Weapon6Icon" type="TextureRect" parent="WeaponList/VBoxContainer/weapon6/ColorRect"]
-layout_mode = 0
-offset_right = 160.0
-offset_bottom = 80.0
-
-[node name="Weapon6Label" type="Label" parent="WeaponList/VBoxContainer/weapon6"]
-layout_mode = 0
-offset_left = 172.0
-offset_top = 13.0
-offset_right = 262.0
-offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.34407577, 0.34407574, 0.34407574, 1)
-text = "武器6：空缺
-品质：无"
+[node name="Label" type="Label" parent="BottomSection/CloseButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 50
+text = "继续战斗"

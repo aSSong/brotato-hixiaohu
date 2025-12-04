@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpiyn5m1cas1e"]
+
+[ext_resource type="Script" uid="uid://dcsy3ve684bsa" path="res://Scripts/test/test_shop.gd" id="1_test"]
+[ext_resource type="Script" uid="uid://duqcvc6ax5vfk" path="res://Scripts/weapons/now_weapons.gd" id="2_weapons"]
+[ext_resource type="PackedScene" uid="uid://cmru2nlk6bx6s" path="res://scenes/UI/upgrade_shop.tscn" id="3_shop"]
+
+[node name="TestShop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_test")
+
+[node name="NowWeapons" type="Node2D" parent="."]
+script = ExtResource("2_weapons")
+
+[node name="UpgradeShop" parent="." instance=ExtResource("3_shop")]
+layout_mode = 1

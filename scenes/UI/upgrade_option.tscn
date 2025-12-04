@@ -2,74 +2,99 @@
 
 [ext_resource type="Texture2D" uid="uid://b8pw755l6n6ln" path="res://assets/UI/shop_ui/panel-shop-gray-01.png" id="1_b3pey"]
 [ext_resource type="Script" uid="uid://c51kw72w3a0re" path="res://Scripts/UI/upgrade_option.gd" id="1_upgrade_option"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3bqk"]
-bg_color = Color(0.2877148, 0.44229522, 0.111751, 1)
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_gi3bl"]
 
 [node name="UpgradeOption" type="TextureRect"]
+custom_minimum_size = Vector2(322, 429)
 offset_right = 322.0
 offset_bottom = 429.0
 texture = ExtResource("1_b3pey")
 script = ExtResource("1_upgrade_option")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
 
-[node name="IconTexture" type="TextureRect" parent="HBoxContainer"]
+[node name="IconTexture" type="TextureRect" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -101.0
+offset_top = -160.5
+offset_right = 99.0
+offset_bottom = 39.499985
+grow_horizontal = 2
+grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/separation = 5
-
-[node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="NameLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
+offset_top = 336.0
+offset_right = 322.0
+offset_bottom = 365.0
+rotation = -0.06632251
 theme_override_colors/font_color = Color(0.26666668, 0.8509804, 0.26666668, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("3_gi3bl")
+theme_override_font_sizes/font_size = 36
 text = "升级名称"
+horizontal_alignment = 1
 
-[node name="DescriptionLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
+layout_mode = 0
+offset_left = 27.0
+offset_top = 387.0
+offset_right = 349.0
+offset_bottom = 437.0
 size_flags_vertical = 6
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 14
 text = "描述"
+horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 440.0
+offset_right = 330.0
+offset_bottom = 480.0
 theme_override_constants/separation = 10
 
-[node name="CostLabel" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="LockButton" type="TextureButton" parent="VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
 layout_mode = 2
-size_flags_horizontal = 3
+
+[node name="BuyButton" type="TextureButton" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+
+[node name="CostLabel" type="Label" parent="VBoxContainer/HBoxContainer2/BuyButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -12.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
 theme_override_font_sizes/font_size = 16
-text = "0 钥匙"
-
-[node name="LockButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 40)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_s3bqk")
-text = "锁定"
-
-[node name="BuyButton" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 40)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_s3bqk")
-text = "购买"
+text = "99 钥匙"

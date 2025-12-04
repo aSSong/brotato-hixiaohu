@@ -7,8 +7,8 @@ class_name UpgradeOption
 @onready var name_label: Label = %NameLabel
 @onready var cost_label: Label = %CostLabel
 @onready var description_label: Label = %DescriptionLabel
-@onready var buy_button: Button = %BuyButton
-@onready var lock_button: Button = %LockButton
+@onready var buy_button: TextureButton = %BuyButton
+@onready var lock_button: TextureButton = %LockButton
 
 var upgrade_data: UpgradeData = null
 var is_locked: bool = false
@@ -76,8 +76,8 @@ func set_upgrade_data(data: UpgradeData) -> void:
 		print("设置升级描述: ", desc_text)
 	
 	# 设置整个选项的边框颜色（modulate）
-	var quality_color = UpgradeData.get_quality_color(upgrade_data.quality)
-	self.modulate = quality_color.lerp(Color.WHITE, 0.7)  # 混合70%白色，避免过于鲜艳
+	##var quality_color = UpgradeData.get_quality_color(upgrade_data.quality)
+	#self.modulate = quality_color.lerp(Color.WHITE, 0.7)  # 混合70%白色，避免过于鲜艳
 	
 	_update_cost_display()
 	_update_lock_button()

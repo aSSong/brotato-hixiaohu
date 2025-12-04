@@ -6,19 +6,22 @@
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_u03l2"]
 
 [node name="WeaponCompact" type="Control"]
+custom_minimum_size = Vector2(162, 133)
 layout_mode = 3
+anchors_preset = 0
+offset_right = 140.0
+offset_bottom = 100.0
+script = ExtResource("1_script")
+
+[node name="bg-lilweapon" type="TextureRect" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_script")
-
-[node name="bg-lilweapon" type="TextureRect" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 texture = ExtResource("1_tlojq")
+stretch_mode = 5
 
 [node name="weapon-image" type="TextureRect" parent="bg-lilweapon"]
 layout_mode = 1
@@ -27,15 +30,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = -56.5
-offset_right = 131.0
-offset_bottom = 43.5
+offset_left = -50.0
+offset_top = -35.0
+offset_right = 50.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_ibirs")
-stretch_mode = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="weapon-name" type="Label" parent="bg-lilweapon"]
 layout_mode = 1
@@ -44,12 +47,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -32.0
-offset_top = -35.0
-offset_right = 32.0
-offset_bottom = -11.0
+offset_left = -60.0
+offset_top = -28.0
+offset_right = 60.0
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("3_u03l2")
-theme_override_font_sizes/font_size = 20
-text = "连锁闪电"
+theme_override_font_sizes/font_size = 18
+text = "武器名"
+horizontal_alignment = 1
