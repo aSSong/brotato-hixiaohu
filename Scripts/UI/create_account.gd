@@ -66,5 +66,5 @@ func _on_fight_pressed() -> void:
 	SaveManager.set_floor(current_floor_id, FloorConfig.get_floor_name(current_floor_id))
 	print("[CreateAccount] 已保存用户数据: 名字=%s, 楼层=%s" % [player_name, FloorConfig.get_floor_name(current_floor_id)])
 	
-	# 切换到下一个场景
-	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
+	# 切换到关卡选择场景
+	get_tree().change_scene_to_file("res://scenes/UI/level_select.tscn")

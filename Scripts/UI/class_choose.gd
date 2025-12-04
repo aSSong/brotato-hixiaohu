@@ -253,8 +253,8 @@ func _on_class_button_input(event: InputEvent, btn: TextureRect) -> void:
 			_select_class_by_id(class_id)
 
 func _on_back_button_pressed() -> void:
-	# 返回主菜单
-	get_tree().change_scene_to_file("res://scenes/UI/main_title.tscn")
+	# 返回关卡选择界面
+	get_tree().change_scene_to_file("res://scenes/UI/level_select.tscn")
 
 func _on_next_button_pressed() -> void:
 	if selected_class_id == "":
