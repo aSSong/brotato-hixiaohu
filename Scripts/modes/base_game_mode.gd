@@ -127,32 +127,30 @@ func get_mode_info() -> Dictionary:
 func get_victory_description() -> String:
 	match victory_condition_type:
 		"keys":
-			return "持有钥匙 %d 把" % victory_keys
+			return "持有%d把钥匙" % victory_keys
 		"waves":
-			return "完成消灭 %d 波敌人" % victory_waves
+			return "消灭%d波敌人" % victory_waves
 		"time":
 			return "生存指定时间"
 		"survival":
 			return "尽可能生存"
 	return "未知目标"
 
-## 获取当前进度文本
+## 获取当前进度文本（格式：已完成数 / 目标数）
 func get_progress_text() -> String:
 	match victory_condition_type:
 		"keys":
-			return "已持有 %d 把" % GameMain.gold
+			return "%d / %d" % [GameMain.gold, victory_keys]
 		"waves":
 			var wave_manager = Engine.get_main_loop().get_first_node_in_group("wave_manager")
+			var completed_waves = 0
 			if wave_manager and "current_wave" in wave_manager:
-				# 已消灭的波数 = 当前波次 - 1（因为当前波次还在进行中）
-				# 如果波次没在进行，说明是波次结束后，已消灭数就是当前波次号
-				var completed_waves = wave_manager.current_wave
+				completed_waves = wave_manager.current_wave
 				if "is_wave_in_progress" in wave_manager and wave_manager.is_wave_in_progress:
 					completed_waves -= 1
-				return "已消灭 %d 波" % completed_waves
-			return "已消灭 0 波"
+			return "%d / %d" % [completed_waves, victory_waves]
 		"time":
-			return "已生存 0 秒"
+			return "0 / ?"
 		"survival":
 			return ""
 	return ""
@@ -165,4 +163,4 @@ func get_kpi_text() -> String:
 	if progress.is_empty():
 		return "目标：%s" % desc
 	else:
-		return "目标：%s（%s）" % [desc, progress]
+		return "目标：%s：%s" % [desc, progress]
