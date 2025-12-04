@@ -1,0 +1,332 @@
+[gd_scene load_steps=11 format=3 uid="uid://dkl5ukxxqe48v"]
+
+[ext_resource type="Texture2D" uid="uid://r4drbwadpmy8" path="res://assets/UI/common/bg-maintitle-02.png" id="1_qli5c"]
+[ext_resource type="Texture2D" uid="uid://bbkdoqdj2q2uy" path="res://assets/UI/level_select_ui/panel-levelselect-01.png" id="2_l65nk"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_f431m"]
+[ext_resource type="Texture2D" uid="uid://bwxn18efpuf7s" path="res://assets/UI/common/btn-level-normal-01.png" id="4_1ep74"]
+[ext_resource type="Texture2D" uid="uid://rkoedninn4cu" path="res://assets/UI/common/btn-level-pressed-01.png" id="5_20eho"]
+[ext_resource type="Texture2D" uid="uid://c6ru0ufa3c6xp" path="res://assets/UI/common/btn-level-hover-01.png" id="6_aqroq"]
+[ext_resource type="Texture2D" uid="uid://cdigl7d4s25p3" path="res://assets/UI/common/btn-level-disabled-01.png" id="7_h3adk"]
+[ext_resource type="Texture2D" uid="uid://da75cnh456084" path="res://assets/UI/level_select_ui/panel-level3-01.png" id="8_tt6bj"]
+[ext_resource type="Texture2D" uid="uid://b4xgibahk4h0u" path="res://assets/UI/class_choose/btn-back-gray-01.png" id="9_02328"]
+[ext_resource type="Texture2D" uid="uid://tpynlqo2yorf" path="res://assets/UI/class_choose/btn-back-white-01.png" id="10_bmtn0"]
+
+[node name="LevelSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bg" type="TextureRect" parent="."]
+self_modulate = Color(0.18538326, 0.18538326, 0.18538326, 1)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_qli5c")
+
+[node name="MarginContainer" type="Control" parent="bg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="bg/MarginContainer"]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 129.0
+offset_right = 1764.0
+offset_bottom = 818.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 50
+
+[node name="level1panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_l65nk")
+
+[node name="level1text" type="VBoxContainer" parent="bg/MarginContainer/HBoxContainer/level1panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 88.55
+offset_right = 150.0
+offset_bottom = 424.55
+grow_horizontal = 2
+
+[node name="chapter" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.9225877, 0.20633054, 0.75347173, 1)
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+bbcode_enabled = true
+text = "[i]CHAPTER 1[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_f431m")
+theme_override_font_sizes/font_size = 60
+text = "最后的防线"
+horizontal_alignment = 1
+
+[node name="englishtitle" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.64705884, 0.33333334, 0.9607843, 1)
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 26
+bbcode_enabled = true
+text = "[i][color=#ea35c0]K[/color]EEP [color=#ea35c0]E[/color]VERY [color=#ea35c0]Y[/color]OU[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]孤勇者模式[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]只有自己可以依靠[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel4" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]仅能拯救过去的自己[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel5" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]⭕️可以复活[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level1panel/level1text"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]难度：[color=#ea33bf]😌普通[/color][/i]"
+horizontal_alignment = 1
+
+[node name="level1beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/level1panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -175.5
+offset_top = -123.0
+offset_right = 406.5
+offset_bottom = 93.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+texture_normal = ExtResource("4_1ep74")
+texture_pressed = ExtResource("5_20eho")
+texture_hover = ExtResource("6_aqroq")
+texture_disabled = ExtResource("7_h3adk")
+texture_focused = ExtResource("6_aqroq")
+
+[node name="beginLabel" type="Label" parent="bg/MarginContainer/HBoxContainer/level1panel/level1beginBtn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.28572
+offset_top = -30.857147
+offset_right = 54.714294
+offset_bottom = 70.14285
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.15358898
+theme_override_fonts/font = ExtResource("3_f431m")
+theme_override_font_sizes/font_size = 80
+text = "进  入"
+
+[node name="level2panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_l65nk")
+
+[node name="level2text" type="VBoxContainer" parent="bg/MarginContainer/HBoxContainer/level2panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 88.55
+offset_right = 150.0
+offset_bottom = 424.55
+grow_horizontal = 2
+
+[node name="chapter" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.9225877, 0.20633054, 0.75347173, 1)
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+bbcode_enabled = true
+text = "[i]CHAPTER 2[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_f431m")
+theme_override_font_sizes/font_size = 60
+text = "反击大作战"
+horizontal_alignment = 1
+
+[node name="englishtitle" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+custom_minimum_size = Vector2(400, 40)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.64705884, 0.33333334, 0.9607843, 1)
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 26
+bbcode_enabled = true
+text = "[i][color=#ea35c0]K[/color]EEP [color=#ea35c0]E[/color]VERYONE [color=#ea35c0]Y[/color]ELLING[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]同心同力模式[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]可以看到同事的英灵👻[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel4" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]可以拯救过去的同事[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel5" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]❌不可以复活[/i]"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/level2panel/level2text"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]难度：[color=#ea33bf]☠️困难[/color][/i]"
+horizontal_alignment = 1
+
+[node name="level1beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/level2panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -175.5
+offset_top = -123.0
+offset_right = 406.5
+offset_bottom = 93.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+texture_normal = ExtResource("4_1ep74")
+texture_pressed = ExtResource("5_20eho")
+texture_hover = ExtResource("6_aqroq")
+texture_disabled = ExtResource("7_h3adk")
+texture_focused = ExtResource("6_aqroq")
+
+[node name="beginLabel" type="Label" parent="bg/MarginContainer/HBoxContainer/level2panel/level1beginBtn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.28572
+offset_top = -30.857147
+offset_right = 54.714294
+offset_bottom = 70.14285
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.15358898
+theme_override_fonts/font = ExtResource("3_f431m")
+theme_override_font_sizes/font_size = 80
+text = "进  入"
+
+[node name="level3panel" type="TextureRect" parent="bg/MarginContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("8_tt6bj")
+
+[node name="TextureButton" type="TextureButton" parent="bg"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -180.0
+offset_right = 314.0
+offset_bottom = -81.0
+grow_vertical = 0
+texture_normal = ExtResource("9_02328")
+texture_pressed = ExtResource("10_bmtn0")
+texture_hover = ExtResource("10_bmtn0")
+texture_disabled = ExtResource("9_02328")
+texture_focused = ExtResource("10_bmtn0")
