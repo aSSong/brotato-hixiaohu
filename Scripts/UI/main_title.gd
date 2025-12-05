@@ -31,6 +31,13 @@ func _ready() -> void:
 	# 连接清空名字按钮信号
 	if clean_name_btn:
 		clean_name_btn.pressed.connect(_on_clean_name_btn_pressed)
+		clean_name_btn.visible = false  # 默认隐藏清空名字按钮
+
+func _input(event: InputEvent) -> void:
+	# 按下 "info" 键切换清空名字按钮的显示状态
+	if event.is_action_pressed("info"):
+		if clean_name_btn:
+			clean_name_btn.visible = !clean_name_btn.visible
 
 func _on_begin_btn_pressed() -> void:
 	# 如果存档信息不为空，进入 cutscene_open 场景
