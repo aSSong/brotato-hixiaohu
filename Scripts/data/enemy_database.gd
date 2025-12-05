@@ -77,7 +77,25 @@ static func initialize_enemies() -> void:
 	ent_enemy.shadow_scale = Vector2(1.8, 1.0)
 	enemies["ent"] = ent_enemy
 	
+	# 监视器敌人
+	var monitor_enemy = EnemyData.new(
+		"监视器",
+		50,  # max_hp（更高）
+		8,  # attack_damage（更高）
+		350.0,  # move_speed（更慢）
+		"res://assets/enemy/monitor-run-Sheet.png",
+		530,
+		600,
+		14
+	)
+	monitor_enemy.description = "这是一只监视器怪"
+	monitor_enemy.animation_speed = 20.0  
+	monitor_enemy.scale = Vector2(0.9, 0.9)  # 0.4倍大小
+	monitor_enemy.shadow_offset = Vector2(15.0,120.0) 
+	monitor_enemy.shadow_scale = Vector2(1.2, 0.8)
+	enemies["monitor"] = monitor_enemy
 	
+	# 绿史莱姆敌人
 	var basic00_enemy = EnemyData.new(
 		"基础敌人-绿史莱姆",
 		10,  # max_hp
