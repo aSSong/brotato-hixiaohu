@@ -98,7 +98,7 @@ static func initialize_weapons() -> void:
 			"bullet_id": "normal_bullet",
 			"pierce_count": 0,
 			"projectile_count": 5,
-			"spread_angle": 30.0
+			"spread_angle": 120.0
 		},
 		"res://assets/weapon/WeaponShotgun.png",
 		Vector2(0.8, 0.8)
