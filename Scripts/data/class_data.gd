@@ -172,19 +172,19 @@ func sync_to_base_stats() -> void:
 func generate_traits_description() -> void:
 	traits.clear()
 	
-	# 基础属性
-	if max_hp != 100:
-		var diff = max_hp - 100
-		traits.append("血量%+d" % diff if diff > 0 else "血量%d" % diff)
-	
-	if speed != 400.0:
-		var percent = int((speed / 400.0 - 1.0) * 100)
-		if percent != 0:
-			traits.append("移动速度%+d%%" % percent if percent > 0 else "移动速度%d%%" % percent)
-	
-	if defense != 0:
-		traits.append("防御%+d" % defense if defense > 0 else "防御%d" % defense)
-	
+	## 基础属性
+	#if max_hp != 100:
+		#var diff = max_hp - 100
+		#traits.append("血量%+d" % diff if diff > 0 else "血量%d" % diff)
+	#
+	#if speed != 400.0:
+		#var percent = int((speed / 400.0 - 1.0) * 100)
+		#if percent != 0:
+			#traits.append("移动速度%+d%%" % percent if percent > 0 else "移动速度%d%%" % percent)
+	#
+	#if defense != 0:
+		#traits.append("防御%+d" % defense if defense > 0 else "防御%d" % defense)
+	#
 	# 战斗属性
 	if damage_reduction_multiplier != 1.0:
 		var percent = int((1.0 - damage_reduction_multiplier) * 100)
