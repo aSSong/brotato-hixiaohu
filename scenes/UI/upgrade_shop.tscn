@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmru2nlk6bx6s"]
+[gd_scene load_steps=11 format=3 uid="uid://cmru2nlk6bx6s"]
 
-[ext_resource type="Script" uid="uid://d204d6lsfq0ob" path="res://Scripts/UI/upgrade_shop.gd" id="1_upgrade_shop"]
+[ext_resource type="Script" uid="uid://cd71et64p8kkg" path="res://Scripts/UI/upgrade_shop.gd" id="1_upgrade_shop"]
 [ext_resource type="Texture2D" uid="uid://dyshj6vfwbbpd" path="res://assets/UI/shop_ui/bg-shop-01.jpg" id="2_ow4b2"]
 [ext_resource type="Texture2D" uid="uid://cwf5um53xfis5" path="res://assets/UI/class_choose/classchoose-title-01.png" id="3_title_bg"]
+[ext_resource type="PackedScene" uid="uid://db4jvyr16i2bm" path="res://scenes/UI/components/hp_bar.tscn" id="3_voncc"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="4_font"]
 [ext_resource type="Texture2D" uid="uid://copqpwom7gp0" path="res://assets/UI/common/bg-portrait-lilred-01.png" id="5_portrait_bg"]
 [ext_resource type="Texture2D" uid="uid://ecy5k54h8wsu" path="res://assets/UI/class_choose/namelabel.png" id="6_namelabel"]
+[ext_resource type="Texture2D" uid="uid://cukcxr563a1p8" path="res://assets/UI/class_poster/portrait-babayaga-01.png" id="7_hrmsk"]
 [ext_resource type="Texture2D" uid="uid://c6nku3xu00b2f" path="res://assets/UI/common/btn-right-white-01.png" id="7_kme6m"]
 [ext_resource type="Texture2D" uid="uid://caaop1fglq53m" path="res://assets/UI/shop_ui/btn-shop-fresh-01.png" id="7_wesum"]
 
@@ -33,6 +35,14 @@ texture = ExtResource("2_ow4b2")
 anchors_preset = 0
 offset_bottom = 200.0
 
+[node name="HPBar" parent="TitleSection" instance=ExtResource("3_voncc")]
+z_index = 1
+layout_mode = 0
+offset_left = 35.0
+offset_top = 127.26
+offset_right = 455.0
+offset_bottom = 167.26001
+
 [node name="TitleBg" type="TextureRect" parent="TitleSection"]
 layout_mode = 0
 offset_right = 691.0
@@ -59,17 +69,21 @@ offset_left = 49.0
 offset_top = 100.0
 offset_right = 359.0
 offset_bottom = 200.0
+scale = Vector2(1.2, 1.2)
 
 [node name="PortraitFrame" type="TextureRect" parent="TitleSection/PlayerNameContainer"]
+z_index = 1
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 0
+offset_top = -8.15
 offset_right = 100.0
-offset_bottom = 100.0
+offset_bottom = 91.85
 texture = ExtResource("5_portrait_bg")
 stretch_mode = 2
 
 [node name="PlayerPortrait" type="TextureRect" parent="TitleSection/PlayerNameContainer/PortraitFrame"]
 unique_name_in_owner = true
+z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,10 +92,12 @@ offset_left = -13.0
 offset_right = -13.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("7_hrmsk")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="NameLabelBg" type="TextureRect" parent="TitleSection/PlayerNameContainer/PortraitFrame"]
+z_index = -2
 layout_mode = 0
 offset_left = 69.0
 offset_top = 27.0
@@ -91,6 +107,7 @@ texture = ExtResource("6_namelabel")
 
 [node name="PlayerName" type="Label" parent="TitleSection/PlayerNameContainer"]
 unique_name_in_owner = true
+z_index = -1
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 0
 offset_left = 83.0
@@ -106,29 +123,21 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -713.0
-offset_top = 116.0
-offset_right = -483.0
-offset_bottom = 166.0
+offset_left = -1070.0
+offset_top = 780.0
+offset_right = -808.99927
+offset_bottom = 842.0
 grow_horizontal = 0
 theme_override_constants/separation = 10
 
-[node name="RefreshCostLabel" type="Label" parent="RefreshSection"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
-theme_override_font_sizes/font_size = 40
-text = "🔑 2"
-vertical_alignment = 1
-
 [node name="RefreshButton" type="TextureButton" parent="RefreshSection"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(250, 40)
 layout_mode = 2
 texture_normal = ExtResource("7_wesum")
 texture_pressed = ExtResource("7_wesum")
 texture_hover = ExtResource("7_wesum")
+stretch_mode = 0
 
 [node name="refreshLabel" type="Label" parent="RefreshSection/RefreshButton"]
 layout_mode = 1
@@ -137,16 +146,28 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -12.0
-offset_right = 20.0
-offset_bottom = 12.0
+offset_left = -91.000244
+offset_top = -23.0
+offset_right = -19.000244
+offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 36
 text = "刷新"
+
+[node name="RefreshCostLabel" type="Label" parent="RefreshSection/RefreshButton"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 94.0
+offset_right = 182.0001
+offset_bottom = 62.0
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "🔑 2"
+vertical_alignment = 1
 
 [node name="MainPanel" type="Control" parent="."]
 layout_mode = 1
