@@ -233,10 +233,48 @@ func _on_wave_flow_step(wave_number: int) -> void:
 	
 	print("[Flow] 波次 %d 结束，开始流程结算..." % wave_number)
 	
-	# 1. 状态检查：如果玩家已经死了，中断流程
+	# 1. 状态检查：如果玩家已经死了，等待复活而不是直接终止
 	if GameState.current_state == GameState.State.PLAYER_DEAD:
-		print("[Flow] 玩家已死亡，终止流程")
-		return
+		print("[Flow] 玩家已死亡，等待复活...")
+		# 找到死亡管理器并等待复活信号
+		var tree = get_tree()
+		if tree == null:
+			return
+		var dm = tree.get_first_node_in_group("death_manager")
+		if dm and dm.has_signal("player_revived"):
+			# 同时监听 game_over 信号以防玩家放弃
+			var revive_or_quit = false
+			var quit_game = false
+			
+			# 创建一个临时的等待逻辑
+			var revive_callback = func(): revive_or_quit = true
+			var quit_callback = func(): 
+				revive_or_quit = true
+				quit_game = true
+			
+			dm.player_revived.connect(revive_callback, CONNECT_ONE_SHOT)
+			if dm.has_signal("game_over"):
+				dm.game_over.connect(quit_callback, CONNECT_ONE_SHOT)
+			
+			# 等待任一信号
+			while not revive_or_quit:
+				tree = get_tree()
+				if tree == null:
+					return
+				await tree.process_frame
+				if not is_inside_tree():
+					return
+			
+			# 如果玩家选择放弃，终止流程
+			if quit_game:
+				print("[Flow] 玩家放弃游戏，终止流程")
+				return
+			
+			print("[Flow] 玩家已复活，继续流程结算...")
+		else:
+			# 如果找不到死亡管理器或没有复活信号，直接返回
+			print("[Flow] 无法等待复活信号，终止流程")
+			return
 
 	# 2. 进入清扫阶段（捡东西时间），也就是你想要的延迟
 	GameState.change_state(GameState.State.WAVE_CLEARING)
