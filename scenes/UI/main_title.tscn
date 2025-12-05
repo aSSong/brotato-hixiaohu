@@ -116,7 +116,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.33333334)
 theme_override_font_sizes/font_size = 36
-text = "当前版本号：2k（0.2.11.1）"
+text = "当前版本号：2k+（0.2.11.2）"
 
 [node name="player_info" type="Label" parent="."]
 layout_mode = 1
