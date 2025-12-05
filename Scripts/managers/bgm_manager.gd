@@ -64,6 +64,20 @@ func stop_bgm() -> void:
 	current_bgm = ""
 	print("[BGMManager] 停止BGM")
 
+## 暂停BGM（保留播放位置）
+func pause_bgm() -> void:
+	audio_player.stream_paused = true
+	print("[BGMManager] 暂停BGM")
+
+## 恢复BGM（从暂停位置继续播放）
+func resume_bgm() -> void:
+	audio_player.stream_paused = false
+	print("[BGMManager] 恢复BGM")
+
+## BGM是否暂停中
+func is_paused() -> bool:
+	return audio_player.stream_paused
+
 ## 设置音量
 func set_volume(volume_db: float) -> void:
 	audio_player.volume_db = volume_db
