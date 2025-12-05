@@ -18,7 +18,7 @@ var grave_ghost_data: GhostData = null  # 墓碑关联的Ghost数据
 var grave_rescue_manager: GraveRescueManager = null  # 墓碑救援管理器
 
 ## 预加载墓碑纹理（避免运行时load导致卡顿）
-var grave_texture_preload = preload("res://assets/others/grave.png")
+var grave_texture_preload = preload("res://assets/others/grave-01.png")
 
 ## 状态
 var is_dead: bool = false
@@ -27,7 +27,7 @@ var death_count: int = 0  # 本局累计死亡次数（包括已复活的）
 var death_timer: float = 0.0
 var death_delay: float = 1.5  # 死亡延迟时间
 var death_position: Vector2 = Vector2.ZERO  # 记录死亡位置
-
+var grave_scale: Vector2 = Vector2(0.3,0.3)
 func _ready() -> void:
 	# 确保在游戏暂停时仍能处理死亡逻辑
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -157,6 +157,7 @@ func _create_grave() -> void:
 	grave_sprite = Sprite2D.new()
 	grave_sprite.texture = grave_texture
 	grave_sprite.global_position = death_position
+	grave_sprite.scale = grave_scale
 	
 	# 设置层级（高于玩家和怪物）
 	grave_sprite.z_index = 20
@@ -440,11 +441,11 @@ func _create_grave_name_label() -> void:
 	
 	# 设置位置（在墓碑上方）
 	# 墓碑图片大小需要根据实际调整，这里假设墓碑高度约100像素
-	name_label.position = Vector2(-115, -100)  # 在墓碑上方
+	name_label.position = Vector2(-260, -330)  # 在墓碑上方
 	name_label.size = Vector2(120, 30)
 	
 	# 设置字体大小和颜色（与Ghost一致，使用淡蓝色）
-	name_label.add_theme_font_size_override("font_size", 28)
+	name_label.add_theme_font_size_override("font_size", 90)
 	name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0))  # 淡蓝色
 	
 	# 添加黑色描边效果

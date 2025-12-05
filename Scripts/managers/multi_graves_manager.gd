@@ -6,7 +6,8 @@ class_name MultiGravesManager
 ## 注意：作为场景节点使用，不使用autoload
 
 ## 预加载墓碑纹理（避免运行时load导致卡顿）
-var grave_texture = preload("res://assets/others/grave.png")
+var grave_texture = preload("res://assets/others/grave-01.png")
+var grave_scale: Vector2 = Vector2(0.3,0.3)
 
 ## 当前生成的墓碑列表（墓碑精灵节点）
 var current_graves: Array = []
@@ -76,7 +77,7 @@ func _create_grave_for_ghost(ghost_data: GhostData) -> void:
 	grave_sprite.texture = grave_texture
 	grave_sprite.global_position = ghost_data.death_position
 	grave_sprite.z_index = 20
-	
+	grave_sprite.scale = grave_scale
 	# 创建名字Label
 	_create_grave_name_label(grave_sprite, ghost_data)
 	
@@ -103,11 +104,11 @@ func _create_grave_name_label(grave_sprite: Sprite2D, ghost_data: GhostData) -> 
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	
 	# 设置位置（在墓碑上方）
-	name_label.position = Vector2(-115, -100)
+	name_label.position = Vector2(-260, -330)
 	name_label.size = Vector2(120, 30)
 	
 	# 设置字体大小和颜色（与Ghost一致，使用淡蓝色）
-	name_label.add_theme_font_size_override("font_size", 28)
+	name_label.add_theme_font_size_override("font_size", 90)
 	name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0))  # 淡蓝色
 	
 	# 添加黑色描边效果
