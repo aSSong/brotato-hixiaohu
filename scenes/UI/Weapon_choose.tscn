@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dhpmorc3nh0rx"]
+[gd_scene load_steps=17 format=3 uid="uid://dhpmorc3nh0rx"]
 
 [ext_resource type="Script" uid="uid://cbbs20aohqtja" path="res://Scripts/UI/weapon_choose.gd" id="1_weapon"]
 [ext_resource type="Texture2D" uid="uid://cv60hkdkrm472" path="res://assets/UI/weapon_choose/weaponchoose-bg-01.png" id="2_s4hvt"]
@@ -11,12 +11,11 @@
 [ext_resource type="Texture2D" uid="uid://b4xgibahk4h0u" path="res://assets/UI/class_choose/btn-back-gray-01.png" id="6_ysnaf"]
 [ext_resource type="Texture2D" uid="uid://tpynlqo2yorf" path="res://assets/UI/class_choose/btn-back-white-01.png" id="7_g7k44"]
 [ext_resource type="Texture2D" uid="uid://josbodbe1aju" path="res://assets/UI/weapon_choose/weaponchoose-info-bg-01.png" id="7_wiwm1"]
-[ext_resource type="Texture2D" uid="uid://co5kwsisnk6y8" path="res://assets/UI/class_choose/btn-next-red-01.png" id="8_fp288"]
 [ext_resource type="StyleBox" uid="uid://ma8mp05kvbte" path="res://scenes/UI/weapon_state_bar_bg.tres" id="8_g7k44"]
 [ext_resource type="Texture2D" uid="uid://b5m4okwxeae3k" path="res://assets/UI/weapon_choose/weaponchoose-info-unchoosed-01.png" id="8_ysnaf"]
 [ext_resource type="StyleBox" uid="uid://brjva4kavfa5r" path="res://scenes/UI/weapon_state_bar_fill.tres" id="9_fp288"]
 [ext_resource type="Texture2D" uid="uid://bvn8auipbm3g2" path="res://assets/UI/weapon_choose/weaponchoose-info-bg-02.png" id="9_g7k44"]
-[ext_resource type="Texture2D" uid="uid://cuv4ryakt3udj" path="res://assets/UI/class_choose/btn-next-darkred-01.png" id="9_lfaaf"]
+[ext_resource type="Texture2D" uid="uid://7oqiyvuqvk4x" path="res://assets/UI/weapon_choose/btn-fight-red-01.png" id="16_lfaaf"]
 
 [node name="WeaponChoose" type="Control"]
 layout_mode = 3
@@ -545,8 +544,8 @@ offset_top = -172.0
 offset_bottom = -60.0
 grow_horizontal = 0
 grow_vertical = 0
-texture_normal = ExtResource("8_fp288")
-texture_pressed = ExtResource("9_lfaaf")
-texture_hover = ExtResource("8_fp288")
-texture_disabled = ExtResource("9_lfaaf")
-texture_focused = ExtResource("8_fp288")
+texture_normal = ExtResource("16_lfaaf")
+texture_pressed = ExtResource("16_lfaaf")
+texture_hover = ExtResource("16_lfaaf")
+texture_disabled = ExtResource("16_lfaaf")
+texture_focused = ExtResource("16_lfaaf")
