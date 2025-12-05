@@ -5,7 +5,7 @@ class_name BaseSkillUI
 ## 用于 Dash 和职业技能的CD显示
 
 @onready var icon: TextureRect = $Icon
-@onready var cd_mask: ColorRect = $CDMask
+@onready var cd_mask: TextureRect = $CDMask  # 从 ColorRect 改为 TextureRect
 @onready var cd_text: Label = $CDText
 @onready var name_label: Label = $NameLabel
 #@onready var key_label: Label = $KeyLabel
