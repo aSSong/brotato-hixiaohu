@@ -38,7 +38,7 @@ enum CalculationType {
 @export var description: String = ""
 
 ## 外观设置
-@export var texture_path: String = "res://assets/weapon/weapon1.png"
+@export var texture_path: String = "res://assets/weapon/weapon-lightningwand.png"
 @export var scale: Vector2 = Vector2(0.7, 0.7)
 @export var sprite_offset: Vector2 = Vector2.ZERO
 
@@ -181,7 +181,7 @@ func _init(
 	p_behavior_type: BehaviorType = BehaviorType.RANGED,
 	p_calculation_type: CalculationType = CalculationType.RANGED,
 	p_behavior_params: Dictionary = {},
-	p_texture_path: String = "res://assets/weapon/weapon1.png",
+	p_texture_path: String = "res://assets/weapon/weapon-lightningwand.png",
 	p_scale: Vector2 = Vector2(0.7, 0.7)
 ) -> void:
 	weapon_name = p_weapon_name
