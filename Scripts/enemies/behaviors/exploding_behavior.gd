@@ -36,7 +36,7 @@ var is_invincible: bool = false  # 倒数期间无敌
 ## 范围指示器
 var range_indicator: Sprite2D = null
 ## 预加载的范围圈纹理（与grave_rescue_manager共用资源）
-static var _range_circle_texture = preload("res://assets/others/rescue_range_circle.png")
+static var _range_circle_texture = preload("res://assets/others/explosion_range_circle.png")
 
 ## 闪烁相关
 var flash_timer: float = 0.0
