@@ -59,6 +59,7 @@ enum UpgradeType {
 @export var base_cost: int = 5  # 武器升级的基础价格
 @export var actual_cost: int = 5  # 实际价格（根据品质计算或使用cost）
 @export var locked_cost: int = -1  # 锁定时的价格（-1表示未锁定）
+@export var current_price: int = -1  # 当前波次下的最终售价（包含波次修正，生成时确定）
 @export var weight: int = 100  # 出现权重（用于加权随机，默认100，权重越高越容易出现）
 
 ## 自定义值（用于特殊效果，如HEAL_HP的恢复量）
@@ -114,7 +115,7 @@ func create_modifier() -> AttributeModifier:
 	return modifier
 
 ## 创建副本
-func duplicate(subresources: bool = false) -> UpgradeData:
+func clone(subresources: bool = false) -> UpgradeData:
 	var copy = UpgradeData.new(
 		upgrade_type,
 		name,
@@ -127,6 +128,7 @@ func duplicate(subresources: bool = false) -> UpgradeData:
 	copy.base_cost = base_cost
 	copy.actual_cost = actual_cost
 	copy.locked_cost = locked_cost
+	copy.current_price = current_price
 	copy.weight = weight
 	copy.custom_value = custom_value
 	

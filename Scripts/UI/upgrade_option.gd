@@ -64,6 +64,8 @@ func get_display_cost() -> int:
 	
 	if upgrade_data.locked_cost >= 0:
 		return upgrade_data.locked_cost
+	elif upgrade_data.current_price > 0:
+		return upgrade_data.current_price
 	else:
 		return UpgradeShop.calculate_wave_adjusted_cost(upgrade_data.actual_cost)
 

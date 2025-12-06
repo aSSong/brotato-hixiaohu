@@ -48,18 +48,30 @@ var upgrade_option_scene = preload("res://scenes/UI/upgrade_option.tscn")
 
 ## 计算带波次修正的价格
 ## 公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
-func calculate_wave_adjusted_cost(base_cost: int) -> int:
+## 静态版本，供 UpgradeOption 等外部调用
+static func calculate_wave_adjusted_cost(base_cost: int) -> int:
 	var wave_number: int = 0
 	
-	if _cached_wave_manager and "current_wave" in _cached_wave_manager:
-		wave_number = _cached_wave_manager.current_wave
+	# 尝试获取场景树
+	var main_loop = Engine.get_main_loop()
+	if main_loop and main_loop is SceneTree:
+		var scene_tree = main_loop as SceneTree
+		
+		# 尝试获取波次管理器
+		var wave_system = scene_tree.get_first_node_in_group("wave_system")
+		if not wave_system:
+			wave_system = scene_tree.get_first_node_in_group("wave_manager")
+		
+		if wave_system and "current_wave" in wave_system:
+			wave_number = wave_system.current_wave
 	
 	# 应用公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
 	var adjusted_cost = float(base_cost) + float(wave_number) + (float(base_cost) * 0.1 * float(wave_number))
 	return int(floor(adjusted_cost))
 
-# 为了兼容性保留的静态方法（如果其他脚本有调用），建议逐步迁移到实例方法
-static func calculate_wave_adjusted_cost_static(base_cost: int, wave_number: int) -> int:
+## 实例方法版本的价格计算（可利用缓存）
+func _calculate_cost_instance(base_cost: int) -> int:
+	var wave_number: int = _get_current_wave()
 	var adjusted_cost = float(base_cost) + float(wave_number) + (float(base_cost) * 0.1 * float(wave_number))
 	return int(floor(adjusted_cost))
 
@@ -207,7 +219,7 @@ func generate_upgrades() -> void:
 		if locked_upgrades.has(position_index):
 			var locked_upgrade = locked_upgrades[position_index]
 			# 创建升级数据的副本（保留锁定价格）
-			var upgrade_copy = locked_upgrade.duplicate()
+			var upgrade_copy = locked_upgrade.clone()
 			new_upgrades_list[position_index] = upgrade_copy
 			# 同步更新字典中的引用为新副本
 			locked_upgrades[position_index] = upgrade_copy
@@ -334,8 +346,9 @@ func _clear_upgrades() -> void:
 ## 处理锁定状态变化
 func _on_upgrade_lock_state_changed(upgrade: UpgradeData, is_locked: bool, position_index: int) -> void:
 	if is_locked:
-		# 锁定：计算并保存当前波次的价格
-		var adjusted_cost = calculate_wave_adjusted_cost(upgrade.actual_cost)
+		# 锁定：保存当前价格
+		# 优先使用 current_price，如果没有则实时计算
+		var adjusted_cost = upgrade.current_price if upgrade.current_price > 0 else _calculate_cost_instance(upgrade.actual_cost)
 		upgrade.locked_cost = adjusted_cost
 		locked_upgrades[position_index] = upgrade
 		print("[UpgradeShop] 锁定升级: %s 在位置 %d, 锁定价格: %d" % [upgrade.name, position_index, adjusted_cost])
@@ -348,7 +361,7 @@ func _on_upgrade_lock_state_changed(upgrade: UpgradeData, is_locked: bool, posit
 
 ## 复制升级数据（用于锁定升级的恢复）
 func _duplicate_upgrade_data(source: UpgradeData) -> UpgradeData:
-	return source.duplicate()
+	return source.clone()
 
 ## 判断两个升级是否相同
 func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
@@ -378,12 +391,15 @@ func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
 ## 3. 应用升级效果（武器升级需等待异步加载）
 ## 4. 局部刷新 UI（Flip Out -> 生成新数据 -> Flip In）
 func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
-	# 如果有锁定价格，使用锁定价格；否则计算波次修正后的价格
+	# 如果有锁定价格，使用锁定价格；否则使用固定的 current_price
 	var adjusted_cost: int
 	if upgrade.locked_cost >= 0:
 		adjusted_cost = upgrade.locked_cost
+	elif upgrade.current_price > 0:
+		adjusted_cost = upgrade.current_price
 	else:
-		adjusted_cost = calculate_wave_adjusted_cost(upgrade.actual_cost)
+		# 兼容性保底：如果 current_price 未设置，才实时计算
+		adjusted_cost = _calculate_cost_instance(upgrade.actual_cost)
 	
 	if GameMain.gold < adjusted_cost:
 		print("钥匙不足！需要 %d，当前 %d" % [adjusted_cost, GameMain.gold])
@@ -747,6 +763,9 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 				break
 		
 		if not is_duplicate:
+			# 计算并固定当前波次的最终售价
+			# 这样即使后续 current_wave 发生变化（如进入下一关），该商品价格也保持不变
+			upgrade.current_price = _calculate_cost_instance(upgrade.actual_cost)
 			return upgrade
 	
 	# print("[UpgradeShop] 警告: 尝试 %d 次后仍无法生成不重复的升级" % max_attempts)
