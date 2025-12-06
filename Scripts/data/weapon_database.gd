@@ -168,7 +168,7 @@ static func initialize_weapons() -> void:
 		{
 			"damage": 6,
 			"attack_speed": 0.8,
-			"range": 280.0,
+			"range": 380.0,
 			"orbit_radius": 400.0,
 			"orbit_speed": 120.0,
 			"hit_range": 280.0,

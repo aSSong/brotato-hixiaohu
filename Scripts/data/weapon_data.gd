@@ -212,6 +212,36 @@ func _sync_legacy_fields() -> void:
 		attack_speed = behavior_params.get("attack_speed")
 	if behavior_params.has("range"):
 		range = behavior_params.get("range")
+	
+	# 同步近战武器专用参数
+	if behavior_params.has("orbit_radius"):
+		orbit_radius = behavior_params.get("orbit_radius")
+	if behavior_params.has("orbit_speed"):
+		orbit_speed = behavior_params.get("orbit_speed")
+	if behavior_params.has("hit_range"):
+		hit_range = behavior_params.get("hit_range")
+	if behavior_params.has("knockback_force"):
+		knockback_force = behavior_params.get("knockback_force")
+	if behavior_params.has("rotation_speed"):
+		rotation_speed = behavior_params.get("rotation_speed")
+	
+	# 同步魔法武器专用参数
+	if behavior_params.has("explosion_radius"):
+		explosion_radius = behavior_params.get("explosion_radius")
+	if behavior_params.has("explosion_damage_multiplier"):
+		explosion_damage_multiplier = behavior_params.get("explosion_damage_multiplier")
+	if behavior_params.has("cast_delay"):
+		attack_cast_delay = behavior_params.get("cast_delay")
+	if behavior_params.has("is_target_locked"):
+		is_target_locked = behavior_params.get("is_target_locked")
+	if behavior_params.has("max_targets"):
+		max_targets = behavior_params.get("max_targets")
+	if behavior_params.has("has_explosion_damage"):
+		has_explosion_damage = behavior_params.get("has_explosion_damage")
+	
+	# 同步远程武器专用参数
+	if behavior_params.has("pierce_count"):
+		pierce_count = behavior_params.get("pierce_count")
 
 ## 从旧版字段构建 behavior_params（用于迁移）
 func build_behavior_params_from_legacy() -> Dictionary:
