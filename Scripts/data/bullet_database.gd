@@ -45,14 +45,14 @@ static func initialize_bullets() -> void:
 	
 	# ========== 特殊子弹 ==========
 	
-	var homing_bullet = BulletData.new("homing_bullet", 1000.0, 5.0,"res://assets/weapon/bullet-missle.png")
+	var homing_bullet = BulletData.new("homing_bullet", 1000.0, 8.0,"res://assets/weapon/bullet-missle.png")
 	homing_bullet.bullet_name = "追踪子弹"
 	homing_bullet.scale = Vector2(0.5, 0.5)
 	#homing_bullet.modulate = Color(0.5, 0.8, 1.0)
 	homing_bullet.movement_type = BulletData.MovementType.HOMING
 	homing_bullet.movement_params = {
-		"turn_speed": 3.0,        # 降低转向速度，让它转大弯
-		"acceleration": 600.0,    # 增加加速度，越飞越快
+		"turn_speed": 8.0,        # 降低转向速度，让它转大弯
+		"acceleration": 100.0,    # 增加加速度，越飞越快
 		"max_speed": 1200.0,      # 稍微降低极速，让玩家看清轨迹
 		"homing_delay": 0.2,      # 发射后 0.2秒内直飞，不追踪
 		"wobble_amount": 15.0,    # 15度的左右摆动
