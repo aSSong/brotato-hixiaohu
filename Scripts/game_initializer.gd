@@ -242,22 +242,21 @@ func _on_wave_flow_step(wave_number: int) -> void:
 			return
 		var dm = tree.get_first_node_in_group("death_manager")
 		if dm and dm.has_signal("player_revived"):
-			# 同时监听 game_over 信号以防玩家放弃
-			var revive_or_quit = false
-			var quit_game = false
+			# 使用字典来避免闭包变量捕获问题
+			var state = {"revive_or_quit": false, "quit_game": false}
 			
 			# 创建一个临时的等待逻辑
-			var revive_callback = func(): revive_or_quit = true
+			var revive_callback = func(): state.revive_or_quit = true
 			var quit_callback = func(): 
-				revive_or_quit = true
-				quit_game = true
+				state.revive_or_quit = true
+				state.quit_game = true
 			
 			dm.player_revived.connect(revive_callback, CONNECT_ONE_SHOT)
 			if dm.has_signal("game_over"):
 				dm.game_over.connect(quit_callback, CONNECT_ONE_SHOT)
 			
 			# 等待任一信号
-			while not revive_or_quit:
+			while not state.revive_or_quit:
 				tree = get_tree()
 				if tree == null:
 					return
@@ -266,7 +265,7 @@ func _on_wave_flow_step(wave_number: int) -> void:
 					return
 			
 			# 如果玩家选择放弃，终止流程
-			if quit_game:
+			if state.quit_game:
 				print("[Flow] 玩家放弃游戏，终止流程")
 				return
 			
