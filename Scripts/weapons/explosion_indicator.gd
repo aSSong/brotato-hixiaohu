@@ -3,9 +3,10 @@ class_name ExplosionIndicator
 
 ## 魔法武器爆炸范围指示器
 ## 显示一个半透明的圆形区域，标识攻击目标位置和范围
+## 修改：使用纹理替代程序化绘制，与GraveRescueManager方案一致
 
-## 静态共享纹理（所有指示器共用，只创建一次）
-static var shared_circle_texture: Texture2D = null
+## 预加载的范围圈纹理（所有实例共享）
+static var _circle_texture = preload("res://assets/others/rescue_range_circle.png")
 
 ## 圆形精灵
 var circle_sprite: Sprite2D = null
@@ -26,10 +27,6 @@ var is_persistent: bool = false
 var follow_target: Node2D = null
 
 func _ready() -> void:
-	# 确保共享纹理已创建
-	if shared_circle_texture == null:
-		_create_shared_texture()
-	
 	# 创建圆形精灵
 	_create_circle_sprite()
 
@@ -39,38 +36,13 @@ func _process(_delta: float) -> void:
 		global_position = follow_target.global_position
 	# 如果没有目标，保持在原位置（固定位置模式）
 
-## 创建共享纹理（静态，只执行一次）
-static func _create_shared_texture() -> void:
-	if shared_circle_texture != null:
-		return
-	
-	var size = 512
-	var image = Image.create(size, size, false, Image.FORMAT_RGBA8)
-	
-	# 绘制实心圆
-	var center = Vector2(size / 2, size / 2)
-	var radius = size / 2
-	
-	for x in range(size):
-		for y in range(size):
-			var distance = Vector2(x, y).distance_to(center)
-			if distance <= radius:
-				# 添加边缘软化效果
-				var alpha = 1.0
-				if distance > radius - 20:
-					alpha = (radius - distance) / 20.0
-				image.set_pixel(x, y, Color(1, 1, 1, alpha))
-	
-	# 创建纹理并保存为静态共享资源
-	shared_circle_texture = ImageTexture.create_from_image(image)
-
 ## 创建圆形精灵
 func _create_circle_sprite() -> void:
 	circle_sprite = Sprite2D.new()
 	add_child(circle_sprite)
 	
-	# 使用共享纹理
-	circle_sprite.texture = shared_circle_texture
+	# 使用预加载的纹理
+	circle_sprite.texture = _circle_texture
 	
 	# 设置颜色和初始透明度
 	circle_sprite.modulate = indicator_color
@@ -91,8 +63,13 @@ func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 0.5, 0.
 	# 设置位置
 	global_position = position
 	
-	# 设置缩放（根据半径）
-	var scale_factor = radius / 256.0  # 256是纹理半径
+	# 设置缩放（根据半径和纹理尺寸）
+	var texture_size = _circle_texture.get_size().x
+	var target_diameter = radius * 2.0
+	var scale_factor = 1.0
+	if texture_size > 0:
+		scale_factor = target_diameter / texture_size
+	
 	circle_sprite.scale = Vector2(scale_factor, scale_factor)
 	
 	# 设置颜色
@@ -124,7 +101,12 @@ func show_persistent(target: Node2D, radius: float, color: Color, duration: floa
 	# 如果target为null，保持当前位置（由调用者设置）
 	
 	# 设置缩放
-	var scale_factor = radius / 256.0
+	var texture_size = _circle_texture.get_size().x
+	var target_diameter = radius * 2.0
+	var scale_factor = 1.0
+	if texture_size > 0:
+		scale_factor = target_diameter / texture_size
+		
 	circle_sprite.scale = Vector2(scale_factor, scale_factor)
 	
 	# 设置颜色
