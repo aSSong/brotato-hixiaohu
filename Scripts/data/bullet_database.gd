@@ -32,11 +32,22 @@ static func initialize_bullets() -> void:
 	heavy_bullet.movement_type = BulletData.MovementType.STRAIGHT
 	bullets["heavy_bullet"] = heavy_bullet
 	
+	# ========== 手动新子弹 ==========
+	var shuriken_bullet = BulletData.new("shuriken_bullet", 800.0, 4.0, "res://assets/bullet/bullet-shuriken.png")
+	shuriken_bullet.bullet_name = "手里剑子弹"
+	shuriken_bullet.scale = Vector2(0.5, 0.5)
+	shuriken_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	# 新增：手里剑自转
+	shuriken_bullet.movement_params = {
+		"self_rotation_speed": 720.0
+	}
+	bullets["shuriken_bullet"] = shuriken_bullet
+	
 	# ========== 特殊子弹 ==========
 	
-	var homing_bullet = BulletData.new("homing_bullet", 1800.0, 5.0, "res://assets/bullet/bullet_blue.png")
+	var homing_bullet = BulletData.new("homing_bullet", 1000.0, 5.0,"res://assets/weapon/bullet-missle.png")
 	homing_bullet.bullet_name = "追踪子弹"
-	homing_bullet.scale = Vector2(1.0, 1.0)
+	homing_bullet.scale = Vector2(0.5, 0.5)
 	homing_bullet.modulate = Color(0.5, 0.8, 1.0)
 	homing_bullet.movement_type = BulletData.MovementType.HOMING
 	homing_bullet.movement_params = {
@@ -118,4 +129,3 @@ static func get_bullets_by_movement_type(movement_type: BulletData.MovementType)
 		if bullet.movement_type == movement_type:
 			result.append(bullet_id)
 	return result
-

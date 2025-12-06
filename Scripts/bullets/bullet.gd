@@ -39,6 +39,11 @@ var calculation_type: int = 0
 var pierce_count: int = 0
 var pierced_enemies: Array = []
 
+## 动画状态变量
+var _anim_timer: float = 0.0
+var _current_frame_index: int = 0
+var _total_frames: int = 1
+
 ## ========== 移动相关 ==========
 
 ## 移动类型
@@ -142,6 +147,18 @@ func _init_movement() -> void:
 			_velocity = dir * speed
 
 func _physics_process(delta: float) -> void:
+	# 1. 处理动画播放
+	if bullet_data and bullet_data.animation_speed > 0:
+		_update_animation(delta)
+
+	# 新增：处理自转 (如果子弹需要自转，例如手里剑)
+	# 假设我们在 movement_params 里约定了一个 "self_rotation_speed"
+	if movement_params.has("self_rotation_speed"):
+		var sprite = get_node_or_null("Sprite2D")
+		if sprite:
+			sprite.rotation_degrees += movement_params["self_rotation_speed"] * delta
+
+	# 2. 处理移动
 	match movement_type:
 		BulletData.MovementType.STRAIGHT:
 			_move_straight(delta)
@@ -244,6 +261,25 @@ func _setup_appearance() -> void:
 		var texture = load(bullet_data.texture_path)
 		if texture:
 			sprite.texture = texture
+			
+			# 设置序列帧属性
+			sprite.hframes = bullet_data.hframes
+			sprite.vframes = bullet_data.vframes
+			sprite.frame = 0
+			
+			# 初始化动画状态
+			_total_frames = bullet_data.hframes * bullet_data.vframes
+			_current_frame_index = 0
+			_anim_timer = 0.0
+	
+	# 新增：加载挂载特效（如拖尾、旋转光圈等）
+	if bullet_data.trail_effect_path != "":
+		var effect_scene = load(bullet_data.trail_effect_path)
+		if effect_scene:
+			var effect_instance = effect_scene.instantiate()
+			add_child(effect_instance)
+			# 确保特效在子弹图层之下（如果需要）
+			# move_child(effect_instance, 0) 
 
 ## ========== 碰撞处理 ==========
 
@@ -399,3 +435,24 @@ func _handle_bounce_to_enemy() -> void:
 		_velocity = dir * speed
 	else:
 		queue_free()
+
+## 新增：动画更新函数
+func _update_animation(delta: float) -> void:
+	var sprite = get_node_or_null("Sprite2D")
+	if not sprite: return
+	
+	_anim_timer += delta
+	var frame_duration = 1.0 / bullet_data.animation_speed
+	
+	if _anim_timer >= frame_duration:
+		_anim_timer -= frame_duration
+		_current_frame_index += 1
+		
+		# 循环或停在最后一帧
+		if _current_frame_index >= _total_frames:
+			if bullet_data.loop_animation:
+				_current_frame_index = 0
+			else:
+				_current_frame_index = _total_frames - 1
+		
+		sprite.frame = _current_frame_index

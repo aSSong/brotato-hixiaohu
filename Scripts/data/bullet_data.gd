@@ -24,6 +24,12 @@ enum MovementType {
 @export var scale: Vector2 = Vector2(1.0, 1.0)
 @export var modulate: Color = Color.WHITE
 
+## 动画设置 (Sprite Sheet)
+@export var hframes: int = 1        # 水平帧数（默认1表示不是序列帧）
+@export var vframes: int = 1        # 垂直帧数
+@export var animation_speed: float = 0.0  # 播放速度 (帧/秒)，0表示不自动播放
+@export var loop_animation: bool = true   # 是否循环播放
+
 ## 基础属性
 @export var speed: float = 2000.0
 @export var lifetime: float = 3.0
