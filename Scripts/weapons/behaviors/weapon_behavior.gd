@@ -170,4 +170,3 @@ func _on_initialize() -> void:
 ## 获取行为类型（子类覆盖）
 func get_behavior_type() -> int:
 	return WeaponData.BehaviorType.MELEE
-

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7m3k6yat4h5y"]
 
 [node name="MeteorExplosion" type="Node2D"]
+scale = Vector2(2, 2)
 
 [node name="Core" type="CPUParticles2D" parent="."]
 emitting = false
