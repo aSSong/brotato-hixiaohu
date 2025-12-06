@@ -4,12 +4,16 @@ extends Node2D
 ## 
 ## 简化：直接设置武器的player_stats引用，不再手动计算加成
 
-var weapon_radius = 160
+var weapon_radius = 180
 var weapon_num = 0
 var player_ref: Node2D = null
 
 ## 近战武器环绕运动管理
 var melee_weapon_angles: Dictionary = {}
+
+## 武器环绕角度偏移（避开玩家头部区域，10点到2点方向）
+## PI/4 (45度) 偏移让武器分布避开正上方
+const WEAPON_ANGLE_OFFSET = PI / 4
 
 ## 预加载武器场景
 var base_weapon_scene = preload("res://scenes/weapons/weapon.tscn")
@@ -280,12 +284,13 @@ func arrange_weapons() -> void:
 			else:
 				other_weapons.append(weapon)
 	
-	# 为近战武器分配初始角度（均匀分布）
+	# 为近战武器分配初始角度（均匀分布，带偏移避开头部）
 	var melee_unit = TAU / max(melee_weapons.size(), 1)
 	for i in range(melee_weapons.size()):
 		var weapon = melee_weapons[i]
 		var weapon_id = weapon.get_instance_id()
-		var initial_angle = melee_unit * i
+		# 添加角度偏移，避开玩家头部区域
+		var initial_angle = melee_unit * i + WEAPON_ANGLE_OFFSET
 		
 		# 存储初始角度
 		melee_weapon_angles[weapon_id] = initial_angle
@@ -295,11 +300,12 @@ func arrange_weapons() -> void:
 		var end_pos = Vector2(radius, 0).rotated(initial_angle)
 		weapon.position = end_pos
 	
-	# 为其他武器分配固定位置（均匀分布）
+	# 为其他武器分配固定位置（均匀分布，带偏移避开头部）
 	var other_unit = TAU / max(other_weapons.size(), 1)
 	for i in range(other_weapons.size()):
 		var weapon = other_weapons[i]
-		var weapon_rad = other_unit * i
+		# 添加角度偏移，避开玩家头部区域
+		var weapon_rad = other_unit * i + WEAPON_ANGLE_OFFSET
 		var end_pos = Vector2(weapon_radius, 0).rotated(weapon_rad)
 		weapon.position = end_pos
 
