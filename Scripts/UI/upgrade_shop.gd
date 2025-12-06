@@ -18,6 +18,10 @@ class_name UpgradeShop
 ## WeaponCompact 场景预加载
 var weapon_compact_scene: PackedScene = preload("res://scenes/UI/components/weapon_compact.tscn")
 
+## 常量
+const WEAPON_SPAWN_CHANCE := 0.35
+const FLIP_ANIMATION_DELAY := 0.08
+
 ## 当前显示的升级选项（最多3个）
 var current_upgrades: Array[UpgradeData] = []
 var refresh_cost: int = 2  # 刷新费用，每次x2
@@ -30,6 +34,11 @@ var locked_upgrades: Dictionary = {}
 var new_weapon_cost: int = 5 # 新武器基础价格
 #var green_weapon_multi: int = 2 #绿色武器价格倍率
 
+## 缓存的管理器引用
+var _cached_weapons_manager: Node = null
+var _cached_wave_manager: Node = null
+var _cached_player: Node = null
+
 ## 信号
 signal upgrade_purchased(upgrade: UpgradeData)
 signal shop_closed()
@@ -39,23 +48,18 @@ var upgrade_option_scene = preload("res://scenes/UI/upgrade_option.tscn")
 
 ## 计算带波次修正的价格
 ## 公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
-static func calculate_wave_adjusted_cost(base_cost: int) -> int:
+func calculate_wave_adjusted_cost(base_cost: int) -> int:
 	var wave_number: int = 0
 	
-	# 尝试获取场景树
-	var main_loop = Engine.get_main_loop()
-	if main_loop and main_loop is SceneTree:
-		var scene_tree = main_loop as SceneTree
-		
-		# 尝试获取波次管理器
-		var wave_system = scene_tree.get_first_node_in_group("wave_system")
-		if not wave_system:
-			wave_system = scene_tree.get_first_node_in_group("wave_manager")
-		
-		if wave_system and "current_wave" in wave_system:
-			wave_number = wave_system.current_wave
+	if _cached_wave_manager and "current_wave" in _cached_wave_manager:
+		wave_number = _cached_wave_manager.current_wave
 	
 	# 应用公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
+	var adjusted_cost = float(base_cost) + float(wave_number) + (float(base_cost) * 0.1 * float(wave_number))
+	return int(floor(adjusted_cost))
+
+# 为了兼容性保留的静态方法（如果其他脚本有调用），建议逐步迁移到实例方法
+static func calculate_wave_adjusted_cost_static(base_cost: int, wave_number: int) -> int:
 	var adjusted_cost = float(base_cost) + float(wave_number) + (float(base_cost) * 0.1 * float(wave_number))
 	return int(floor(adjusted_cost))
 
@@ -91,6 +95,14 @@ func _ready() -> void:
 		if close_button:
 			close_button.pressed.connect(_on_close_button_pressed)
 	
+	# 缓存管理器引用
+	_cache_managers()
+	
+	# 监听钥匙变化信号
+	if GameMain.has_signal("gold_changed"):
+		if not GameMain.gold_changed.is_connected(_on_gold_changed):
+			GameMain.gold_changed.connect(_on_gold_changed)
+	
 	_update_refresh_cost_display()
 	
 	# 初始化玩家信息显示
@@ -101,20 +113,39 @@ func _ready() -> void:
 	print("upgrade_container: ", upgrade_container, " refresh_button: ", refresh_button, " close_button: ", close_button)
 	print("weapon_container: ", weapon_container)
 
+## 缓存常用的管理器引用
+func _cache_managers() -> void:
+	var tree = get_tree()
+	
+	# 缓存 WeaponsManager
+	if not _cached_weapons_manager:
+		_cached_weapons_manager = tree.get_first_node_in_group("weapons_manager")
+		if not _cached_weapons_manager:
+			_cached_weapons_manager = tree.get_first_node_in_group("weapons")
+	
+	# 缓存 WaveManager
+	if not _cached_wave_manager:
+		_cached_wave_manager = tree.get_first_node_in_group("wave_system")
+		if not _cached_wave_manager:
+			_cached_wave_manager = tree.get_first_node_in_group("wave_manager")
+	
+	# 缓存 Player
+	if not _cached_player:
+		_cached_player = tree.get_first_node_in_group("player")
+
 ## 打开商店
 func open_shop() -> void:
 	print("升级商店 open_shop() 被调用")
-	print("当前可见性: ", visible, " 是否在树中: ", is_inside_tree())
 	
 	# 确保所有@onready变量都已初始化
 	if not is_inside_tree():
 		await get_tree().process_frame
 	
+	# 刷新缓存（以防场景重载）
+	_cache_managers()
+	
 	# 设置进程模式为始终处理（即使在暂停时）
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	
-	# 暂停游戏
-	# get_tree().paused = true # 由 GameState 管理
 	
 	# 显示商店（必须在暂停后）
 	show()
@@ -149,14 +180,10 @@ func open_shop() -> void:
 	_update_weapon_list()
 	
 	print("升级商店已打开，选项数量: ", current_upgrades.size())
-	print("容器子节点数（生成后）: ", upgrade_container.get_child_count())
-	print("打开后可见性: ", visible, " process_mode: ", process_mode)
 
 ## 关闭商店
 func close_shop() -> void:
 	hide()
-	# GameState 管理暂停状态，这里不需要手动处理
-	# get_tree().paused = false
 	shop_closed.emit()
 
 ## 生成升级选项（3个）
@@ -180,11 +207,11 @@ func generate_upgrades() -> void:
 		if locked_upgrades.has(position_index):
 			var locked_upgrade = locked_upgrades[position_index]
 			# 创建升级数据的副本（保留锁定价格）
-			var upgrade_copy = _duplicate_upgrade_data(locked_upgrade)
+			var upgrade_copy = locked_upgrade.duplicate()
 			new_upgrades_list[position_index] = upgrade_copy
 			# 同步更新字典中的引用为新副本
 			locked_upgrades[position_index] = upgrade_copy
-			print("[UpgradeShop] 恢复锁定升级到位置 %d: %s" % [position_index, upgrade_copy.name])
+			# print("[UpgradeShop] 恢复锁定升级到位置 %d: %s" % [position_index, upgrade_copy.name])
 	
 	# 生成新升级填补空位
 	for position_index in range(3):
@@ -249,7 +276,7 @@ func generate_upgrades() -> void:
 			option_ui.scale.x = 0.0
 			option_ui.modulate = Color(0.5, 0.5, 0.5) # 初始暗色
 			
-			var delay = i * 0.08
+			var delay = i * FLIP_ANIMATION_DELAY
 			if option_ui.has_method("play_flip_in_animation"):
 				option_ui.play_flip_in_animation(delay)
 	
@@ -321,29 +348,7 @@ func _on_upgrade_lock_state_changed(upgrade: UpgradeData, is_locked: bool, posit
 
 ## 复制升级数据（用于锁定升级的恢复）
 func _duplicate_upgrade_data(source: UpgradeData) -> UpgradeData:
-	var copy = UpgradeData.new(
-		source.upgrade_type,
-		source.name,
-		source.cost,
-		source.icon_path,
-		source.weapon_id
-	)
-	copy.description = source.description
-	copy.quality = source.quality
-	copy.base_cost = source.base_cost
-	copy.actual_cost = source.actual_cost
-	copy.locked_cost = source.locked_cost  # 保留锁定时的价格
-	copy.weight = source.weight  # 复制权重
-	copy.attribute_changes = source.attribute_changes.duplicate(true)
-	
-	# ⭐ 关键：复制stats_modifier（新属性系统）
-	if source.stats_modifier:
-		copy.stats_modifier = source.stats_modifier.clone()
-	
-	# 复制自定义值
-	copy.custom_value = source.custom_value
-	
-	return copy
+	return source.duplicate()
 
 ## 判断两个升级是否相同
 func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
@@ -387,7 +392,7 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	# 扣除钥匙（使用修正后的价格）
 	GameMain.remove_gold(adjusted_cost)
 	
-	# 更新刷新按钮状态（钥匙变化后）
+	# 更新刷新按钮状态（钥匙变化后，通过信号自动处理，这里只需更新显示）
 	_update_refresh_cost_display()
 	
 	print("[UpgradeShop] 购买升级: %s，消耗 %d 钥匙（基础价格 %d）" % [upgrade.name, adjusted_cost, upgrade.actual_cost])
@@ -402,12 +407,12 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 	
 	# 应用升级效果（武器相关的是异步的，需要等待）
 	if upgrade.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
-		await _apply_upgrade(upgrade)
+		await UpgradeManager.apply_upgrade(upgrade, get_tree())
 		# 等待一帧确保武器已完全添加到场景树
 		await get_tree().process_frame
 		_update_weapon_list()
 	else:
-		_apply_upgrade(upgrade)
+		UpgradeManager.apply_upgrade(upgrade, get_tree())
 	
 	upgrade_purchased.emit(upgrade)
 	
@@ -452,183 +457,6 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 				# 隐藏节点，避免显示旧数据
 				purchased_option.visible = false
 
-## 应用升级效果
-func _apply_upgrade(upgrade: UpgradeData) -> void:
-	# 特殊处理：武器相关和恢复HP
-	match upgrade.upgrade_type:
-		UpgradeData.UpgradeType.HEAL_HP:
-			_apply_heal_upgrade(upgrade)
-		UpgradeData.UpgradeType.NEW_WEAPON:
-			await _apply_new_weapon_upgrade(upgrade.weapon_id)
-		UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
-			_apply_weapon_level_upgrade(upgrade.weapon_id)
-		_:
-			# 使用新属性系统应用升级
-			_apply_attribute_upgrade(upgrade)
-
-func _apply_heal_upgrade(upgrade: UpgradeData) -> void:
-	var heal_amount = 10 # Default
-	
-	# Try to get heal amount from custom_value (preferred)
-	if upgrade.custom_value > 0:
-		heal_amount = int(upgrade.custom_value)
-	# Fallback: Try to get heal amount from stats_modifier.max_hp (legacy/compatibility)
-	elif upgrade.stats_modifier and upgrade.stats_modifier.max_hp > 0:
-		heal_amount = upgrade.stats_modifier.max_hp
-	
-	var player = get_tree().get_first_node_in_group("player")
-	if player:
-		var old_hp = player.now_hp
-		player.now_hp = min(player.now_hp + heal_amount, player.max_hp)
-		var actual_heal = player.now_hp - old_hp
-		
-		# 显示HP恢复的浮动文字（使用统一方法）
-		if actual_heal > 0:
-			SpecialEffects.show_heal_floating_text(player, actual_heal)
-		
-		player.hp_changed.emit(player.now_hp, player.max_hp)
-		print("[UpgradeShop] 应用治疗: %s, 恢复量: %d (实际: %d)" % [upgrade.name, heal_amount, actual_heal])
-
-func _apply_new_weapon_upgrade(weapon_id: String) -> void:
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
-	
-	if weapons_manager and weapons_manager.has_method("add_weapon"):
-		await weapons_manager.add_weapon(weapon_id, 1)  # 新武器固定1级，必须等待完成
-
-func _apply_weapon_level_upgrade(weapon_id: String) -> void:
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
-	
-	if weapons_manager and weapons_manager.has_method("get_lowest_level_weapon_of_type"):
-		var weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
-		if weapon and weapon.has_method("upgrade_level"):
-			weapon.upgrade_level()
-
-## 应用属性升级（新系统）
-## 
-## 使用AttributeManager添加永久属性加成
-func _apply_attribute_upgrade(upgrade: UpgradeData) -> void:
-	var player = get_tree().get_first_node_in_group("player")
-	if not player:
-		push_error("[UpgradeShop] 无法找到玩家节点")
-		return
-	
-	# 检查是否使用新属性系统
-	if player.has_node("AttributeManager"):
-		# 新系统：使用AttributeModifier
-		if upgrade.stats_modifier:
-			var modifier = upgrade.create_modifier()
-			player.attribute_manager.add_permanent_modifier(modifier)
-			print("[UpgradeShop] 使用新系统应用升级: %s" % upgrade.name)
-		else:
-			# 如果升级还没有stats_modifier，尝试使用旧系统
-			push_warning("[UpgradeShop] 升级 %s 没有stats_modifier，降级到旧系统" % upgrade.name)
-			_apply_attribute_changes_old(upgrade)
-	else:
-		# 降级方案：使用旧系统
-		_apply_attribute_changes_old(upgrade)
-
-## 通用属性变化应用函数（旧系统兼容）
-## 
-## 根据 upgrade.attribute_changes 配置应用属性变化
-func _apply_attribute_changes_old(upgrade: UpgradeData) -> void:
-	if upgrade.attribute_changes.is_empty():
-		print("[UpgradeShop] 警告: 升级 %s 没有配置属性变化" % upgrade.name)
-		return
-	
-	var player = get_tree().get_first_node_in_group("player")
-	if not player:
-		push_error("[UpgradeShop] 无法找到玩家节点")
-		return
-	
-	var class_data = player.current_class
-	if not class_data:
-		push_error("[UpgradeShop] 玩家没有职业数据")
-		return
-	
-	var need_reapply_weapons = false
-	
-	# 遍历所有属性变化配置
-	for attr_name in upgrade.attribute_changes.keys():
-		var change_config = upgrade.attribute_changes[attr_name]
-		if not change_config.has("op") or not change_config.has("value"):
-			push_error("[UpgradeShop] 属性变化配置格式错误: %s" % attr_name)
-			continue
-		
-		var op = change_config["op"]
-		var value = change_config["value"]
-		
-		# 特殊处理：max_hp 和 speed（在 player 上）
-		if attr_name == "max_hp":
-			if op == "add":
-				player.max_hp += int(value)
-				# player.now_hp += int(value)  # 同时恢复HP
-				player.hp_changed.emit(player.now_hp, player.max_hp)
-				print("[UpgradeShop] %s: max_hp += %d (当前: %d)" % [upgrade.name, int(value), player.max_hp])
-			continue
-		
-		if attr_name == "speed":
-			if op == "add":
-				player.base_speed += value
-				player.speed += value
-				print("[UpgradeShop] %s: speed += %.1f (当前: %.1f)" % [upgrade.name, value, player.speed])
-			continue
-		
-		# 其他属性在 class_data 上
-		# 检查属性是否存在（Resource 没有 has() 方法，需要检查 property_list）
-		var property_exists = false
-		for prop in class_data.get_property_list():
-			if prop.name == attr_name:
-				property_exists = true
-				break
-		
-		if not property_exists:
-			push_error("[UpgradeShop] 属性不存在: %s" % attr_name)
-			continue
-		
-		var current_value = class_data.get(attr_name)
-		var new_value
-		
-		match op:
-			"add":
-				new_value = current_value + value
-			"multiply":
-				new_value = current_value * value
-			_:
-				push_error("[UpgradeShop] 不支持的操作类型: %s" % op)
-				continue
-		
-		class_data.set(attr_name, new_value)
-		
-		# 检查是否需要重新应用武器加成
-		if attr_name.contains("multiplier") or attr_name == "luck":
-			need_reapply_weapons = true
-		
-		print("[UpgradeShop] %s: %s %s %.2f (%.2f -> %.2f)" % [
-			upgrade.name,
-			attr_name,
-			op,
-			value,
-			current_value,
-			new_value
-		])
-	
-	# 如果修改了武器相关属性，重新应用武器加成
-	if need_reapply_weapons:
-		_reapply_weapon_bonuses()
-
-## 重新应用武器加成（当属性改变时）
-func _reapply_weapon_bonuses() -> void:
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
-	
-	if weapons_manager and weapons_manager.has_method("reapply_all_bonuses"):
-		weapons_manager.reapply_all_bonuses()
-
 ## 刷新按钮
 func _on_refresh_button_pressed() -> void:
 	if GameMain.gold < refresh_cost:
@@ -643,6 +471,14 @@ func _on_refresh_button_pressed() -> void:
 ## 关闭按钮
 func _on_close_button_pressed() -> void:
 	close_shop()
+
+## 监听钥匙变化
+func _on_gold_changed(_new_amount: int, _change: int) -> void:
+	_update_refresh_cost_display()
+	# 也可以在这里触发子项的购买按钮状态更新，如果需要的话
+	# for child in upgrade_container.get_children():
+	# 	if child is UpgradeOption:
+	# 		child._update_buy_button() 
 
 ## 更新刷新费用显示
 func _update_refresh_cost_display() -> void:
@@ -687,18 +523,20 @@ func _update_weapon_list() -> void:
 	for child in weapon_container.get_children():
 		child.queue_free()
 	
-	# 获取武器管理器
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
+	# 使用缓存的 WeaponsManager
+	if not _cached_weapons_manager:
+		# 尝试重新查找
+		_cached_weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
+		if not _cached_weapons_manager:
+			_cached_weapons_manager = get_tree().get_first_node_in_group("weapons")
 	
-	if not weapons_manager:
+	if not _cached_weapons_manager:
 		print("[UpgradeShop] 无法找到武器管理器")
 		return
 	
 	# 获取所有武器（按获得顺序）
-	var weapons = weapons_manager.get_all_weapons()
-	print("[UpgradeShop] 找到武器管理器，武器数量: ", weapons.size())
+	var weapons = _cached_weapons_manager.get_all_weapons()
+	# print("[UpgradeShop] 找到武器管理器，武器数量: ", weapons.size())
 	
 	# 显示6个武器槽位
 	for i in range(6):
@@ -734,24 +572,22 @@ func _update_weapon_list() -> void:
 
 ## 获取当前波数
 func _get_current_wave() -> int:
-	# 尝试多种方式获取波次管理器
+	if _cached_wave_manager and "current_wave" in _cached_wave_manager:
+		return _cached_wave_manager.current_wave
+	
+	# Fallback attempt
 	var wave_manager = get_tree().get_first_node_in_group("wave_system")
-	if not wave_manager:
-		wave_manager = get_tree().get_first_node_in_group("wave_manager")
-	
-	var current_wave = 1
 	if wave_manager and "current_wave" in wave_manager:
-		current_wave = wave_manager.current_wave
-	
-	return current_wave
+		_cached_wave_manager = wave_manager
+		return wave_manager.current_wave
+		
+	return 1
 
 ## 获取玩家幸运值
 func _get_player_luck() -> float:
-	var player = get_tree().get_first_node_in_group("player")
-	var luck_value = 0.0
-	if player and player.current_class:
-		luck_value = player.current_class.luck
-	return luck_value
+	if _cached_player and _cached_player.current_class:
+		return _cached_player.current_class.luck
+	return 0.0
 
 ## 统计商店中的new weapon数量（包括锁定的）
 func _count_new_weapons_in_shop() -> int:
@@ -857,7 +693,7 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 		is_weapon = true # 已经有2个属性了，强制生成武器
 	else:
 		# 正常随机：35% 概率生成武器，65% 概率生成属性
-		is_weapon = rng.randf() < 0.35
+		is_weapon = rng.randf() < WEAPON_SPAWN_CHANCE
 	
 	var attempts = 0
 	var max_attempts = 50
@@ -918,16 +754,18 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 
 ## 生成武器相关upgrade
 func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int = 0) -> UpgradeData:
-	var weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
-	if not weapons_manager:
-		weapons_manager = get_tree().get_first_node_in_group("weapons")
+	# 使用缓存的 WeaponsManager
+	if not _cached_weapons_manager:
+		_cached_weapons_manager = get_tree().get_first_node_in_group("weapons_manager")
+		if not _cached_weapons_manager:
+			_cached_weapons_manager = get_tree().get_first_node_in_group("weapons")
 	
-	if not weapons_manager:
+	if not _cached_weapons_manager:
 		return null
 	
 	var weapon_count = 0
-	if weapons_manager.has_method("get_weapon_count"):
-		weapon_count = weapons_manager.get_weapon_count()
+	if _cached_weapons_manager.has_method("get_weapon_count"):
+		weapon_count = _cached_weapons_manager.get_weapon_count()
 	
 	# 统计商店中的new weapon数量（包括锁定的和当前生成的）
 	var new_weapon_count_in_shop = 0
@@ -940,8 +778,8 @@ func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int =
 	
 	# 检查是否所有武器都满级
 	var all_weapons_max_level = false
-	if weapons_manager.has_method("has_all_weapons_max_level"):
-		all_weapons_max_level = weapons_manager.has_all_weapons_max_level()
+	if _cached_weapons_manager.has_method("has_all_weapons_max_level"):
+		all_weapons_max_level = _cached_weapons_manager.has_all_weapons_max_level()
 	
 	var rng = RandomNumberGenerator.new()
 	var current_wave = _get_current_wave()
@@ -960,13 +798,13 @@ func _generate_weapon_upgrade(existing_upgrades: Array[UpgradeData], salt: int =
 	
 	if not can_generate_new_weapon and can_level_up:
 		# 只能升级武器
-		return _generate_weapon_level_up_upgrade(weapons_manager, salt)
+		return _generate_weapon_level_up_upgrade(_cached_weapons_manager, salt)
 	
 	# 两者都可以，随机选择
 	if rng.randf() < 0.5:
 		return _generate_new_weapon_upgrade(salt)
 	else:
-		return _generate_weapon_level_up_upgrade(weapons_manager, salt)
+		return _generate_weapon_level_up_upgrade(_cached_weapons_manager, salt)
 
 ## 生成新武器upgrade
 func _generate_new_weapon_upgrade(salt: int = 0) -> UpgradeData:

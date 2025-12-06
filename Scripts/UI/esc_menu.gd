@@ -231,16 +231,16 @@ func _on_main_menu_pressed() -> void:
 	print("[ESC Menu] 玩家选择返回主菜单")
 	
 	# 显示确认对话框（可选）
-	if await _show_confirmation():
-		_return_to_main_menu()
-	else:
-		print("[ESC Menu] 玩家取消返回主菜单")
+	#if await _show_confirmation():
+		#_return_to_main_menu()
+	#else:
+		#print("[ESC Menu] 玩家取消返回主菜单")
 
 ## 显示确认对话框
-func _show_confirmation() -> bool:
-	# 简化版：直接返回true
-	# 如果需要确认对话框，可以在这里实现
-	return true
+#func _show_confirmation() -> bool:
+	## 简化版：直接返回true
+	## 如果需要确认对话框，可以在这里实现
+	#return true
 
 ## 返回主菜单
 func _return_to_main_menu() -> void:

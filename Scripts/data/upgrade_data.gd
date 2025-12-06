@@ -113,6 +113,36 @@ func create_modifier() -> AttributeModifier:
 	modifier.modifier_id = "upgrade_" + name
 	return modifier
 
+## 创建副本
+func duplicate(subresources: bool = false) -> UpgradeData:
+	var copy = UpgradeData.new(
+		upgrade_type,
+		name,
+		cost,
+		icon_path,
+		weapon_id
+	)
+	copy.description = description
+	copy.quality = quality
+	copy.base_cost = base_cost
+	copy.actual_cost = actual_cost
+	copy.locked_cost = locked_cost
+	copy.weight = weight
+	copy.custom_value = custom_value
+	
+	# 复制旧属性系统字典
+	copy.attribute_changes = attribute_changes.duplicate(true)
+	
+	# 复制新属性系统数据
+	if stats_modifier:
+		# 假设 CombatStats 也有 clone() 或类似方法，或者如果是 Resource 可以用 duplicate()
+		if stats_modifier.has_method("clone"):
+			copy.stats_modifier = stats_modifier.clone()
+		else:
+			copy.stats_modifier = stats_modifier.duplicate(subresources)
+	
+	return copy
+
 ## 获取品质价格倍率
 static func get_quality_price_multiplier(quality_level: int) -> float:
 	match quality_level:
