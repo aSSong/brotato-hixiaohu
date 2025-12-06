@@ -48,7 +48,7 @@ radius = 51.0
 height = 192.0
 
 [node name="ghost" type="CharacterBody2D" groups=["ghost"]]
-z_index = 9
+z_index = 13
 scale = Vector2(0.6, 0.6)
 collision_layer = 0
 collision_mask = 0
