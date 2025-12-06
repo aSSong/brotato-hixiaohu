@@ -22,6 +22,8 @@ var weapon_compact_scene: PackedScene = preload("res://scenes/UI/components/weap
 const WEAPON_SPAWN_CHANCE := 0.35
 const FLIP_ANIMATION_DELAY := 0.08
 const SHOP_SLOTS := 4 # 商店槽位数量
+const costbywave_multiA := 0.5 # 波次价格修正系数a
+const costbywave_multiB := 0.05 # 波次价格修正系数b
 
 ## 当前显示的升级选项（最多4个）
 var current_upgrades: Array[UpgradeData] = []
@@ -67,7 +69,7 @@ static func calculate_wave_adjusted_cost(base_cost: int) -> int:
 			wave_number = wave_system.current_wave
 	
 	# 应用公式：最终价格 = floor(基础价格 + 波数 + (基础价格 × 0.1 × 波数))
-	var adjusted_cost = float(base_cost) + float(wave_number) + (float(base_cost) * 0.1 * float(wave_number))
+	var adjusted_cost = float(base_cost) + float(wave_number)*costbywave_multiA + (float(base_cost) * costbywave_multiB * float(wave_number))
 	return int(floor(adjusted_cost))
 
 ## 实例方法版本的价格计算（可利用缓存）
