@@ -88,19 +88,19 @@ static func initialize_weapons() -> void:
 	
 	# 散弹枪（远程行为 + 远程结算 + 多弹丸）
 	var shotgun = WeaponData.new(
-		"散弹枪",
+		"手里剑",
 		WeaponData.BehaviorType.RANGED,
 		WeaponData.CalculationType.RANGED,
 		{
 			"damage": 2,
 			"attack_speed": 0.8,
 			"range": 600.0,
-			"bullet_id": "normal_bullet",
+			"bullet_id": "shuriken_bullet",
 			"pierce_count": 0,
 			"projectile_count": 5,
 			"spread_angle": 120.0
 		},
-		"res://assets/weapon/WeaponShotgun.png",
+		"res://assets/weapon/weapon-shuriken.png",
 		Vector2(0.8, 0.8)
 	)
 	shotgun.description = "近距离高伤害，发射多颗弹丸"
@@ -120,7 +120,7 @@ static func initialize_weapons() -> void:
 			"projectile_count": 1,
 			"spread_angle": 0.0
 		},
-		"res://assets/weapon/Weapon_fire.png",
+		"res://assets/weapon/bullet-missle.png",
 		Vector2(0.7, 0.7)
 	)
 	homing_missile.description = "发射追踪导弹，使用魔法伤害"
@@ -196,7 +196,7 @@ static func initialize_weapons() -> void:
 			"knockback_force": 280.0,
 			"rotation_speed": 540.0
 		},
-		"res://assets/weapon/Weapon_sword.png",
+		"res://assets/weapon/weapon-dagger.png",
 		Vector2(0.7, 0.7)
 	)
 	dagger.description = "快速攻击的近战武器，有吸血效果"
@@ -351,7 +351,7 @@ static func initialize_weapons() -> void:
 			"has_explosion_damage": true,
 			"indicator_color": Color(0.8, 0.8, 1.0, 0.3)
 		},
-		"res://assets/weapon/Weapon_ice.png",
+		"res://assets/weapon/weapon-lightningwand.png",
 		Vector2(0.6, 0.6)
 	)
 	lightning.description = "快速魔法武器，可同时攻击多个目标"
