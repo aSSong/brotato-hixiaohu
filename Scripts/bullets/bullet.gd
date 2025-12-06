@@ -185,21 +185,45 @@ func _move_homing(delta: float) -> void:
 	if not is_instance_valid(homing_target) or homing_target.get("is_dead"):
 		_find_homing_target()
 	
-	if is_instance_valid(homing_target):
+	# 获取参数
+	var turn_speed = movement_params.get("turn_speed", 5.0)     # 转向灵敏度 (现在代表每秒转多少弧度)
+	var acceleration = movement_params.get("acceleration", 100.0)
+	var max_speed = movement_params.get("max_speed", 2500.0)
+	var homing_delay = movement_params.get("homing_delay", 0.0) # 追踪延迟 (秒)
+	var wobble_amount = movement_params.get("wobble_amount", 0.0) # 扰动幅度 (度)
+	var wobble_freq = movement_params.get("wobble_frequency", 10.0) # 扰动频率
+	
+	# 处理追踪延迟（先直飞一会）
+	if life_time - (get_tree().create_timer(life_time).time_left) < homing_delay:
+		# 还在延迟期，只加速不转向
+		pass
+	elif is_instance_valid(homing_target):
+		# 计算目标方向
 		var target_dir = (homing_target.global_position - global_position).normalized()
-		var turn_speed = movement_params.get("turn_speed", 5.0)
-		var acceleration = movement_params.get("acceleration", 100.0)
-		var max_speed = movement_params.get("max_speed", 2500.0)
+		var current_dir = _velocity.normalized()
 		
-		# 逐渐转向目标
-		dir = dir.lerp(target_dir, turn_speed * delta).normalized()
+		# 使用 rotate_toward 限制最大转向角速度 (模拟真实的转弯半径)
+		# turn_speed 设为 3.0 ~ 6.0 比较合适
+		var angle_diff = current_dir.angle_to(target_dir)
+		var rotate_step = sign(angle_diff) * min(abs(angle_diff), turn_speed * delta)
+		var new_dir = current_dir.rotated(rotate_step)
 		
-		# 加速
-		speed = min(speed + acceleration * delta, max_speed)
-		_velocity = dir * speed
-		
-		# 旋转子弹朝向
-		rotation = dir.angle()
+		dir = new_dir.normalized()
+
+	# 加速
+	speed = min(speed + acceleration * delta, max_speed)
+	
+	# 计算最终速度方向（包含扰动）
+	var final_dir = dir
+	if wobble_amount > 0:
+		# 添加正弦波扰动
+		var wobble = sin(Time.get_ticks_msec() / 1000.0 * wobble_freq) * deg_to_rad(wobble_amount)
+		final_dir = dir.rotated(wobble)
+	
+	_velocity = final_dir * speed
+	
+	# 旋转子弹朝向
+	rotation = final_dir.angle()
 	
 	global_position += _velocity * delta
 

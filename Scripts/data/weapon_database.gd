@@ -94,7 +94,7 @@ static func initialize_weapons() -> void:
 		{
 			"damage": 2,
 			"attack_speed": 0.8,
-			"range": 600.0,
+			"range": 800.0,
 			"bullet_id": "shuriken_bullet",
 			"pierce_count": 0,
 			"projectile_count": 5,
@@ -114,7 +114,7 @@ static func initialize_weapons() -> void:
 		{
 			"damage": 8,
 			"attack_speed": 1.2,
-			"range": 1000.0,
+			"range": 1200.0,
 			"bullet_id": "homing_bullet",
 			"pierce_count": 0,
 			"projectile_count": 1,
