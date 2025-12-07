@@ -1,23 +1,6 @@
-[gd_scene load_steps=23 format=3 uid="uid://bn6xtfxrcaon"]
+[gd_scene load_steps=23 format=3 uid="uid://cvury4k4jk0q6"]
 
 [ext_resource type="Script" uid="uid://dqbe40akqpv4e" path="res://Scripts/UI/cutscene_1.gd" id="1_noght"]
-[ext_resource type="Texture2D" uid="uid://bmid8ntlnwjek" path="res://assets/cutscene/frames/1.png" id="3_g22yg"]
-[ext_resource type="Texture2D" uid="uid://1m5davvctb7f" path="res://assets/cutscene/frames/2.png" id="4_wjw2t"]
-[ext_resource type="Texture2D" uid="uid://b164pvj30ss03" path="res://assets/cutscene/frames/3.png" id="5_m3rxv"]
-[ext_resource type="Texture2D" uid="uid://bjnyatqs23vx0" path="res://assets/cutscene/frames/4.png" id="6_lot02"]
-[ext_resource type="Texture2D" uid="uid://mpk1r50fyn7i" path="res://assets/cutscene/frames/5.png" id="7_dxmb1"]
-[ext_resource type="Texture2D" uid="uid://cojbpbuxfcx76" path="res://assets/cutscene/frames/6.png" id="7_xkyjr"]
-[ext_resource type="Texture2D" uid="uid://bq0xrvyjebdw6" path="res://assets/cutscene/bubbles/1_pop.png" id="8_nijxb"]
-[ext_resource type="Texture2D" uid="uid://csfjgo3ikay7p" path="res://assets/cutscene/bubbles/3_pop2.png" id="9_gn20c"]
-[ext_resource type="Texture2D" uid="uid://clrf2pgr458os" path="res://assets/cutscene/bubbles/3_pop.png" id="10_c24b6"]
-[ext_resource type="Texture2D" uid="uid://bjrbaq7c6pwbf" path="res://assets/cutscene/bubbles/6-pop2.png" id="11_xd2mq"]
-[ext_resource type="Texture2D" uid="uid://bc6q7iwfodn1d" path="res://assets/cutscene/bubbles/6_pop1.png" id="12_gvvye"]
-[ext_resource type="Texture2D" uid="uid://dhrlh17d5w6kq" path="res://assets/cutscene/subs/1_pop_text.png" id="13_07uu0"]
-[ext_resource type="Texture2D" uid="uid://dwms1s7a1i4v4" path="res://assets/cutscene/subs/3_pop2_text2.png" id="14_qxlus"]
-[ext_resource type="Texture2D" uid="uid://ctqxho5726fni" path="res://assets/cutscene/subs/3_pop_text.png" id="15_h1vrd"]
-[ext_resource type="Texture2D" uid="uid://bmi4b2rhewseq" path="res://assets/cutscene/subs/4_pop_text.png" id="16_tcgdo"]
-[ext_resource type="Texture2D" uid="uid://bqftneg3tkb2q" path="res://assets/cutscene/subs/6_pop1-text1.png" id="17_lkrw6"]
-[ext_resource type="Texture2D" uid="uid://ba10k11725bpb" path="res://assets/cutscene/subs/6_pop2_text2.png" id="18_g0yil"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l5735"]
 bg_color = Color(0.17330971, 0.64435536, 0.34610808, 1)
@@ -520,6 +503,57 @@ _data = {
 &"default": SubResource("Animation_xkyjr")
 }
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_noght"]
+load_path = "res://.godot/imported/1.png-e677ab96b7b6d96731fc6b6b6dd61dd0.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_eb661"]
+load_path = "res://.godot/imported/2.png-4f97fb3bf3a8df3271847ede7c91e8be.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l5735"]
+load_path = "res://.godot/imported/3.png-1c557ff244835d721ab47aadcebc9acc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fpedv"]
+load_path = "res://.godot/imported/4.png-7c6f6441c5518680ee914d0c2f2d27c6.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bowig"]
+load_path = "res://.godot/imported/5.png-f86d1a45bd60e32c4fc8dd26e5dbba2e.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0xoux"]
+load_path = "res://.godot/imported/6.png-925317da50abc419bb1787181dc4cc90.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_g22yg"]
+load_path = "res://.godot/imported/1_pop.png-c3c780a9132d692a6cb7c212958d5948.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wjw2t"]
+load_path = "res://.godot/imported/3_pop2.png-d86170607906830cef02e4c1ed141a54.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m3rxv"]
+load_path = "res://.godot/imported/3_pop.png-a993eee6358545480221507c2129b893.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lot02"]
+load_path = "res://.godot/imported/6-pop2.png-26f7ac501fdab2f03592052d6618ee34.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_dxmb1"]
+load_path = "res://.godot/imported/6_pop1.png-ceaf8784beec06ff4ca0643ed60b60d8.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l37nj"]
+load_path = "res://.godot/imported/1_pop_text.png-670341c5b5db3557bc849a4b4259d3f1.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_w2qmo"]
+load_path = "res://.godot/imported/3_pop2_text2.png-32149a8237500f988c44fe91940c04a2.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_vxngy"]
+load_path = "res://.godot/imported/3_pop_text.png-e3df852757deb00c032d05d446912e7c.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ndk2x"]
+load_path = "res://.godot/imported/4_pop_text.png-b377eca27a474200b941ece970ba8f98.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qi0sg"]
+load_path = "res://.godot/imported/6_pop1-text1.png-eebded7b4b23f487f9edf3b928403ad7.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6lolt"]
+load_path = "res://.godot/imported/6_pop2_text2.png-2efa8629bc2b3aa1df13fc1d3108cbee.ctex"
+
 [node name="Cutscene1" type="Node2D"]
 script = ExtResource("1_noght")
 
@@ -584,63 +618,63 @@ visible = false
 z_index = 1
 position = Vector2(552, 479)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("3_g22yg")
+texture = SubResource("CompressedTexture2D_noght")
 
 [node name="2" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 1
 position = Vector2(1410, 464)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("4_wjw2t")
+texture = SubResource("CompressedTexture2D_eb661")
 
 [node name="3" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 1
 position = Vector2(973, 1136)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("5_m3rxv")
+texture = SubResource("CompressedTexture2D_l5735")
 
 [node name="4" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 1
 position = Vector2(563, 1702)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("6_lot02")
+texture = SubResource("CompressedTexture2D_fpedv")
 
 [node name="5" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 1
 position = Vector2(1364, 1840)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("7_dxmb1")
+texture = SubResource("CompressedTexture2D_bowig")
 
 [node name="6" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 1
 position = Vector2(972, 2212)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("7_xkyjr")
+texture = SubResource("CompressedTexture2D_0xoux")
 
 [node name="1Pop" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 2
 position = Vector2(919, 474)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("8_nijxb")
+texture = SubResource("CompressedTexture2D_g22yg")
 
 [node name="3Pop2" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 2
 position = Vector2(611, 1277)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("9_gn20c")
+texture = SubResource("CompressedTexture2D_wjw2t")
 
 [node name="3Pop" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 2
 position = Vector2(1556, 716)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("10_c24b6")
+texture = SubResource("CompressedTexture2D_m3rxv")
 
 [node name="3Pop3" type="Sprite2D" parent="comic"]
 visible = false
@@ -648,35 +682,35 @@ z_index = 2
 position = Vector2(1079.9999, 1539)
 rotation = 0.23387411
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("10_c24b6")
+texture = SubResource("CompressedTexture2D_m3rxv")
 
 [node name="6Pop2" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 2
 position = Vector2(1389, 2272)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("11_xd2mq")
+texture = SubResource("CompressedTexture2D_lot02")
 
 [node name="6Pop1" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 2
 position = Vector2(763, 2187)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("12_gvvye")
+texture = SubResource("CompressedTexture2D_dxmb1")
 
 [node name="1PopText" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 3
 position = Vector2(1020, 426)
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("13_07uu0")
+texture = SubResource("CompressedTexture2D_l37nj")
 
 [node name="3Pop2Text2" type="Sprite2D" parent="comic"]
 visible = false
 z_index = 3
 position = Vector2(549.0001, 1240)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("14_qxlus")
+texture = SubResource("CompressedTexture2D_w2qmo")
 
 [node name="3PopText" type="Sprite2D" parent="comic"]
 visible = false
@@ -684,7 +718,7 @@ z_index = 3
 position = Vector2(1592.0002, 681)
 rotation = 0.35081118
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("15_h1vrd")
+texture = SubResource("CompressedTexture2D_vxngy")
 
 [node name="4PopText" type="Sprite2D" parent="comic"]
 visible = false
@@ -692,7 +726,7 @@ z_index = 3
 position = Vector2(1125.9999, 1500.9998)
 rotation = -0.23387411
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("16_tcgdo")
+texture = SubResource("CompressedTexture2D_ndk2x")
 
 [node name="6Pop1Text1" type="Sprite2D" parent="comic"]
 visible = false
@@ -700,7 +734,7 @@ z_index = 3
 position = Vector2(776, 2175)
 rotation = 0.5846853
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("17_lkrw6")
+texture = SubResource("CompressedTexture2D_qi0sg")
 
 [node name="6Pop2Text2" type="Sprite2D" parent="comic"]
 visible = false
@@ -708,7 +742,7 @@ z_index = 3
 position = Vector2(1392, 2260)
 rotation = -0.116937056
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("18_g0yil")
+texture = SubResource("CompressedTexture2D_6lolt")
 
 [connection signal="pressed" from="CanvasLayer/btn_start" to="." method="_on_btn_start_pressed"]
 [connection signal="pressed" from="CanvasLayer/skip" to="." method="_on_skip_pressed"]

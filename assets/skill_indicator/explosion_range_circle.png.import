@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bq0xrvyjebdw6"
-path="res://.godot/imported/1_pop.png-c3c780a9132d692a6cb7c212958d5948.ctex"
+uid="uid://bad4liwywthhn"
+path="res://.godot/imported/explosion_range_circle.png-d4bfbbf1ca0f928cfa4521a160c961ff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cutscene/bubbles/1_pop.png"
-dest_files=["res://.godot/imported/1_pop.png-c3c780a9132d692a6cb7c212958d5948.ctex"]
+source_file="res://assets/skill_indicator/explosion_range_circle.png"
+dest_files=["res://.godot/imported/explosion_range_circle.png-d4bfbbf1ca0f928cfa4521a160c961ff.ctex"]
 
 [params]
 
