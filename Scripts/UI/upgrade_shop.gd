@@ -314,6 +314,9 @@ func generate_upgrades() -> void:
 		
 		option_ui.position_index = i
 		
+		# 显式确保节点可见
+		option_ui.visible = true
+		
 		# 更新数据
 		# 注意：对于非锁定节点，此时 scale.x 应为 0（由 _play_flip_out_animations 设置）
 		# 所以即使数据变了，玩家也暂时看不到，直到翻入动画播放
@@ -507,6 +510,9 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 				purchased_option.set_upgrade_data(new_upgrade)
 				purchased_option.position_index = purchased_index # 保持索引
 				purchased_option.set_lock_state(false) # 新生成的默认不锁定
+				
+				# 显式恢复可见
+				purchased_option.visible = true
 				
 				# 5. 翻入动画
 				if purchased_option.has_method("play_flip_in_animation"):
