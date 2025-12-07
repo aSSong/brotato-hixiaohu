@@ -11,9 +11,17 @@ var player_ref: Node2D = null
 ## 近战武器环绕运动管理
 var melee_weapon_angles: Dictionary = {}
 
-## 武器环绕角度偏移（避开玩家头部区域，10点到2点方向）
-## PI/4 (45度) 偏移让武器分布避开正上方
-const WEAPON_ANGLE_OFFSET = PI / 4
+## 远程/魔法武器的角度偏移配置（根据武器数量）
+## 用于避开玩家头部区域（10点到2点方向，即上方）
+## 键为武器数量，值为偏移角度（弧度）
+const RANGED_MAGIC_ANGLE_OFFSETS = {
+	1: 0,       # 1把：偏移90度，放在右下方
+	2: 0,       # 2把：偏移45度，左右下方
+	3: PI / 6,       # 3把：偏移30度，避开正上方
+	4: PI / 4,       # 4把：偏移45度，四角分布
+	5: 0,      # 5把：偏移18度
+	6: 0,      # 6把：偏移15度
+}
 
 ## 预加载武器场景
 var base_weapon_scene = preload("res://scenes/weapons/weapon.tscn")
@@ -273,7 +281,7 @@ func arrange_weapons() -> void:
 	if weapon_num == 0:
 		return
 	
-	# 分离近战武器和其他武器
+	# 分离近战武器和其他武器（远程+魔法）
 	var melee_weapons: Array = []
 	var other_weapons: Array = []
 	
@@ -284,13 +292,12 @@ func arrange_weapons() -> void:
 			else:
 				other_weapons.append(weapon)
 	
-	# 为近战武器分配初始角度（均匀分布，带偏移避开头部）
+	# 为近战武器分配初始角度（均匀分布，近战武器不需要偏移）
 	var melee_unit = TAU / max(melee_weapons.size(), 1)
 	for i in range(melee_weapons.size()):
 		var weapon = melee_weapons[i]
 		var weapon_id = weapon.get_instance_id()
-		# 添加角度偏移，避开玩家头部区域
-		var initial_angle = melee_unit * i + WEAPON_ANGLE_OFFSET
+		var initial_angle = melee_unit * i
 		
 		# 存储初始角度
 		melee_weapon_angles[weapon_id] = initial_angle
@@ -300,14 +307,28 @@ func arrange_weapons() -> void:
 		var end_pos = Vector2(radius, 0).rotated(initial_angle)
 		weapon.position = end_pos
 	
-	# 为其他武器分配固定位置（均匀分布，带偏移避开头部）
-	var other_unit = TAU / max(other_weapons.size(), 1)
-	for i in range(other_weapons.size()):
+	# 为远程/魔法武器分配固定位置（均匀分布，根据数量使用不同偏移避开头部）
+	var other_count = other_weapons.size()
+	var angle_offset = _get_ranged_magic_angle_offset(other_count)
+	var other_unit = TAU / max(other_count, 1)
+	
+	for i in range(other_count):
 		var weapon = other_weapons[i]
-		# 添加角度偏移，避开玩家头部区域
-		var weapon_rad = other_unit * i + WEAPON_ANGLE_OFFSET
+		var weapon_rad = other_unit * i + angle_offset
 		var end_pos = Vector2(weapon_radius, 0).rotated(weapon_rad)
 		weapon.position = end_pos
+
+## 根据远程/魔法武器数量获取角度偏移
+func _get_ranged_magic_angle_offset(count: int) -> float:
+	if count <= 0:
+		return 0.0
+	
+	# 如果配置表中有对应数量的偏移，使用配置值
+	if RANGED_MAGIC_ANGLE_OFFSETS.has(count):
+		return RANGED_MAGIC_ANGLE_OFFSETS[count]
+	
+	# 超过配置范围的数量，使用默认偏移（小角度）
+	return PI / 12  # 15度
 
 ## 更新近战武器环绕运动
 func _process(delta: float) -> void:
