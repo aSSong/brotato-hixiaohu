@@ -187,4 +187,3 @@ static func _get_weapons_manager(tree: SceneTree) -> Node:
 	if not weapons_manager:
 		weapons_manager = tree.get_first_node_in_group("weapons")
 	return weapons_manager
-

@@ -172,4 +172,3 @@ func _apply_knockback(enemy: Node2D, force: float) -> void:
 			enemy.knockback_velocity += knockback_dir * force
 		elif "velocity" in enemy:
 			enemy.velocity += knockback_dir * force
-
