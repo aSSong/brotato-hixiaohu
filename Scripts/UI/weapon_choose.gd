@@ -299,7 +299,7 @@ func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 		damage_bar.value = weapon_data.damage
 	
 	# 攻速（转换为每分钟攻击次数）
-	var attacks_per_minute = 60.0 / weapon_data.attack_speed if weapon_data.attack_speed > 0 else 0
+	var attacks_per_minute = 60.0 / weapon_data.attack_speed if weapon_data.attack_speed > 0 else 0.0
 	if speed_value:
 		speed_value.text = str(int(attacks_per_minute))
 	if speed_bar:
