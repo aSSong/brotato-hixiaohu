@@ -22,8 +22,11 @@ var explosion_indicator_script: GDScript = null
 ## 当前正在施法的攻击列表
 var casting_attacks: Array = []
 
-## 指示器颜色（可由武器配置覆盖）
-var indicator_color: Color = Color(1.0, 0.5, 0.0, 0.35)
+## 指示器颜色（可由武器配置覆盖，默认白色保留纹理原色）
+var indicator_color: Color = Color(1.0, 1.0, 1.0, 0.8)
+
+## 缓存的自定义指示器纹理
+var _cached_indicator_texture: Texture2D = null
 
 func _on_initialize() -> void:
 	casting_attacks.clear()
@@ -34,6 +37,12 @@ func _on_initialize() -> void:
 	# 读取指示器颜色
 	if params.has("indicator_color"):
 		indicator_color = params.get("indicator_color")
+
+	# 预加载并缓存指示器纹理
+	_cached_indicator_texture = null
+	var texture_path = params.get("indicator_texture_path", "")
+	if texture_path != "" and ResourceLoader.exists(texture_path):
+		_cached_indicator_texture = load(texture_path)
 
 func get_behavior_type() -> int:
 	return WeaponData.BehaviorType.MAGIC
@@ -270,6 +279,11 @@ func _create_persistent_indicator(target: Node2D, radius: float, duration: float
 	weapon.get_tree().root.add_child(indicator)
 	indicator._ready()
 	
+	# 设置自定义纹理
+	var texture = _get_indicator_texture()
+	if texture and indicator.has_method("set_texture"):
+		indicator.set_texture(texture)
+	
 	if indicator.has_method("show_persistent"):
 		indicator.show_persistent(target, radius, indicator_color, duration)
 	
@@ -286,6 +300,11 @@ func _create_fixed_indicator(position: Vector2, radius: float, duration: float) 
 	weapon.get_tree().root.add_child(indicator)
 	indicator._ready()
 	
+	# 设置自定义纹理
+	var texture = _get_indicator_texture()
+	if texture and indicator.has_method("set_texture"):
+		indicator.set_texture(texture)
+	
 	if indicator.has_method("show_persistent"):
 		indicator.show_persistent(null, radius, indicator_color, duration)
 	
@@ -301,6 +320,15 @@ func _show_explosion_indicator(pos: Vector2, radius: float) -> void:
 	weapon.get_tree().root.add_child(indicator)
 	indicator._ready()
 	
+	# 设置自定义纹理
+	var texture = _get_indicator_texture()
+	if texture and indicator.has_method("set_texture"):
+		indicator.set_texture(texture)
+	
 	if indicator.has_method("show_at"):
 		indicator.show_at(pos, radius, indicator_color, 0.3)
+
+## 获取指示器纹理
+func _get_indicator_texture() -> Texture2D:
+	return _cached_indicator_texture
 

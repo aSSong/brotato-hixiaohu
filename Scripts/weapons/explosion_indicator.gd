@@ -8,14 +8,17 @@ class_name ExplosionIndicator
 ## 预加载的范围圈纹理（所有实例共享）
 static var _circle_texture = preload("res://assets/others/rescue_range_circle.png")
 
+## 自定义纹理（如果设置，将覆盖默认纹理）
+var custom_texture: Texture2D = null
+
 ## 圆形精灵
 var circle_sprite: Sprite2D = null
 
 ## 淡入淡出动画
 var tween: Tween = null
 
-## 指示器颜色
-var indicator_color: Color = Color(1.0, 0.5, 0.0, 0.3)  # 橙色，30%透明度
+## 指示器颜色（默认白色，保留纹理原色）
+var indicator_color: Color = Color(1.0, 1.0, 1.0, 0.8)
 
 ## 显示持续时间（秒）
 var display_duration: float = 0.3
@@ -36,13 +39,22 @@ func _process(_delta: float) -> void:
 		global_position = follow_target.global_position
 	# 如果没有目标，保持在原位置（固定位置模式）
 
+## 设置自定义纹理
+func set_texture(texture: Texture2D) -> void:
+	custom_texture = texture
+	if circle_sprite:
+		circle_sprite.texture = custom_texture
+
 ## 创建圆形精灵
 func _create_circle_sprite() -> void:
 	circle_sprite = Sprite2D.new()
 	add_child(circle_sprite)
 	
-	# 使用预加载的纹理
-	circle_sprite.texture = _circle_texture
+	# 使用自定义纹理或默认纹理
+	if custom_texture:
+		circle_sprite.texture = custom_texture
+	else:
+		circle_sprite.texture = _circle_texture
 	
 	# 设置颜色和初始透明度
 	circle_sprite.modulate = indicator_color
@@ -53,7 +65,7 @@ func _create_circle_sprite() -> void:
 ## radius: 爆炸半径
 ## color: 指示器颜色（可选）
 ## duration: 显示持续时间（可选）
-func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 0.5, 0.0, 0.3), duration: float = 0.3) -> void:
+func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 1.0, 1.0, 0.8), duration: float = 0.3) -> void:
 	if not circle_sprite:
 		return
 	
@@ -63,8 +75,13 @@ func show_at(position: Vector2, radius: float, color: Color = Color(1.0, 0.5, 0.
 	# 设置位置
 	global_position = position
 	
+	# 获取当前使用的纹理
+	var current_texture = circle_sprite.texture
+	var texture_size = 0.0
+	if current_texture:
+		texture_size = current_texture.get_size().x
+	
 	# 设置缩放（根据半径和纹理尺寸）
-	var texture_size = _circle_texture.get_size().x
 	var target_diameter = radius * 2.0
 	var scale_factor = 1.0
 	if texture_size > 0:
@@ -100,8 +117,13 @@ func show_persistent(target: Node2D, radius: float, color: Color, duration: floa
 		global_position = target.global_position
 	# 如果target为null，保持当前位置（由调用者设置）
 	
+	# 获取当前使用的纹理
+	var current_texture = circle_sprite.texture
+	var texture_size = 0.0
+	if current_texture:
+		texture_size = current_texture.get_size().x
+	
 	# 设置缩放
-	var texture_size = _circle_texture.get_size().x
 	var target_diameter = radius * 2.0
 	var scale_factor = 1.0
 	if texture_size > 0:

@@ -168,7 +168,7 @@ static func initialize_weapons() -> void:
 		{
 			"damage": 6,
 			"attack_speed": 0.8,
-			"range": 380.0,
+			"range": 280.0,
 			"orbit_radius": 400.0,
 			"orbit_speed": 120.0,
 			"hit_range": 280.0,
@@ -176,7 +176,7 @@ static func initialize_weapons() -> void:
 			"rotation_speed": 270.0
 		},
 		"res://assets/weapon/Weapon_axe.png",
-		Vector2(0.7, 0.7)
+		Vector2(0.8, 0.8)
 	)
 	axe.description = "高伤害近战武器，攻击速度较慢"
 	weapons["axe"] = axe
@@ -294,7 +294,8 @@ static func initialize_weapons() -> void:
 			"is_target_locked": false,
 			"max_targets": 1,
 			"has_explosion_damage": true,
-			"indicator_color": Color(0.3, 0.8, 1.0, 0.35)
+			#"indicator_color": Color(1.0, 0.4, 0.0, 0.4),
+			"indicator_texture_path": "res://assets/skill_indicator/ice_range_circle.png" # 指定自定义纹理路径
 		},
 		"res://assets/weapon/Weapon_ice.png",
 		Vector2(0.7, 0.7)
@@ -326,7 +327,7 @@ static func initialize_weapons() -> void:
 			"is_target_locked": false,
 			"max_targets": 1,
 			"has_explosion_damage": true,
-			"indicator_color": Color(1.0, 0.2, 0.0, 0.45)
+			"indicator_texture_path": "res://assets/skill_indicator/meteor_range_circle.png"  # 指定自定义纹理路径
 		},
 		"res://assets/weapon/Weapon_stone.png",
 		Vector2(0.7, 0.7)
