@@ -16,6 +16,7 @@ class_name WeaponChooseUI
 @onready var weapon1_panel: TextureRect = $MainContent/WeaponDetailSection/Weapon1Panel
 @onready var weapon1_name: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/NameSection/Weapon1Name
 @onready var weapon1_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Icon
+@onready var weapon1_caltype_label: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/calSection/caltypeLabel
 @onready var weapon1_damage_value: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection/DamageBar/DamageValue
 @onready var weapon1_damage_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection/DamageBar
 @onready var weapon1_speed_value: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/SpeedSection/SpeedBar/SpeedValue
@@ -30,6 +31,7 @@ class_name WeaponChooseUI
 @onready var weapon2_content: HBoxContainer = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content
 @onready var weapon2_name: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/NameSection/Weapon2Name
 @onready var weapon2_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Icon
+@onready var weapon2_caltype_label: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/calSection/caltypeLabel
 @onready var weapon2_damage_value: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection/DamageBar/DamageValue
 @onready var weapon2_damage_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection/DamageBar
 @onready var weapon2_speed_value: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/SpeedSection/SpeedBar/SpeedValue
@@ -244,6 +246,7 @@ func _update_weapon_details() -> void:
 func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 	var name_label: Label
 	var icon: TextureRect
+	var caltype_label: Label
 	var damage_value: Label
 	var damage_bar: ProgressBar
 	var speed_value: Label
@@ -255,6 +258,7 @@ func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 	if slot == 1:
 		name_label = weapon1_name
 		icon = weapon1_icon
+		caltype_label = weapon1_caltype_label
 		damage_value = weapon1_damage_value
 		damage_bar = weapon1_damage_bar
 		speed_value = weapon1_speed_value
@@ -265,6 +269,7 @@ func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 	else:
 		name_label = weapon2_name
 		icon = weapon2_icon
+		caltype_label = weapon2_caltype_label
 		damage_value = weapon2_damage_value
 		damage_bar = weapon2_damage_bar
 		speed_value = weapon2_speed_value
@@ -282,6 +287,10 @@ func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 		var tex = load(weapon_data.texture_path)
 		if tex:
 			icon.texture = tex
+	
+	# 更新武器类型显示
+	if caltype_label:
+		caltype_label.text = _get_calculation_type_text(weapon_data.calculation_type)
 	
 	# 伤害
 	if damage_value:
@@ -307,6 +316,18 @@ func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 	var effect_str = _get_weapon_effect_text(weapon_data)
 	if effect_text:
 		effect_text.text = effect_str
+
+## 获取结算类型的显示文字
+func _get_calculation_type_text(calc_type: WeaponData.CalculationType) -> String:
+	match calc_type:
+		WeaponData.CalculationType.MELEE:
+			return "近战武器"
+		WeaponData.CalculationType.RANGED:
+			return "远程武器"
+		WeaponData.CalculationType.MAGIC:
+			return "魔法武器"
+		_:
+			return "未知类型"
 
 ## 获取武器特效文字
 func _get_weapon_effect_text(weapon_data: WeaponData) -> String:
@@ -346,6 +367,8 @@ func _clear_weapon_panel(slot: int) -> void:
 			weapon1_name.text = ""
 		if weapon1_icon:
 			weapon1_icon.texture = null
+		if weapon1_caltype_label:
+			weapon1_caltype_label.text = ""
 		if weapon1_damage_value:
 			weapon1_damage_value.text = "0"
 		if weapon1_damage_bar:
@@ -365,6 +388,8 @@ func _clear_weapon_panel(slot: int) -> void:
 			weapon2_name.text = ""
 		if weapon2_icon:
 			weapon2_icon.texture = null
+		if weapon2_caltype_label:
+			weapon2_caltype_label.text = ""
 		if weapon2_damage_value:
 			weapon2_damage_value.text = "0"
 		if weapon2_damage_bar:
