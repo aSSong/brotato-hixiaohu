@@ -191,7 +191,7 @@ static func initialize_weapons() -> void:
 			"attack_speed": 0.3,
 			"range": 200.0,
 			"orbit_radius": 200.0,
-			"orbit_speed": 240.0,
+			"orbit_speed": 240.0, # 每秒转多少度
 			"hit_range": 200.0,
 			"knockback_force": 280.0,
 			"rotation_speed": 540.0
