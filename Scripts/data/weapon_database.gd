@@ -260,7 +260,8 @@ static func initialize_weapons() -> void:
 			"is_target_locked": true,
 			"max_targets": 1,
 			"has_explosion_damage": true,
-			"indicator_color": Color(1.0, 0.4, 0.0, 0.4)
+			"indicator_color": Color(1.0, 0.4, 0.0, 0.4),
+			"effect_lead_time": 0.2  # 特效提前 0.2 秒播放
 		},
 		"res://assets/weapon/Weapon_fire.png",
 		Vector2(0.7, 0.7)
@@ -294,8 +295,8 @@ static func initialize_weapons() -> void:
 			"is_target_locked": false,
 			"max_targets": 1,
 			"has_explosion_damage": true,
-			#"indicator_color": Color(1.0, 0.4, 0.0, 0.4),
-			"indicator_texture_path": "res://assets/skill_indicator/ice_range_circle.png" # 指定自定义纹理路径
+			"indicator_texture_path": "res://assets/skill_indicator/ice_range_circle.png",
+			"effect_lead_time": 0.2  # 特效提前 0.15 秒播放
 		},
 		"res://assets/weapon/Weapon_ice.png",
 		Vector2(0.7, 0.7)
@@ -327,7 +328,8 @@ static func initialize_weapons() -> void:
 			"is_target_locked": false,
 			"max_targets": 1,
 			"has_explosion_damage": true,
-			"indicator_texture_path": "res://assets/skill_indicator/meteor_range_circle.png"  # 指定自定义纹理路径
+			"indicator_texture_path": "res://assets/skill_indicator/meteor_range_circle.png",
+			"effect_lead_time": 0.2  # 特效较长，提前 0.35 秒播放
 		},
 		"res://assets/weapon/Weapon_stone.png",
 		Vector2(0.7, 0.7)
@@ -350,7 +352,8 @@ static func initialize_weapons() -> void:
 			"is_target_locked": true,
 			"max_targets": 3,
 			"has_explosion_damage": true,
-			"indicator_color": Color(0.8, 0.8, 1.0, 0.3)
+			"indicator_color": Color(0.8, 0.8, 1.0, 0.3),
+			"effect_lead_time": 0.1  # 特效短，提前 0.1 秒播放
 		},
 		"res://assets/weapon/weapon-lightningwand.png",
 		Vector2(0.6, 0.6)

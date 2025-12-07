@@ -15,6 +15,7 @@ class_name MagicBehavior
 ##   - has_explosion_damage: bool 是否有范围爆炸伤害
 ##   - attack_speed: float 攻击间隔（秒）
 ##   - range: float 检测范围
+##   - effect_lead_time: float 特效预播放时间（在伤害判定前多久播放特效）
 
 ## 爆炸指示器脚本
 var explosion_indicator_script: GDScript = null
@@ -76,12 +77,17 @@ func get_max_targets() -> int:
 func has_explosion_damage() -> bool:
 	return params.get("has_explosion_damage", true)
 
+## 获取特效预播放时间（在伤害判定前多久开始播放特效）
+func get_effect_lead_time() -> float:
+	return params.get("effect_lead_time", 0.2)  # 默认提前 0.2 秒
+
 func process(delta: float) -> void:
 	_update_casting_attacks(delta)
 
 ## 更新施法攻击
 func _update_casting_attacks(delta: float) -> void:
 	var attacks_to_remove = []
+	var effect_lead_time = get_effect_lead_time()
 	
 	for i in range(casting_attacks.size()):
 		var cast_data = casting_attacks[i]
@@ -96,7 +102,12 @@ func _update_casting_attacks(delta: float) -> void:
 		# 更新倒计时
 		cast_data.timer -= delta
 		
-		# 时间到，执行攻击
+		# 预播放特效：在伤害判定前 effect_lead_time 秒播放特效
+		if not cast_data.get("effect_played", false) and cast_data.timer <= effect_lead_time:
+			_play_cast_effect_early(cast_data)
+			cast_data["effect_played"] = true
+		
+		# 时间到，执行攻击（伤害判定）
 		if cast_data.timer <= 0:
 			_execute_cast(cast_data)
 			attacks_to_remove.append(i)
@@ -112,7 +123,7 @@ func _cancel_cast(cast_data: Dictionary) -> void:
 		if cast_data.indicator.has_method("fade_out_and_remove"):
 			cast_data.indicator.fade_out_and_remove(0.1)
 
-## 执行施法
+## 执行施法（只处理伤害判定，特效已在预播放阶段处理）
 func _execute_cast(cast_data: Dictionary) -> void:
 	var base_damage = cast_data.damage
 	var explosion_radius = get_explosion_radius()
@@ -123,7 +134,10 @@ func _execute_cast(cast_data: Dictionary) -> void:
 		var target = cast_data.target
 		if not is_instance_valid(target):
 			if cast_data.indicator and is_instance_valid(cast_data.indicator):
-				cast_data.indicator.hide_and_remove() if cast_data.indicator.has_method("hide_and_remove") else cast_data.indicator.queue_free()
+				if cast_data.indicator.has_method("hide_and_remove"):
+					cast_data.indicator.hide_and_remove()
+				else:
+					cast_data.indicator.queue_free()
 			return
 		
 		explosion_position = target.global_position
@@ -150,8 +164,9 @@ func _execute_cast(cast_data: Dictionary) -> void:
 		if has_explosion_damage() and explosion_radius > 0:
 			_explode_at_position(explosion_position, explosion_radius, base_damage, null)
 	
-	# 播放爆炸特效
-	_create_explosion_effect(explosion_position)
+	# 如果特效没有预播放（无延迟攻击或其他原因），在这里补播
+	if not cast_data.get("effect_played", false):
+		_create_explosion_effect(explosion_position)
 	
 	# 清理指示器
 	if cast_data.indicator and is_instance_valid(cast_data.indicator):
@@ -159,6 +174,22 @@ func _execute_cast(cast_data: Dictionary) -> void:
 			cast_data.indicator.hide_and_remove()
 		else:
 			cast_data.indicator.queue_free()
+
+## 预播放特效（在伤害判定前调用）
+func _play_cast_effect_early(cast_data: Dictionary) -> void:
+	var explosion_position: Vector2
+	
+	if cast_data.is_locked:
+		var target = cast_data.target
+		if is_instance_valid(target):
+			explosion_position = target.global_position
+		else:
+			return
+	else:
+		explosion_position = cast_data.target_position
+	
+	# 播放爆炸特效
+	_create_explosion_effect(explosion_position)
 
 func perform_attack(enemies: Array) -> void:
 	if enemies.is_empty() or not weapon:
