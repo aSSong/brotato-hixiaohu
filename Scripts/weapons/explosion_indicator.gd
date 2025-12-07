@@ -3,7 +3,7 @@ class_name ExplosionIndicator
 
 ## 魔法武器爆炸范围指示器
 ## 显示一个半透明的圆形区域，标识攻击目标位置和范围
-## 修改：使用纹理替代程序化绘制，与GraveRescueManager方案一致
+## 修改：使用纹理替代程序化绘制，与Grave方案一致
 
 ## 预加载的范围圈纹理（所有实例共享）
 static var _circle_texture = preload("res://assets/others/rescue_range_circle.png")

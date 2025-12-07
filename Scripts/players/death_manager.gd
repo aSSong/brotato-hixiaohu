@@ -13,12 +13,11 @@ signal game_over  # 游戏结束（玩家放弃）
 var player: CharacterBody2D = null
 var death_ui: DeathUI = null
 var floor_layer: TileMapLayer = null
-var grave_sprite: Sprite2D = null  # 墓碑精灵
+var grave_instance: Grave = null  # 墓碑实例
 var grave_ghost_data: GhostData = null  # 墓碑关联的Ghost数据
-var grave_rescue_manager: GraveRescueManager = null  # 墓碑救援管理器
 
-## 预加载墓碑纹理（避免运行时load导致卡顿）
-var grave_texture_preload = preload("res://assets/others/grave-01.png")
+## 预加载墓碑场景
+var grave_scene: PackedScene = preload("res://scenes/players/grave.tscn")
 
 ## 状态
 var is_dead: bool = false
@@ -27,7 +26,7 @@ var death_count: int = 0  # 本局累计死亡次数（包括已复活的）
 var death_timer: float = 0.0
 var death_delay: float = 1.5  # 死亡延迟时间
 var death_position: Vector2 = Vector2.ZERO  # 记录死亡位置
-var grave_scale: Vector2 = Vector2(0.3,0.3)
+
 func _ready() -> void:
 	# 确保在游戏暂停时仍能处理死亡逻辑
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -94,8 +93,6 @@ func _trigger_death() -> void:
 	
 	# 禁用玩家输入和武器（但不暂停游戏，等待death_delay后再暂停）
 	if player:
-		#player.set_physics_process(false) # 可选：禁用物理处理
-		#player.set_process_input(false) # 可选：禁用输入
 		if player.has_method("disable_weapons"):
 			player.disable_weapons()
 	
@@ -110,8 +107,8 @@ func _trigger_death() -> void:
 		death_position = player.global_position
 	
 	# 强制停止之前的救援读条（如果有）
-	if grave_rescue_manager and is_instance_valid(grave_rescue_manager):
-		grave_rescue_manager.force_stop_reading()
+	if grave_instance and is_instance_valid(grave_instance):
+		grave_instance.force_stop_reading()
 	
 	# 创建Ghost数据（用于救援）
 	if player:
@@ -147,83 +144,144 @@ func _trigger_death() -> void:
 
 ## 创建墓碑
 func _create_grave() -> void:
-	# 使用预加载的墓碑纹理
-	if not grave_texture_preload:
-		push_error("[DeathManager] 墓碑纹理未加载！")
-		return
-	var grave_texture = grave_texture_preload
-	
-	# 创建墓碑精灵
-	grave_sprite = Sprite2D.new()
-	grave_sprite.texture = grave_texture
-	grave_sprite.global_position = death_position
-	grave_sprite.scale = grave_scale
-	
-	# 设置层级（高于玩家和怪物）
-	grave_sprite.z_index = 20
-	
-	# 创建墓碑名字Label（作为墓碑的子节点）
-	_create_grave_name_label()
-	
-	# 添加到当前场景而不是root（避免场景切换后残留）
-	if player and player.get_parent():
-		player.get_parent().add_child(grave_sprite)
-		print("[DeathManager] 墓碑已创建于:", death_position)
-		
-		# 创建救援管理器
-		_create_rescue_manager()
-	else:
-		push_warning("[DeathManager] 无法找到合适的父节点放置墓碑")
-
-## 创建救援管理器
-func _create_rescue_manager() -> void:
-	if not grave_sprite or not grave_ghost_data:
+	if not grave_ghost_data:
+		push_error("[DeathManager] Ghost数据为空，无法创建墓碑")
 		return
 	
-	# 创建救援管理器
-	grave_rescue_manager = GraveRescueManager.new()
+	# 实例化墓碑场景
+	grave_instance = grave_scene.instantiate()
+	grave_instance.global_position = death_position
 	
 	# 添加到场景
 	if player and player.get_parent():
-		player.get_parent().add_child(grave_rescue_manager)
-	
-	# 设置引用
-	grave_rescue_manager.set_player(player)
-	grave_rescue_manager.set_grave(grave_sprite)
-	grave_rescue_manager.set_ghost_data(grave_ghost_data)
-	grave_rescue_manager.set_death_manager(self)
-	
-	# 初始化位置
-	grave_rescue_manager.update_position()
-	
-	print("[DeathManager] 救援管理器已创建")
+		player.get_parent().add_child(grave_instance)
+		
+		# 设置墓碑数据
+		grave_instance.setup(grave_ghost_data, player)
+		
+		# 连接墓碑信号
+		grave_instance.rescue_requested.connect(_on_grave_rescue_requested)
+		grave_instance.transcend_requested.connect(_on_grave_transcend_requested)
+		grave_instance.rescue_cancelled.connect(_on_grave_rescue_cancelled)
+		
+		print("[DeathManager] 墓碑已创建于:", death_position)
+	else:
+		push_warning("[DeathManager] 无法找到合适的父节点放置墓碑")
 
 ## 移除墓碑
 func _remove_grave() -> void:
-	# 移除救援管理器
-	if grave_rescue_manager and is_instance_valid(grave_rescue_manager):
-		grave_rescue_manager.cleanup()
-		grave_rescue_manager = null
-	
-	# 移除墓碑精灵
-	if grave_sprite and is_instance_valid(grave_sprite):
-		grave_sprite.queue_free()
-		grave_sprite = null
+	if grave_instance and is_instance_valid(grave_instance):
+		grave_instance.cleanup()
+		grave_instance = null
 		print("[DeathManager] 墓碑已移除")
 
 ## 移除旧墓碑（再次死亡时清除上一个墓碑）
 func _remove_old_grave() -> void:
-	# 移除救援管理器
-	if grave_rescue_manager and is_instance_valid(grave_rescue_manager):
-		grave_rescue_manager.cleanup()
-		grave_rescue_manager = null
-	
-	# 移除墓碑精灵
-	if grave_sprite and is_instance_valid(grave_sprite):
-		grave_sprite.queue_free()
-		grave_sprite = null
-		# 注意：不清除grave_ghost_data，因为新的数据已经在_trigger_death()中创建
+	if grave_instance and is_instance_valid(grave_instance):
+		grave_instance.cleanup()
+		grave_instance = null
 		print("[DeathManager] 旧墓碑已移除")
+
+## 墓碑救援请求回调
+func _on_grave_rescue_requested(ghost_data: GhostData) -> void:
+	print("[DeathManager] 收到墓碑救援请求")
+	
+	# 检查masterkey
+	if GameMain.master_key < 2:
+		print("[DeathManager] Master Key不足")
+		_restore_game_state_after_rescue()
+		return
+	
+	# 消耗masterkey
+	GameMain.master_key -= 2
+	print("[DeathManager] 消耗2个Master Key，剩余:", GameMain.master_key)
+	
+	# 创建Ghost
+	_create_ghost_from_grave(ghost_data)
+	
+	# 清除墓碑
+	_remove_grave()
+	
+	# 恢复游戏状态
+	_restore_game_state_after_rescue()
+	
+	print("[DeathManager] 救援完成")
+
+## 墓碑超度请求回调
+func _on_grave_transcend_requested(_ghost_data: GhostData) -> void:
+	print("[DeathManager] 收到墓碑超度请求")
+	
+	# 清除墓碑
+	_remove_grave()
+	
+	# 恢复游戏状态
+	_restore_game_state_after_rescue()
+	
+	print("[DeathManager] 超度完成")
+
+## 墓碑救援取消回调
+func _on_grave_rescue_cancelled() -> void:
+	print("[DeathManager] 墓碑救援取消")
+	# 状态恢复已在Grave中处理
+
+## 恢复游戏状态（救援/超度后）
+func _restore_game_state_after_rescue() -> void:
+	if GameState.previous_state == GameState.State.WAVE_FIGHTING or GameState.previous_state == GameState.State.WAVE_CLEARING:
+		GameState.change_state(GameState.previous_state)
+	else:
+		GameState.change_state(GameState.State.WAVE_FIGHTING)
+
+## 从墓碑数据创建Ghost
+func _create_ghost_from_grave(ghost_data: GhostData) -> void:
+	if not ghost_data:
+		push_error("[DeathManager] Ghost数据为空")
+		return
+	
+	print("[DeathManager] 开始创建Ghost，职业:", ghost_data.class_id, " 武器数:", ghost_data.weapons.size())
+	
+	# 获取GhostManager
+	var ghost_manager = get_tree().get_first_node_in_group("ghost_manager")
+	if not ghost_manager:
+		push_error("[DeathManager] 找不到GhostManager")
+		return
+	
+	# 创建Ghost
+	var ghost_scene_res = load("res://scenes/players/ghost.tscn")
+	var new_ghost = ghost_scene_res.instantiate()
+	
+	# 设置Ghost数据（在add_child之前）
+	new_ghost.class_id = ghost_data.class_id
+	new_ghost.ghost_weapons = ghost_data.weapons.duplicate()
+	
+	# 设置Ghost的名字和死亡次数
+	new_ghost.set_name_from_ghost_data(ghost_data.player_name, ghost_data.total_death_count)
+	
+	# 设置初始位置
+	if grave_instance and is_instance_valid(grave_instance):
+		new_ghost.global_position = grave_instance.global_position
+	elif death_position != Vector2.ZERO:
+		new_ghost.global_position = death_position
+	
+	# 添加到场景
+	get_tree().root.add_child(new_ghost)
+	
+	# 准备目标
+	var follow_target = player
+	var queue_index = 0
+	
+	if ghost_manager.ghosts.size() > 0:
+		follow_target = ghost_manager.ghosts[ghost_manager.ghosts.size() - 1]
+		queue_index = ghost_manager.ghosts.size()
+	
+	# 添加到GhostManager
+	ghost_manager.ghosts.append(new_ghost)
+	
+	# 初始化Ghost
+	if follow_target:
+		var player_speed = ghost_manager._get_player_speed() if ghost_manager.has_method("_get_player_speed") else 400.0
+		new_ghost.call_deferred("initialize", follow_target, queue_index, player_speed, true)
+	
+	print("[DeathManager] Ghost创建成功！职业:", ghost_data.class_id, " 武器数:", ghost_data.weapons.size())
 
 ## 显示死亡UI
 func _show_death_ui() -> void:
@@ -245,7 +303,7 @@ func _show_death_ui() -> void:
 	death_ui.show_death_screen(revive_count, current_gold, current_mode)
 	
 	var current_master_key = GameMain.master_key
-	print("[DeathManager] 显示死亡UI | 模式:", current_mode, " 主钥匙:", current_master_key, " 复活费用: 1")
+	print("[DeathManager] 显示死亡UI | 模式:", current_mode, " 主钥匙:", current_master_key, " 复活费用: 2")
 
 ## 复活请求
 func _on_revive_requested() -> void:
@@ -366,7 +424,6 @@ func _respawn_player_at_random_position() -> void:
 		var world_pos = floor_layer.map_to_local(random_cell) * 6  # 假设缩放为6
 		
 		# 简单检查：确保不在太边缘
-		# 可以添加更复杂的检查，比如距离敌人的距离
 		player.global_position = world_pos
 		print("[DeathManager] 复活位置:", world_pos)
 		return
@@ -425,40 +482,3 @@ func _cleanup_ghosts_for_multi_mode() -> void:
 			print("[DeathManager] Multi模式 - MultiGravesManager没有clear_all_graves方法")
 	else:
 		print("[DeathManager] Multi模式 - 未找到MultiGravesManager（可能正常，取决于wave）")
-
-## 创建墓碑名字Label
-func _create_grave_name_label() -> void:
-	if not grave_sprite or not grave_ghost_data:
-		return
-	
-	# 创建Label节点作为墓碑的子节点
-	var name_label = Label.new()
-	grave_sprite.add_child(name_label)
-	
-	# 设置Label属性
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	
-	# 设置位置（在墓碑上方）
-	# 墓碑图片大小需要根据实际调整，这里假设墓碑高度约100像素
-	name_label.position = Vector2(-260, -330)  # 在墓碑上方
-	name_label.size = Vector2(120, 30)
-	
-	# 设置字体大小和颜色（与Ghost一致，使用淡蓝色）
-	name_label.add_theme_font_size_override("font_size", 90)
-	name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0))  # 淡蓝色
-	
-	# 添加黑色描边效果
-	name_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	name_label.add_theme_constant_override("outline_size", 2)
-	
-	# 设置z_index确保在墓碑上方显示
-	name_label.z_index = 100
-	
-	# 设置显示文本：名字 - n世（n为死亡时的total_death_count）
-	var player_name = grave_ghost_data.player_name
-	var total_death = grave_ghost_data.total_death_count
-	var display_name = "%s - 第 %d 世" % [player_name, total_death]
-	name_label.text = display_name
-	
-	print("[DeathManager] 墓碑名字Label已创建:", display_name)

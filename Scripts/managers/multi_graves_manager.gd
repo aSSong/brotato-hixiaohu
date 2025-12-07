@@ -5,15 +5,11 @@ class_name MultiGravesManager
 ## 负责在每波开始时刷新对应wave的ghost墓碑
 ## 注意：作为场景节点使用，不使用autoload
 
-## 预加载墓碑纹理（避免运行时load导致卡顿）
-var grave_texture = preload("res://assets/others/grave-01.png")
-var grave_scale: Vector2 = Vector2(0.3,0.3)
+## 预加载墓碑场景
+var grave_scene: PackedScene = preload("res://scenes/players/grave.tscn")
 
-## 当前生成的墓碑列表（墓碑精灵节点）
-var current_graves: Array = []
-
-## 当前生成的救援管理器列表
-var current_rescue_managers: Array = []
+## 当前生成的墓碑列表
+var current_graves: Array[Grave] = []
 
 ## 父节点引用（用于添加墓碑）
 var parent_node: Node2D = null
@@ -29,12 +25,16 @@ func _ready() -> void:
 ## 设置父节点（用于添加墓碑）
 func set_parent_node(node: Node2D) -> void:
 	parent_node = node
-	print("[MultiGravesManager] 设置父节点:", node.name if node else "null")
+	if node:
+		print("[MultiGravesManager] 设置父节点:", node.name)
+	else:
+		print("[MultiGravesManager] 设置父节点: null")
 
 ## 设置玩家引用
 func set_player(p: CharacterBody2D) -> void:
 	player = p
-	print("[MultiGravesManager] 设置玩家引用")
+	if p:
+		print("[MultiGravesManager] 设置玩家引用")
 
 ## 为指定wave刷新墓碑
 func spawn_graves_for_wave(wave: int) -> void:
@@ -64,104 +64,143 @@ func spawn_graves_for_wave(wave: int) -> void:
 
 ## 为单个ghost创建墓碑
 func _create_grave_for_ghost(ghost_data: GhostData) -> void:
-	if not ghost_data:
+	if not ghost_data or not player:
 		return
 	
-	# 使用预加载的墓碑纹理
-	if not grave_texture:
-		push_error("[MultiGravesManager] 墓碑纹理未加载！")
-		return
-	
-	# 创建墓碑精灵
-	var grave_sprite = Sprite2D.new()
-	grave_sprite.texture = grave_texture
-	grave_sprite.global_position = ghost_data.death_position
-	grave_sprite.z_index = 20
-	grave_sprite.scale = grave_scale
-	# 创建名字Label
-	_create_grave_name_label(grave_sprite, ghost_data)
+	# 实例化墓碑场景
+	var grave_instance: Grave = grave_scene.instantiate()
+	grave_instance.global_position = ghost_data.death_position
 	
 	# 添加到场景
-	parent_node.add_child(grave_sprite)
-	current_graves.append(grave_sprite)
+	parent_node.add_child(grave_instance)
 	
-	# 创建救援管理器
-	_create_rescue_manager_for_grave(grave_sprite, ghost_data)
+	# 设置墓碑数据
+	grave_instance.setup(ghost_data, player)
+	
+	# 连接信号
+	grave_instance.rescue_requested.connect(_on_grave_rescue_requested)
+	grave_instance.transcend_requested.connect(_on_grave_transcend_requested)
+	grave_instance.rescue_cancelled.connect(_on_grave_rescue_cancelled)
+	
+	# 记录到列表
+	current_graves.append(grave_instance)
 	
 	print("[MultiGravesManager] 创建墓碑: %s (第%d世) 于 %s" % [ghost_data.player_name, ghost_data.total_death_count, ghost_data.death_position])
 
-## 创建墓碑名字Label
-func _create_grave_name_label(grave_sprite: Sprite2D, ghost_data: GhostData) -> void:
-	if not grave_sprite or not ghost_data:
+## 墓碑救援请求回调
+func _on_grave_rescue_requested(ghost_data: GhostData) -> void:
+	print("[MultiGravesManager] 收到墓碑救援请求")
+	
+	# 检查masterkey
+	if GameMain.master_key < 2:
+		print("[MultiGravesManager] Master Key不足")
+		_restore_game_state()
 		return
 	
-	# 创建Label节点作为墓碑的子节点
-	var name_label = Label.new()
-	grave_sprite.add_child(name_label)
+	# 消耗masterkey
+	GameMain.master_key -= 2
+	print("[MultiGravesManager] 消耗2个Master Key，剩余:", GameMain.master_key)
 	
-	# 设置Label属性
-	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# 创建Ghost
+	_create_ghost_from_data(ghost_data)
 	
-	# 设置位置（在墓碑上方）
-	name_label.position = Vector2(-260, -330)
-	name_label.size = Vector2(120, 30)
+	# 从列表中移除并清理对应的墓碑
+	_remove_grave_by_ghost_data(ghost_data)
 	
-	# 设置字体大小和颜色（与Ghost一致，使用淡蓝色）
-	name_label.add_theme_font_size_override("font_size", 90)
-	name_label.add_theme_color_override("font_color", Color(0.8, 0.8, 1.0))  # 淡蓝色
+	# 恢复游戏状态
+	_restore_game_state()
 	
-	# 添加黑色描边效果
-	name_label.add_theme_color_override("font_outline_color", Color.BLACK)
-	name_label.add_theme_constant_override("outline_size", 2)
-	
-	# 设置z_index确保在墓碑上方显示
-	name_label.z_index = 100
-	
-	# 设置显示文本：名字 - n世
-	var display_name = "%s - 第 %d 世" % [ghost_data.player_name, ghost_data.total_death_count]
-	name_label.text = display_name
+	print("[MultiGravesManager] 救援完成")
 
-## 为墓碑创建救援管理器
-func _create_rescue_manager_for_grave(grave_sprite: Sprite2D, ghost_data: GhostData) -> void:
-	if not grave_sprite or not ghost_data or not player:
+## 墓碑超度请求回调
+func _on_grave_transcend_requested(ghost_data: GhostData) -> void:
+	print("[MultiGravesManager] 收到墓碑超度请求")
+	
+	# 从列表中移除并清理对应的墓碑
+	_remove_grave_by_ghost_data(ghost_data)
+	
+	# 恢复游戏状态
+	_restore_game_state()
+	
+	print("[MultiGravesManager] 超度完成")
+
+## 墓碑救援取消回调
+func _on_grave_rescue_cancelled() -> void:
+	print("[MultiGravesManager] 墓碑救援取消")
+
+## 根据ghost_data移除对应的墓碑
+func _remove_grave_by_ghost_data(ghost_data: GhostData) -> void:
+	for i in range(current_graves.size() - 1, -1, -1):
+		var grave = current_graves[i]
+		if grave and is_instance_valid(grave) and grave.ghost_data == ghost_data:
+			grave.cleanup()
+			current_graves.remove_at(i)
+			break
+
+## 恢复游戏状态
+func _restore_game_state() -> void:
+	if GameState.previous_state == GameState.State.WAVE_FIGHTING or GameState.previous_state == GameState.State.WAVE_CLEARING:
+		GameState.change_state(GameState.previous_state)
+	else:
+		GameState.change_state(GameState.State.WAVE_FIGHTING)
+
+## 从数据创建Ghost
+func _create_ghost_from_data(ghost_data: GhostData) -> void:
+	if not ghost_data:
+		push_error("[MultiGravesManager] Ghost数据为空")
 		return
 	
-	# 创建救援管理器
-	var rescue_manager = GraveRescueManager.new()
+	print("[MultiGravesManager] 开始创建Ghost，职业:", ghost_data.class_id, " 武器数:", ghost_data.weapons.size())
+	
+	# 获取GhostManager
+	var ghost_manager = get_tree().get_first_node_in_group("ghost_manager")
+	if not ghost_manager:
+		push_error("[MultiGravesManager] 找不到GhostManager")
+		return
+	
+	# 创建Ghost
+	var ghost_scene_res = load("res://scenes/players/ghost.tscn")
+	var new_ghost = ghost_scene_res.instantiate()
+	
+	# 设置Ghost数据（在add_child之前）
+	new_ghost.class_id = ghost_data.class_id
+	new_ghost.ghost_weapons = ghost_data.weapons.duplicate()
+	
+	# 设置Ghost的名字和死亡次数
+	new_ghost.set_name_from_ghost_data(ghost_data.player_name, ghost_data.total_death_count)
+	
+	# 设置初始位置
+	new_ghost.global_position = ghost_data.death_position
 	
 	# 添加到场景
-	parent_node.add_child(rescue_manager)
+	get_tree().root.add_child(new_ghost)
 	
-	# 设置引用
-	rescue_manager.set_player(player)
-	rescue_manager.set_grave(grave_sprite)
-	rescue_manager.set_ghost_data(ghost_data)
-	# Multi模式下不需要设置death_manager，因为墓碑不是玩家自己的
+	# 准备目标
+	var follow_target = player
+	var queue_index = 0
 	
-	# 初始化位置
-	rescue_manager.update_position()
+	if ghost_manager.ghosts.size() > 0:
+		follow_target = ghost_manager.ghosts[ghost_manager.ghosts.size() - 1]
+		queue_index = ghost_manager.ghosts.size()
 	
-	# 记录到列表
-	current_rescue_managers.append(rescue_manager)
+	# 添加到GhostManager
+	ghost_manager.ghosts.append(new_ghost)
 	
-	print("[MultiGravesManager] 为墓碑创建救援管理器")
+	# 初始化Ghost
+	if follow_target:
+		var player_speed = ghost_manager._get_player_speed() if ghost_manager.has_method("_get_player_speed") else 400.0
+		new_ghost.call_deferred("initialize", follow_target, queue_index, player_speed, true)
+	
+	print("[MultiGravesManager] Ghost创建成功！职业:", ghost_data.class_id, " 武器数:", ghost_data.weapons.size())
 
 ## 清除所有墓碑
 func clear_all_graves() -> void:
 	print("[MultiGravesManager] 清除所有墓碑，共 %d 个" % current_graves.size())
 	
-	# 清除救援管理器
-	for rescue_manager in current_rescue_managers:
-		if rescue_manager and is_instance_valid(rescue_manager):
-			rescue_manager.cleanup()
-			rescue_manager.queue_free()
-	current_rescue_managers.clear()
-	
-	# 清除墓碑
 	for grave in current_graves:
 		if grave and is_instance_valid(grave):
-			grave.queue_free()
+			grave.cleanup()
+	
 	current_graves.clear()
 
 ## 节点移除时清理
