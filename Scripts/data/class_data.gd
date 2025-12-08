@@ -72,6 +72,10 @@ class_name ClassData
 @export var magic_speed_multiplier: float = 1.0
 @export var magic_explosion_radius_multiplier: float = 1.0
 
+## 异常效果系数（已废弃，请使用base_stats）
+@export var status_chance_multiplier: float = 1.0  ## 异常触发概率系数
+@export var status_effect_multiplier: float = 1.0  ## 异常伤害/效果系数
+
 ## 特殊技能配置
 @export var skill_name: String = ""
 @export var skill_description: String = ""
@@ -167,6 +171,10 @@ func sync_to_base_stats() -> void:
 	base_stats.magic_speed_mult = magic_speed_multiplier
 	base_stats.magic_range_mult = magic_range_multiplier
 	base_stats.magic_explosion_radius_mult = magic_explosion_radius_multiplier
+	
+	# 异常效果系数
+	base_stats.status_chance_mult = status_chance_multiplier
+	base_stats.status_effect_mult = status_effect_multiplier
 
 ## 自动生成职业特性描述
 func generate_traits_description() -> void:
@@ -190,6 +198,18 @@ func generate_traits_description() -> void:
 		var percent = roundi((1.0 - damage_reduction_multiplier) * 100)
 		if percent != 0:
 			traits.append("受到伤害%+d%%" % -percent if percent > 0 else "受到伤害%d%%" % -percent)
+	
+	# 暴击率（默认0.1即10%，显示与默认值的差异）
+	if crit_chance != 0.1:
+		var diff_percent = roundi((crit_chance - 0.1) * 100)
+		if diff_percent != 0:
+			traits.append("暴击率%+d%%" % diff_percent if diff_percent > 0 else "暴击率%d%%" % diff_percent)
+	
+	# 暴击伤害（默认2.0即200%，显示与默认值的差异）
+	if crit_damage != 2.0:
+		var diff_percent = roundi((crit_damage - 2.0) * 100)
+		if diff_percent != 0:
+			traits.append("暴击伤害%+d%%" % diff_percent if diff_percent > 0 else "暴击伤害%d%%" % diff_percent)
 	
 	# 总攻击速度
 	if attack_speed_multiplier != 1.0:
@@ -260,3 +280,18 @@ func generate_traits_description() -> void:
 		var percent = roundi((magic_explosion_radius_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("爆炸范围%+d%%" % percent if percent > 0 else "爆炸范围%d%%" % percent)
+	
+	# 异常效果
+	if status_chance_multiplier != 1.0:
+		var percent = roundi((status_chance_multiplier - 1.0) * 100)
+		if percent != 0:
+			traits.append("异常触发概率%+d%%" % percent if percent > 0 else "异常触发概率%d%%" % percent)
+	
+	if status_effect_multiplier != 1.0:
+		var percent = roundi((status_effect_multiplier - 1.0) * 100)
+		if percent != 0:
+			traits.append("异常伤害%+d%%" % percent if percent > 0 else "异常伤害%d%%" % percent)
+	
+	# 幸运值
+	if luck != 0.0:
+		traits.append("幸运值%+d" % roundi(luck) if luck > 0 else "幸运值%d" % roundi(luck))
