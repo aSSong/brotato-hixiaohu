@@ -339,6 +339,9 @@ func _enable_weapons() -> void:
 	if weapons_node:
 		weapons_node.process_mode = Node.PROCESS_MODE_INHERIT
 		weapons_node.visible = true
+		# 刷新武器属性引用（修复复活后特效不触发的问题）
+		if weapons_node.has_method("reapply_all_bonuses"):
+			weapons_node.reapply_all_bonuses()
 
 ## 设置Ghost的名字和死亡次数（从GhostData获取）
 func set_name_from_ghost_data(player_name: String, total_death_count: int) -> void:
