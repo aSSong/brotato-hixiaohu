@@ -87,6 +87,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "幸运: 0"
 
+[node name="KeyPickupRange" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "钥匙拾取范围: ×1.00"
+
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer/ScrollContainer/StatsContainer"]
 layout_mode = 2
 

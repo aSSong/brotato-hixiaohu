@@ -67,6 +67,7 @@ func apply_to(target_stats: CombatStats) -> void:
 	target_stats.speed += stats_delta.speed
 	target_stats.defense += stats_delta.defense
 	target_stats.luck += stats_delta.luck
+	target_stats.key_pickup_range_mult *= stats_delta.key_pickup_range_mult
 	
 	# 通用战斗属性
 	target_stats.crit_chance += stats_delta.crit_chance

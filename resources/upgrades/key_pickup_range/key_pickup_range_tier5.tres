@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=4 format=3]
+
+[ext_resource type="Script" uid="uid://cus8beqf0gra0" path="res://Scripts/data/upgrade_data.gd" id="1_upgrade"]
+[ext_resource type="Script" uid="uid://on4clrq6gi83" path="res://Scripts/AttributeSystem/CombatStats.gd" id="2_stats"]
+
+[sub_resource type="Resource" id="Resource_stats"]
+script = ExtResource("2_stats")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+key_pickup_range_mult = 1.5
+
+[resource]
+script = ExtResource("1_upgrade")
+upgrade_type = 19
+name = "钥匙范围+50%"
+description = "钥匙拾取范围扩大50%"
+cost = 48
+icon_path = "res://assets/skillicon/10.png"
+quality = 5
+actual_cost = 48
+weight = 100
+stats_modifier = SubResource("Resource_stats")
+

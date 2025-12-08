@@ -56,6 +56,10 @@ signal hp_changed(current_hp: int, max_hp: int)
 ## 说话气泡组件
 var speech_bubble: PlayerSpeechBubble = null
 
+## 拾取范围相关
+@onready var drop_item_area: Area2D = $drop_item_area
+var base_pickup_radius: float = 0.0  # 保存原始拾取半径
+
 func _ready() -> void:
 	# 初始化属性管理器
 	attribute_manager = AttributeManager.new()
@@ -84,6 +88,12 @@ func _ready() -> void:
 	last_recorded_position = global_position
 	path_history.append(global_position)
 	original_path_record_distance = path_record_distance
+	
+	# 保存原始拾取半径
+	if drop_item_area:
+		var collision_shape = drop_item_area.get_node("CollisionShape2D")
+		if collision_shape and collision_shape.shape is CircleShape2D:
+			base_pickup_radius = collision_shape.shape.radius
 	
 	# 创建Dash计时器
 	_setup_dash_timers()
@@ -321,7 +331,24 @@ func _on_stats_changed(new_stats: CombatStats) -> void:
 	# 发送血量变化信号
 	hp_changed.emit(now_hp, max_hp)
 	
+	# 更新拾取范围
+	_update_pickup_range(new_stats)
+	
 	print("[Player] 属性更新: HP=%d/%d (+%d), Speed=%.1f" % [now_hp, max_hp, hp_increase, speed])
+
+## 更新拾取范围
+func _update_pickup_range(stats: CombatStats) -> void:
+	if not drop_item_area or base_pickup_radius <= 0:
+		return
+	
+	var collision_shape = drop_item_area.get_node("CollisionShape2D")
+	if not collision_shape or not collision_shape.shape is CircleShape2D:
+		return
+	
+	var new_radius = base_pickup_radius * stats.key_pickup_range_mult
+	collision_shape.shape.radius = new_radius
+	
+	print("[Player] 拾取范围更新: %.1f -> %.1f (x%.2f)" % [base_pickup_radius, new_radius, stats.key_pickup_range_mult])
 
 ## Buff Tick回调
 ## 

@@ -11,6 +11,7 @@ class_name PlayerStatsInfo
 @onready var speed_label: Label = %Speed
 @onready var defense_label: Label = %Defense
 @onready var luck_label: Label = %Luck
+@onready var key_pickup_range_label: Label = %KeyPickupRange
 
 # 战斗属性标签
 @onready var crit_chance_label: Label = %CritChance
@@ -106,6 +107,8 @@ func _on_stats_changed(stats: CombatStats) -> void:
 	speed_label.text = "移动速度: %.1f" % stats.speed
 	defense_label.text = "防御: %d" % stats.defense
 	luck_label.text = "幸运: %.1f" % stats.luck
+	if key_pickup_range_label:
+		key_pickup_range_label.text = "钥匙拾取范围: ×%.2f" % stats.key_pickup_range_mult
 	
 	# 战斗属性
 	crit_chance_label.text = "暴击率: %.1f%%" % (stats.crit_chance * 100)
@@ -187,6 +190,13 @@ func _update_modifier_counts() -> void:
 
 ## 高亮修改过的属性
 func _highlight_modified_stats(stats: CombatStats) -> void:
+	# 钥匙拾取范围 - 如果不是1.0，则高亮
+	if key_pickup_range_label:
+		if stats.key_pickup_range_mult != 1.0:
+			key_pickup_range_label.add_theme_color_override("font_color", Color(0.3, 1, 1))
+		else:
+			key_pickup_range_label.remove_theme_color_override("font_color")
+	
 	# 全局属性 - 如果不是1.0，则高亮
 	if stats.global_damage_mult != 1.0:
 		global_damage_mult_label.add_theme_color_override("font_color", Color(1, 1, 0.3))

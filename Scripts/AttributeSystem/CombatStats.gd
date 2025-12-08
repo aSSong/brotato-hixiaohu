@@ -22,6 +22,7 @@ class_name CombatStats
 @export var speed: float = 400.0  ## 移动速度
 @export var defense: int = 0  ## 防御力（固定减伤）
 @export var luck: float = 0.0  ## 幸运值（影响掉落和品质）
+@export var key_pickup_range_mult: float = 1.0  ## 钥匙拾取范围倍数
 
 # ========== 通用战斗属性 ==========
 @export var crit_chance: float = 0.0  ## 暴击率（0-1）
@@ -173,6 +174,7 @@ func clone() -> CombatStats:
 	result.speed = speed
 	result.defense = defense
 	result.luck = luck
+	result.key_pickup_range_mult = key_pickup_range_mult
 	
 	# 通用战斗属性
 	result.crit_chance = crit_chance

@@ -45,6 +45,9 @@ enum UpgradeType {
 	MAGIC_RANGE,       # 魔法范围+10%
 	MAGIC_SPEED,       # 魔法速度+10%
 	MAGIC_EXPLOSION,   # 魔法爆炸范围+10%
+	
+	# 拾取属性
+	KEY_PICKUP_RANGE,  # 钥匙拾取范围
 }
 
 @export var upgrade_type: UpgradeType = UpgradeType.HP_MAX
