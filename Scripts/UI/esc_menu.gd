@@ -247,6 +247,9 @@ func _return_to_main_menu() -> void:
 	# 恢复游戏（必须在切换场景前）
 	get_tree().paused = false
 	
+	# 停止计时器（最高波次记录已在波次完成时统一处理）
+	_stop_timer_on_exit()
+	
 	# 重置游戏数据
 	GameMain.reset_game()
 	
@@ -270,6 +273,9 @@ func _on_restart_pressed() -> void:
 	# 恢复游戏（必须在切换场景前）
 	get_tree().paused = false
 	
+	# 停止计时器（最高波次记录已在波次完成时统一处理）
+	_stop_timer_on_exit()
+	
 	# 发送信号
 	main_menu_requested.emit()
 	
@@ -277,3 +283,9 @@ func _on_restart_pressed() -> void:
 	
 	# 使用SceneCleanupManager安全切换场景（会清理所有游戏对象并重置GameState，同时保留模式信息）
 	SceneCleanupManager.change_scene_safely_keep_mode("res://scenes/UI/Class_choose.tscn")
+
+## 退出游戏时停止计时器
+## 注意：最高波次记录已在 game_initializer._on_wave_flow_step 中统一处理
+func _stop_timer_on_exit() -> void:
+	if GameMain.current_session:
+		GameMain.current_session.stop_timer()

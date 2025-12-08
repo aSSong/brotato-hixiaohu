@@ -10,7 +10,11 @@ var user_data: Dictionary = {
 	"player_name": "",
 	"floor_id": -1,  # -1 表示未选择，1-38 对应真实楼层，99 表示"不在漕河泾"
 	"floor_name": "",
-	"total_death_count": 0  # 累计死亡次数
+	"total_death_count": 0,  # 累计死亡次数
+	"best_waves": {  # 各模式最高波次记录
+		"survival": 0,
+		"multi": 0
+	}
 }
 
 ## 初始化
@@ -59,6 +63,9 @@ func load_user_data() -> bool:
 		# 确保旧存档也有 total_death_count 字段
 		if not user_data.has("total_death_count"):
 			user_data["total_death_count"] = 0
+		# 确保旧存档也有 best_waves 字段
+		if not user_data.has("best_waves"):
+			user_data["best_waves"] = {"survival": 0, "multi": 0}
 		# 迁移旧版 floor_id（0-38 索引制）到新版（1-38 真实楼层号）
 		_migrate_legacy_floor_id()
 		print("[SaveManager] 用户数据已加载: %s" % user_data)
@@ -100,7 +107,8 @@ func clear_save_data() -> void:
 		"player_name": "",
 		"floor_id": -1,
 		"floor_name": "",
-		"total_death_count": 0
+		"total_death_count": 0,
+		"best_waves": {"survival": 0, "multi": 0}
 	}
 	if FileAccess.file_exists(SAVE_FILE_PATH):
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
@@ -116,6 +124,28 @@ func increment_death_count() -> void:
 ## 获取总死亡次数
 func get_total_death_count() -> int:
 	return user_data.get("total_death_count", 0)
+
+## ==================== 最高波次记录 ====================
+
+## 获取指定模式的最高波次
+func get_best_wave(mode_id: String) -> int:
+	var best_waves = user_data.get("best_waves", {})
+	return best_waves.get(mode_id, 0)
+
+## 尝试更新指定模式的最高波次（如果新波次更高则更新）
+## 返回 true 表示创建了新纪录
+func try_update_best_wave(mode_id: String, wave: int) -> bool:
+	var best_waves = user_data.get("best_waves", {"survival": 0, "multi": 0})
+	var current_best = best_waves.get(mode_id, 0)
+	
+	if wave > current_best:
+		best_waves[mode_id] = wave
+		user_data["best_waves"] = best_waves
+		save_user_data()
+		print("[SaveManager] %s 模式最高波次更新: %d -> %d" % [mode_id, current_best, wave])
+		return true
+	
+	return false
 
 ## 迁移旧版 floor_id 到新版
 ## 旧版: 0-37 对应 1-38 楼，38 对应"不在漕河泾"

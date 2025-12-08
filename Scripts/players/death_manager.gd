@@ -330,6 +330,9 @@ func _on_revive_requested() -> void:
 func _on_give_up_requested() -> void:
 	print("[DeathManager] 玩家放弃游戏")
 	
+	# 停止计时器（最高波次记录已在波次完成时统一处理）
+	_stop_timer_on_game_end()
+	
 	# 移除墓碑
 	_remove_grave()
 	
@@ -346,6 +349,9 @@ func _on_give_up_requested() -> void:
 func _on_restart_requested() -> void:
 	var current_mode = GameMain.current_mode_id
 	print("[DeathManager] 玩家再战 | 当前模式:", current_mode)
+	
+	# 停止计时器（最高波次记录已在波次完成时统一处理）
+	_stop_timer_on_game_end()
 	
 	# 移除墓碑
 	_remove_grave()
@@ -482,3 +488,9 @@ func _cleanup_ghosts_for_multi_mode() -> void:
 			print("[DeathManager] Multi模式 - MultiGravesManager没有clear_all_graves方法")
 	else:
 		print("[DeathManager] Multi模式 - 未找到MultiGravesManager（可能正常，取决于wave）")
+
+## 游戏结束时停止计时器
+## 注意：最高波次记录已在 game_initializer._on_wave_flow_step 中统一处理
+func _stop_timer_on_game_end() -> void:
+	if GameMain.current_session:
+		GameMain.current_session.stop_timer()

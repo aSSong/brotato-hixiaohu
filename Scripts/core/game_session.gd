@@ -38,6 +38,11 @@ var player: CharacterBody2D = null
 var current_mode_id: String = "survival"  # 当前游戏模式
 var current_map_id: String = ""  # 当前地图ID
 
+## 游戏计时器相关字段
+var _timer_start_time: float = 0.0  # 计时器开始时的时间戳
+var _timer_accumulated: float = 0.0  # 累计游戏时间（秒）
+var _timer_running: bool = false  # 计时器是否正在运行
+
 func reset() -> void:
 	gold = 0
 	master_key = 0
@@ -48,6 +53,10 @@ func reset() -> void:
 	selected_weapon_ids.clear()
 	current_mode_id = "survival"  # 重置为默认模式
 	current_map_id = ""
+	# 重置计时器
+	_timer_start_time = 0.0
+	_timer_accumulated = 0.0
+	_timer_running = false
 	print("[GameSession] 会话数据已重置")
 
 func add_gold(amount: int) -> void:
@@ -70,3 +79,34 @@ func remove_master_key(amount: int) -> bool:
 
 func can_afford(cost: int) -> bool:
 	return gold >= cost
+
+## ==================== 游戏计时器 ====================
+
+## 开始计时器
+func start_timer() -> void:
+	if _timer_running:
+		return
+	_timer_start_time = Time.get_unix_time_from_system()
+	_timer_running = true
+	print("[GameSession] 计时器已启动")
+
+## 停止计时器
+func stop_timer() -> void:
+	if not _timer_running:
+		return
+	_timer_accumulated += Time.get_unix_time_from_system() - _timer_start_time
+	_timer_running = false
+	print("[GameSession] 计时器已停止，累计时间: %.2f 秒" % _timer_accumulated)
+
+## 获取已用时间（秒）
+func get_elapsed_time() -> float:
+	if _timer_running:
+		return _timer_accumulated + (Time.get_unix_time_from_system() - _timer_start_time)
+	return _timer_accumulated
+
+## 重置计时器
+func reset_timer() -> void:
+	_timer_start_time = 0.0
+	_timer_accumulated = 0.0
+	_timer_running = false
+	print("[GameSession] 计时器已重置")

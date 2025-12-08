@@ -142,6 +142,16 @@ bbcode_enabled = true
 text = "[i]难度：[color=#ea33bf]😌普通[/color][/i]"
 horizontal_alignment = 1
 
+[node name="selfrecordLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper1panel/chaper1text"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]个人最速通关：[color=#ea33bf]148'14''58[/color][/i]"
+horizontal_alignment = 1
+
 [node name="chaper1beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/chaper1panel"]
 layout_mode = 1
 anchors_preset = 7
@@ -274,6 +284,16 @@ theme_override_font_sizes/normal_font_size = 25
 theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
 text = "[i]难度：[color=#ea33bf]☠️困难[/color][/i]"
+horizontal_alignment = 1
+
+[node name="selfrecordLabel" type="RichTextLabel" parent="bg/MarginContainer/HBoxContainer/chaper2panel/chaper2text"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("3_f431m")
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[i]个人最高波次：[color=#ea33bf]20[/color][/i]"
 horizontal_alignment = 1
 
 [node name="chaper2beginBtn" type="TextureButton" parent="bg/MarginContainer/HBoxContainer/chaper2panel"]
