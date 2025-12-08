@@ -69,10 +69,35 @@ offset_right = 61.0
 offset_bottom = 69.5
 grow_horizontal = 2
 grow_vertical = 2
-rotation = -0.13962634
 theme_override_fonts/font = ExtResource("7_wl6us")
-theme_override_font_sizes/font_size = 80
-text = "进  入"
+theme_override_font_sizes/font_size = 60
+text = "开始游戏"
+
+[node name="boardButton" type="TextureButton" parent="menu/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("8_fraxl")
+texture_pressed = ExtResource("9_nb8ff")
+texture_hover = ExtResource("10_adb34")
+texture_disabled = ExtResource("11_h860p")
+
+[node name="boardLabel" type="Label" parent="menu/VBoxContainer/boardButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.5
+offset_top = -20.53
+offset_right = 75.5
+offset_bottom = 30.47013
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7_wl6us")
+theme_override_font_sizes/font_size = 50
+text = "排行榜"
+horizontal_alignment = 1
 
 [node name="btn_Quit" type="TextureButton" parent="menu/VBoxContainer"]
 layout_mode = 2
@@ -90,15 +115,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -84.5
-offset_top = -9.0
+offset_top = -20.53
 offset_right = 75.5
-offset_bottom = 42.0
+offset_bottom = 30.47013
 grow_horizontal = 2
 grow_vertical = 2
-rotation = -0.13962634
 theme_override_fonts/font = ExtResource("7_wl6us")
-theme_override_font_sizes/font_size = 40
-text = "退出游戏"
+theme_override_font_sizes/font_size = 50
+text = "退出"
 horizontal_alignment = 1
 
 [node name="Verson" type="Label" parent="."]
