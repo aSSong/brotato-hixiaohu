@@ -75,6 +75,7 @@ class_name ClassData
 ## 异常效果系数（已废弃，请使用base_stats）
 @export var status_chance_multiplier: float = 1.0  ## 异常触发概率系数
 @export var status_effect_multiplier: float = 1.0  ## 异常伤害/效果系数
+@export var status_duration_multiplier: float = 1.0  ## 异常持续时间系数
 
 ## 特殊技能配置
 @export var skill_name: String = ""
@@ -175,6 +176,7 @@ func sync_to_base_stats() -> void:
 	# 异常效果系数
 	base_stats.status_chance_mult = status_chance_multiplier
 	base_stats.status_effect_mult = status_effect_multiplier
+	base_stats.status_duration_mult = status_duration_multiplier
 
 ## 自动生成职业特性描述
 func generate_traits_description() -> void:
@@ -291,6 +293,11 @@ func generate_traits_description() -> void:
 		var percent = roundi((status_effect_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("异常伤害%+d%%" % percent if percent > 0 else "异常伤害%d%%" % percent)
+	
+	if status_duration_multiplier != 1.0:
+		var percent = roundi((status_duration_multiplier - 1.0) * 100)
+		if percent != 0:
+			traits.append("异常持续时间%+d%%" % percent if percent > 0 else "异常持续时间%d%%" % percent)
 	
 	# 幸运值
 	if luck != 0.0:
