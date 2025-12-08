@@ -13,11 +13,10 @@ crit_damage = 0.0
 [resource]
 script = ExtResource("1_upgrade")
 upgrade_type = 19
-name = "钥匙范围+20%"
+name = "拾取范围+20%"
 description = "钥匙拾取范围扩大20%"
 cost = 6
 icon_path = "res://assets/skillicon/10.png"
 quality = 2
 actual_cost = 6
-weight = 500
 stats_modifier = SubResource("Resource_stats")
