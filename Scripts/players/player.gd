@@ -471,6 +471,9 @@ func enable_weapons() -> void:
 		weapons_node.process_mode = Node.PROCESS_MODE_INHERIT
 		# 显示武器
 		weapons_node.visible = true
+		# 刷新武器属性引用（修复复活后特效不触发的问题）
+		if weapons_node.has_method("reapply_all_bonuses"):
+			weapons_node.reapply_all_bonuses()
 		print("[Player] 武器已启用")
 
 ## 记录路径点（用于Ghost跟随）

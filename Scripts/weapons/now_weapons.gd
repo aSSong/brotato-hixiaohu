@@ -137,7 +137,7 @@ func _setup_weapon_stats(weapon) -> void:
 	# 使用新系统：直接引用玩家的final_stats
 	if player_ref.has_node("AttributeManager"):
 		var attr_manager = player_ref.get_node("AttributeManager")
-		weapon.player_stats = attr_manager.final_stats
+		weapon.set_player_stats(attr_manager.final_stats)  # 调用方法以同步设置behavior.player_stats
 		print("[NowWeapons] 武器使用新属性系统")
 	else:
 		# 降级方案：继续使用旧系统
