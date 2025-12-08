@@ -63,9 +63,14 @@ func load_user_data() -> bool:
 		# 确保旧存档也有 total_death_count 字段
 		if not user_data.has("total_death_count"):
 			user_data["total_death_count"] = 0
-		# 确保旧存档也有 best_waves 字段
+		# 确保旧存档也有 best_waves 字段，并确保值为整数
 		if not user_data.has("best_waves"):
 			user_data["best_waves"] = {"survival": 0, "multi": 0}
+		else:
+			# JSON 加载可能将整数解析为浮点数，强制转换为整数
+			var best_waves = user_data["best_waves"]
+			for mode_id in best_waves.keys():
+				best_waves[mode_id] = int(best_waves[mode_id])
 		# 迁移旧版 floor_id（0-38 索引制）到新版（1-38 真实楼层号）
 		_migrate_legacy_floor_id()
 		print("[SaveManager] 用户数据已加载: %s" % user_data)
@@ -130,16 +135,16 @@ func get_total_death_count() -> int:
 ## 获取指定模式的最高波次
 func get_best_wave(mode_id: String) -> int:
 	var best_waves = user_data.get("best_waves", {})
-	return best_waves.get(mode_id, 0)
+	return int(best_waves.get(mode_id, 0))
 
 ## 尝试更新指定模式的最高波次（如果新波次更高则更新）
 ## 返回 true 表示创建了新纪录
 func try_update_best_wave(mode_id: String, wave: int) -> bool:
 	var best_waves = user_data.get("best_waves", {"survival": 0, "multi": 0})
-	var current_best = best_waves.get(mode_id, 0)
+	var current_best = int(best_waves.get(mode_id, 0))
 	
 	if wave > current_best:
-		best_waves[mode_id] = wave
+		best_waves[mode_id] = int(wave)  # 确保存储为整数
 		user_data["best_waves"] = best_waves
 		save_user_data()
 		print("[SaveManager] %s 模式最高波次更新: %d -> %d" % [mode_id, current_best, wave])
