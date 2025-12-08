@@ -187,76 +187,76 @@ func generate_traits_description() -> void:
 	#
 	# 战斗属性
 	if damage_reduction_multiplier != 1.0:
-		var percent = int((1.0 - damage_reduction_multiplier) * 100)
+		var percent = roundi((1.0 - damage_reduction_multiplier) * 100)
 		if percent != 0:
 			traits.append("受到伤害%+d%%" % -percent if percent > 0 else "受到伤害%d%%" % -percent)
 	
 	# 总攻击速度
 	if attack_speed_multiplier != 1.0:
-		var percent = int((attack_speed_multiplier - 1.0) * 100)
+		var percent = roundi((attack_speed_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("攻击速度%+d%%" % percent if percent > 0 else "攻击速度%d%%" % percent)
 	
 	# 总武器伤害
 	if attack_multiplier != 1.0:
-		var percent = int((attack_multiplier - 1.0) * 100)
+		var percent = roundi((attack_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("所有武器伤害%+d%%" % percent if percent > 0 else "所有武器伤害%d%%" % percent)
 	
 	# 近战武器
 	if melee_damage_multiplier != 1.0:
-		var percent = int((melee_damage_multiplier - 1.0) * 100)
+		var percent = roundi((melee_damage_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("近战武器伤害%+d%%" % percent if percent > 0 else "近战武器伤害%d%%" % percent)
 	
 	if melee_speed_multiplier != 1.0:
-		var percent = int((melee_speed_multiplier - 1.0) * 100)
+		var percent = roundi((melee_speed_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("近战武器速度%+d%%" % percent if percent > 0 else "近战武器速度%d%%" % percent)
 	
 	if melee_range_multiplier != 1.0:
-		var percent = int((melee_range_multiplier - 1.0) * 100)
+		var percent = roundi((melee_range_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("近战武器范围%+d%%" % percent if percent > 0 else "近战武器范围%d%%" % percent)
 	
 	if melee_knockback_multiplier != 1.0:
-		var percent = int((melee_knockback_multiplier - 1.0) * 100)
+		var percent = roundi((melee_knockback_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("近战武器击退%+d%%" % percent if percent > 0 else "近战武器击退%d%%" % percent)
 	
 	# 远程武器
 	if ranged_damage_multiplier != 1.0:
-		var percent = int((ranged_damage_multiplier - 1.0) * 100)
+		var percent = roundi((ranged_damage_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("远程武器伤害%+d%%" % percent if percent > 0 else "远程武器伤害%d%%" % percent)
 	
 	if ranged_speed_multiplier != 1.0:
-		var percent = int((ranged_speed_multiplier - 1.0) * 100)
+		var percent = roundi((ranged_speed_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("远程武器速度%+d%%" % percent if percent > 0 else "远程武器速度%d%%" % percent)
 	
 	if ranged_range_multiplier != 1.0:
-		var percent = int((ranged_range_multiplier - 1.0) * 100)
+		var percent = roundi((ranged_range_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("远程武器范围%+d%%" % percent if percent > 0 else "远程武器范围%d%%" % percent)
 	
 	# 魔法武器
 	if magic_damage_multiplier != 1.0:
-		var percent = int((magic_damage_multiplier - 1.0) * 100)
+		var percent = roundi((magic_damage_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("魔法武器伤害%+d%%" % percent if percent > 0 else "魔法武器伤害%d%%" % percent)
 	
 	if magic_speed_multiplier != 1.0:
-		var percent = int((magic_speed_multiplier - 1.0) * 100)
+		var percent = roundi((magic_speed_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("魔法冷却%+d%%" % percent if percent > 0 else "魔法冷却%d%%" % percent)
 	
 	if magic_range_multiplier != 1.0:
-		var percent = int((magic_range_multiplier - 1.0) * 100)
+		var percent = roundi((magic_range_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("魔法武器范围%+d%%" % percent if percent > 0 else "魔法武器范围%d%%" % percent)
 	
 	if magic_explosion_radius_multiplier != 1.0:
-		var percent = int((magic_explosion_radius_multiplier - 1.0) * 100)
+		var percent = roundi((magic_explosion_radius_multiplier - 1.0) * 100)
 		if percent != 0:
 			traits.append("爆炸范围%+d%%" % percent if percent > 0 else "爆炸范围%d%%" % percent)
