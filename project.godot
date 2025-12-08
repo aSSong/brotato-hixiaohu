@@ -32,6 +32,7 @@ BGMManager="*res://Scripts/managers/bgm_manager.gd"
 ApiManager="*res://Scripts/managers/api_manager.gd"
 SaveManager="*res://Scripts/managers/save_manager.gd"
 GhostDatabase="*res://Scripts/data/ghost_database.gd"
+LeaderboardManager="*res://Scripts/managers/leaderboard_manager.gd"
 
 [display]
 
