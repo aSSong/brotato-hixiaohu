@@ -426,7 +426,7 @@ theme_override_font_sizes/font_size = 22
 text = "Talent"
 
 [node name="TalentText" type="RichTextLabel" parent="MainContent/RightSection/InfoContainer/TalentSection"]
-custom_minimum_size = Vector2(450, 50)
+custom_minimum_size = Vector2(450, 80)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.7058824, 0.9882353, 0.13333334, 1)
 bbcode_enabled = true
@@ -451,6 +451,7 @@ text = "Skill"
 [node name="SkillIcon" type="TextureRect" parent="MainContent/RightSection/InfoContainer/SkillSection"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+size_flags_vertical = 0
 expand_mode = 1
 stretch_mode = 5
 
