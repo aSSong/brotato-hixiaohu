@@ -28,6 +28,7 @@ func try_update_survival_record(completion_time: float, death_count: int) -> boo
 	if current == null or completion_time < current.get("completion_time_seconds", INF):
 		records["survival"] = _create_survival_record(completion_time, death_count)
 		save_records()
+		save_leaderboard_data(1, records["survival"])
 		print("[LeaderboardManager] Survival模式新纪录! 时间: %.2f秒" % completion_time)
 		return true
 	
@@ -43,6 +44,7 @@ func try_update_multi_record(best_wave: int, death_count: int) -> bool:
 	if current == null or best_wave > current.get("best_wave", 0):
 		records["multi"] = _create_multi_record(best_wave, death_count)
 		save_records()
+		save_leaderboard_data(2, records["multi"])
 		print("[LeaderboardManager] Multi模式新纪录! 波次: %d" % best_wave)
 		return true
 	
@@ -162,6 +164,28 @@ func load_records() -> bool:
 	push_warning("[LeaderboardManager] 记录数据格式错误，清除记录")
 	_clear_corrupted_data()
 	return false
+
+# 从服务器加载记录
+func load_leaderboard_data() -> Dictionary:
+	var data = await ApiManager.load_leaderboard_data()
+	if data is Dictionary and data.has("leaderboards"):
+		# TODO: 根据客户端需求自行排序
+		return data["leaderboards"]
+	return {}
+
+# 保存记录到服务器
+func save_leaderboard_data(type: int, data: Dictionary) -> bool:
+	var json_string = JSON.stringify(data)
+	var result = await ApiManager.save_leaderboard_data(type, json_string)
+	if result.has("error"):
+		push_error("[LeaderboardManager] ✗ 上传失败: %s" % result["error"])
+		return false
+	elif result.has("success") and result["success"]:
+		print("[LeaderboardManager] ✓ 上传成功！")
+		return true
+	else:
+		push_warning("[LeaderboardManager] ⚠ 上传返回未知结果: %s" % result)
+		return false
 
 ## ==================== 私有方法 ====================
 
