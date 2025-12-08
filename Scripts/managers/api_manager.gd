@@ -105,3 +105,15 @@ func save_ghost_data(data: String) -> Dictionary:
 	if res.has("error"):
 		return {error = res["error"]}
 	return {success = true}
+
+func load_leaderboard_data() -> Dictionary:
+	var res = await _http_get("/api/game/leaderboards")
+	if res.has("error"):
+		return {error = res["error"]}
+	return res["data"]
+
+func save_leaderboard_data(type: int, data: String) -> Dictionary:
+	var res = await _http_post("/api/game/leaderboards/" + str(type) + "/{player_id}", data)
+	if res.has("error"):
+		return {error = res["error"]}
+	return {success = true}
