@@ -144,12 +144,8 @@ func _can_start_reading() -> bool:
 func _on_range_changed(entered: bool) -> void:
 	if entered:
 		print("[Grave] 进入救援范围 | 玩家HP:", player.now_hp if player else "null")
-		if range_circle:
-			range_circle.visible = true
 	else:
 		print("[Grave] 离开救援范围")
-		if range_circle:
-			range_circle.visible = false
 
 ## 开始读条
 func _start_reading() -> void:
@@ -158,6 +154,8 @@ func _start_reading() -> void:
 	
 	is_reading = true
 	rescue_progress = 0.0
+	if range_circle:
+		range_circle.visible = true
 	if progress_bar:
 		progress_bar.visible = true
 	print("[Grave] 开始读条（已锁定）")
@@ -166,6 +164,8 @@ func _start_reading() -> void:
 func _stop_reading() -> void:
 	is_reading = false
 	rescue_progress = 0.0
+	if range_circle:
+		range_circle.visible = false
 	if progress_bar:
 		progress_bar.visible = false
 		progress_bar.value = 0
