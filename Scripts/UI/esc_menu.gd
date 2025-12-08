@@ -229,7 +229,7 @@ func _on_resume_pressed() -> void:
 ## 返回主菜单按钮
 func _on_main_menu_pressed() -> void:
 	print("[ESC Menu] 玩家选择返回主菜单")
-	
+	_return_to_main_menu()
 	# 显示确认对话框（可选）
 	#if await _show_confirmation():
 		#_return_to_main_menu()
