@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=5 format=3 uid="uid://sckpdapshu0c"]
+
+[ext_resource type="Texture2D" uid="uid://bijoqd3cifawg" path="res://assets/UI/game_ui/icon-skill2-01.png" id="1_tckqi"]
+[ext_resource type="Script" uid="uid://cr4jxrshys2c8" path="res://Scripts/data/skill_data.gd" id="2_1e7qe"]
+[ext_resource type="Script" uid="uid://bvomybpfunsra" path="res://Scripts/AttributeSystem/stats_modifier.gd" id="3_ey6g7"]
+
+[sub_resource type="Resource" id="Resource_fmo1s"]
+script = ExtResource("3_ey6g7")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+damage_reduction = 0.5
+
+[resource]
+script = ExtResource("2_1e7qe")
+name = "新手光环"
+description = "受到的伤害减少50%"
+icon = ExtResource("1_tckqi")
+cooldown = 30.0
+stats_modifier = SubResource("Resource_fmo1s")

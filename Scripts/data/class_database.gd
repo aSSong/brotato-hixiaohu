@@ -29,7 +29,7 @@ static func initialize_classes() -> void:
 	# 平衡者已经通过 attack_multiplier 设置了所有武器伤害+15%
 	# speed 保持 400.0（移动速度0%）
 	# 加载技能数据（新系统）
-	betty.skill_data = load("res://resources/skills/shield.tres") as SkillData
+	betty.skill_data = load("res://resources/skills/betty_skill.tres") as SkillData
 	# 设置皮肤 (需要先在编辑器创建 SpriteFrames 资源)
 	betty.skin_frames = load("res://resources/class_skin/betty01.tres")
 	betty.scale = Vector2(0.7, 0.7)
@@ -62,7 +62,7 @@ static func initialize_classes() -> void:
 	warrior.melee_damage_multiplier = 1.3  # 近战武器伤害+30%
 	warrior.melee_knockback_multiplier = 1.2  # 近战击退+20%
 	# 加载技能数据（新系统）
-	warrior.skill_data = load("res://resources/skills/berserk.tres") as SkillData
+	warrior.skill_data = load("res://resources/skills/babayaga_skill.tres") as SkillData
 	warrior.skin_frames = load("res://resources/class_skin/babayaga01.tres")
 	warrior.scale = Vector2(0.7, 0.7)
 	# UI 资源配置
@@ -93,7 +93,7 @@ static func initialize_classes() -> void:
 	ranger.ranged_damage_multiplier = 1.2  # 远程武器伤害+25%
 	#ranger.attack_speed_multiplier = 1.2  # 攻击速度+20%
 	# 加载技能数据（新系统）
-	ranger.skill_data = load("res://resources/skills/precision.tres") as SkillData
+	ranger.skill_data = load("res://resources/skills/mrwill_skill.tres") as SkillData
 	ranger.skin_frames = load("res://resources/class_skin/mrwill01.tres")
 	ranger.scale = Vector2(0.7, 0.7)
 	# UI 资源配置
@@ -125,7 +125,7 @@ static func initialize_classes() -> void:
 	mage.magic_explosion_radius_multiplier = 1.2  # 爆炸范围+30%
 	#mage.magic_speed_multiplier = 0.8  # 魔法冷却-20%（速度降低=冷却减少）
 	# 加载技能数据（新系统）
-	mage.skill_data = load("res://resources/skills/magic_burst.tres") as SkillData
+	mage.skill_data = load("res://resources/skills/as_skill.tres") as SkillData
 	mage.skin_frames = load("res://resources/class_skin/armstrong01.tres")
 	mage.scale = Vector2(0.7, 0.7)
 	# UI 资源配置
@@ -153,10 +153,10 @@ static func initialize_classes() -> void:
 	)
 	balanced.description = "外包公司的老板，来要尾款，被困在了大楼里，\n 脸皮很厚，背后小手段很多"
 	# 设置异常加成
-	balanced.status_chance_multiplier = 2.0  # 异常触发概率+100%
+	balanced.status_chance_multiplier = 1.5  # 异常触发概率+50%
 	balanced.status_effect_multiplier = 1.5  # 异常伤害+50%
 	# 加载技能数据（新系统）
-	balanced.skill_data = load("res://resources/skills/all_stats.tres") as SkillData
+	balanced.skill_data = load("res://resources/skills/mrdot_skill.tres") as SkillData
 	balanced.skin_frames = load("res://resources/class_skin/mrdot01.tres")
 	balanced.scale = Vector2(0.7, 0.7)
 	# UI 资源配置
@@ -187,7 +187,7 @@ static func initialize_classes() -> void:
 	tank.damage_reduction_multiplier = 0.8  # 受到伤害-20%（减伤系数0.8）
 	tank.luck = 50.0  # 幸运值+50
 	# 加载技能数据（新系统）
-	tank.skill_data = load("res://resources/skills/shield.tres") as SkillData
+	tank.skill_data = load("res://resources/skills/kp_skill.tres") as SkillData
 	tank.skin_frames = load("res://resources/class_skin/ky01.tres")
 	tank.scale = Vector2(0.7, 0.7)
 	# UI 资源配置

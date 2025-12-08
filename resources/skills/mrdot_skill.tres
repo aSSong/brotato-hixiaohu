@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=5 format=3 uid="uid://2i6k532nccsc"]
+
+[ext_resource type="Texture2D" uid="uid://bijoqd3cifawg" path="res://assets/UI/game_ui/icon-skill2-01.png" id="1_uo7qo"]
+[ext_resource type="Script" uid="uid://cr4jxrshys2c8" path="res://Scripts/data/skill_data.gd" id="2_gxkx3"]
+[ext_resource type="Script" uid="uid://bvomybpfunsra" path="res://Scripts/AttributeSystem/stats_modifier.gd" id="3_xsn6r"]
+
+[sub_resource type="Resource" id="Resource_m1wn4"]
+script = ExtResource("3_xsn6r")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+status_effect_mult = 1.5
+status_chance_mult = 1.5
+
+[resource]
+script = ExtResource("2_gxkx3")
+name = "想想办法"
+description = "特殊效果触发概率+50%
+特殊效果伤害+50%"
+icon = ExtResource("1_uo7qo")
+cooldown = 30.0
+stats_modifier = SubResource("Resource_m1wn4")

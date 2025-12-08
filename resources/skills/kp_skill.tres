@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=5 format=3 uid="uid://nrvnlkpc7du7"]
+
+[ext_resource type="Texture2D" uid="uid://bijoqd3cifawg" path="res://assets/UI/game_ui/icon-skill2-01.png" id="1_6dckc"]
+[ext_resource type="Script" uid="uid://cr4jxrshys2c8" path="res://Scripts/data/skill_data.gd" id="2_dhsvr"]
+[ext_resource type="Script" uid="uid://bvomybpfunsra" path="res://Scripts/AttributeSystem/stats_modifier.gd" id="3_ngi3b"]
+
+[sub_resource type="Resource" id="Resource_m1wn4"]
+script = ExtResource("3_ngi3b")
+max_hp = 0
+speed = 0.0
+key_pickup_range_mult = 2.0
+crit_damage = 0.0
+
+[resource]
+script = ExtResource("2_dhsvr")
+name = "紫key东来"
+description = "钥匙拾取范围+100%"
+icon = ExtResource("1_6dckc")
+cooldown = 30.0
+stats_modifier = SubResource("Resource_m1wn4")

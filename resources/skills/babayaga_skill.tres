@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=5 format=3 uid="uid://cr38dmon72rf2"]
+
+[ext_resource type="Texture2D" uid="uid://bijoqd3cifawg" path="res://assets/UI/game_ui/icon-skill2-01.png" id="1_ykcqn"]
+[ext_resource type="Script" uid="uid://cr4jxrshys2c8" path="res://Scripts/data/skill_data.gd" id="2_r678f"]
+[ext_resource type="Script" uid="uid://bvomybpfunsra" path="res://Scripts/AttributeSystem/stats_modifier.gd" id="3_1vl35"]
+
+[sub_resource type="Resource" id="Resource_f1vrg"]
+script = ExtResource("3_1vl35")
+max_hp = 0
+speed = 0.0
+crit_damage = 0.0
+melee_range_mult = 1.5
+melee_knockback_mult = 2.0
+
+[resource]
+script = ExtResource("2_r678f")
+name = "把脚挪开"
+description = "近战范围+50%
+击退效果+100%"
+icon = ExtResource("1_ykcqn")
+cooldown = 30.0
+stats_modifier = SubResource("Resource_f1vrg")
