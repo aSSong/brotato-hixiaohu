@@ -226,8 +226,8 @@ static func initialize_weapons() -> void:
 			"knockback_force": 400.0,
 			"rotation_speed": 300.0
 		},
-		"res://assets/weapon/Weapon_lasersword.png",
-		Vector2(0.75, 0.75)
+		"res://assets/weapon/weapon-fireblade.png",
+		Vector2(1.0, 1.0)
 	)
 	flame_sword.description = "附魔火焰的剑，近战行为但使用魔法伤害加成"
 	flame_sword.special_effects = [
