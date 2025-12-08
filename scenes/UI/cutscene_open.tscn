@@ -1,16 +1,16 @@
 [gd_scene load_steps=3 format=3 uid="uid://3hd2ct6idsnd"]
 
-[ext_resource type="Script" uid="uid://cutscene_open_script" path="res://Scripts/UI/cutscene_open.gd" id="1_script"]
 [ext_resource type="VideoStream" uid="uid://dg4wg2xp5txb7" path="res://video/cut-open.ogv" id="1_1ovi6"]
+[ext_resource type="Script" uid="uid://cmouyiq2mjvaq" path="res://Scripts/UI/cutscene_open.gd" id="1_script"]
 
 [node name="CutsceneOpen" type="Control"]
-script = ExtResource("1_script")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
 layout_mode = 1
