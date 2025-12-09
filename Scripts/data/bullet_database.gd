@@ -26,6 +26,7 @@ static func initialize_bullets() -> void:
 	var fast_bullet = BulletData.new("fast_bullet", 3000.0, 2.5, "res://assets/bullet/bullet.png")
 	fast_bullet.bullet_name = "高速子弹"
 	fast_bullet.scale = Vector2(0.8, 0.8)
+	fast_bullet.modulate = Color(0.0, 0.866, 0.867, 1.0)
 	fast_bullet.movement_type = BulletData.MovementType.STRAIGHT
 	#fast_bullet.movement_params = {
 		#"rotate_to_direction": true  # 朝向飞行方向
@@ -59,10 +60,10 @@ static func initialize_bullets() -> void:
 	
 	# ========== 特殊子弹 ==========
 	
-	var homing_bullet = BulletData.new("homing_bullet", 1000.0, 8.0,"res://assets/weapon/bullet-missle.png")
+	var homing_bullet = BulletData.new("homing_bullet", 1000.0, 8.0,"res://FX/fx-missle-Sheet-01.png")
 	homing_bullet.bullet_name = "追踪子弹"
-	homing_bullet.scale = Vector2(0.5, 0.5)
-	#homing_bullet.modulate = Color(0.5, 0.8, 1.0)
+	homing_bullet.scale = Vector2(2.5, 2.5)
+	homing_bullet.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	homing_bullet.movement_type = BulletData.MovementType.HOMING
 	homing_bullet.movement_params = {
 		"turn_speed": 8.0,        # 降低转向速度，让它转大弯
@@ -72,13 +73,18 @@ static func initialize_bullets() -> void:
 		"wobble_amount": 15.0,    # 15度的左右摆动
 		"wobble_frequency": 8.0   # 摆动频率
 	}
+	# 序列帧动画配置
+	homing_bullet.hframes = 4           # 水平帧数（4列）
+	homing_bullet.vframes = 1           # 垂直帧数（1行）
+	homing_bullet.animation_speed = 10.0  # 播放速度 10fps
+	homing_bullet.loop_animation = true   # 循环播放（默认就是true，可省略）
 	bullets["homing_bullet"] = homing_bullet
 	
 	
-	var arcane_bullet = BulletData.new("arcane_bullet", 600.0, 8.0,"res://assets/bullet/bullet.png")
+	var arcane_bullet = BulletData.new("arcane_bullet", 600.0, 8.0,"res://FX/fx-arcane-Sheet-01.png")
 	arcane_bullet.bullet_name = "奥术飞弹"
-	arcane_bullet.scale = Vector2(1.5, 1.5)
-	arcane_bullet.modulate = Color(0.645, 0.51, 1.0, 1.0)
+	arcane_bullet.scale = Vector2(1.0, 1.0)
+	#arcane_bullet.modulate = Color(0.645, 0.51, 1.0, 1.0)
 	arcane_bullet.movement_type = BulletData.MovementType.HOMING
 	arcane_bullet.movement_params = {
 		"turn_speed": 8.0,        # 降低转向速度，让它转大弯
@@ -88,13 +94,17 @@ static func initialize_bullets() -> void:
 		"wobble_amount": 15.0,    # 15度的左右摆动
 		"wobble_frequency": 8.0   # 摆动频率
 	}
+	arcane_bullet.hframes = 10           # 水平帧数（4列）
+	arcane_bullet.vframes = 1           # 垂直帧数（1行）
+	arcane_bullet.animation_speed = 10.0  # 播放速度 10fps
+	arcane_bullet.loop_animation = true   # 循环播放（默认就是true，可省略）
 	# 紫色魔法拖尾特效
 	arcane_bullet.trail_effect_path = "res://scenes/effects/arcane_trail.tscn"
 	bullets["arcane_bullet"] = arcane_bullet
 	
 	## 连锁闪电
 	# 名称，速度，存活时间，贴图
-	var bounce_bullet = BulletData.new("bounce_bullet", 1200.0, 6.0, "res://assets/bullet/bullet_lightning.png")
+	var bounce_bullet = BulletData.new("bounce_bullet", 1200.0, 6.0, "res://FX/fx-ligntningchain-Sheet-01.png")
 	bounce_bullet.bullet_name = "弹跳子弹"
 	bounce_bullet.scale = Vector2(1.0, 1.0)
 	#bounce_bullet.modulate = Color(0.8, 1.0, 0.5)
@@ -105,6 +115,10 @@ static func initialize_bullets() -> void:
 		"bounce_loss": 0.9,     # 每次弹跳速度保留比例
 		"search_range": 800.0   # 弹跳目标搜索范围
 	}
+	bounce_bullet.hframes = 10           # 水平帧数（4列）
+	bounce_bullet.vframes = 1           # 垂直帧数（1行）
+	bounce_bullet.animation_speed = 10.0  # 播放速度 10fps
+	bounce_bullet.loop_animation = true   # 循环播放（默认就是true，可省略）
 	bounce_bullet.destroy_on_hit = false  # 弹跳子弹不会立即销毁
 	bullets["bounce_bullet"] = bounce_bullet
 	
