@@ -70,19 +70,21 @@ static func initialize_bullets() -> void:
 	bullets["homing_bullet"] = homing_bullet
 	
 	
-	var arcane_bullet = BulletData.new("arcane_bullet", 800.0, 8.0,"res://assets/bullet/bullet.png")
+	var arcane_bullet = BulletData.new("arcane_bullet", 600.0, 8.0,"res://assets/bullet/bullet.png")
 	arcane_bullet.bullet_name = "奥术飞弹"
 	arcane_bullet.scale = Vector2(1.5, 1.5)
-	arcane_bullet.modulate = Color(0.532, 0.234, 1.0, 1.0)
+	arcane_bullet.modulate = Color(0.645, 0.51, 1.0, 1.0)
 	arcane_bullet.movement_type = BulletData.MovementType.HOMING
 	arcane_bullet.movement_params = {
 		"turn_speed": 8.0,        # 降低转向速度，让它转大弯
-		"acceleration": 100.0,    # 增加加速度，越飞越快
+		"acceleration": 50.0,    # 增加加速度，越飞越快
 		"max_speed": 1200.0,      # 稍微降低极速，让玩家看清轨迹
 		"homing_delay": 0.2,      # 发射后 0.2秒内直飞，不追踪
 		"wobble_amount": 15.0,    # 15度的左右摆动
 		"wobble_frequency": 8.0   # 摆动频率
 	}
+	# 紫色魔法拖尾特效
+	arcane_bullet.trail_effect_path = "res://scenes/effects/arcane_trail.tscn"
 	bullets["arcane_bullet"] = arcane_bullet
 	
 	## 连锁闪电
