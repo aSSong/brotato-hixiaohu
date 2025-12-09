@@ -18,18 +18,27 @@ static func initialize_bullets() -> void:
 	normal_bullet.bullet_name = "普通子弹"
 	normal_bullet.scale = Vector2(1.0, 1.0)
 	normal_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	#normal_bullet.movement_params = {
+		#"rotate_to_direction": true  # 朝向飞行方向
+	#}
 	bullets["normal_bullet"] = normal_bullet
 	
 	var fast_bullet = BulletData.new("fast_bullet", 3000.0, 2.5, "res://assets/bullet/bullet.png")
 	fast_bullet.bullet_name = "高速子弹"
 	fast_bullet.scale = Vector2(0.8, 0.8)
 	fast_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	#fast_bullet.movement_params = {
+		#"rotate_to_direction": true  # 朝向飞行方向
+	#}
 	bullets["fast_bullet"] = fast_bullet
 	
 	var heavy_bullet = BulletData.new("heavy_bullet", 1500.0, 4.0, "res://assets/bullet/bullet_lightning.png")
 	heavy_bullet.bullet_name = "重型子弹"
 	heavy_bullet.scale = Vector2(1.0, 1.0)
 	heavy_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	heavy_bullet.movement_params = {
+		"rotate_to_direction": true  # 朝向飞行方向
+	}
 	bullets["heavy_bullet"] = heavy_bullet
 	
 	# ========== 手动新子弹 ==========
@@ -91,6 +100,9 @@ static func initialize_bullets() -> void:
 	fire_bullet.scale = Vector2(1.2, 1.2)
 	fire_bullet.modulate = Color(1.0, 0.5, 0.2)
 	fire_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	fire_bullet.movement_params = {
+		"rotate_to_direction": true  # 朝向飞行方向
+	}
 	# 可配置火焰轨迹特效
 	# fire_bullet.trail_effect_path = "res://scenes/effects/fire_trail.tscn"
 	bullets["fire_bullet"] = fire_bullet
@@ -100,6 +112,9 @@ static func initialize_bullets() -> void:
 	ice_bullet.scale = Vector2(1.0, 1.0)
 	ice_bullet.modulate = Color(0.5, 0.9, 1.0)
 	ice_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	ice_bullet.movement_params = {
+		"rotate_to_direction": true  # 朝向飞行方向
+	}
 	bullets["ice_bullet"] = ice_bullet
 	
 	var poison_bullet = BulletData.new("poison_bullet", 1900.0, 4.0, "res://assets/bullet/bullet.png")
@@ -107,6 +122,9 @@ static func initialize_bullets() -> void:
 	poison_bullet.scale = Vector2(1.0, 1.0)
 	poison_bullet.modulate = Color(0.4, 1.0, 0.3)
 	poison_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	poison_bullet.movement_params = {
+		"rotate_to_direction": true  # 朝向飞行方向
+	}
 	bullets["poison_bullet"] = poison_bullet
 
 ## 获取子弹数据

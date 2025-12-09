@@ -128,6 +128,10 @@ func _init_movement() -> void:
 	match movement_type:
 		BulletData.MovementType.STRAIGHT:
 			_velocity = dir * speed
+			# 修正朝向：如果配置了 rotate_to_direction，则旋转子弹朝向飞行方向
+			# 子弹素材右侧为正方向（0度），所以直接使用 dir.angle()
+			if movement_params.get("rotate_to_direction", false):
+				rotation = dir.angle()
 		
 		BulletData.MovementType.HOMING:
 			_velocity = dir * speed
