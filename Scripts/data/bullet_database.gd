@@ -32,13 +32,18 @@ static func initialize_bullets() -> void:
 	#}
 	bullets["fast_bullet"] = fast_bullet
 	
-	var heavy_bullet = BulletData.new("heavy_bullet", 1500.0, 4.0, "res://assets/bullet/bullet_lightning.png")
+	var heavy_bullet = BulletData.new("heavy_bullet", 1500.0, 4.0, "res://FX/fx-spark-Sheet-01.png")
 	heavy_bullet.bullet_name = "重型子弹"
 	heavy_bullet.scale = Vector2(1.0, 1.0)
 	heavy_bullet.movement_type = BulletData.MovementType.STRAIGHT
 	heavy_bullet.movement_params = {
 		"rotate_to_direction": true  # 朝向飞行方向
 	}
+	# 序列帧动画配置
+	heavy_bullet.hframes = 3           # 水平帧数（3列）
+	heavy_bullet.vframes = 1           # 垂直帧数（1行）
+	heavy_bullet.animation_speed = 10.0  # 播放速度 10fps
+	heavy_bullet.loop_animation = true   # 循环播放（默认就是true，可省略）
 	bullets["heavy_bullet"] = heavy_bullet
 	
 	# ========== 手动新子弹 ==========
