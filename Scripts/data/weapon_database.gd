@@ -183,11 +183,11 @@ static func initialize_weapons() -> void:
 	shotgun.description = "近距离高伤害，发射多颗弹丸"
 	weapons["shotgun"] = shotgun
 	
-	# 追踪导弹（远程行为 + 魔法结算 + 追踪子弹）
+	# 追踪导弹（远程行为 + 远程结算 + 追踪子弹）
 	var homing_missile = WeaponData.new(
 		"追踪导弹",
 		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.MAGIC,  # 魔法结算！
+		WeaponData.CalculationType.RANGED,  # 魔法结算！
 		{
 			"damage": 8,
 			"attack_speed": 1.2,
@@ -200,7 +200,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_missle.png",
 		Vector2(0.7, 0.7)
 	)
-	homing_missile.description = "发射追踪导弹，使用魔法伤害"
+	homing_missile.description = "发射追踪导弹"
 	homing_missile.special_effects = [
 		{
 			"type": "burn",
@@ -338,28 +338,28 @@ static func initialize_weapons() -> void:
 	weapons["ice_shard"] = ice_shard
 	
 	# 陨石（魔法行为 + 魔法结算）
-	#var meteor = WeaponData.new(
-		#"陨石",
-		#WeaponData.BehaviorType.MAGIC,
-		#WeaponData.CalculationType.MAGIC,
-		#{
-			#"damage": 10,
-			#"attack_speed": 1.5,
-			#"range": 700.0,
-			#"explosion_radius": 250.0,
-			#"explosion_damage_multiplier": 1.5,
-			#"cast_delay": 1.0,
-			#"is_target_locked": false,
-			#"max_targets": 1,
-			#"has_explosion_damage": true,
-			#"indicator_texture_path": "res://assets/skill_indicator/meteor_range_circle.png",
-			#"effect_lead_time": 0.2  # 特效较长，提前 0.35 秒播放
-		#},
-		#"res://assets/weapon/Weapon_stone.png",
-		#Vector2(0.7, 0.7)
-	#)
-	#meteor.description = "高伤害魔法武器，超大爆炸范围"
-	#weapons["meteor"] = meteor
+	var meteor = WeaponData.new(
+		"陨石",
+		WeaponData.BehaviorType.MAGIC,
+		WeaponData.CalculationType.MAGIC,
+		{
+			"damage": 10,
+			"attack_speed": 1.5,
+			"range": 700.0,
+			"explosion_radius": 250.0,
+			"explosion_damage_multiplier": 1.5,
+			"cast_delay": 1.0,
+			"is_target_locked": false,
+			"max_targets": 1,
+			"has_explosion_damage": true,
+			"indicator_texture_path": "res://assets/skill_indicator/meteor_range_circle.png",
+			"effect_lead_time": 0.2  # 特效较长，提前 0.35 秒播放
+		},
+		"res://assets/weapon/weapon_meteor.png",
+		Vector2(0.7, 0.7)
+	)
+	meteor.description = "高伤害魔法武器，超大爆炸范围"
+	weapons["meteor"] = meteor
 	
 	# 闪电（魔法行为 + 魔法结算 + 多目标）
 	var lightning = WeaponData.new(
@@ -384,6 +384,37 @@ static func initialize_weapons() -> void:
 	)
 	lightning.description = "快速魔法武器，可同时攻击多个目标"
 	weapons["lightning"] = lightning
+	
+	# 追踪导弹（远程行为 + 远程结算 + 追踪子弹）
+	var arcane_missile = WeaponData.new(
+		"奥术飞弹",
+		WeaponData.BehaviorType.RANGED,
+		WeaponData.CalculationType.MAGIC,  # 魔法结算！
+		{
+			"damage": 6,
+			"attack_speed": 1.2,
+			"range": 1800.0,
+			"bullet_id": "arcane_bullet",
+			"pierce_count": 0,
+			"projectile_count": 3,
+			"spread_angle": 90.0
+		},
+		"res://assets/weapon/weapon_arcane.png",
+		Vector2(0.7, 0.7)
+	)
+	arcane_missile.description = "发射奥术飞弹"
+	#arcane_missile.special_effects = [
+		#{
+			#"type": "burn",
+			#"params": {
+				#"chance": 0.3,
+				#"tick_interval": 0.5,
+				#"damage": 3.0,
+				#"duration": 2.0
+			#}
+		#}
+	#]
+	weapons["arcane_missile"] = arcane_missile
 
 ## 获取武器
 static func get_weapon(weapon_id: String) -> WeaponData:
