@@ -96,7 +96,7 @@ func start_with_config(config: Dictionary) -> void:
 	
 	# 暴击效果
 	if is_critical:
-		modulate = Color(1.5, 1.5, 1.5)
+		#modulate = Color(1.5, 1.5, 1.5)
 		scale *= 1.2
 	
 	# 生命周期
@@ -117,7 +117,7 @@ func start(pos: Vector2, _dir: Vector2, _speed: float, _hurt: int, _is_critical:
 	_velocity = dir * speed
 	
 	if is_critical:
-		modulate = Color(1.5, 1.5, 1.5)
+		#modulate = Color(1.5, 1.5, 1.5)
 		scale *= 1.2
 	
 	get_tree().create_timer(life_time).timeout.connect(queue_free)
