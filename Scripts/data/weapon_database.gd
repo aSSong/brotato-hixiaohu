@@ -37,9 +37,9 @@ static func initialize_weapons() -> void:
 	
 	# 步枪（远程行为 + 远程结算 + 流血效果）
 	var rifle = WeaponData.new(
-		"步枪",
+		"闪电长矛",
 		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.RANGED,
+		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 4,
 			"attack_speed": 0.7,
@@ -49,7 +49,7 @@ static func initialize_weapons() -> void:
 			"projectile_count": 1,
 			"spread_angle": 0.0
 		},
-		"res://assets/weapon/WeaponShotgun.png",
+		"res://assets/weapon/weapon_lightspear.png",
 		Vector2(0.7, 0.7)
 	)
 	rifle.description = "高伤害远程武器，可穿透敌人"
