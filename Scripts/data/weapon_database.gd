@@ -298,7 +298,7 @@ static func initialize_weapons() -> void:
 			"indicator_texture_path": "res://assets/skill_indicator/ice_range_circle.png",
 			"effect_lead_time": 0.2  # 特效提前 0.15 秒播放
 		},
-		"res://assets/weapon/Weapon_ice.png",
+		"res://assets/weapon/weapon_popsicle.png",
 		Vector2(0.7, 0.7)
 	)
 	ice_shard.description = "快速魔法武器，有几率冰冻敌人"
