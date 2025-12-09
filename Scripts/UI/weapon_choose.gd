@@ -61,11 +61,10 @@ const CLASS_CHOOSE_SCENE = "res://scenes/UI/Class_choose.tscn"
 
 ## 预定义的武器列表（10个武器，每行5个，共2行）
 var available_weapons: Array = [
-	"shotgun", "rifle", "machine_gun", "homing_missile", "axe",  # 第一行
-	"dagger", "flame_sword", "ice_shard", "meteor","lightning"  # 第二行
+	"flame_sword", "axe","dagger", "machine_gun","shotgun",   # 第一行
+	"homing_missile","rifle","lightning","ice_shard","meteor" # 第二行
 ]
-#✅ 显示的：pistol, rifle, machine_gun, sword, axe, dagger, fireball, ice_shard, meteor
-#❌ 未显示的：shotgun（散弹枪）、homing_missile（追踪导弹）、flame_sword（火焰剑）、lightning（闪电）
+#❌ 未显示的：pistol, sword,  fireball,
 
 func _ready() -> void:
 	# 初始化玩家信息显示
