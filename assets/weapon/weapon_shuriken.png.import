@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmtvc1wu11e48"
-path="res://.godot/imported/weapon-fireblade.png-09cbc25ea7209b198e986fa54eb17c8f.ctex"
+uid="uid://bpt8gdi113h4a"
+path="res://.godot/imported/weapon_shuriken.png-c40e50faaa73e488c9d6d11a788e05fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/weapon/weapon-fireblade.png"
-dest_files=["res://.godot/imported/weapon-fireblade.png-09cbc25ea7209b198e986fa54eb17c8f.ctex"]
+source_file="res://assets/weapon/weapon_shuriken.png"
+dest_files=["res://.godot/imported/weapon_shuriken.png-c40e50faaa73e488c9d6d11a788e05fc.ctex"]
 
 [params]
 

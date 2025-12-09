@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://baoq5dund1158"
-path="res://.godot/imported/Weapon_mace.png-45aeeb6dea3d681f37442f69e45f43fd.ctex"
+uid="uid://crd1mqpik75el"
+path="res://.godot/imported/weapon_missle.png-ec734697db9013b8e74a68be0e50fe11.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/weapon/Weapon_mace.png"
-dest_files=["res://.godot/imported/Weapon_mace.png-45aeeb6dea3d681f37442f69e45f43fd.ctex"]
+source_file="res://assets/weapon/weapon_missle.png"
+dest_files=["res://.godot/imported/weapon_missle.png-ec734697db9013b8e74a68be0e50fe11.ctex"]
 
 [params]
 

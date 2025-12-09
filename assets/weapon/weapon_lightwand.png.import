@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8c8w2d50g82i"
-path="res://.godot/imported/Weapon_wand.png-f9317d23c08d46b6a9966aa485c792d0.ctex"
+uid="uid://dlvpu8yjypcxb"
+path="res://.godot/imported/weapon_lightwand.png-fe496dfa6946d65f463444a7626dd0fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/weapon/Weapon_wand.png"
-dest_files=["res://.godot/imported/Weapon_wand.png-f9317d23c08d46b6a9966aa485c792d0.ctex"]
+source_file="res://assets/weapon/weapon_lightwand.png"
+dest_files=["res://.godot/imported/weapon_lightwand.png-fe496dfa6946d65f463444a7626dd0fc.ctex"]
 
 [params]
 

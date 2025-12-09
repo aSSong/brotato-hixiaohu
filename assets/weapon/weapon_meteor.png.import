@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bssnecp6sa1jm"
-path="res://.godot/imported/WeaponSMG.png-269cd3dc1959c1fe067e7d734a281324.ctex"
+uid="uid://wvmaasllomuq"
+path="res://.godot/imported/weapon_meteor.png-161ebdfc74fe70afa9629b9676a345bb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/weapon/WeaponSMG.png"
-dest_files=["res://.godot/imported/WeaponSMG.png-269cd3dc1959c1fe067e7d734a281324.ctex"]
+source_file="res://assets/weapon/weapon_meteor.png"
+dest_files=["res://.godot/imported/weapon_meteor.png-161ebdfc74fe70afa9629b9676a345bb.ctex"]
 
 [params]
 
