@@ -140,6 +140,8 @@ func _init_movement() -> void:
 		BulletData.MovementType.BOUNCE:
 			_velocity = dir * speed
 			max_bounces = movement_params.get("bounce_count", 3)
+			# 弹跳子弹默认朝向飞行方向
+			rotation = dir.angle()
 		
 		BulletData.MovementType.WAVE:
 			_velocity = dir * speed
@@ -332,14 +334,16 @@ func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, 
 	# 应用特殊效果（传参执行，无回调）
 	_apply_effects_to_target(body)
 	
-	# 穿透处理
+	# 弹跳子弹特殊处理：击中敌人后寻找下一个目标（不依赖 pierce_count）
+	if movement_type == BulletData.MovementType.BOUNCE:
+		pierced_enemies.append(body)
+		_handle_bounce_to_enemy()
+		return
+	
+	# 穿透处理（非弹跳子弹）
 	if pierce_count > 0:
 		pierced_enemies.append(body)
 		pierce_count -= 1
-		
-		# 弹跳子弹：寻找下一个目标
-		if movement_type == BulletData.MovementType.BOUNCE:
-			_handle_bounce_to_enemy()
 		return
 	
 	# 销毁子弹
@@ -461,6 +465,8 @@ func _handle_bounce_to_enemy() -> void:
 		var bounce_loss = movement_params.get("bounce_loss", 0.9)
 		speed *= bounce_loss
 		_velocity = dir * speed
+		# 弹跳后更新朝向
+		rotation = dir.angle()
 	else:
 		queue_free()
 

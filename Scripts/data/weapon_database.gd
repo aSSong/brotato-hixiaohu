@@ -13,173 +13,83 @@ static func initialize_weapons() -> void:
 	if not weapons.is_empty():
 		return
 	
-	# ========== 远程武器 ==========
+
 	
-	# 手枪（远程行为 + 远程结算）
-	var pistol = WeaponData.new(
-		"手枪",
-		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.RANGED,
-		{
-			"damage": 3,
-			"attack_speed": 0.4,
-			"range": 800.0,
-			"bullet_id": "normal_bullet",
-			"pierce_count": 0,
-			"projectile_count": 1,
-			"spread_angle": 0.0
-		},
-		"res://assets/weapon/WeaponPistol.png",
-		Vector2(0.7, 0.7)
-	)
-	pistol.description = "基础远程武器，发射快速子弹"
-	weapons["pistol"] = pistol
+	# ========== 近战武器 ==========
 	
-	# 步枪（远程行为 + 远程结算 + 流血效果）
-	var rifle = WeaponData.new(
-		"闪电长矛",
-		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.MAGIC,
+	## 剑（近战行为 + 近战结算）
+	#var sword = WeaponData.new(
+		#"剑",
+		#WeaponData.BehaviorType.MELEE,
+		#WeaponData.CalculationType.MELEE,
+		#{
+			#"damage": 4,
+			#"attack_speed": 0.5,
+			#"range": 240.0,
+			#"orbit_radius": 300.0,
+			#"orbit_speed": 180.0,
+			#"hit_range": 240.0,
+			#"knockback_force": 560.0,
+			#"rotation_speed": 360.0
+		#},
+		#"res://assets/weapon/Weapon_lasersword.png",
+		#Vector2(0.7, 0.7)
+	#)
+	#sword.description = "基础近战武器，环绕攻击"
+	#weapons["sword"] = sword
+	
+	# 斧头（近战行为 + 近战结算）
+	#var axe = WeaponData.new(
+		#"斧头",
+		#WeaponData.BehaviorType.MELEE,
+		#WeaponData.CalculationType.MELEE,
+		#{
+			#"damage": 6,
+			#"attack_speed": 0.8,
+			#"range": 280.0,
+			#"orbit_radius": 400.0,
+			#"orbit_speed": 120.0,
+			#"hit_range": 280.0,
+			#"knockback_force": 840.0,
+			#"rotation_speed": 270.0
+		#},
+		#"res://assets/weapon/Weapon_axe.png",
+		#Vector2(0.8, 0.8)
+	#)
+	#axe.description = "高伤害近战武器，攻击速度较慢"
+	#weapons["axe"] = axe
+	
+		# 火焰剑（近战行为 + 魔法结算！）
+	var flame_sword = WeaponData.new(
+		"火焰剑",
+		WeaponData.BehaviorType.MELEE,
+		WeaponData.CalculationType.MAGIC,  # 魔法结算！
 		{
-			"damage": 4,
-			"attack_speed": 0.7,
-			"range": 900.0,
-			"bullet_id": "heavy_bullet",
-			"pierce_count": 1,
-			"projectile_count": 1,
-			"spread_angle": 0.0
+			"damage": 5,
+			"attack_speed": 0.6,
+			"range": 250.0,
+			"orbit_radius": 320.0,
+			"orbit_speed": 160.0,
+			"hit_range": 250.0,
+			"knockback_force": 400.0,
+			"rotation_speed": 300.0
 		},
-		"res://assets/weapon/weapon_lightspear.png",
-		Vector2(0.7, 0.7)
+		"res://assets/weapon/weapon_flame_sword.png",
+		Vector2(1.0, 1.0)
 	)
-	rifle.description = "高伤害远程武器，可穿透敌人"
-	rifle.special_effects = [
+	flame_sword.description = "附魔火焰的剑，近战行为但使用魔法伤害加成"
+	flame_sword.special_effects = [
 		{
-			"type": "bleed",
+			"type": "burn",
 			"params": {
-				"chance": 0.2,
+				"chance": 0.4,
 				"tick_interval": 0.5,
-				"damage": 3.0,
+				"damage": 5.0,
 				"duration": 3.0
 			}
 		}
 	]
-	weapons["rifle"] = rifle
-	
-	# 机枪（远程行为 + 远程结算）
-	var machine_gun = WeaponData.new(
-		"机枪",
-		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.RANGED,
-		{
-			"damage": 1,
-			"attack_speed": 0.15,
-			"range": 800.0,
-			"bullet_id": "fast_bullet",
-			"pierce_count": 0,
-			"projectile_count": 1,
-			"spread_angle": 0.0
-		},
-		"res://assets/weapon/WeaponSMG.png",
-		Vector2(1, 1)
-	)
-	machine_gun.description = "超高攻击速度的远程武器"
-	weapons["machine_gun"] = machine_gun
-	
-	# 散弹枪（远程行为 + 远程结算 + 多弹丸）
-	var shotgun = WeaponData.new(
-		"手里剑",
-		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.RANGED,
-		{
-			"damage": 2,
-			"attack_speed": 0.8,
-			"range": 800.0,
-			"bullet_id": "shuriken_bullet",
-			"pierce_count": 0,
-			"projectile_count": 5,
-			"spread_angle": 120.0
-		},
-		"res://assets/weapon/weapon-shuriken.png",
-		Vector2(0.8, 0.8)
-	)
-	shotgun.description = "近距离高伤害，发射多颗弹丸"
-	weapons["shotgun"] = shotgun
-	
-	# 追踪导弹（远程行为 + 魔法结算 + 追踪子弹）
-	var homing_missile = WeaponData.new(
-		"追踪导弹",
-		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.MAGIC,  # 魔法结算！
-		{
-			"damage": 8,
-			"attack_speed": 1.2,
-			"range": 1800.0,
-			"bullet_id": "homing_bullet",
-			"pierce_count": 0,
-			"projectile_count": 1,
-			"spread_angle": 0.0
-		},
-		"res://assets/weapon/bullet-missle.png",
-		Vector2(0.7, 0.7)
-	)
-	homing_missile.description = "发射追踪导弹，使用魔法伤害"
-	homing_missile.special_effects = [
-		{
-			"type": "burn",
-			"params": {
-				"chance": 0.3,
-				"tick_interval": 0.5,
-				"damage": 3.0,
-				"duration": 2.0
-			}
-		}
-	]
-	weapons["homing_missile"] = homing_missile
-	
-	# ========== 近战武器 ==========
-	
-	# 剑（近战行为 + 近战结算）
-	var sword = WeaponData.new(
-		"剑",
-		WeaponData.BehaviorType.MELEE,
-		WeaponData.CalculationType.MELEE,
-		{
-			"damage": 4,
-			"attack_speed": 0.5,
-			"range": 240.0,
-			"orbit_radius": 300.0,
-			"orbit_speed": 180.0,
-			"hit_range": 240.0,
-			"knockback_force": 560.0,
-			"rotation_speed": 360.0
-		},
-		"res://assets/weapon/Weapon_lasersword.png",
-		Vector2(0.7, 0.7)
-	)
-	sword.description = "基础近战武器，环绕攻击"
-	weapons["sword"] = sword
-	
-	# 斧头（近战行为 + 近战结算）
-	var axe = WeaponData.new(
-		"斧头",
-		WeaponData.BehaviorType.MELEE,
-		WeaponData.CalculationType.MELEE,
-		{
-			"damage": 6,
-			"attack_speed": 0.8,
-			"range": 280.0,
-			"orbit_radius": 400.0,
-			"orbit_speed": 120.0,
-			"hit_range": 280.0,
-			"knockback_force": 840.0,
-			"rotation_speed": 270.0
-		},
-		"res://assets/weapon/Weapon_axe.png",
-		Vector2(0.8, 0.8)
-	)
-	axe.description = "高伤害近战武器，攻击速度较慢"
-	weapons["axe"] = axe
+	weapons["flame_sword"] = flame_sword
 	
 	# 匕首（近战行为 + 近战结算 + 吸血）
 	var dagger = WeaponData.new(
@@ -211,74 +121,188 @@ static func initialize_weapons() -> void:
 	]
 	weapons["dagger"] = dagger
 	
-	# 火焰剑（近战行为 + 魔法结算！）
-	var flame_sword = WeaponData.new(
-		"火焰剑",
-		WeaponData.BehaviorType.MELEE,
+	# ========== 远程武器 ==========
+	
+	## 手枪（远程行为 + 远程结算）
+	#var pistol = WeaponData.new(
+		#"手枪",
+		#WeaponData.BehaviorType.RANGED,
+		#WeaponData.CalculationType.RANGED,
+		#{
+			#"damage": 3,
+			#"attack_speed": 0.4,
+			#"range": 800.0,
+			#"bullet_id": "normal_bullet",
+			#"pierce_count": 0,
+			#"projectile_count": 1,
+			#"spread_angle": 0.0
+		#},
+		#"res://assets/weapon/WeaponPistol.png",
+		#Vector2(0.7, 0.7)
+	#)
+	#pistol.description = "基础远程武器，发射快速子弹"
+	#weapons["pistol"] = pistol
+	
+	# 机枪（远程行为 + 远程结算）
+	var machine_gun = WeaponData.new(
+		"冲锋枪",
+		WeaponData.BehaviorType.RANGED,
+		WeaponData.CalculationType.RANGED,
+		{
+			"damage": 1,
+			"attack_speed": 0.15,
+			"range": 800.0,
+			"bullet_id": "fast_bullet",
+			"pierce_count": 0,
+			"projectile_count": 2,
+			"spread_angle": 0.0
+		},
+		"res://assets/weapon/weapon_machinegun.png",
+		Vector2(1, 1)
+	)
+	machine_gun.description = "超高攻击速度的远程武器"
+	weapons["machine_gun"] = machine_gun
+	
+	# 散弹枪（远程行为 + 远程结算 + 多弹丸）
+	var shotgun = WeaponData.new(
+		"霰弹枪",
+		WeaponData.BehaviorType.RANGED,
+		WeaponData.CalculationType.RANGED,
+		{
+			"damage": 2,
+			"attack_speed": 0.8,
+			"range": 800.0,
+			"bullet_id": "normal_bullet",
+			"pierce_count": 0,
+			"projectile_count": 5,
+			"spread_angle": 120.0
+		},
+		"res://assets/weapon/weapon_shotgun.png",
+		Vector2(0.8, 0.8)
+	)
+	shotgun.description = "近距离高伤害，发射多颗弹丸"
+	weapons["shotgun"] = shotgun
+	
+	# 追踪导弹（远程行为 + 魔法结算 + 追踪子弹）
+	var homing_missile = WeaponData.new(
+		"追踪导弹",
+		WeaponData.BehaviorType.RANGED,
 		WeaponData.CalculationType.MAGIC,  # 魔法结算！
 		{
-			"damage": 5,
-			"attack_speed": 0.6,
-			"range": 250.0,
-			"orbit_radius": 320.0,
-			"orbit_speed": 160.0,
-			"hit_range": 250.0,
-			"knockback_force": 400.0,
-			"rotation_speed": 300.0
+			"damage": 8,
+			"attack_speed": 1.2,
+			"range": 1800.0,
+			"bullet_id": "homing_bullet",
+			"pierce_count": 0,
+			"projectile_count": 1,
+			"spread_angle": 0.0
 		},
-		"res://assets/weapon/weapon-fireblade.png",
-		Vector2(1.0, 1.0)
+		"res://assets/weapon/weapon_missle.png",
+		Vector2(0.7, 0.7)
 	)
-	flame_sword.description = "附魔火焰的剑，近战行为但使用魔法伤害加成"
-	flame_sword.special_effects = [
+	homing_missile.description = "发射追踪导弹，使用魔法伤害"
+	homing_missile.special_effects = [
 		{
 			"type": "burn",
 			"params": {
-				"chance": 0.4,
+				"chance": 0.3,
 				"tick_interval": 0.5,
-				"damage": 5.0,
-				"duration": 3.0
+				"damage": 3.0,
+				"duration": 2.0
 			}
 		}
 	]
-	weapons["flame_sword"] = flame_sword
+	weapons["homing_missile"] = homing_missile
 	
 	# ========== 魔法武器 ==========
 	
-	# 火球（魔法行为 + 魔法结算）
-	var fireball = WeaponData.new(
-		"火球",
-		WeaponData.BehaviorType.MAGIC,
+	## 火球（魔法行为 + 魔法结算）
+	#var fireball = WeaponData.new(
+		#"火球",
+		#WeaponData.BehaviorType.MAGIC,
+		#WeaponData.CalculationType.MAGIC,
+		#{
+			#"damage": 5,
+			#"attack_speed": 0.7,
+			#"range": 800.0,
+			#"explosion_radius": 150.0,
+			#"explosion_damage_multiplier": 1.0,
+			#"cast_delay": 0.5,
+			#"is_target_locked": true,
+			#"max_targets": 1,
+			#"has_explosion_damage": true,
+			#"indicator_color": Color(1.0, 0.4, 0.0, 0.4),
+			#"effect_lead_time": 0.2  # 特效提前 0.2 秒播放
+		#},
+		#"res://assets/weapon/Weapon_fire.png",
+		#Vector2(0.7, 0.7)
+	#)
+	#fireball.description = "基础魔法武器，造成范围爆炸伤害"
+	#fireball.special_effects = [
+		#{
+			#"type": "burn",
+			#"params": {
+				#"chance": 0.2,
+				#"tick_interval": 0.5,
+				#"damage": 5.0,
+				#"duration": 3.0
+			#}
+		#}
+	#]
+	#weapons["fireball"] = fireball
+	
+		# 闪电长矛（远程行为 + 远程结算 + 流血效果）
+	var rifle = WeaponData.new(
+		"闪电长矛",
+		WeaponData.BehaviorType.RANGED,
 		WeaponData.CalculationType.MAGIC,
 		{
-			"damage": 5,
+			"damage": 4,
 			"attack_speed": 0.7,
-			"range": 800.0,
-			"explosion_radius": 150.0,
-			"explosion_damage_multiplier": 1.0,
-			"cast_delay": 0.5,
-			"is_target_locked": true,
-			"max_targets": 1,
-			"has_explosion_damage": true,
-			"indicator_color": Color(1.0, 0.4, 0.0, 0.4),
-			"effect_lead_time": 0.2  # 特效提前 0.2 秒播放
+			"range": 900.0,
+			"bullet_id": "heavy_bullet",
+			"pierce_count": 1,
+			"projectile_count": 1,
+			"spread_angle": 0.0
 		},
-		"res://assets/weapon/Weapon_fire.png",
+		"res://assets/weapon/weapon_lightspear.png",
 		Vector2(0.7, 0.7)
 	)
-	fireball.description = "基础魔法武器，造成范围爆炸伤害"
-	fireball.special_effects = [
+	rifle.description = "高伤害远程武器，可穿透敌人"
+	#rifle.special_effects = [
+		#{
+			#"type": "bleed",
+			#"params": {
+				#"chance": 0.2,
+				#"tick_interval": 0.5,
+				#"damage": 3.0,
+				#"duration": 3.0
+			#}
+		#}
+	#]
+	weapons["rifle"] = rifle
+	
+	
+		# 连锁闪电（远程行为 + 远程结算）
+	var lightning_chain = WeaponData.new(
+		"连锁闪电",
+		WeaponData.BehaviorType.RANGED,
+		WeaponData.CalculationType.MAGIC,
 		{
-			"type": "burn",
-			"params": {
-				"chance": 0.2,
-				"tick_interval": 0.5,
-				"damage": 5.0,
-				"duration": 3.0
-			}
-		}
-	]
-	weapons["fireball"] = fireball
+			"damage": 3,
+			"attack_speed": 0.7,
+			"range": 1000.0,
+			"bullet_id": "bounce_bullet",
+			"pierce_count": 0, # 穿透数
+			"projectile_count": 1, #子弹数
+			"spread_angle": 0.0
+		},
+		"res://assets/weapon/weapon_lightwand.png",
+		Vector2(0.7, 0.7)
+	)
+	lightning_chain.description = "会寻找目标的魔法闪电"
+	weapons["lightning_chain"] = lightning_chain
+	
 	
 	# 冰刺（魔法行为 + 魔法结算）
 	var ice_shard = WeaponData.new(
@@ -314,32 +338,32 @@ static func initialize_weapons() -> void:
 	weapons["ice_shard"] = ice_shard
 	
 	# 陨石（魔法行为 + 魔法结算）
-	var meteor = WeaponData.new(
-		"陨石",
-		WeaponData.BehaviorType.MAGIC,
-		WeaponData.CalculationType.MAGIC,
-		{
-			"damage": 10,
-			"attack_speed": 1.5,
-			"range": 700.0,
-			"explosion_radius": 250.0,
-			"explosion_damage_multiplier": 1.5,
-			"cast_delay": 1.0,
-			"is_target_locked": false,
-			"max_targets": 1,
-			"has_explosion_damage": true,
-			"indicator_texture_path": "res://assets/skill_indicator/meteor_range_circle.png",
-			"effect_lead_time": 0.2  # 特效较长，提前 0.35 秒播放
-		},
-		"res://assets/weapon/Weapon_stone.png",
-		Vector2(0.7, 0.7)
-	)
-	meteor.description = "高伤害魔法武器，超大爆炸范围"
-	weapons["meteor"] = meteor
+	#var meteor = WeaponData.new(
+		#"陨石",
+		#WeaponData.BehaviorType.MAGIC,
+		#WeaponData.CalculationType.MAGIC,
+		#{
+			#"damage": 10,
+			#"attack_speed": 1.5,
+			#"range": 700.0,
+			#"explosion_radius": 250.0,
+			#"explosion_damage_multiplier": 1.5,
+			#"cast_delay": 1.0,
+			#"is_target_locked": false,
+			#"max_targets": 1,
+			#"has_explosion_damage": true,
+			#"indicator_texture_path": "res://assets/skill_indicator/meteor_range_circle.png",
+			#"effect_lead_time": 0.2  # 特效较长，提前 0.35 秒播放
+		#},
+		#"res://assets/weapon/Weapon_stone.png",
+		#Vector2(0.7, 0.7)
+	#)
+	#meteor.description = "高伤害魔法武器，超大爆炸范围"
+	#weapons["meteor"] = meteor
 	
 	# 闪电（魔法行为 + 魔法结算 + 多目标）
 	var lightning = WeaponData.new(
-		"闪电",
+		"连锁闪电",
 		WeaponData.BehaviorType.MAGIC,
 		WeaponData.CalculationType.MAGIC,
 		{
@@ -355,7 +379,7 @@ static func initialize_weapons() -> void:
 			"indicator_color": Color(0.8, 0.8, 1.0, 0.3),
 			"effect_lead_time": 0.1  # 特效短，提前 0.1 秒播放
 		},
-		"res://assets/weapon/weapon-lightningwand.png",
+		"res://assets/weapon/weapon_lightwand.png",
 		Vector2(0.6, 0.6)
 	)
 	lightning.description = "快速魔法武器，可同时攻击多个目标"

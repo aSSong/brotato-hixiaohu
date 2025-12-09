@@ -69,15 +69,18 @@ static func initialize_bullets() -> void:
 	}
 	bullets["homing_bullet"] = homing_bullet
 	
-	var bounce_bullet = BulletData.new("bounce_bullet", 2000.0, 6.0, "res://assets/bullet/bullet.png")
+	## 连锁闪电
+	# 名称，速度，存活时间，贴图
+	var bounce_bullet = BulletData.new("bounce_bullet", 1200.0, 6.0, "res://assets/bullet/bullet_lightning.png")
 	bounce_bullet.bullet_name = "弹跳子弹"
 	bounce_bullet.scale = Vector2(1.0, 1.0)
-	bounce_bullet.modulate = Color(0.8, 1.0, 0.5)
+	#bounce_bullet.modulate = Color(0.8, 1.0, 0.5)
 	bounce_bullet.movement_type = BulletData.MovementType.BOUNCE
 	bounce_bullet.movement_params = {
+		"rotate_to_direction": true,  # 朝向飞行方向
 		"bounce_count": 3,      # 最大弹跳次数
 		"bounce_loss": 0.9,     # 每次弹跳速度保留比例
-		"search_range": 300.0   # 弹跳目标搜索范围
+		"search_range": 800.0   # 弹跳目标搜索范围
 	}
 	bounce_bullet.destroy_on_hit = false  # 弹跳子弹不会立即销毁
 	bullets["bounce_bullet"] = bounce_bullet
