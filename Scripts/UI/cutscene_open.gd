@@ -27,4 +27,3 @@ func _on_skip_pressed() -> void:
 	print("[CutsceneOpen] 用户跳过视频，跳转至 create_account")
 	BGMManager.resume_bgm()  # 恢复背景音乐
 	get_tree().change_scene_to_file("res://scenes/UI/create_account.tscn")
-
