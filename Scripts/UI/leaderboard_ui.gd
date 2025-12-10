@@ -63,8 +63,12 @@ func _ready() -> void:
 	# 初始化滚动背景
 	_setup_scrolling_background()
 	
-	# 初始化为模式1
-	_switch_to_mode(1)
+	# 初始化为模式2（默认显示模式2排行榜）
+	_switch_to_mode(2)
+	
+	# 设置模式2按钮为focused
+	if switch2_button:
+		switch2_button.grab_focus()
 	
 	# 加载数据
 	_load_leaderboard_data()
@@ -188,13 +192,16 @@ func _create_survival_row(rank: int, record: Dictionary) -> HBoxContainer:
 	var row = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	
+	var floor_id = int(record.get("floor_id", 0))
+	var death_count = int(record.get("total_death_count", 0))
+	
 	var columns = [
 		_format_rank(rank),
 		record.get("player_name", "???"),
-		str(record.get("floor_id", 0)) + "F",
+		_format_floor(floor_id),
 		_format_time(record.get("completion_time_seconds", 0)),
-		_format_date(record.get("completed_at", "")),
-		str(record.get("total_death_count", 0))
+		_format_datetime(record.get("completed_at", "")),
+		str(death_count)
 	]
 	
 	for i in range(columns.size()):
@@ -285,13 +292,16 @@ func _create_multi_row(group_rank: int, floor_id: int, record: Dictionary, show_
 	var row = HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	
+	var best_wave = int(record.get("best_wave", 0))
+	var death_count = int(record.get("total_death_count", 0))
+	
 	var columns = [
 		_format_rank(group_rank) if show_rank else "",
-		(str(floor_id) + "F") if show_rank else "",
+		_format_floor(floor_id) if show_rank else "",
 		record.get("player_name", "???"),
-		"Wave" + str(record.get("best_wave", 0)),
-		_format_date(record.get("achieved_at", "")),
-		str(record.get("total_death_count", 0))
+		"Wave" + str(best_wave),
+		_format_datetime(record.get("achieved_at", "")),
+		str(death_count)
 	]
 	
 	for i in range(columns.size()):
@@ -317,27 +327,44 @@ func _format_rank(rank: int) -> String:
 		3: return "3RD"
 		_: return str(rank) + "TH"
 
-## 格式化时间 (秒 -> mm:ss.ms)
-func _format_time(seconds: float) -> String:
-	var mins = int(seconds) / 60
-	var secs = int(seconds) % 60
-	var ms = int((seconds - int(seconds)) * 100)
-	return "%02d:%02d.%02d" % [mins, secs, ms]
+## 格式化楼层显示（使用 FloorConfig）
+func _format_floor(floor_id: int) -> String:
+	var floor_text = FloorConfig.get_floor_short_text(floor_id)
+	if floor_text.is_empty():
+		return str(floor_id) + "F"
+	return floor_text
 
-## 格式化日期 (ISO 8601 -> MM/DD日YYYY年)
-func _format_date(iso_date: String) -> String:
+## 格式化通关时间 (秒 -> xxx'xx''xx 格式：分'秒''毫秒，使用半角引号)
+func _format_time(seconds: float) -> String:
+	var total_seconds = int(seconds)
+	var mins = total_seconds / 60
+	var secs = total_seconds % 60
+	var ms = int((seconds - total_seconds) * 100)
+	return "%d'%02d''%02d" % [mins, secs, ms]
+
+## 格式化日期时间 (ISO 8601 -> YYYY/MM/DD HH:MM)
+func _format_datetime(iso_date: String) -> String:
 	if iso_date.is_empty():
 		return "???"
 	
 	# 解析 ISO 8601 格式: "2025-12-08T14:17:31Z"
-	var date_part = iso_date.split("T")[0] if "T" in iso_date else iso_date
-	var parts = date_part.split("-")
+	var datetime_parts = iso_date.split("T")
+	if datetime_parts.size() < 2:
+		return iso_date
 	
-	if parts.size() >= 3:
-		var year = parts[0]
-		var month = parts[1]
-		var day = parts[2]
-		return "%s/%s日%s年" % [month, day, year]
+	var date_part = datetime_parts[0]
+	var time_part = datetime_parts[1].replace("Z", "")
+	
+	var date_components = date_part.split("-")
+	var time_components = time_part.split(":")
+	
+	if date_components.size() >= 3 and time_components.size() >= 2:
+		var year = date_components[0]
+		var month = date_components[1]
+		var day = date_components[2]
+		var hour = time_components[0]
+		var minute = time_components[1]
+		return "%s/%s/%s %s:%s" % [year, month, day, hour, minute]
 	
 	return iso_date
 
