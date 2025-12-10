@@ -4,6 +4,7 @@ extends Control
 #@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var player_info: Label = $player_info
 @onready var begin_btn: TextureButton = $menu/VBoxContainer/beginBtn
+@onready var board_btn: TextureButton = $menu/VBoxContainer/boardButton
 @onready var info_label: Label = $player_info/infoLabel
 @onready var clean_name_btn: Button = $player_info/cleannameButton
 
@@ -28,6 +29,10 @@ func _ready() -> void:
 	if begin_btn:
 		begin_btn.pressed.connect(_on_begin_btn_pressed)
 	
+	# 连接排行榜按钮信号
+	if board_btn:
+		board_btn.pressed.connect(_on_board_btn_pressed)
+	
 	# 连接清空名字按钮信号
 	if clean_name_btn:
 		clean_name_btn.pressed.connect(_on_clean_name_btn_pressed)
@@ -50,6 +55,11 @@ func _on_begin_btn_pressed() -> void:
 
 func _on_btn_quit_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_board_btn_pressed() -> void:
+	print("[MainTitle] 进入排行榜")
+	get_tree().change_scene_to_file("res://scenes/UI/leaderboard_ui.tscn")
 
 
 func _on_clean_name_btn_pressed() -> void:
