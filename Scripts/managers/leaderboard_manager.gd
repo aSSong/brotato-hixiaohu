@@ -13,9 +13,24 @@ var records: Dictionary = {
 	"multi": null      # Multi模式最佳记录
 }
 
+## 上传状态（记录哪些模式的数据尚未成功上传到服务器）
+var _pending_upload: Dictionary = {
+	"survival": false,
+	"multi": false
+}
+
+## 是否正在上传中（防止重复上传）
+var _uploading: Dictionary = {
+	"survival": false,
+	"multi": false
+}
+
 func _ready() -> void:
 	load_records()
 	print("[LeaderboardManager] 排行榜管理器初始化完成")
+	
+	# 启动时尝试上传未成功的记录
+	_retry_pending_uploads()
 
 ## ==================== 公共方法 ====================
 
@@ -27,8 +42,9 @@ func try_update_survival_record(completion_time: float, death_count: int) -> boo
 	# 如果没有记录，或者新时间更短，则更新
 	if current == null or completion_time < current.get("completion_time_seconds", INF):
 		records["survival"] = _create_survival_record(completion_time, death_count)
+		_pending_upload["survival"] = true  # 标记需要上传
 		save_records()
-		save_leaderboard_data(1, records["survival"])
+		_upload_in_background("survival", 1, records["survival"])
 		print("[LeaderboardManager] Survival模式新纪录! 时间: %.2f秒" % completion_time)
 		return true
 	
@@ -43,8 +59,9 @@ func try_update_multi_record(best_wave: int, death_count: int) -> bool:
 	# 如果没有记录，或者新波次更高，则更新
 	if current == null or best_wave > current.get("best_wave", 0):
 		records["multi"] = _create_multi_record(best_wave, death_count)
+		_pending_upload["multi"] = true  # 标记需要上传
 		save_records()
-		save_leaderboard_data(2, records["multi"])
+		_upload_in_background("multi", 2, records["multi"])
 		print("[LeaderboardManager] Multi模式新纪录! 波次: %d" % best_wave)
 		return true
 	
@@ -71,21 +88,29 @@ func clear_all_records() -> void:
 		"survival": null,
 		"multi": null
 	}
+	_pending_upload = {
+		"survival": false,
+		"multi": false
+	}
 	if FileAccess.file_exists(SAVE_FILE_PATH):
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
 	print("[LeaderboardManager] 所有记录已清除")
 
 ## ==================== 保存/加载 ====================
 
-## 保存记录到文件
+## 保存记录到文件（包含上传状态）
 func save_records() -> void:
 	var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_error("[LeaderboardManager] 无法打开文件进行写入: %s" % SAVE_FILE_PATH)
 		return
 	
-	# 将记录转换为JSON
-	var json_string = JSON.stringify(records)
+	# 将记录和上传状态一起保存
+	var save_content = {
+		"records": records,
+		"pending_upload": _pending_upload
+	}
+	var json_string = JSON.stringify(save_content)
 	
 	# Base64 编码
 	var encoded_data = _encode_data(json_string)
@@ -157,8 +182,15 @@ func load_records() -> bool:
 	
 	var loaded_data = json.data
 	if loaded_data is Dictionary:
-		records = loaded_data
-		print("[LeaderboardManager] 记录已加载")
+		# 新格式：包含 records 和 pending_upload
+		if loaded_data.has("records"):
+			records = loaded_data["records"]
+			if loaded_data.has("pending_upload"):
+				_pending_upload = loaded_data["pending_upload"]
+		else:
+			# 旧格式兼容：直接就是 records
+			records = loaded_data
+		print("[LeaderboardManager] 记录已加载 | 待上传: %s" % _pending_upload)
 		return true
 	
 	push_warning("[LeaderboardManager] 记录数据格式错误，清除记录")
@@ -173,8 +205,8 @@ func load_leaderboard_data() -> Dictionary:
 		return data["leaderboards"]
 	return {}
 
-# 保存记录到服务器
-func save_leaderboard_data(type: int, data: Dictionary) -> bool:
+# 保存记录到服务器（内部方法）
+func _do_upload(type: int, data: Dictionary) -> bool:
 	var json_string = JSON.stringify(data)
 	var result = await ApiManager.save_leaderboard_data(type, json_string)
 	if result.has("error"):
@@ -186,6 +218,58 @@ func save_leaderboard_data(type: int, data: Dictionary) -> bool:
 	else:
 		push_warning("[LeaderboardManager] ⚠ 上传返回未知结果: %s" % result)
 		return false
+
+## 后台上传（不阻塞游戏流程，带保护机制）
+func _upload_in_background(mode_id: String, type: int, data: Dictionary) -> void:
+	# 防止重复上传
+	if _uploading.get(mode_id, false):
+		print("[LeaderboardManager] %s 模式正在上传中，跳过" % mode_id)
+		return
+	
+	_uploading[mode_id] = true
+	
+	# 执行上传
+	var success = await _do_upload(type, data)
+	
+	_uploading[mode_id] = false
+	
+	if success:
+		# 上传成功，清除待上传标记
+		_pending_upload[mode_id] = false
+		save_records()  # 保存更新后的状态
+		print("[LeaderboardManager] %s 模式上传完成，已清除待上传标记" % mode_id)
+	else:
+		# 上传失败，保持待上传标记，下次启动时重试
+		print("[LeaderboardManager] %s 模式上传失败，将在下次启动时重试" % mode_id)
+
+## 启动时重试上传未成功的记录
+func _retry_pending_uploads() -> void:
+	# 等待一小段时间，确保网络和其他系统就绪
+	await get_tree().create_timer(1.0).timeout
+	
+	print("[LeaderboardManager] 检查待上传记录...")
+	
+	# 重试 Survival 模式
+	if _pending_upload.get("survival", false) and records.get("survival") != null:
+		print("[LeaderboardManager] 重试上传 Survival 模式记录...")
+		_upload_in_background("survival", 1, records["survival"])
+	
+	# 重试 Multi 模式
+	if _pending_upload.get("multi", false) and records.get("multi") != null:
+		print("[LeaderboardManager] 重试上传 Multi 模式记录...")
+		_upload_in_background("multi", 2, records["multi"])
+
+## 手动触发重新上传所有记录（可用于调试或用户主动同步）
+func force_upload_all() -> void:
+	print("[LeaderboardManager] 强制上传所有记录...")
+	
+	if records.get("survival") != null:
+		_pending_upload["survival"] = true
+		_upload_in_background("survival", 1, records["survival"])
+	
+	if records.get("multi") != null:
+		_pending_upload["multi"] = true
+		_upload_in_background("multi", 2, records["multi"])
 
 ## ==================== 私有方法 ====================
 
@@ -250,6 +334,10 @@ func _clear_corrupted_data() -> void:
 	records = {
 		"survival": null,
 		"multi": null
+	}
+	_pending_upload = {
+		"survival": false,
+		"multi": false
 	}
 	if FileAccess.file_exists(SAVE_FILE_PATH):
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
