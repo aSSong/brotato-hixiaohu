@@ -1,0 +1,129 @@
+[gd_scene load_steps=9 format=3 uid="uid://b5wlvn6mdcidc"]
+
+[ext_resource type="Texture2D" uid="uid://cj6md7y43vvl3" path="res://assets/UI/leaderboard_ui/bg-leaderboard-01.png" id="1_nbgag"]
+[ext_resource type="Texture2D" uid="uid://irt6hht6er7j" path="res://assets/UI/leaderboard_ui/btn-label-unselect-normal-01.png" id="2_egwti"]
+[ext_resource type="Texture2D" uid="uid://b4xgibahk4h0u" path="res://assets/UI/class_choose/btn-back-gray-01.png" id="2_s68vt"]
+[ext_resource type="Texture2D" uid="uid://2drelf601u4l" path="res://assets/UI/leaderboard_ui/btn-label-unselect-pressed-01.png" id="3_b7iye"]
+[ext_resource type="Texture2D" uid="uid://tpynlqo2yorf" path="res://assets/UI/class_choose/btn-back-white-01.png" id="3_bef1q"]
+[ext_resource type="Texture2D" uid="uid://de886t2ed30ql" path="res://assets/UI/leaderboard_ui/btn-label-unselect-hover-01.png" id="4_3qejf"]
+[ext_resource type="Texture2D" uid="uid://3ipgqbsncqjd" path="res://assets/UI/leaderboard_ui/btn-label-selected-normal-01.png" id="5_ppf2r"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="6_x26nh"]
+
+[node name="LeaderboardUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.3882353, 0.06666667, 0.64705884, 1)
+
+[node name="bg_panel" type="TextureRect" parent="."]
+z_index = 5
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_nbgag")
+stretch_mode = 2
+
+[node name="board1panel" type="Control" parent="bg_panel"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="board2panel" type="Control" parent="bg_panel"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="labelContainer" type="HBoxContainer" parent="bg_panel"]
+z_index = -1
+layout_mode = 1
+offset_top = -110.5
+offset_right = 948.0
+offset_bottom = 32.5
+
+[node name="swich1Button" type="TextureButton" parent="bg_panel/labelContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_egwti")
+texture_pressed = ExtResource("3_b7iye")
+texture_hover = ExtResource("4_3qejf")
+texture_disabled = ExtResource("5_ppf2r")
+texture_focused = ExtResource("4_3qejf")
+
+[node name="swich1Label" type="Label" parent="bg_panel/labelContainer/swich1Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -40.5
+offset_right = 190.0
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_x26nh")
+theme_override_font_sizes/font_size = 50
+text = "Chapter1排行榜"
+
+[node name="swich1Button2" type="TextureButton" parent="bg_panel/labelContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_egwti")
+texture_pressed = ExtResource("3_b7iye")
+texture_hover = ExtResource("4_3qejf")
+texture_disabled = ExtResource("5_ppf2r")
+texture_focused = ExtResource("4_3qejf")
+
+[node name="swich1Label" type="Label" parent="bg_panel/labelContainer/swich1Button2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -40.5
+offset_right = 190.0
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_x26nh")
+theme_override_font_sizes/font_size = 50
+text = "Chapter2排行榜"
+
+[node name="backButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -132.0
+offset_right = 344.0
+offset_bottom = -33.0
+grow_vertical = 0
+texture_normal = ExtResource("2_s68vt")
+texture_pressed = ExtResource("3_bef1q")
+texture_hover = ExtResource("3_bef1q")
+texture_disabled = ExtResource("2_s68vt")
+texture_focused = ExtResource("3_bef1q")
