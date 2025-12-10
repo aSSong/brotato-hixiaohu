@@ -11,6 +11,80 @@ static func initialize_enemies() -> void:
 	if not enemies.is_empty():
 		return
 	
+	# ------  场景1怪物--------------
+	
+	# ------  场景2怪物--------------
+	# 基础敌人 - 标准属性
+	# 假设sheet有5帧，横向排列，每帧240x240
+	var greenmashroom_enemy = EnemyData.new(
+		"基础敌人-绿蘑菇",
+		10,  # max_hp
+		5,  # attack_damage
+		330.0,  # move_speed
+		"res://assets/enemy/mashroom-run-Sheet.png",
+		425,  # frame_width
+		500,  # frame_height
+		11     # frame_count（根据你的实际帧数修改）
+	)
+	greenmashroom_enemy.description = "标准敌人，平衡的属性"
+	greenmashroom_enemy.scale = Vector2(0.4, 0.4)  # 1.2倍大小
+	greenmashroom_enemy.animation_speed = 20.0  # 8 FPS
+	# 配置shadow：由于敌人scale是0.5，需要补偿shadow的scale使其可见
+	# 场景默认shadow scale是Vector2(1.1, 0.8)，补偿后应该是Vector2(2.2, 1.6)
+	greenmashroom_enemy.shadow_scale = Vector2(0.6, 0.4)
+	greenmashroom_enemy.shadow_offset = Vector2(20,-115) # 使用默认位置
+	enemies["greenmashroom"] = greenmashroom_enemy
+	
+	
+	
+		# 自爆敌人 - 带有自爆技能
+	var redmashroom_enemy = EnemyData.new(
+		"自爆敌人-红蘑菇",
+		12,  # max_hp（较低，因为会自爆）
+		3,   # attack_damage
+		280.0,  # move_speed
+		"res://assets/enemy/redmashroom-run-Sheet.png",
+		445,
+		500,
+		10
+	)
+	redmashroom_enemy.description = "低血量时会自爆的敌人"
+	redmashroom_enemy.scale = Vector2(0.4, 0.4)  # 0.4倍大小
+	redmashroom_enemy.shadow_offset = Vector2(17,-87) 
+	redmashroom_enemy.shadow_scale = Vector2(0.8, 0.6)
+	redmashroom_enemy.animation_speed = 16.0  # FPS
+	redmashroom_enemy.skill_type = EnemyData.EnemySkillType.EXPLODING
+	redmashroom_enemy.skill_config = {
+		"trigger_condition": "low_hp",  # 触发条件：低血量
+		"explosion_range": 300.0,        # 爆炸范围
+		"explosion_damage": 30,          # 爆炸伤害
+		"low_hp_threshold": 0.3,        # 低血量阈值（30%）
+		"countdown_duration": 3.0        # 倒数时长（秒）
+	}
+	enemies["redmashroom"] = redmashroom_enemy
+	
+	
+		# 精英敌人 - 全属性较高
+	var bluemashroom_enemy = EnemyData.new(
+		"精英敌人-蓝蘑菇",
+		25,  # max_hp
+		10,  # attack_damage
+		350.0,  # move_speed
+		"res://assets/enemy/bluemashroom-run-Sheet.png",
+		310,
+		500,
+		5
+	)
+	bluemashroom_enemy.description = "强化的精英敌人"
+	bluemashroom_enemy.scale = Vector2(0.6, 0.6)  # 0.4倍大小
+	bluemashroom_enemy.shake_amount = 12.0  # 更强的震动
+	bluemashroom_enemy.animation_speed = 10.0
+	enemies["bluemashroom"] = bluemashroom_enemy
+	
+	
+	
+	# ------  其他怪物--------------
+	
 	# 基础敌人 - 标准属性
 	# 假设sheet有5帧，横向排列，每帧240x240
 	var basic_enemy = EnemyData.new(

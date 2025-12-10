@@ -9,11 +9,11 @@
 	  "damage_growth": 0.0,
 	  "total_count": 15,
 	  "enemies": {
-		"basic": 0.3,
-		"exploding_enemy": 0.2,
+		"greenmashroom": 0.3,
+		"redmashroom": 0.2,
 		"stapler": 0.2,
 		"fast": 0.1,
-		"tank": 0.1,
+		"bluemashroom": 0.1,
 		"monitor": 0.1
 	  },
 	  "boss_config": {
