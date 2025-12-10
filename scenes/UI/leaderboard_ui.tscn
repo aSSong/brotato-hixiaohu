@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5wlvn6mdcidc"]
+[gd_scene load_steps=10 format=3 uid="uid://b5wlvn6mdcidc"]
 
 [ext_resource type="Texture2D" uid="uid://cj6md7y43vvl3" path="res://assets/UI/leaderboard_ui/bg-leaderboard-01.png" id="1_nbgag"]
 [ext_resource type="Script" uid="uid://11srfvolmubk" path="res://Scripts/UI/leaderboard_ui.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://7xxpe18bui5y" path="res://assets/UI/common/bg-purplekey-01.png" id="2_b7iye"]
 [ext_resource type="Texture2D" uid="uid://irt6hht6er7j" path="res://assets/UI/leaderboard_ui/btn-label-unselect-normal-01.png" id="2_egwti"]
 [ext_resource type="Texture2D" uid="uid://b4xgibahk4h0u" path="res://assets/UI/class_choose/btn-back-gray-01.png" id="2_s68vt"]
 [ext_resource type="Texture2D" uid="uid://2drelf601u4l" path="res://assets/UI/leaderboard_ui/btn-label-unselect-pressed-01.png" id="3_b7iye"]
@@ -26,6 +27,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.3882353, 0.06666667, 0.64705884, 1)
+
+[node name="bg-key" type="TextureRect" parent="."]
+z_index = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_b7iye")
 
 [node name="bg_panel" type="TextureRect" parent="."]
 z_index = 5
@@ -283,6 +291,7 @@ theme_override_font_sizes/font_size = 50
 text = "Chapter2 Rank"
 
 [node name="backButton" type="TextureButton" parent="."]
+z_index = 1
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

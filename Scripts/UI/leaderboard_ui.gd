@@ -27,6 +27,7 @@ const COLUMN_WIDTHS_MODE2 = [80, 80, 150, 100, 150, 100]  # 排名, 楼层, 关�
 @onready var back_button: TextureButton = $backButton
 @onready var board1_panel: Control = $bg_panel/board1panel
 @onready var board2_panel: Control = $bg_panel/board2panel
+@onready var bg_key: TextureRect = $"bg-key"
 
 # 缓存字体资源
 var _cached_font: Font = null
@@ -37,6 +38,15 @@ var is_loading: bool = false
 
 # 当前选中的模式 (1 或 2)
 var current_mode: int = 1
+
+## ==================== 滚动背景 ====================
+
+## 背景滚动速度（像素/秒）
+@export var scroll_speed: Vector2 = Vector2(100, 100)
+
+## 背景贴图尺寸（用于无缝循环）
+var bg_texture_size: Vector2 = Vector2.ZERO
+var scroll_offset: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	# 加载字体资源
@@ -50,11 +60,52 @@ func _ready() -> void:
 	if back_button:
 		back_button.pressed.connect(_on_back_pressed)
 	
+	# 初始化滚动背景
+	_setup_scrolling_background()
+	
 	# 初始化为模式1
 	_switch_to_mode(1)
 	
 	# 加载数据
 	_load_leaderboard_data()
+
+## 初始化滚动背景
+func _setup_scrolling_background() -> void:
+	if not bg_key or not bg_key.texture:
+		return
+	
+	# 获取贴图尺寸
+	bg_texture_size = bg_key.texture.get_size()
+	
+	# 设置背景铺满并可重复
+	bg_key.anchor_left = 0
+	bg_key.anchor_top = 0
+	bg_key.anchor_right = 0
+	bg_key.anchor_bottom = 0
+	
+	# 扩展背景尺寸以支持无缝滚动（2倍大小）
+	var viewport_size = get_viewport_rect().size
+	bg_key.size = viewport_size + bg_texture_size
+	
+	# 设置纹理平铺模式
+	bg_key.stretch_mode = TextureRect.STRETCH_TILE
+
+func _process(delta: float) -> void:
+	if not bg_key or bg_texture_size == Vector2.ZERO:
+		return
+	
+	# 更新滚动偏移（向左下角滚动）
+	scroll_offset.x += scroll_speed.x * delta
+	scroll_offset.y += scroll_speed.y * delta
+	
+	# 循环重置（当滚动超过贴图尺寸时重置）
+	if scroll_offset.x >= bg_texture_size.x:
+		scroll_offset.x -= bg_texture_size.x
+	if scroll_offset.y >= bg_texture_size.y:
+		scroll_offset.y -= bg_texture_size.y
+	
+	# 应用位置偏移（向左下移动 = position 向右上移动的负值）
+	bg_key.position = -scroll_offset
 
 ## 从服务器加载排行榜数据
 func _load_leaderboard_data() -> void:
