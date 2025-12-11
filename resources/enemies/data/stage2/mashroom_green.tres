@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://cnv8vr72h5i76"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_sje1j"]
+
+[resource]
+script = ExtResource("1_sje1j")
+enemy_name = "基础敌人-绿蘑菇"
+description = "标准敌人，平衡的属性"
+scene_path = "res://scenes/enemies/prefabs/stage2/greenmashroom.tscn"
+max_hp = 10
+move_speed = 330.0
+scale = Vector2(0.4, 0.4)

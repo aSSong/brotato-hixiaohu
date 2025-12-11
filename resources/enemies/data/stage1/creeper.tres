@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://30ych7uhb5wa"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_j6y6j"]
+
+[resource]
+script = ExtResource("1_j6y6j")
+enemy_name = "鼠标怪"
+description = "标准敌人，平衡的属性"
+scene_path = "res://scenes/enemies/prefabs/stage1/creeper.tscn"
+max_hp = 10
+move_speed = 330.0
+scale = Vector2(0.2, 0.2)

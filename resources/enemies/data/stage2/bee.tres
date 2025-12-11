@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://clrta6ptolnfd"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_3054c"]
+
+[resource]
+script = ExtResource("1_3054c")
+enemy_name = "蜜蜂"
+description = "会冲锋攻击的敌人"
+scene_path = "res://scenes/enemies/prefabs/charging_slime.tscn"
+max_hp = 40
+attack_damage = 6
+move_speed = 350.0
+skill_type = 1
+skill_config = {
+"charge_distance": 1000.0,
+"charge_speed": 800.0,
+"cooldown": 3.0,
+"extra_damage": 10,
+"prepare_time": 0.3,
+"trigger_distance": 500.0
+}
+scale = Vector2(0.6, 0.6)

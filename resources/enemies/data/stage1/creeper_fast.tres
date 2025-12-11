@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://s7gfu5gyl2jt"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_name = "鼠标怪-红色"
+description = "快速但脆弱的敌人"
+scene_path = "res://scenes/enemies/prefabs/stage1/creeper_fast.tscn"
+max_hp = 8
+attack_damage = 3
+move_speed = 500.0
+scale = Vector2(0.4, 0.4)
