@@ -15,27 +15,47 @@ static func initialize_enemies() -> void:
 		return
 	
 	print("[EnemyDatabase] 开始加载敌人数据...")
+	_load_enemies_from_dir(ENEMY_DATA_DIR)
+	print("[EnemyDatabase] 加载完成，共 %d 个敌人" % enemies.size())
+
+## 递归加载目录下的敌人数据
+## 支持子文件夹、.tres/.res 以及导出后的 .remap 后缀
+static func _load_enemies_from_dir(path: String) -> void:
+	var dir = DirAccess.open(path)
+	if not dir:
+		push_error("[EnemyDatabase] 无法打开目录: %s" % path)
+		return
 	
-	# 加载所有 .tres 资源
-	var dir = DirAccess.open(ENEMY_DATA_DIR)
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if file_name.ends_with(".tres"):
-				var enemy_id = file_name.replace(".tres", "")
-				var data = load(ENEMY_DATA_DIR + file_name)
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	
+	while file_name != "":
+		if dir.current_is_dir() and not file_name.begins_with("."):
+			# 递归处理子文件夹
+			_load_enemies_from_dir(path + file_name + "/")
+		else:
+			var full_path = ""
+			var enemy_id = ""
+			
+			# 兼容编辑器 (.tres/.res) 和导出环境 (.tres.remap/.res.remap)
+			if file_name.ends_with(".tres") or file_name.ends_with(".res"):
+				full_path = path + file_name
+				enemy_id = file_name.get_basename()
+			elif file_name.ends_with(".tres.remap") or file_name.ends_with(".res.remap"):
+				full_path = path + file_name.trim_suffix(".remap")
+				enemy_id = file_name.trim_suffix(".remap").get_basename()
+			
+			if full_path != "":
+				var data = load(full_path)
 				if data and data is EnemyData:
 					enemies[enemy_id] = data
 					print("[EnemyDatabase] ✓ 加载敌人: %s" % enemy_id)
 				else:
 					push_warning("[EnemyDatabase] ✗ 无法加载: %s" % file_name)
-			file_name = dir.get_next()
-		dir.list_dir_end()
-	else:
-		push_error("[EnemyDatabase] 无法打开敌人数据目录: %s" % ENEMY_DATA_DIR)
+		
+		file_name = dir.get_next()
 	
-	print("[EnemyDatabase] 加载完成，共 %d 个敌人" % enemies.size())
+	dir.list_dir_end()
 
 ## 获取敌人数据
 static func get_enemy_data(enemy_id: String) -> EnemyData:
