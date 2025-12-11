@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://bcuv8gm0scaua"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://pojmrko0gde0"]
 
-[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_wd5q2"]
 
 [resource]
-script = ExtResource("1_script")
+script = ExtResource("1_wd5q2")
 enemy_name = "绿蚊子"
 description = "会远程射击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage2/masquito_green.tscn"
+max_hp = 80
 attack_damage = 4
 move_speed = 250.0
 skill_type = 2

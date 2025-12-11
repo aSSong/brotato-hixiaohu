@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dentprefab"]
+[gd_scene load_steps=7 format=3 uid="uid://dentprefab"]
 
 [ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_enemy_script"]
 [ext_resource type="Shader" uid="uid://dsun82e56sau7" path="res://Shaders/flash.gdshader" id="2_flash_shader"]
 [ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="3_shadow_tex"]
-[ext_resource type="SpriteFrames" path="res://resources/enemies/animations/stage2/ent_sprites.tres" id="4_sprite_frames"]
+[ext_resource type="SpriteFrames" uid="uid://bpu0qwrt2ai6e" path="res://resources/enemies/animations/stage2/ent_sprites.tres" id="4_sprite_frames"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
 resource_local_to_scene = true
@@ -12,7 +12,7 @@ shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_opacity = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
-radius = 120.0
+radius = 208.89186
 
 [node name="ent" type="CharacterBody2D" groups=["enemy"]]
 z_index = 8
@@ -25,9 +25,10 @@ script = ExtResource("1_enemy_script")
 modulate = Color(0, 0, 0, 0.45490196)
 z_index = 7
 z_as_relative = false
-position = Vector2(15, -35)
-scale = Vector2(1.8, 1.0)
+position = Vector2(0, -255.32657)
+scale = Vector2(2.0555558, 2.4464462)
 texture = ExtResource("3_shadow_tex")
+offset = Vector2(0, 172.68)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
@@ -36,11 +37,8 @@ material = SubResource("ShaderMaterial_flash")
 sprite_frames = ExtResource("4_sprite_frames")
 animation = &"walk"
 autoplay = "walk"
-offset = Vector2(0, -150)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -150)
 shape = SubResource("CircleShape2D_collision")
-
