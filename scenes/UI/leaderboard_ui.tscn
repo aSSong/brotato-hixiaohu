@@ -53,6 +53,7 @@ texture = ExtResource("1_nbgag")
 stretch_mode = 2
 
 [node name="board1panel" type="Control" parent="bg_panel"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,75 +75,69 @@ grow_horizontal = 2
 theme_override_constants/separation = 10
 
 [node name="RankHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "排名"
-horizontal_alignment = 1
 
 [node name="NameHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "名字"
-horizontal_alignment = 1
 
 [node name="FloorHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_x26nh")
-theme_override_font_sizes/font_size = 32
-text = "楼层"
-horizontal_alignment = 1
-
-[node name="TimeHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_x26nh")
-theme_override_font_sizes/font_size = 32
-text = "通关时间"
-horizontal_alignment = 1
-
-[node name="DateHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
+text = "楼层"
+
+[node name="TimeHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_x26nh")
+theme_override_font_sizes/font_size = 32
+text = "通关时间"
+
+[node name="DateHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_x26nh")
+theme_override_font_sizes/font_size = 32
 text = "完成时间"
-horizontal_alignment = 1
 
 [node name="DeathHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "总穿越次数"
-horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="bg_panel/board1panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 50.0
+offset_top = 15.0
+offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ContentContainer" type="VBoxContainer" parent="bg_panel/board1panel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 15
 
 [node name="board2panel" type="Control" parent="bg_panel"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -164,72 +159,67 @@ grow_horizontal = 2
 theme_override_constants/separation = 10
 
 [node name="RankHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "排名"
-horizontal_alignment = 1
 
 [node name="FloorHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "楼层"
-horizontal_alignment = 1
 
 [node name="NameHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "关键人物"
-horizontal_alignment = 1
 
 [node name="WaveHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_x26nh")
-theme_override_font_sizes/font_size = 32
-text = "最佳波次"
-horizontal_alignment = 1
-
-[node name="DateHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
-text = "完成时间"
-horizontal_alignment = 1
+text = "最佳波次"
+
+[node name="DateHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_x26nh")
+theme_override_font_sizes/font_size = 32
+text = "达成时间"
 
 [node name="DeathHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "总穿越次数"
-horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="bg_panel/board2panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 50.0
+offset_top = 15.0
+offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ContentContainer" type="VBoxContainer" parent="bg_panel/board2panel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 15
 
 [node name="labelContainer" type="HBoxContainer" parent="bg_panel"]
 z_index = -1

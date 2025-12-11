@@ -17,8 +17,8 @@ const CONTENT_FONT_SIZE: int = 24
 const CONTENT_FONT_COLOR: Color = Color(0.0, 0.0, 0.0, 1.0)
 
 # 表头列宽配置
-const COLUMN_WIDTHS_MODE1 = [80, 150, 80, 120, 150, 100]  # 排名, 名字, 楼层, 通关时间, 达成时间, 穿越次数
-const COLUMN_WIDTHS_MODE2 = [80, 80, 150, 100, 150, 100]  # 排名, 楼层, 关键人物, 最佳波次, 完成时间, 穿越次数
+const COLUMN_WIDTHS_MODE1 = [150, 200, 150, 250, 250, 250]  # 排名, 名字, 楼层, 通关时间, 达成时间, 穿越次数
+const COLUMN_WIDTHS_MODE2 = [150, 150, 200, 150, 250, 250]  # 排名, 楼层, 关键人物, 最佳波次, 完成时间, 穿越次数
 
 ## ==================== 节点引用 ====================
 
@@ -208,7 +208,7 @@ func _create_survival_row(rank: int, record: Dictionary) -> HBoxContainer:
 		var label = Label.new()
 		label.text = columns[i]
 		label.custom_minimum_size.x = COLUMN_WIDTHS_MODE1[i]
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		label.add_theme_font_size_override("font_size", CONTENT_FONT_SIZE)
 		label.add_theme_color_override("font_color", CONTENT_FONT_COLOR)
 		if _cached_font:
@@ -308,7 +308,7 @@ func _create_multi_row(group_rank: int, floor_id: int, record: Dictionary, show_
 		var label = Label.new()
 		label.text = columns[i]
 		label.custom_minimum_size.x = COLUMN_WIDTHS_MODE2[i]
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		label.add_theme_font_size_override("font_size", CONTENT_FONT_SIZE)
 		label.add_theme_color_override("font_color", CONTENT_FONT_COLOR)
 		if _cached_font:
