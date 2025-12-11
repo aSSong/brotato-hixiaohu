@@ -38,7 +38,7 @@ func _on_chapter2_begin_pressed() -> void:
 	# Chapter 2: 同心同力模式 - Multi
 	GameMain.current_mode_id = "multi"
 	print("[LevelSelect] 选择 Chapter 2: Multi 模式")
-	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/cutscene_chapter2.tscn")
 
 
 func _on_back_button_pressed() -> void:
@@ -73,4 +73,3 @@ func _format_time(seconds: float) -> String:
 	var centiseconds = int((seconds - int(seconds)) * 100)
 	
 	return "%d'%02d''%02d" % [total_minutes, secs, centiseconds]
-

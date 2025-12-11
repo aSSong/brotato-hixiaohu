@@ -1,0 +1,166 @@
+[gd_scene load_steps=10 format=3 uid="uid://b7r7uwpt3gfoh"]
+
+[ext_resource type="Script" uid="uid://jbcf1cx5oed3" path="res://Scripts/UI/settings_ui.gd" id="1_u4aqc"]
+[ext_resource type="Texture2D" uid="uid://r4drbwadpmy8" path="res://assets/UI/common/bg-maintitle-02.png" id="1_xretj"]
+[ext_resource type="Texture2D" uid="uid://dxpixj4t5dr3a" path="res://assets/UI/settings_ui/btn-settings-normal-01.png" id="2_u4aqc"]
+[ext_resource type="Texture2D" uid="uid://ck252yolcp3co" path="res://assets/UI/settings_ui/btn-settings-pressed-01.png" id="3_m547k"]
+[ext_resource type="Texture2D" uid="uid://crk51cchcwnj8" path="res://assets/UI/settings_ui/btn-settings-hover-01.png" id="4_insag"]
+[ext_resource type="Texture2D" uid="uid://c1y6pdncm58q2" path="res://assets/UI/settings_ui/btn-settings-disabled-01.png" id="5_bxq6r"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="6_oaxod"]
+[ext_resource type="Texture2D" uid="uid://b4xgibahk4h0u" path="res://assets/UI/class_choose/btn-back-gray-01.png" id="8_insag"]
+[ext_resource type="Texture2D" uid="uid://tpynlqo2yorf" path="res://assets/UI/class_choose/btn-back-white-01.png" id="9_bxq6r"]
+
+[node name="SettingsUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u4aqc")
+
+[node name="bg" type="TextureRect" parent="."]
+modulate = Color(0.47397572, 0.47397572, 0.47397572, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_xretj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="cut1btn" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="cut1labal" type="Label" parent="VBoxContainer/cut1btn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "Chapter 1 动画"
+horizontal_alignment = 1
+
+[node name="cut2btn" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="cut2labal" type="Label" parent="VBoxContainer/cut2btn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "Chapter 2 动画"
+horizontal_alignment = 1
+
+[node name="stuffbtn" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="stufflabal" type="Label" parent="VBoxContainer/stuffbtn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "创作人员"
+horizontal_alignment = 1
+
+[node name="filesbtn" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="fileslabal" type="Label" parent="VBoxContainer/filesbtn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "修改信息"
+horizontal_alignment = 1
+
+[node name="backbtn" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -180.0
+offset_right = 344.0
+offset_bottom = -81.0
+grow_vertical = 0
+texture_normal = ExtResource("8_insag")
+texture_pressed = ExtResource("9_bxq6r")
+texture_hover = ExtResource("9_bxq6r")
+texture_disabled = ExtResource("8_insag")
+
+[connection signal="pressed" from="VBoxContainer/cut1btn" to="." method="_on_cut_1_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/cut2btn" to="." method="_on_cut_2_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/stuffbtn" to="." method="_on_stuffbtn_pressed"]
+[connection signal="pressed" from="VBoxContainer/filesbtn" to="." method="_on_filesbtn_pressed"]
+[connection signal="pressed" from="backbtn" to="." method="_on_backbtn_pressed"]

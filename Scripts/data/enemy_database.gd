@@ -11,7 +11,9 @@ static func initialize_enemies() -> void:
 	if not enemies.is_empty():
 		return
 	
-	# 基础敌人 - 标准属性
+	# ------  场景1怪物--------------
+	
+		# 基础敌人 - 标准属性
 	# 假设sheet有5帧，横向排列，每帧240x240
 	var basic_enemy = EnemyData.new(
 		"基础敌人-爬虫",
@@ -40,7 +42,10 @@ static func initialize_enemies() -> void:
 	#enemy.shadow_scale = Vector2.ZERO  # 使用默认大小
 	#enemy.shadow_offset = Vector2(10, 20)  # 相对默认位置偏移(10, 20)
 	
-		# 订书机
+	# 爬虫怪快速
+	
+	
+	# 订书机 -冲锋怪
 	var stapler_enemy = EnemyData.new(
 		"订书机",
 		20,  # max_hp
@@ -58,26 +63,13 @@ static func initialize_enemies() -> void:
 	stapler_enemy.animation_speed = 12.0  #  FPS
 	enemies["stapler"] = stapler_enemy
 	
+	# 电磁怪 -自曝
 	
-		# 树怪敌人
-	var ent_enemy = EnemyData.new(
-		"树精",
-		50,  # max_hp（更高）
-		8,  # attack_damage（更高）
-		330.0,  # move_speed（更慢）
-		"res://assets/enemy/ent-run-Sheet.png",
-		510,
-		500,
-		9
-	)
-	ent_enemy.description = "这是一只树怪"
-	ent_enemy.animation_speed = 20.0  
-	ent_enemy.scale = Vector2(0.9, 0.9)  # 0.4倍大小
-	ent_enemy.shadow_offset = Vector2(15.0,-35) 
-	ent_enemy.shadow_scale = Vector2(1.8, 1.0)
-	enemies["ent"] = ent_enemy
 	
-	# 监视器敌人
+	#饮水机怪 -射手&精英
+	
+	
+		# 监视器敌人
 	var monitor_enemy = EnemyData.new(
 		"监视器",
 		50,  # max_hp（更高）
@@ -95,20 +87,28 @@ static func initialize_enemies() -> void:
 	monitor_enemy.shadow_scale = Vector2(1.2, 0.8)
 	enemies["monitor"] = monitor_enemy
 	
-	# 绿史莱姆敌人
-	var basic00_enemy = EnemyData.new(
-		"基础敌人-绿史莱姆",
+	
+	# ------  场景2怪物--------------
+	# 基础敌人 - 标准属性
+	# 假设sheet有5帧，横向排列，每帧240x240
+	var greenmashroom_enemy = EnemyData.new(
+		"基础敌人-绿蘑菇",
 		10,  # max_hp
 		5,  # attack_damage
-		300.0,  # move_speed
-		"res://assets/enemy/enemy-green-sheet.png",
-		357,  # frame_width
-		240,  # frame_height
-		5     # frame_count（根据你的实际帧数修改）
+		330.0,  # move_speed
+		"res://assets/enemy/mashroom-run-Sheet.png",
+		425,  # frame_width
+		500,  # frame_height
+		11     # frame_count（根据你的实际帧数修改）
 	)
-	basic00_enemy.description = "标准敌人，平衡的属性"
-	basic00_enemy.animation_speed = 8.0  # 8 FPS
-	enemies["basic00"] = basic00_enemy
+	greenmashroom_enemy.description = "标准敌人，平衡的属性"
+	greenmashroom_enemy.scale = Vector2(0.4, 0.4)  # 1.2倍大小
+	greenmashroom_enemy.animation_speed = 20.0  # 8 FPS
+	# 配置shadow：由于敌人scale是0.5，需要补偿shadow的scale使其可见
+	# 场景默认shadow scale是Vector2(1.1, 0.8)，补偿后应该是Vector2(2.2, 1.6)
+	greenmashroom_enemy.shadow_scale = Vector2(0.6, 0.4)
+	greenmashroom_enemy.shadow_offset = Vector2(20,-115) # 使用默认位置
+	enemies["greenmashroom"] = greenmashroom_enemy
 	
 	# 快速敌人 - 低血量，高速度
 	var fast_enemy = EnemyData.new(
@@ -126,6 +126,93 @@ static func initialize_enemies() -> void:
 	fast_enemy.shadow_offset = Vector2(30,-80) 
 	fast_enemy.animation_speed = 8.0  # 8 FPS
 	enemies["fast"] = fast_enemy
+	
+	# 冲锋bee
+	
+	# 射手蚊子
+	
+	# 自爆敌人 - 带有自爆技能
+	var redmashroom_enemy = EnemyData.new(
+		"自爆敌人-红蘑菇",
+		12,  # max_hp（较低，因为会自爆）
+		3,   # attack_damage
+		280.0,  # move_speed
+		"res://assets/enemy/redmashroom-run-Sheet.png",
+		445,
+		500,
+		10
+	)
+	redmashroom_enemy.description = "低血量时会自爆的敌人"
+	redmashroom_enemy.scale = Vector2(0.4, 0.4)  # 0.4倍大小
+	redmashroom_enemy.shadow_offset = Vector2(17,-87) 
+	redmashroom_enemy.shadow_scale = Vector2(0.8, 0.6)
+	redmashroom_enemy.animation_speed = 16.0  # FPS
+	redmashroom_enemy.skill_type = EnemyData.EnemySkillType.EXPLODING
+	redmashroom_enemy.skill_config = {
+		"trigger_condition": "low_hp",  # 触发条件：低血量
+		"explosion_range": 300.0,        # 爆炸范围
+		"explosion_damage": 30,          # 爆炸伤害
+		"low_hp_threshold": 0.3,        # 低血量阈值（30%）
+		"countdown_duration": 3.0        # 倒数时长（秒）
+	}
+	enemies["redmashroom"] = redmashroom_enemy
+	
+	
+		# 精英敌人 - 全属性较高
+	var bluemashroom_enemy = EnemyData.new(
+		"精英敌人-蓝蘑菇",
+		25,  # max_hp
+		10,  # attack_damage
+		350.0,  # move_speed
+		"res://assets/enemy/bluemashroom-run-Sheet.png",
+		310,
+		500,
+		5
+	)
+	bluemashroom_enemy.description = "强化的精英敌人"
+	bluemashroom_enemy.scale = Vector2(0.6, 0.6)  # 0.4倍大小
+	bluemashroom_enemy.shake_amount = 12.0  # 更强的震动
+	bluemashroom_enemy.animation_speed = 10.0
+	enemies["bluemashroom"] = bluemashroom_enemy
+	
+	
+	# BOSS树怪敌人
+	var ent_enemy = EnemyData.new(
+		"树精",
+		50,  # max_hp（更高）
+		8,  # attack_damage（更高）
+		330.0,  # move_speed（更慢）
+		"res://assets/enemy/ent-run-Sheet.png",
+		510,
+		500,
+		9
+	)
+	ent_enemy.description = "这是一只树怪"
+	ent_enemy.animation_speed = 20.0  
+	ent_enemy.scale = Vector2(0.9, 0.9)  # 0.4倍大小
+	ent_enemy.shadow_offset = Vector2(15.0,-35) 
+	ent_enemy.shadow_scale = Vector2(1.8, 1.0)
+	enemies["ent"] = ent_enemy
+	
+	# ------  其他怪物--------------
+	
+	
+	# 绿史莱姆敌人
+	var basic00_enemy = EnemyData.new(
+		"基础敌人-绿史莱姆",
+		10,  # max_hp
+		5,  # attack_damage
+		300.0,  # move_speed
+		"res://assets/enemy/enemy-green-sheet.png",
+		357,  # frame_width
+		240,  # frame_height
+		5     # frame_count（根据你的实际帧数修改）
+	)
+	basic00_enemy.description = "标准敌人，平衡的属性"
+	basic00_enemy.animation_speed = 8.0  # 8 FPS
+	enemies["basic00"] = basic00_enemy
+	
+
 	
 	# 快速敌人 - 低血量，高速度
 	var fast00_enemy = EnemyData.new(
