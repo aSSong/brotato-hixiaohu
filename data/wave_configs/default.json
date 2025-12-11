@@ -9,12 +9,10 @@
 	  "damage_growth": 0.0,
 	  "total_count": 15,
 	  "enemies": {
-		"greenmashroom": 0.3,
-		"redmashroom": 0.2,
-		"stapler": 0.2,
-		"fast": 0.1,
-		"bluemashroom": 0.1,
-		"monitor": 0.1
+		"basic": 0.6,
+		"fast": 0.2,
+		"tank": 0.1,
+		"elite": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -29,12 +27,10 @@
 	  "damage_growth": 0.02,
 	  "total_count": 16,
 	  "enemies": {
-		"basic": 0.3,
-		"exploding_enemy": 0.2,
-		"stapler": 0.2,
-		"fast": 0.1,
+		"basic": 0.5,
+		"fast": 0.3,
 		"tank": 0.1,
-		"monitor": 0.1
+		"elite": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -52,7 +48,7 @@
 		"basic": 0.55,
 		"fast": 0.25,
 		"tank": 0.1,
-		"monitor": 0.1
+		"elite": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -69,7 +65,7 @@
 	  "enemies": {
 		"basic": 0.5,
 		"fast": 0.25,
-		"monitor": 0.15,
+		"tank": 0.15,
 		"elite": 0.1
 	  },
 	  "boss_config": {
