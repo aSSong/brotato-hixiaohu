@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/data/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_name = "自爆敌人-红蘑菇"
+description = "低血量时会自爆的敌人"
+scene_path = "res://scenes/enemies/prefabs/redmashroom.tscn"
+max_hp = 12
+attack_damage = 3
+move_speed = 280.0
+attack_interval = 1.0
+attack_range = 80.0
+skill_type = 3
+skill_config = {
+"trigger_condition": "low_hp",
+"explosion_range": 300.0,
+"explosion_damage": 30,
+"low_hp_threshold": 0.3,
+"countdown_duration": 3.0
+}
+animations = {
+"walk": "walk",
+"idle": "",
+"attack": "",
+"hurt": "",
+"skill_prepare": "",
+"skill_execute": ""
+}
+scale = Vector2(0.4, 0.4)
+shake_on_death = true
+shake_duration = 0.2
+shake_amount = 8.0
+

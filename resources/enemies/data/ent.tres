@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/data/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_name = "树精"
+description = "这是一只树怪"
+scene_path = "res://scenes/enemies/prefabs/ent.tscn"
+max_hp = 50
+attack_damage = 8
+move_speed = 330.0
+attack_interval = 1.0
+attack_range = 80.0
+skill_type = 0
+skill_config = {}
+animations = {
+"walk": "walk",
+"idle": "",
+"attack": "",
+"hurt": "",
+"skill_prepare": "",
+"skill_execute": ""
+}
+scale = Vector2(0.9, 0.9)
+shake_on_death = true
+shake_duration = 0.2
+shake_amount = 8.0
+

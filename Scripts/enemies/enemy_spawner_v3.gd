@@ -3,13 +3,20 @@ class_name EnemySpawnerV3
 
 ## 新的敌人生成器 V3
 ## 职责：只负责生成敌人，不管理波次逻辑
+## 
+## 改进：使用预制场景系统，从 EnemyData.scene_path 加载敌人场景
 
 ## ========== 配置 ==========
-@export var enemy_scene: PackedScene
+## 默认敌人场景（兜底用，当 scene_path 为空时使用）
+@export var fallback_enemy_scene: PackedScene
 
 var floor_layer: TileMapLayer = null
 var player: Node = null
 var wave_system: Node = null
+
+## ========== 场景缓存 ==========
+## 缓存已加载的敌人场景，避免重复加载
+var scene_cache: Dictionary = {}
 
 ## ========== 生成参数 ==========
 var min_distance_from_player: float = 300.0
@@ -103,6 +110,36 @@ func _spawn_enemies_async(spawn_list: Array, wave_number: int, spawn_interval: f
 	is_spawning = false
 	print("[EnemySpawner V3] 生成完成")
 
+## 获取敌人场景（带缓存）
+func _get_enemy_scene(enemy_data: EnemyData) -> PackedScene:
+	# 如果 scene_path 为空，使用兜底场景
+	var scene_path = enemy_data.scene_path
+	if scene_path == "" or scene_path == null:
+		if fallback_enemy_scene:
+			return fallback_enemy_scene
+		else:
+			push_error("[EnemySpawner V3] 敌人没有 scene_path 且没有设置 fallback_enemy_scene")
+			return null
+	
+	# 检查缓存
+	if scene_cache.has(scene_path):
+		return scene_cache[scene_path]
+	
+	# 加载场景
+	if not ResourceLoader.exists(scene_path):
+		push_error("[EnemySpawner V3] 场景文件不存在: %s" % scene_path)
+		return fallback_enemy_scene
+	
+	var scene = load(scene_path) as PackedScene
+	if scene:
+		scene_cache[scene_path] = scene
+		print("[EnemySpawner V3] ✓ 缓存敌人场景: %s" % scene_path)
+	else:
+		push_error("[EnemySpawner V3] ✗ 无法加载场景: %s" % scene_path)
+		return fallback_enemy_scene
+	
+	return scene
+
 ## 生成单个敌人
 func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_number: int = 1, hp_growth: float = 0.0, damage_growth: float = 0.0) -> Node:
 	if not floor_layer:
@@ -120,6 +157,12 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 		push_error("[EnemySpawner V3] 敌人数据不存在：", enemy_id)
 		return null
 	
+	# 获取敌人场景（从预制场景或兜底场景）
+	var enemy_scene = _get_enemy_scene(enemy_data)
+	if not enemy_scene:
+		push_error("[EnemySpawner V3] 无法获取敌人场景：", enemy_id)
+		return null
+	
 	# 尝试多次找合适的位置
 	for attempt in max_spawn_attempts:
 		var cell := used[randi() % used.size()]
@@ -132,13 +175,8 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 			# 设置位置
 			enemy.global_position = world_pos
 			
-			# 初始化敌人数据
-			if enemy.has_method("initialize"):
-				enemy.initialize(enemy_data)
-			else:
-				enemy.enemy_data = enemy_data
-				if enemy.has_method("_apply_enemy_data"):
-					enemy._apply_enemy_data()
+			# 初始化敌人数据（只应用数值属性，动画已在预制场景中配置）
+			enemy.enemy_data = enemy_data
 			
 			# 设置波次号（用于掉落判断）
 			enemy.current_wave_number = wave_number
@@ -146,7 +184,7 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 			# 标记是否为最后一个敌人（掉落钥匙）
 			enemy.is_last_enemy_in_wave = is_last_in_wave
 			
-			# 添加到场景树（这会触发_ready()，可能会重新应用enemy_data）
+			# 添加到场景树（这会触发_ready()，应用 enemy_data）
 			add_child(enemy)
 			
 			# 在_ready()执行完后，应用成长率（必须在add_child之后）
@@ -184,3 +222,8 @@ func clear_all_enemies() -> void:
 		if child is Enemy:
 			child.queue_free()
 	print("[EnemySpawner V3] 清理所有敌人")
+
+## 清除场景缓存（用于热重载）
+func clear_scene_cache() -> void:
+	scene_cache.clear()
+	print("[EnemySpawner V3] 场景缓存已清除")

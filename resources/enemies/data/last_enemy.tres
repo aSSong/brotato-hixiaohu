@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/data/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_name = "波次首领"
+description = "每波最后的首领，掉落Master Key"
+scene_path = "res://scenes/enemies/prefabs/boss.tscn"
+max_hp = 45
+attack_damage = 8
+move_speed = 380.0
+attack_interval = 1.0
+attack_range = 80.0
+skill_type = 1
+skill_config = {
+"trigger_distance": 600.0,
+"charge_speed": 900.0,
+"charge_distance": 700.0,
+"cooldown": 2.5,
+"extra_damage": 15,
+"prepare_time": 0.2
+}
+animations = {
+"walk": "walk",
+"idle": "",
+"attack": "",
+"hurt": "",
+"skill_prepare": "",
+"skill_execute": ""
+}
+scale = Vector2(1.2, 1.2)
+shake_on_death = true
+shake_duration = 0.2
+shake_amount = 15.0
+

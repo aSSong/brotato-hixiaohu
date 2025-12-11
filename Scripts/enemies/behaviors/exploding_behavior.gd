@@ -140,6 +140,10 @@ func _start_countdown() -> void:
 	if enemy.has_method("set_invincible"):
 		enemy.set_invincible(true)
 	
+	# 播放自爆准备动画
+	enemy.play_animation("skill_prepare")
+	enemy.play_skill_animation("explode_countdown")
+	
 	print("[ExplodingBehavior] 开始倒数 | 时长:", countdown_duration, "秒")
 
 ## 更新倒数状态

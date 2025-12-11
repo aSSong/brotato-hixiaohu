@@ -66,7 +66,9 @@ func _ready() -> void:
 	# 如果已经设置了敌人数据，应用它
 	if enemy_data != null:
 		_apply_enemy_data()
-	pass # Replace with function body.
+	
+	# 播放默认走路动画
+	play_animation("walk")
 
 ## 处理Buff Tick（DoT伤害）
 func _on_buff_tick(buff_id: String, tick_data: Dictionary) -> void:
@@ -178,40 +180,17 @@ func initialize(data: EnemyData) -> void:
 	enemy_data = data
 	_apply_enemy_data()
 
-## 应用敌人数据
+## 应用敌人数据（只应用数值属性，不处理动画）
 func _apply_enemy_data() -> void:
 	if enemy_data == null:
 		return
 	
-	# 应用属性
+	# 应用数值属性
 	max_enemyHP = enemy_data.max_hp
 	enemyHP = max_enemyHP
 	attack_damage = enemy_data.attack_damage
 	speed = enemy_data.move_speed
 	attack_interval = enemy_data.attack_interval
-	
-	# 应用外观
-	self.scale = enemy_data.scale
-	
-	# 应用Shadow配置
-	if $shadow:
-		# 如果配置了shadow_scale，则应用（需要补偿父节点scale）
-		if enemy_data.shadow_scale != Vector2.ZERO:
-			$shadow.scale = enemy_data.shadow_scale / enemy_data.scale
-		# 如果配置了shadow_offset，则应用（需要补偿父节点scale）
-		if enemy_data.shadow_offset != Vector2.ZERO:
-			# shadow_offset是相对于场景默认位置的偏移
-			# 场景默认position是Vector2(-19.999998, 136.66666)
-			var base_shadow_position = Vector2(-19.999998, 136.66666)
-			$shadow.position = (base_shadow_position + enemy_data.shadow_offset) / enemy_data.scale
-	
-	# 设置动画贴图（使用缓存的SpriteFrames，避免每个敌人都创建新的）
-	if $AnimatedSprite2D and enemy_data.texture_path != "":
-		var sprite_frames = enemy_data.get_sprite_frames()
-		if sprite_frames:
-			$AnimatedSprite2D.sprite_frames = sprite_frames
-			$AnimatedSprite2D.play("default")
-			#print("[Enemy] 加载动画: ", enemy_data.enemy_name, " 帧数:", enemy_data.frame_count, " FPS:", enemy_data.animation_speed)
 	
 	# 应用震动设置
 	shake_on_death = enemy_data.shake_on_death
@@ -220,6 +199,40 @@ func _apply_enemy_data() -> void:
 	
 	# 初始化技能行为
 	_setup_skill_behavior()
+
+## 播放指定动画（供 behavior 调用）
+## 
+## @param anim_key 逻辑动画名（walk/idle/attack/hurt/skill_prepare/skill_execute）
+func play_animation(anim_key: String) -> void:
+	if not $AnimatedSprite2D:
+		return
+	
+	# 从 enemy_data 获取实际动画名
+	var anim_name = anim_key  # 默认使用原名
+	if enemy_data and enemy_data.animations.has(anim_key):
+		var mapped_name = enemy_data.animations.get(anim_key, "")
+		if mapped_name != "" and mapped_name != null:
+			anim_name = mapped_name
+		else:
+			return  # 该敌人没有配置这个动画
+	
+	# 检查 SpriteFrames 是否有这个动画
+	if $AnimatedSprite2D.sprite_frames and $AnimatedSprite2D.sprite_frames.has_animation(anim_name):
+		$AnimatedSprite2D.play(anim_name)
+
+## 播放 AnimationPlayer 动画（技能动作）
+## 
+## @param anim_name AnimationPlayer 中的动画名
+func play_skill_animation(anim_name: String) -> void:
+	var anim_player = get_node_or_null("AnimationPlayer")
+	if anim_player and anim_player.has_animation(anim_name):
+		anim_player.play(anim_name)
+
+## 停止 AnimationPlayer 动画
+func stop_skill_animation() -> void:
+	var anim_player = get_node_or_null("AnimationPlayer")
+	if anim_player:
+		anim_player.stop()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -285,7 +298,6 @@ func _process(delta: float) -> void:
 		# 检查是否在攻击范围内（造成伤害）
 		if player_distance < attack_range_value:  # 接触距离
 			_attack_player()
-	pass
 
 ## 更新敌人朝向
 func _update_facing_direction() -> void:
@@ -309,6 +321,7 @@ func _attack_player() -> void:
 	if target and target.has_method("player_hurt"):
 		target.player_hurt(attack_damage)
 		attack_cooldown = attack_interval
+
 func enemy_hurt(hurt, is_critical: bool = false):
 	# 如果已经死亡，忽略后续伤害
 	if is_dead:
@@ -345,20 +358,15 @@ func enemy_hurt(hurt, is_critical: bool = false):
 					self.enemyHP = max(1, new_hp)
 					return
 	
-	#print("[Enemy] 受伤 | HP:", self.enemyHP, " 伤害:", hurt, " 位置:", global_position)
 	self.enemyHP -= hurt
 	
 	# 确定伤害数字颜色
 	var text_color = Color(1.0, 1.0, 1.0, 1.0)  # 伤害数字
 	if is_critical:
 		text_color = Color(0.2, 0.8, 0.8, 1.0)  # 表示暴击
-	
-	# 注意：hurt已经在函数开头处理过，确保 >= 1（如果 > 0）
-	# 这里不需要再次检查
 
 	# 显示伤害跳字
 	var text_content = str(hurt)
-	#var text_content = "-" + str(hurt)
 	if is_critical:
 		text_content = "暴击 " + str(hurt)
 		
@@ -373,13 +381,11 @@ func enemy_hurt(hurt, is_critical: bool = false):
 	# 使用统一的特效管理器
 	CombatEffectManager.play_enemy_hurt(global_position)
 	if self.enemyHP <= 0:
-		#print("[Enemy] 死亡 | 位置:", global_position)
 		enemy_dead()
-	pass
+
 func enemy_dead():
 	# 防止重复调用
 	if is_dead:
-		#print("[Enemy] 已经死亡，忽略重复调用 | 位置:", global_position)
 		return
 	
 	# 检查是否在自爆倒数状态（如果是，不立即死亡）
@@ -388,11 +394,9 @@ func enemy_dead():
 			var exploding = behavior as ExplodingBehavior
 			if exploding.is_in_countdown():
 				# 在倒数状态，不立即死亡，等待爆炸
-				#print("[Enemy] 在自爆倒数状态，延迟死亡")
 				return
 	
 	is_dead = true
-	#print("[Enemy] enemy_dead() 被调用 | 位置:", global_position)
 	
 	# 通知技能行为敌人死亡（用于自爆技能的ON_DEATH触发）
 	for behavior in behaviors:
@@ -407,21 +411,13 @@ func enemy_dead():
 	var item_name = "gold"  # 默认掉落金币
 	
 	if is_last_enemy_in_wave:
-		# 最后一只敌人：单数波掉Master Key，双数波掉Gold
-		# if current_wave_number % 2 == 1:  # 单数波次
 		item_name = "masterkey"
-		# else:  # 双数波次
-			# item_name = "gold"
 	
-	#print("[Enemy] 准备掉落物品 | 类型:", item_name, " 波次:", current_wave_number, " 位置:", self.global_position)
 	GameMain.drop_item_scene_obj.gen_drop_item({
-		#"box":GameMain.duplicate_node,
 		"ani_name": item_name,
-		#"position":Vector2.ZERO,
 		"position": self.global_position,
 		"scale":Vector2(4,4)
 	})
-	#print("[Enemy] 掉落物品完成")
 	
 	# 发送敌人死亡信号（在queue_free之前）
 	enemy_killed.emit(self)
@@ -430,9 +426,7 @@ func enemy_dead():
 	if shake_on_death:
 		CameraShake.shake(shake_duration, shake_amount)
 	
-	#print("[Enemy] 准备 queue_free | 位置:", global_position)
 	self.queue_free()
-	pass
 
 func enemy_flash():
 	if not $AnimatedSprite2D or not $AnimatedSprite2D.material:
@@ -474,7 +468,6 @@ func enemy_flash():
 ## 设置无敌状态
 func set_invincible(value: bool) -> void:
 	is_invincible = value
-	#print("[Enemy] 无敌状态:", value)
 
 ## 设置技能行为
 func _setup_skill_behavior() -> void:
@@ -494,21 +487,18 @@ func _setup_skill_behavior() -> void:
 			add_child(charging)
 			charging.initialize(self, enemy_data.skill_config)
 			behaviors.append(charging)
-			#print("[Enemy] 添加冲锋技能行为")
 		
 		EnemyData.EnemySkillType.SHOOTING:
 			var shooting = ShootingBehavior.new()
 			add_child(shooting)
 			shooting.initialize(self, enemy_data.skill_config)
 			behaviors.append(shooting)
-			#print("[Enemy] 添加射击技能行为")
 		
 		EnemyData.EnemySkillType.EXPLODING:
 			var exploding = ExplodingBehavior.new()
 			add_child(exploding)
 			exploding.initialize(self, enemy_data.skill_config)
 			behaviors.append(exploding)
-			#print("[Enemy] 添加自爆技能行为")
 		
 		EnemyData.EnemySkillType.NONE:
 			pass  # 无技能

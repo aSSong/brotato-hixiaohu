@@ -84,6 +84,11 @@ func _check_trigger_charge() -> void:
 		state_timer = prepare_time
 		is_charging = false
 		_show_indicator()
+		
+		# 播放技能准备动画
+		if enemy:
+			enemy.play_animation("skill_prepare")
+			enemy.play_skill_animation("skill_prepare")
 
 ## 开始冲锋
 func _start_charge() -> void:
@@ -101,6 +106,10 @@ func _start_charge() -> void:
 	# 设置冲锋距离的计时器（基于速度计算）
 	var charge_duration = charge_distance / charge_speed
 	state_timer = charge_duration
+	
+	# 播放技能执行动画
+	enemy.play_animation("skill_execute")
+	enemy.play_skill_animation("skill_execute")
 	
 	print("[ChargingBehavior] 开始冲锋 | 方向:", charge_direction, " 距离:", charge_distance)
 
@@ -152,6 +161,12 @@ func _end_charge() -> void:
 	is_charging = false
 	enemy.velocity = Vector2.ZERO
 	_hide_indicator()
+	
+	# 恢复走路动画
+	if enemy:
+		enemy.play_animation("walk")
+		enemy.stop_skill_animation()
+	
 	print("[ChargingBehavior] 冲锋结束，进入冷却")
 
 ## 是否正在冲锋（供Enemy类查询，用于覆盖正常移动）

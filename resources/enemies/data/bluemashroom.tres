@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/data/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_name = "精英敌人-蓝蘑菇"
+description = "强化的精英敌人"
+scene_path = "res://scenes/enemies/prefabs/bluemashroom.tscn"
+max_hp = 25
+attack_damage = 10
+move_speed = 350.0
+attack_interval = 1.0
+attack_range = 80.0
+skill_type = 0
+skill_config = {}
+animations = {
+"walk": "walk",
+"idle": "",
+"attack": "",
+"hurt": "",
+"skill_prepare": "",
+"skill_execute": ""
+}
+scale = Vector2(0.6, 0.6)
+shake_on_death = true
+shake_duration = 0.2
+shake_amount = 12.0
+

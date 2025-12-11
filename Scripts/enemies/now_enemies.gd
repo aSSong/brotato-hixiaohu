@@ -34,8 +34,8 @@ func _ready() -> void:
 	add_child(enemy_spawner)
 	enemy_spawner.name = "EnemySpawnerV3"
 	
-	# 配置生成器
-	enemy_spawner.enemy_scene = enemy_scene
+	# 配置生成器（fallback_enemy_scene 作为兜底，当敌人没有 scene_path 时使用）
+	enemy_spawner.fallback_enemy_scene = enemy_scene
 	enemy_spawner.floor_layer = floor_layer
 	enemy_spawner.player = player
 	enemy_spawner.min_distance_from_player = min_distance_from_player

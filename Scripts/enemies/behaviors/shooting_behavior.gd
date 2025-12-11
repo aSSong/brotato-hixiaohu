@@ -65,6 +65,10 @@ func _shoot_at_player() -> void:
 	if not player:
 		return
 	
+	# 播放攻击/技能动画
+	enemy.play_animation("attack")
+	enemy.play_skill_animation("shoot")
+	
 	# 创建子弹实例
 	var bullet = bullet_scene.instantiate()
 	if not bullet:
