@@ -68,11 +68,16 @@ func _ready() -> void:
 	print("[WaveSystem V3] 已添加到组: wave_manager, wave_system")
 	
 	# 从当前模式获取配置ID（如果有）
-	if GameMain.current_session and "mode" in GameMain.current_session:
-		var mode = GameMain.current_session.mode
+	var mode_id = GameMain.current_mode_id
+	if mode_id and not mode_id.is_empty():
+		var mode = ModeRegistry.get_mode(mode_id)
 		if mode and "wave_config_id" in mode:
 			wave_config_id = mode.wave_config_id
-			print("[WaveSystem V3] 从模式获取配置ID: ", wave_config_id)
+			print("[WaveSystem V3] 从模式获取配置ID: ", wave_config_id, " (模式: ", mode_id, ")")
+		else:
+			print("[WaveSystem V3] 模式 ", mode_id, " 没有 wave_config_id，使用默认配置")
+	else:
+		print("[WaveSystem V3] 未设置模式ID，使用默认配置: ", wave_config_id)
 	
 	_initialize_waves()
 

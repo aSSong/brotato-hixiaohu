@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://dg7dljb2o0am"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_k6v0q"]
+
+[resource]
+script = ExtResource("1_k6v0q")
+enemy_name = "射击敌人"
+description = "会远程射击的敌人"
+scene_path = "res://scenes/enemies/prefabs/stage1/jug.tscn"
+attack_damage = 4
+move_speed = 250.0
+skill_type = 2
+skill_config = {
+"bullet_damage": 5,
+"bullet_id": "basic",
+"bullet_speed": 350.0,
+"shoot_interval": 0.5,
+"shoot_range": 800.0
+}
+scale = Vector2(0.6, 0.6)

@@ -1,0 +1,2057 @@
+{
+  "config_id": "default",
+  "total_waves": 100,
+  "waves": [
+	{
+	  "wave": 1,
+	  "spawn_interval": 0.5,
+	  "hp_growth": 0.0,
+	  "damage_growth": 0.0,
+	  "total_count": 20,
+	  "enemies": {
+		"creeper": 0.6,
+		"creeper_fast": 0.2,
+		"jug2": 0.1,
+		"jug3": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 2,
+	  "spawn_interval": 0.5,
+	  "hp_growth": 0.1,
+	  "damage_growth": 0.1,
+	  "total_count": 30,
+	  "enemies": {
+		"creeper": 0.5,
+		"creeper_fast": 0.3,
+		"jug2": 0.1,
+		"jug3": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 3,
+	  "spawn_interval": 0.48,
+	  "hp_growth": 0.15,
+	  "damage_growth": 0.15,
+	  "total_count": 40,
+	  "enemies": {
+		"creeper": 0.55,
+		"creeper_fast": 0.25,
+		"jug2": 0.1,
+		"jug3": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 4,
+	  "spawn_interval": 0.46,
+	  "hp_growth": 0.2,
+	  "damage_growth": 0.2,
+	  "total_count": 50,
+	  "enemies": {
+		"creeper": 0.5,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 5,
+	  "spawn_interval": 0.45,
+	  "hp_growth": 0.25,
+	  "damage_growth": 0.25,
+	  "total_count": 57,
+	  "enemies": {
+		"creeper": 0.5,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.1
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 6,
+	  "spawn_interval": 0.44,
+	  "hp_growth": 0.3,
+	  "damage_growth": 0.3,
+	  "total_count": 63,
+	  "enemies": {
+		"creeper": 0.45,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.1,
+		"stapler": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 7,
+	  "spawn_interval": 0.43,
+	  "hp_growth": 0.33,
+	  "damage_growth": 0.33,
+	  "total_count": 66,
+	  "enemies": {
+		"creeper": 0.4,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.1,
+		"stapler": 0.05,
+		"jug": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 8,
+	  "spawn_interval": 0.42,
+	  "hp_growth": 0.35,
+	  "damage_growth": 0.35,
+	  "total_count": 69,
+	  "enemies": {
+		"creeper": 0.35,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.1,
+		"stapler": 0.05,
+		"jug": 0.05,
+		"powerbank": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 9,
+	  "spawn_interval": 0.41,
+	  "hp_growth": 0.38,
+	  "damage_growth": 0.38,
+	  "total_count": 72,
+	  "enemies": {
+		"creeper": 0.35,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.1,
+		"stapler": 0.05,
+		"jug": 0.05,
+		"powerbank": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 10,
+	  "spawn_interval": 0.4,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.4,
+	  "total_count": 75,
+	  "enemies": {
+		"creeper": 0.3,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.15,
+		"stapler": 0.05,
+		"jug": 0.05,
+		"powerbank": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 11,
+	  "spawn_interval": 0.39,
+	  "hp_growth": 0.45,
+	  "damage_growth": 0.45,
+	  "total_count": 81,
+	  "enemies": {
+		"creeper": 0.3,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.15,
+		"stapler": 0.05,
+		"jug": 0.05,
+		"powerbank": 0.05
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 12,
+	  "spawn_interval": 0.38,
+	  "hp_growth": 0.5,
+	  "damage_growth": 0.5,
+	  "total_count": 87,
+	  "enemies": {
+		"creeper": 0.25,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.15,
+		"stapler": 0.07,
+		"jug": 0.07,
+		"powerbank": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 13,
+	  "spawn_interval": 0.37,
+	  "hp_growth": 0.55,
+	  "damage_growth": 0.55,
+	  "total_count": 93,
+	  "enemies": {
+		"creeper": 0.25,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.15,
+		"stapler": 0.07,
+		"jug": 0.07,
+		"powerbank": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 14,
+	  "spawn_interval": 0.36,
+	  "hp_growth": 0.6,
+	  "damage_growth": 0.6,
+	  "total_count": 99,
+	  "enemies": {
+		"creeper": 0.25,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.15,
+		"stapler": 0.07,
+		"jug": 0.07,
+		"powerbank": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 15,
+	  "spawn_interval": 0.35,
+	  "hp_growth": 0.65,
+	  "damage_growth": 0.65,
+	  "total_count": 105,
+	  "enemies": {
+		"creeper": 0.2,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.07,
+		"jug": 0.07,
+		"powerbank": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 16,
+	  "spawn_interval": 0.34,
+	  "hp_growth": 0.75,
+	  "damage_growth": 0.75,
+	  "total_count": 117,
+	  "enemies": {
+		"creeper": 0.2,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.07,
+		"jug": 0.07,
+		"powerbank": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 17,
+	  "spawn_interval": 0.33,
+	  "hp_growth": 0.85,
+	  "damage_growth": 0.85,
+	  "total_count": 129,
+	  "enemies": {
+		"creeper": 0.2,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.07,
+		"jug": 0.07,
+		"powerbank": 0.06
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 18,
+	  "spawn_interval": 0.32,
+	  "hp_growth": 0.95,
+	  "damage_growth": 0.95,
+	  "total_count": 141,
+	  "enemies": {
+		"creeper": 0.15,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.09,
+		"jug": 0.08,
+		"powerbank": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 19,
+	  "spawn_interval": 0.31,
+	  "hp_growth": 1.05,
+	  "damage_growth": 1.05,
+	  "total_count": 150,
+	  "enemies": {
+		"creeper": 0.15,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.09,
+		"jug": 0.08,
+		"powerbank": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 20,
+	  "spawn_interval": 0.3,
+	  "hp_growth": 1.15,
+	  "damage_growth": 1.15,
+	  "total_count": 159,
+	  "enemies": {
+		"creeper": 0.15,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.09,
+		"jug": 0.08,
+		"powerbank": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 21,
+	  "spawn_interval": 0.3,
+	  "hp_growth": 1.2,
+	  "damage_growth": 1.2,
+	  "total_count": 168,
+	  "enemies": {
+		"creeper": 0.15,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.09,
+		"jug": 0.08,
+		"powerbank": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 22,
+	  "spawn_interval": 0.3,
+	  "hp_growth": 1.25,
+	  "damage_growth": 1.25,
+	  "total_count": 177,
+	  "enemies": {
+		"creeper": 0.15,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.09,
+		"jug": 0.08,
+		"powerbank": 0.08
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 23,
+	  "spawn_interval": 0.29,
+	  "hp_growth": 1.3,
+	  "damage_growth": 1.3,
+	  "total_count": 186,
+	  "enemies": {
+		"creeper": 0.12,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.1,
+		"jug": 0.09,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 24,
+	  "spawn_interval": 0.29,
+	  "hp_growth": 1.35,
+	  "damage_growth": 1.35,
+	  "total_count": 195,
+	  "enemies": {
+		"creeper": 0.12,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.1,
+		"jug": 0.09,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 25,
+	  "spawn_interval": 0.29,
+	  "hp_growth": 1.4,
+	  "damage_growth": 1.4,
+	  "total_count": 204,
+	  "enemies": {
+		"creeper": 0.12,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.1,
+		"jug": 0.09,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 26,
+	  "spawn_interval": 0.28,
+	  "hp_growth": 1.45,
+	  "damage_growth": 1.45,
+	  "total_count": 213,
+	  "enemies": {
+		"creeper": 0.12,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.1,
+		"jug": 0.09,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 27,
+	  "spawn_interval": 0.28,
+	  "hp_growth": 1.5,
+	  "damage_growth": 1.5,
+	  "total_count": 222,
+	  "enemies": {
+		"creeper": 0.1,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.11,
+		"jug": 0.1,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 28,
+	  "spawn_interval": 0.28,
+	  "hp_growth": 1.55,
+	  "damage_growth": 1.55,
+	  "total_count": 231,
+	  "enemies": {
+		"creeper": 0.1,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.11,
+		"jug": 0.1,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 29,
+	  "spawn_interval": 0.27,
+	  "hp_growth": 1.6,
+	  "damage_growth": 1.6,
+	  "total_count": 240,
+	  "enemies": {
+		"creeper": 0.1,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.11,
+		"jug": 0.1,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 1,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 30,
+	  "spawn_interval": 0.27,
+	  "hp_growth": 1.65,
+	  "damage_growth": 1.65,
+	  "total_count": 249,
+	  "enemies": {
+		"creeper": 0.1,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.11,
+		"jug": 0.1,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 31,
+	  "spawn_interval": 0.27,
+	  "hp_growth": 1.7,
+	  "damage_growth": 1.7,
+	  "total_count": 258,
+	  "enemies": {
+		"creeper": 0.08,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.12,
+		"jug": 0.11,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 32,
+	  "spawn_interval": 0.26,
+	  "hp_growth": 1.75,
+	  "damage_growth": 1.75,
+	  "total_count": 267,
+	  "enemies": {
+		"creeper": 0.08,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.12,
+		"jug": 0.11,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 33,
+	  "spawn_interval": 0.26,
+	  "hp_growth": 1.8,
+	  "damage_growth": 1.8,
+	  "total_count": 276,
+	  "enemies": {
+		"creeper": 0.08,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.12,
+		"jug": 0.11,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 34,
+	  "spawn_interval": 0.26,
+	  "hp_growth": 1.85,
+	  "damage_growth": 1.85,
+	  "total_count": 285,
+	  "enemies": {
+		"creeper": 0.08,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.12,
+		"jug": 0.11,
+		"powerbank": 0.09
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 35,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 1.9,
+	  "damage_growth": 1.9,
+	  "total_count": 294,
+	  "enemies": {
+		"creeper": 0.05,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 36,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 1.95,
+	  "damage_growth": 1.95,
+	  "total_count": 303,
+	  "enemies": {
+		"creeper": 0.05,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 37,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 312,
+	  "enemies": {
+		"creeper": 0.05,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 38,
+	  "spawn_interval": 0.25,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 321,
+	  "enemies": {
+		"creeper": 0.05,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 39,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 330,
+	  "enemies": {
+		"creeper": 0.05,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.2,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 40,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 339,
+	  "enemies": {
+		"creeper": 0.03,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 41,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 348,
+	  "enemies": {
+		"creeper": 0.03,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 42,
+	  "spawn_interval": 0.24,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 357,
+	  "enemies": {
+		"creeper": 0.03,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 43,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 366,
+	  "enemies": {
+		"creeper": 0.03,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 44,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 375,
+	  "enemies": {
+		"creeper": 0.03,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.13,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 45,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 384,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.14,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 46,
+	  "spawn_interval": 0.23,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 393,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.14,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 47,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 402,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.14,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 48,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 411,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.14,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 49,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 420,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.25,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.14,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 2,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 50,
+	  "spawn_interval": 0.22,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 429,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 51,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 438,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 52,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 447,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 53,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 456,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 54,
+	  "spawn_interval": 0.21,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 465,
+	  "enemies": {
+		"creeper": 0.02,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.22,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 55,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 474,
+	  "enemies": {
+		"creeper": 0.01,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 56,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 483,
+	  "enemies": {
+		"creeper": 0.01,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 57,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 492,
+	  "enemies": {
+		"creeper": 0.01,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 58,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 501,
+	  "enemies": {
+		"creeper": 0.01,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 59,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 510,
+	  "enemies": {
+		"creeper": 0.01,
+		"creeper_fast": 0.23,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 60,
+	  "spawn_interval": 0.2,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 519,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 61,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 528,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 62,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 537,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 63,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 546,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 64,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 555,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.15,
+		"jug": 0.13,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 65,
+	  "spawn_interval": 0.19,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 564,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 66,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 573,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 67,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 582,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 68,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 591,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 69,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 600,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.15,
+		"jug3": 0.23,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 3,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 70,
+	  "spawn_interval": 0.18,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 609,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 71,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 618,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 72,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 627,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 73,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 636,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 74,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 645,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.16,
+		"jug": 0.12,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 75,
+	  "spawn_interval": 0.17,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 654,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 76,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 663,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 77,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 672,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 78,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 681,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 79,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 690,
+	  "enemies": {
+		"creeper_fast": 0.24,
+		"jug2": 0.14,
+		"jug3": 0.24,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 80,
+	  "spawn_interval": 0.16,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 699,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.14,
+		"jug3": 0.25,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 81,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 708,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.14,
+		"jug3": 0.25,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 82,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 717,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.14,
+		"jug3": 0.25,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 83,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 726,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.14,
+		"jug3": 0.25,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 84,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 735,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.14,
+		"jug3": 0.25,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 85,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 744,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.13,
+		"jug3": 0.26,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 4,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 86,
+	  "spawn_interval": 0.15,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 753,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.13,
+		"jug3": 0.26,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 87,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 762,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.13,
+		"jug3": 0.26,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 88,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 771,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.13,
+		"jug3": 0.26,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 89,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 780,
+	  "enemies": {
+		"creeper_fast": 0.23,
+		"jug2": 0.13,
+		"jug3": 0.26,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 90,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 789,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.13,
+		"jug3": 0.27,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 91,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 798,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.13,
+		"jug3": 0.27,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 92,
+	  "spawn_interval": 0.14,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 807,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.13,
+		"jug3": 0.27,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 93,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 816,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.13,
+		"jug3": 0.27,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 94,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 825,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.13,
+		"jug3": 0.27,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 95,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 834,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.12,
+		"jug3": 0.28,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 96,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 843,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.12,
+		"jug3": 0.28,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 97,
+	  "spawn_interval": 0.13,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 852,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.12,
+		"jug3": 0.28,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 98,
+	  "spawn_interval": 0.12,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 861,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.12,
+		"jug3": 0.28,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 99,
+	  "spawn_interval": 0.12,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 870,
+	  "enemies": {
+		"creeper_fast": 0.22,
+		"jug2": 0.12,
+		"jug3": 0.28,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 5,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  }
+	},
+	{
+	  "wave": 100,
+	  "spawn_interval": 0.12,
+	  "hp_growth": 2.0,
+	  "damage_growth": 2.0,
+	  "total_count": 879,
+	  "enemies": {
+		"creeper_fast": 0.21,
+		"jug2": 0.12,
+		"jug3": 0.29,
+		"stapler": 0.17,
+		"jug": 0.11,
+		"powerbank": 0.1
+	  },
+	  "boss_config": {
+		"count": 6,
+		"enemy_id": "monitor",
+		"spawn_at_end": true
+	  },
+	  "special_spawns": [
+		{
+		  "position": 143,
+		  "enemy_id": "monitor"
+		},
+		{
+		  "position": 215,
+		  "enemy_id": "monitor"
+		}
+	  ]
+	}
+  ]
+}
