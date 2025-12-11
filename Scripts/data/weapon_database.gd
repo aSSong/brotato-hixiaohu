@@ -150,7 +150,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.RANGED,
 		{
 			"damage": 1,
-			"attack_speed": 0.15,
+			"attack_speed": 0.3,
 			"range": 800.0,
 			"bullet_id": "fast_bullet",
 			"pierce_count": 0,
@@ -170,7 +170,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.RANGED,
 		{
 			"damage": 2,
-			"attack_speed": 0.8,
+			"attack_speed": 1.6,
 			"range": 800.0,
 			"bullet_id": "normal_bullet",
 			"pierce_count": 0,
@@ -190,7 +190,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.RANGED,  # 魔法结算！
 		{
 			"damage": 8,
-			"attack_speed": 1.2,
+			"attack_speed": 2.4,
 			"range": 1800.0,
 			"bullet_id": "homing_bullet",
 			"pierce_count": 0,
@@ -258,7 +258,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 4,
-			"attack_speed": 0.7,
+			"attack_speed": 1.4,
 			"range": 900.0,
 			"bullet_id": "heavy_bullet",
 			"pierce_count": 1,
@@ -290,7 +290,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 3,
-			"attack_speed": 0.7,
+			"attack_speed": 1.4,
 			"range": 1000.0,
 			"bullet_id": "bounce_bullet",
 			"pierce_count": 0, # 穿透数
@@ -311,7 +311,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 4,
-			"attack_speed": 1.0,
+			"attack_speed": 2.0,
 			"range": 900.0,
 			"explosion_radius": 100.0,
 			"explosion_damage_multiplier": 0.8,
@@ -344,7 +344,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 10,
-			"attack_speed": 1.5,
+			"attack_speed": 3.0,
 			"range": 700.0,
 			"explosion_radius": 250.0,
 			"explosion_damage_multiplier": 1.5,
@@ -368,7 +368,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 3,
-			"attack_speed": 0.5,
+			"attack_speed": 1.4,
 			"range": 850.0,
 			"explosion_radius": 80.0,
 			"explosion_damage_multiplier": 0.6,
@@ -392,7 +392,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,  # 魔法结算！
 		{
 			"damage": 6,
-			"attack_speed": 1.2,
+			"attack_speed": 2.4,
 			"range": 1800.0,
 			"bullet_id": "arcane_bullet",
 			"pierce_count": 0,
