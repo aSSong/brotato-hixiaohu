@@ -25,8 +25,7 @@ script = ExtResource("1_enemy_script")
 modulate = Color(0, 0, 0, 0.45490196)
 z_index = 7
 z_as_relative = false
-position = Vector2(2.2737368e-13, -12.500008)
-scale = Vector2(0.6, 0.4)
+scale = Vector2(0.87499994, 0.65000004)
 texture = ExtResource("3_shadow_tex")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -36,10 +35,10 @@ material = SubResource("ShaderMaterial_flash")
 sprite_frames = ExtResource("4_sprite_frames")
 animation = &"walk"
 autoplay = "walk"
-offset = Vector2(0, -150)
+offset = Vector2(0, -252)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -270)
+position = Vector2(0, -357.5)
 shape = SubResource("CircleShape2D_collision")
