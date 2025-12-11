@@ -32,6 +32,9 @@ const COLUMN_WIDTHS_MODE2 = [150, 150, 200, 150, 250, 250]  # 排名, 楼层, �
 # 缓存字体资源
 var _cached_font: Font = null
 
+# 缓存排名图片资源（前3名）
+var _rank_textures: Array[Texture2D] = []
+
 # 服务器数据
 var leaderboard_data: Dictionary = {}
 var is_loading: bool = false
@@ -51,6 +54,13 @@ var scroll_offset: Vector2 = Vector2.ZERO
 func _ready() -> void:
 	# 加载字体资源
 	_cached_font = load(FONT_PATH)
+	
+	# 预加载排名图片（前3名）
+	_rank_textures = [
+		load("res://assets/UI/leaderboard_ui/label-num-01.png"),
+		load("res://assets/UI/leaderboard_ui/label-num-02.png"),
+		load("res://assets/UI/leaderboard_ui/label-num-03.png")
+	]
 	
 	# 连接按钮信号
 	if switch1_button:
@@ -205,15 +215,20 @@ func _create_survival_row(rank: int, record: Dictionary) -> HBoxContainer:
 	]
 	
 	for i in range(columns.size()):
-		var label = Label.new()
-		label.text = columns[i]
-		label.custom_minimum_size.x = COLUMN_WIDTHS_MODE1[i]
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-		label.add_theme_font_size_override("font_size", CONTENT_FONT_SIZE)
-		label.add_theme_color_override("font_color", CONTENT_FONT_COLOR)
-		if _cached_font:
-			label.add_theme_font_override("font", _cached_font)
-		row.add_child(label)
+		if i == 0:
+			# 第一列是排名，使用特殊处理
+			var rank_cell = _create_rank_cell(rank, COLUMN_WIDTHS_MODE1[i])
+			row.add_child(rank_cell)
+		else:
+			var label = Label.new()
+			label.text = columns[i]
+			label.custom_minimum_size.x = COLUMN_WIDTHS_MODE1[i]
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+			label.add_theme_font_size_override("font_size", CONTENT_FONT_SIZE)
+			label.add_theme_color_override("font_color", CONTENT_FONT_COLOR)
+			if _cached_font:
+				label.add_theme_font_override("font", _cached_font)
+			row.add_child(label)
 	
 	return row
 
@@ -305,19 +320,58 @@ func _create_multi_row(group_rank: int, floor_id: int, record: Dictionary, show_
 	]
 	
 	for i in range(columns.size()):
+		if i == 0 and show_rank:
+			# 第一列是排名，使用特殊处理
+			var rank_cell = _create_rank_cell(group_rank, COLUMN_WIDTHS_MODE2[i])
+			row.add_child(rank_cell)
+		else:
+			var label = Label.new()
+			label.text = columns[i]
+			label.custom_minimum_size.x = COLUMN_WIDTHS_MODE2[i]
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+			label.add_theme_font_size_override("font_size", CONTENT_FONT_SIZE)
+			label.add_theme_color_override("font_color", CONTENT_FONT_COLOR)
+			if _cached_font:
+				label.add_theme_font_override("font", _cached_font)
+			row.add_child(label)
+	
+	return row
+
+## ==================== 格式化工具函数 ====================
+
+## 创建排名单元格（前3名用图片，其他用文字）
+func _create_rank_cell(rank: int, width: float) -> Control:
+	var container = Control.new()
+	container.custom_minimum_size.x = width
+	container.custom_minimum_size.y = 50
+	
+	if rank >= 1 and rank <= 3 and rank - 1 < _rank_textures.size():
+		# 前3名：显示图片（直接指定目标尺寸）
+		var icon = TextureRect.new()
+		icon.texture = _rank_textures[rank - 1]
+		var target_height = 10.0  # ← 调整这个值来控制图片高度
+		# 根据目标高度计算宽度，保持宽高比
+		var original_size = _rank_textures[rank - 1].get_size()
+		var aspect_ratio = original_size.x / original_size.y
+		var target_size = Vector2(target_height * aspect_ratio, target_height)
+		icon.custom_minimum_size = target_size
+		icon.size = target_size
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_SCALE
+		container.add_child(icon)
+	else:
+		# 4名及以后：显示文字
 		var label = Label.new()
-		label.text = columns[i]
-		label.custom_minimum_size.x = COLUMN_WIDTHS_MODE2[i]
+		label.text = _format_rank(rank)
+		label.custom_minimum_size.x = width
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		label.add_theme_font_size_override("font_size", CONTENT_FONT_SIZE)
 		label.add_theme_color_override("font_color", CONTENT_FONT_COLOR)
 		if _cached_font:
 			label.add_theme_font_override("font", _cached_font)
-		row.add_child(label)
+		container.add_child(label)
 	
-	return row
-
-## ==================== 格式化工具函数 ====================
+	return container
 
 ## 格式化排名显示 (1st, 2nd, 3rd, 4th...)
 func _format_rank(rank: int) -> String:

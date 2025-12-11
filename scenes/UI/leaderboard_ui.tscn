@@ -88,7 +88,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
-text = "名字"
+text = "英雄"
 
 [node name="FloorHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
 custom_minimum_size = Vector2(150, 0)
@@ -96,7 +96,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
-text = "楼层"
+text = "火线同盟"
 
 [node name="TimeHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
 custom_minimum_size = Vector2(250, 0)
@@ -172,7 +172,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
-text = "楼层"
+text = "火线同盟"
 
 [node name="NameHeader" type="Label" parent="bg_panel/board2panel/HeaderContainer"]
 custom_minimum_size = Vector2(200, 0)
