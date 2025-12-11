@@ -1,0 +1,60 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3 uid="uid://csaftlp3ip7io"]
+
+[ext_resource type="Texture2D" uid="uid://bvyfg2hvknkbs" path="res://assets/enemy/stage2/masquto-blue-run-Sheet.png" id="1_64he3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_by4rq"]
+atlas = ExtResource("1_64he3")
+region = Rect2(0, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skcbs"]
+atlas = ExtResource("1_64he3")
+region = Rect2(327, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_akwhq"]
+atlas = ExtResource("1_64he3")
+region = Rect2(654, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6unys"]
+atlas = ExtResource("1_64he3")
+region = Rect2(981, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4x0lf"]
+atlas = ExtResource("1_64he3")
+region = Rect2(1308, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nnlyr"]
+atlas = ExtResource("1_64he3")
+region = Rect2(1635, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aw021"]
+atlas = ExtResource("1_64he3")
+region = Rect2(1962, 0, 327, 300)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_by4rq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_skcbs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_akwhq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6unys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4x0lf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nnlyr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aw021")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]

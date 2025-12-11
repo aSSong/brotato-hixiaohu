@@ -1,0 +1,60 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3 uid="uid://dhetyt3r1cpuy"]
+
+[ext_resource type="Texture2D" uid="uid://cgc18avosicv4" path="res://assets/enemy/stage1/creeper-fast-run-Sheet.png" id="1_fpech"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fpech"]
+atlas = ExtResource("1_fpech")
+region = Rect2(0, 0, 634, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6nqe"]
+atlas = ExtResource("1_fpech")
+region = Rect2(634, 0, 634, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gmq5l"]
+atlas = ExtResource("1_fpech")
+region = Rect2(1268, 0, 634, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2irdg"]
+atlas = ExtResource("1_fpech")
+region = Rect2(1902, 0, 634, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xetx"]
+atlas = ExtResource("1_fpech")
+region = Rect2(2536, 0, 634, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mo8jc"]
+atlas = ExtResource("1_fpech")
+region = Rect2(3170, 0, 634, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5qvr3"]
+atlas = ExtResource("1_fpech")
+region = Rect2(3804, 0, 634, 500)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fpech")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u6nqe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gmq5l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2irdg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xetx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mo8jc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5qvr3")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 14.0
+}]

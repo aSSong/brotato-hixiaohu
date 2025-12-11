@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsvnh5wwrmewj"]
+
+[ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_vxydx"]
+[ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_sb7cj"]
+[ext_resource type="Shader" uid="uid://dsun82e56sau7" path="res://Shaders/flash.gdshader" id="3_d504j"]
+[ext_resource type="SpriteFrames" uid="uid://dhetyt3r1cpuy" path="res://resources/enemies/animations/stage1/creeper_fast_sprites.tres" id="4_vxydx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
+resource_local_to_scene = true
+shader = ExtResource("3_d504j")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_opacity = 0.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 290.30573
+
+[node name="creeper_fast" type="CharacterBody2D" groups=["enemy"]]
+z_index = 8
+scale = Vector2(0.2, 0.2)
+collision_layer = 8
+collision_mask = 10
+script = ExtResource("1_vxydx")
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.45490196)
+z_index = 7
+z_as_relative = false
+scale = Vector2(3.0499997, 4.665337)
+texture = ExtResource("2_sb7cj")
+offset = Vector2(0, 21)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_flash")
+sprite_frames = ExtResource("4_vxydx")
+animation = &"walk"
+autoplay = "walk"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_collision")

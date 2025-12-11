@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://csaftlp3ip7io"]
+
+[ext_resource type="Texture2D" uid="uid://d0d7no7rso27r" path="res://assets/enemy/stage2/masquito-run-Sheet.png" id="1_0f1b8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_66c56"]
+atlas = ExtResource("1_0f1b8")
+region = Rect2(0, 0, 321, 278)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_31tka"]
+atlas = ExtResource("1_0f1b8")
+region = Rect2(321, 0, 321, 278)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jmspk"]
+atlas = ExtResource("1_0f1b8")
+region = Rect2(642, 0, 321, 278)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aj8t1"]
+atlas = ExtResource("1_0f1b8")
+region = Rect2(963, 0, 321, 278)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_66c56")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_31tka")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jmspk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aj8t1")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
