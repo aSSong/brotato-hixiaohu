@@ -9,2047 +9,2047 @@
 	  "damage_growth": 0.0,
 	  "total_count": 15,
 	  "enemies": {
-		"basic": 0.6,
-		"fast": 0.2,
-		"tank": 0.1,
-		"elite": 0.1
+		"mashroom_green": 0.6,
+		"masquito": 0.2,
+		"masquito_shooter2": 0.1,
+		"mashroom_blue": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 2,
 	  "spawn_interval": 0.5,
-	  "hp_growth": 0.02,
-	  "damage_growth": 0.02,
-	  "total_count": 16,
+	  "hp_growth": 0.2,
+	  "damage_growth": 0.12,
+	  "total_count": 64,
 	  "enemies": {
-		"basic": 0.5,
-		"fast": 0.3,
-		"tank": 0.1,
-		"elite": 0.1
+		"mashroom_green": 0.5,
+		"masquito": 0.3,
+		"masquito_shooter2": 0.1,
+		"mashroom_blue": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 3,
 	  "spawn_interval": 0.48,
-	  "hp_growth": 0.03,
-	  "damage_growth": 0.03,
-	  "total_count": 17,
+	  "hp_growth": 0.3,
+	  "damage_growth": 0.18,
+	  "total_count": 68,
 	  "enemies": {
-		"basic": 0.55,
-		"fast": 0.25,
-		"tank": 0.1,
-		"elite": 0.1
+		"mashroom_green": 0.55,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.1,
+		"mashroom_blue": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 4,
 	  "spawn_interval": 0.46,
-	  "hp_growth": 0.04,
-	  "damage_growth": 0.04,
-	  "total_count": 18,
+	  "hp_growth": 0.4,
+	  "damage_growth": 0.24,
+	  "total_count": 72,
 	  "enemies": {
-		"basic": 0.5,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.1
+		"mashroom_green": 0.5,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 5,
 	  "spawn_interval": 0.45,
-	  "hp_growth": 0.05,
-	  "damage_growth": 0.05,
-	  "total_count": 19,
+	  "hp_growth": 0.5,
+	  "damage_growth": 0.3,
+	  "total_count": 76,
 	  "enemies": {
-		"basic": 0.5,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.1
+		"mashroom_green": 0.5,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 6,
 	  "spawn_interval": 0.44,
-	  "hp_growth": 0.06,
-	  "damage_growth": 0.06,
-	  "total_count": 21,
+	  "hp_growth": 0.6,
+	  "damage_growth": 0.36,
+	  "total_count": 84,
 	  "enemies": {
-		"basic": 0.45,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.1,
-		"charging_enemy": 0.05
+		"mashroom_green": 0.45,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.1,
+		"bee": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 7,
 	  "spawn_interval": 0.43,
-	  "hp_growth": 0.065,
-	  "damage_growth": 0.065,
-	  "total_count": 22,
+	  "hp_growth": 0.65,
+	  "damage_growth": 0.39,
+	  "total_count": 88,
 	  "enemies": {
-		"basic": 0.4,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.1,
-		"charging_enemy": 0.05,
-		"shooting_enemy": 0.05
+		"mashroom_green": 0.4,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.1,
+		"bee": 0.05,
+		"masquito_shooter": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 8,
 	  "spawn_interval": 0.42,
-	  "hp_growth": 0.07,
-	  "damage_growth": 0.07,
-	  "total_count": 23,
+	  "hp_growth": 0.7,
+	  "damage_growth": 0.42,
+	  "total_count": 92,
 	  "enemies": {
-		"basic": 0.35,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.1,
-		"charging_enemy": 0.05,
-		"shooting_enemy": 0.05,
-		"exploding_enemy": 0.05
+		"mashroom_green": 0.35,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.1,
+		"bee": 0.05,
+		"masquito_shooter": 0.05,
+		"mashroom_red": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 9,
 	  "spawn_interval": 0.41,
-	  "hp_growth": 0.075,
-	  "damage_growth": 0.075,
-	  "total_count": 24,
+	  "hp_growth": 0.75,
+	  "damage_growth": 0.45,
+	  "total_count": 96,
 	  "enemies": {
-		"basic": 0.35,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.1,
-		"charging_enemy": 0.05,
-		"shooting_enemy": 0.05,
-		"exploding_enemy": 0.05
+		"mashroom_green": 0.35,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.1,
+		"bee": 0.05,
+		"masquito_shooter": 0.05,
+		"mashroom_red": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 10,
 	  "spawn_interval": 0.4,
-	  "hp_growth": 0.08,
-	  "damage_growth": 0.08,
-	  "total_count": 25,
+	  "hp_growth": 0.8,
+	  "damage_growth": 0.48,
+	  "total_count": 100,
 	  "enemies": {
-		"basic": 0.3,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.15,
-		"charging_enemy": 0.05,
-		"shooting_enemy": 0.05,
-		"exploding_enemy": 0.05
+		"mashroom_green": 0.3,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.15,
+		"bee": 0.05,
+		"masquito_shooter": 0.05,
+		"mashroom_red": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 11,
 	  "spawn_interval": 0.39,
-	  "hp_growth": 0.09,
-	  "damage_growth": 0.09,
-	  "total_count": 27,
+	  "hp_growth": 0.9,
+	  "damage_growth": 0.54,
+	  "total_count": 108,
 	  "enemies": {
-		"basic": 0.3,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.15,
-		"charging_enemy": 0.05,
-		"shooting_enemy": 0.05,
-		"exploding_enemy": 0.05
+		"mashroom_green": 0.3,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.15,
+		"bee": 0.05,
+		"masquito_shooter": 0.05,
+		"mashroom_red": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 12,
 	  "spawn_interval": 0.38,
-	  "hp_growth": 0.1,
-	  "damage_growth": 0.1,
-	  "total_count": 29,
+	  "hp_growth": 1.0,
+	  "damage_growth": 0.6,
+	  "total_count": 116,
 	  "enemies": {
-		"basic": 0.25,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.15,
-		"charging_enemy": 0.07,
-		"shooting_enemy": 0.07,
-		"exploding_enemy": 0.06
+		"mashroom_green": 0.25,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.15,
+		"bee": 0.07,
+		"masquito_shooter": 0.07,
+		"mashroom_red": 0.06
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 13,
 	  "spawn_interval": 0.37,
-	  "hp_growth": 0.11,
-	  "damage_growth": 0.11,
-	  "total_count": 31,
+	  "hp_growth": 1.1,
+	  "damage_growth": 0.66,
+	  "total_count": 124,
 	  "enemies": {
-		"basic": 0.25,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.15,
-		"charging_enemy": 0.07,
-		"shooting_enemy": 0.07,
-		"exploding_enemy": 0.06
+		"mashroom_green": 0.25,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.15,
+		"bee": 0.07,
+		"masquito_shooter": 0.07,
+		"mashroom_red": 0.06
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 14,
 	  "spawn_interval": 0.36,
-	  "hp_growth": 0.12,
-	  "damage_growth": 0.12,
-	  "total_count": 33,
+	  "hp_growth": 1.2,
+	  "damage_growth": 0.72,
+	  "total_count": 132,
 	  "enemies": {
-		"basic": 0.25,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.15,
-		"charging_enemy": 0.07,
-		"shooting_enemy": 0.07,
-		"exploding_enemy": 0.06
+		"mashroom_green": 0.25,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.15,
+		"bee": 0.07,
+		"masquito_shooter": 0.07,
+		"mashroom_red": 0.06
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 15,
 	  "spawn_interval": 0.35,
-	  "hp_growth": 0.13,
-	  "damage_growth": 0.13,
-	  "total_count": 35,
+	  "hp_growth": 1.3,
+	  "damage_growth": 0.78,
+	  "total_count": 140,
 	  "enemies": {
-		"basic": 0.2,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.07,
-		"shooting_enemy": 0.07,
-		"exploding_enemy": 0.06
+		"mashroom_green": 0.2,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.07,
+		"masquito_shooter": 0.07,
+		"mashroom_red": 0.06
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 16,
 	  "spawn_interval": 0.34,
-	  "hp_growth": 0.15,
-	  "damage_growth": 0.15,
-	  "total_count": 39,
+	  "hp_growth": 1.5,
+	  "damage_growth": 0.9,
+	  "total_count": 156,
 	  "enemies": {
-		"basic": 0.2,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.07,
-		"shooting_enemy": 0.07,
-		"exploding_enemy": 0.06
+		"mashroom_green": 0.2,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.07,
+		"masquito_shooter": 0.07,
+		"mashroom_red": 0.06
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 17,
 	  "spawn_interval": 0.33,
-	  "hp_growth": 0.17,
-	  "damage_growth": 0.17,
-	  "total_count": 43,
+	  "hp_growth": 1.7,
+	  "damage_growth": 1.02,
+	  "total_count": 172,
 	  "enemies": {
-		"basic": 0.2,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.07,
-		"shooting_enemy": 0.07,
-		"exploding_enemy": 0.06
+		"mashroom_green": 0.2,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.07,
+		"masquito_shooter": 0.07,
+		"mashroom_red": 0.06
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 18,
 	  "spawn_interval": 0.32,
-	  "hp_growth": 0.19,
-	  "damage_growth": 0.19,
-	  "total_count": 47,
+	  "hp_growth": 1.9,
+	  "damage_growth": 1.14,
+	  "total_count": 188,
 	  "enemies": {
-		"basic": 0.15,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.09,
-		"shooting_enemy": 0.08,
-		"exploding_enemy": 0.08
+		"mashroom_green": 0.15,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.09,
+		"masquito_shooter": 0.08,
+		"mashroom_red": 0.08
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 19,
 	  "spawn_interval": 0.31,
-	  "hp_growth": 0.21,
-	  "damage_growth": 0.21,
-	  "total_count": 50,
+	  "hp_growth": 2.1,
+	  "damage_growth": 1.26,
+	  "total_count": 200,
 	  "enemies": {
-		"basic": 0.15,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.09,
-		"shooting_enemy": 0.08,
-		"exploding_enemy": 0.08
+		"mashroom_green": 0.15,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.09,
+		"masquito_shooter": 0.08,
+		"mashroom_red": 0.08
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 20,
 	  "spawn_interval": 0.3,
-	  "hp_growth": 0.23,
-	  "damage_growth": 0.23,
-	  "total_count": 53,
+	  "hp_growth": 2.3,
+	  "damage_growth": 1.38,
+	  "total_count": 212,
 	  "enemies": {
-		"basic": 0.15,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.09,
-		"shooting_enemy": 0.08,
-		"exploding_enemy": 0.08
+		"mashroom_green": 0.15,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.09,
+		"masquito_shooter": 0.08,
+		"mashroom_red": 0.08
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 21,
 	  "spawn_interval": 0.3,
-	  "hp_growth": 0.24,
-	  "damage_growth": 0.24,
-	  "total_count": 56,
+	  "hp_growth": 2.4,
+	  "damage_growth": 1.44,
+	  "total_count": 224,
 	  "enemies": {
-		"basic": 0.15,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.09,
-		"shooting_enemy": 0.08,
-		"exploding_enemy": 0.08
+		"mashroom_green": 0.15,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.09,
+		"masquito_shooter": 0.08,
+		"mashroom_red": 0.08
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 22,
 	  "spawn_interval": 0.3,
-	  "hp_growth": 0.25,
-	  "damage_growth": 0.25,
-	  "total_count": 59,
+	  "hp_growth": 2.5,
+	  "damage_growth": 1.5,
+	  "total_count": 236,
 	  "enemies": {
-		"basic": 0.15,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.09,
-		"shooting_enemy": 0.08,
-		"exploding_enemy": 0.08
+		"mashroom_green": 0.15,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.09,
+		"masquito_shooter": 0.08,
+		"mashroom_red": 0.08
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 23,
 	  "spawn_interval": 0.29,
-	  "hp_growth": 0.26,
-	  "damage_growth": 0.26,
-	  "total_count": 62,
+	  "hp_growth": 2.6,
+	  "damage_growth": 1.56,
+	  "total_count": 248,
 	  "enemies": {
-		"basic": 0.12,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.1,
-		"shooting_enemy": 0.09,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.12,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.1,
+		"masquito_shooter": 0.09,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 24,
 	  "spawn_interval": 0.29,
-	  "hp_growth": 0.27,
-	  "damage_growth": 0.27,
-	  "total_count": 65,
+	  "hp_growth": 2.7,
+	  "damage_growth": 1.62,
+	  "total_count": 260,
 	  "enemies": {
-		"basic": 0.12,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.1,
-		"shooting_enemy": 0.09,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.12,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.1,
+		"masquito_shooter": 0.09,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 25,
 	  "spawn_interval": 0.29,
-	  "hp_growth": 0.28,
-	  "damage_growth": 0.28,
-	  "total_count": 68,
+	  "hp_growth": 2.8,
+	  "damage_growth": 1.68,
+	  "total_count": 272,
 	  "enemies": {
-		"basic": 0.12,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.1,
-		"shooting_enemy": 0.09,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.12,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.1,
+		"masquito_shooter": 0.09,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 26,
 	  "spawn_interval": 0.28,
-	  "hp_growth": 0.29,
-	  "damage_growth": 0.29,
-	  "total_count": 71,
+	  "hp_growth": 2.9,
+	  "damage_growth": 1.74,
+	  "total_count": 284,
 	  "enemies": {
-		"basic": 0.12,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.1,
-		"shooting_enemy": 0.09,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.12,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.1,
+		"masquito_shooter": 0.09,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 27,
 	  "spawn_interval": 0.28,
-	  "hp_growth": 0.3,
-	  "damage_growth": 0.3,
-	  "total_count": 74,
+	  "hp_growth": 3.0,
+	  "damage_growth": 1.8,
+	  "total_count": 296,
 	  "enemies": {
-		"basic": 0.1,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.11,
-		"shooting_enemy": 0.1,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.1,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.11,
+		"masquito_shooter": 0.1,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 28,
 	  "spawn_interval": 0.28,
-	  "hp_growth": 0.31,
-	  "damage_growth": 0.31,
-	  "total_count": 77,
+	  "hp_growth": 3.1,
+	  "damage_growth": 1.86,
+	  "total_count": 308,
 	  "enemies": {
-		"basic": 0.1,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.11,
-		"shooting_enemy": 0.1,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.1,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.11,
+		"masquito_shooter": 0.1,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 29,
 	  "spawn_interval": 0.27,
-	  "hp_growth": 0.32,
-	  "damage_growth": 0.32,
-	  "total_count": 80,
+	  "hp_growth": 3.2,
+	  "damage_growth": 1.92,
+	  "total_count": 320,
 	  "enemies": {
-		"basic": 0.1,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.11,
-		"shooting_enemy": 0.1,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.1,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.11,
+		"masquito_shooter": 0.1,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 30,
 	  "spawn_interval": 0.27,
-	  "hp_growth": 0.33,
-	  "damage_growth": 0.33,
-	  "total_count": 83,
+	  "hp_growth": 3.3,
+	  "damage_growth": 1.98,
+	  "total_count": 332,
 	  "enemies": {
-		"basic": 0.1,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.11,
-		"shooting_enemy": 0.1,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.1,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.11,
+		"masquito_shooter": 0.1,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 31,
 	  "spawn_interval": 0.27,
-	  "hp_growth": 0.34,
-	  "damage_growth": 0.34,
-	  "total_count": 86,
+	  "hp_growth": 3.4,
+	  "damage_growth": 2.04,
+	  "total_count": 344,
 	  "enemies": {
-		"basic": 0.08,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.12,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.08,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.12,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 32,
 	  "spawn_interval": 0.26,
-	  "hp_growth": 0.35,
-	  "damage_growth": 0.35,
-	  "total_count": 89,
+	  "hp_growth": 3.5,
+	  "damage_growth": 2.1,
+	  "total_count": 356,
 	  "enemies": {
-		"basic": 0.08,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.12,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.08,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.12,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 33,
 	  "spawn_interval": 0.26,
-	  "hp_growth": 0.36,
-	  "damage_growth": 0.36,
-	  "total_count": 92,
+	  "hp_growth": 3.6,
+	  "damage_growth": 2.16,
+	  "total_count": 368,
 	  "enemies": {
-		"basic": 0.08,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.12,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.08,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.12,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 34,
 	  "spawn_interval": 0.26,
-	  "hp_growth": 0.37,
-	  "damage_growth": 0.37,
-	  "total_count": 95,
+	  "hp_growth": 3.7,
+	  "damage_growth": 2.22,
+	  "total_count": 380,
 	  "enemies": {
-		"basic": 0.08,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.12,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.09
+		"mashroom_green": 0.08,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.12,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.09
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 35,
 	  "spawn_interval": 0.25,
-	  "hp_growth": 0.38,
-	  "damage_growth": 0.38,
-	  "total_count": 98,
+	  "hp_growth": 3.8,
+	  "damage_growth": 2.28,
+	  "total_count": 392,
 	  "enemies": {
-		"basic": 0.05,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.05,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 36,
 	  "spawn_interval": 0.25,
-	  "hp_growth": 0.39,
-	  "damage_growth": 0.39,
-	  "total_count": 101,
+	  "hp_growth": 3.9,
+	  "damage_growth": 2.34,
+	  "total_count": 404,
 	  "enemies": {
-		"basic": 0.05,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.05,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 37,
 	  "spawn_interval": 0.25,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 104,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 416,
 	  "enemies": {
-		"basic": 0.05,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.05,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 38,
 	  "spawn_interval": 0.25,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 107,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 428,
 	  "enemies": {
-		"basic": 0.05,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.05,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 39,
 	  "spawn_interval": 0.24,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 110,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 440,
 	  "enemies": {
-		"basic": 0.05,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.2,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.05,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.2,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 40,
 	  "spawn_interval": 0.24,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 113,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 452,
 	  "enemies": {
-		"basic": 0.03,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.03,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 41,
 	  "spawn_interval": 0.24,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 116,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 464,
 	  "enemies": {
-		"basic": 0.03,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.03,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 42,
 	  "spawn_interval": 0.24,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 119,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 476,
 	  "enemies": {
-		"basic": 0.03,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.03,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 43,
 	  "spawn_interval": 0.23,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 122,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 488,
 	  "enemies": {
-		"basic": 0.03,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.03,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 44,
 	  "spawn_interval": 0.23,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 125,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 500,
 	  "enemies": {
-		"basic": 0.03,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.13,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.03,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.13,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 45,
 	  "spawn_interval": 0.23,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 128,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 512,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.14,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.14,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 46,
 	  "spawn_interval": 0.23,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 131,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 524,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.14,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.14,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 47,
 	  "spawn_interval": 0.22,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 134,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 536,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.14,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.14,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 48,
 	  "spawn_interval": 0.22,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 137,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 548,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.14,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.14,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 49,
 	  "spawn_interval": 0.22,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 140,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 560,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.25,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.14,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.25,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.14,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 2,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 50,
 	  "spawn_interval": 0.22,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 143,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 572,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 51,
 	  "spawn_interval": 0.21,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 146,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 584,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 52,
 	  "spawn_interval": 0.21,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 149,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 596,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 53,
 	  "spawn_interval": 0.21,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 152,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 608,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 54,
 	  "spawn_interval": 0.21,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 155,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 620,
 	  "enemies": {
-		"basic": 0.02,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.22,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.02,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.22,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 55,
 	  "spawn_interval": 0.2,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 158,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 632,
 	  "enemies": {
-		"basic": 0.01,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.01,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 56,
 	  "spawn_interval": 0.2,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 161,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 644,
 	  "enemies": {
-		"basic": 0.01,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.01,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 57,
 	  "spawn_interval": 0.2,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 164,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 656,
 	  "enemies": {
-		"basic": 0.01,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.01,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 58,
 	  "spawn_interval": 0.2,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 167,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 668,
 	  "enemies": {
-		"basic": 0.01,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.01,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 59,
 	  "spawn_interval": 0.2,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 170,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 680,
 	  "enemies": {
-		"basic": 0.01,
-		"fast": 0.23,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"mashroom_green": 0.01,
+		"masquito": 0.23,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 60,
 	  "spawn_interval": 0.2,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 173,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 692,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 61,
 	  "spawn_interval": 0.19,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 176,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 704,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 62,
 	  "spawn_interval": 0.19,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 179,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 716,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 63,
 	  "spawn_interval": 0.19,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 182,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 728,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 64,
 	  "spawn_interval": 0.19,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 185,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 740,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.15,
-		"shooting_enemy": 0.13,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.15,
+		"masquito_shooter": 0.13,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 65,
 	  "spawn_interval": 0.19,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 188,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 752,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 66,
 	  "spawn_interval": 0.18,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 191,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 764,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 67,
 	  "spawn_interval": 0.18,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 194,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 776,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 68,
 	  "spawn_interval": 0.18,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 197,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 788,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 69,
 	  "spawn_interval": 0.18,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 200,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 800,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.15,
-		"elite": 0.23,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.15,
+		"mashroom_blue": 0.23,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 3,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 70,
 	  "spawn_interval": 0.18,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 203,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 812,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 71,
 	  "spawn_interval": 0.17,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 206,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 824,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 72,
 	  "spawn_interval": 0.17,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 209,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 836,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 73,
 	  "spawn_interval": 0.17,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 212,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 848,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 74,
 	  "spawn_interval": 0.17,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 215,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 860,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.16,
-		"shooting_enemy": 0.12,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.16,
+		"masquito_shooter": 0.12,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 75,
 	  "spawn_interval": 0.17,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 218,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 872,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 76,
 	  "spawn_interval": 0.16,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 221,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 884,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 77,
 	  "spawn_interval": 0.16,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 224,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 896,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 78,
 	  "spawn_interval": 0.16,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 227,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 908,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 79,
 	  "spawn_interval": 0.16,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 230,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 920,
 	  "enemies": {
-		"fast": 0.24,
-		"tank": 0.14,
-		"elite": 0.24,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.24,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.24,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 80,
 	  "spawn_interval": 0.16,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 233,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 932,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.14,
-		"elite": 0.25,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.25,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 81,
 	  "spawn_interval": 0.15,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 236,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 944,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.14,
-		"elite": 0.25,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.25,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 82,
 	  "spawn_interval": 0.15,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 239,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 956,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.14,
-		"elite": 0.25,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.25,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 83,
 	  "spawn_interval": 0.15,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 242,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 968,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.14,
-		"elite": 0.25,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.25,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 84,
 	  "spawn_interval": 0.15,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 245,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 980,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.14,
-		"elite": 0.25,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.14,
+		"mashroom_blue": 0.25,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 85,
 	  "spawn_interval": 0.15,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 248,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 992,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.13,
-		"elite": 0.26,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.26,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 4,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 86,
 	  "spawn_interval": 0.15,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 251,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1004,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.13,
-		"elite": 0.26,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.26,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 87,
 	  "spawn_interval": 0.14,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 254,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1016,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.13,
-		"elite": 0.26,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.26,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 88,
 	  "spawn_interval": 0.14,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 257,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1028,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.13,
-		"elite": 0.26,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.26,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 89,
 	  "spawn_interval": 0.14,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 260,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1040,
 	  "enemies": {
-		"fast": 0.23,
-		"tank": 0.13,
-		"elite": 0.26,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.23,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.26,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 90,
 	  "spawn_interval": 0.14,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 263,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1052,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.13,
-		"elite": 0.27,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.27,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 91,
 	  "spawn_interval": 0.14,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 266,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1064,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.13,
-		"elite": 0.27,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.27,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 92,
 	  "spawn_interval": 0.14,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 269,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1076,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.13,
-		"elite": 0.27,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.27,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 93,
 	  "spawn_interval": 0.13,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 272,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1088,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.13,
-		"elite": 0.27,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.27,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 94,
 	  "spawn_interval": 0.13,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 275,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1100,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.13,
-		"elite": 0.27,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.13,
+		"mashroom_blue": 0.27,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 95,
 	  "spawn_interval": 0.13,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 278,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1112,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.12,
-		"elite": 0.28,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.12,
+		"mashroom_blue": 0.28,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 96,
 	  "spawn_interval": 0.13,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 281,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1124,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.12,
-		"elite": 0.28,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.12,
+		"mashroom_blue": 0.28,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 97,
 	  "spawn_interval": 0.13,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 284,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1136,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.12,
-		"elite": 0.28,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.12,
+		"mashroom_blue": 0.28,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 98,
 	  "spawn_interval": 0.12,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 287,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1148,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.12,
-		"elite": 0.28,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.12,
+		"mashroom_blue": 0.28,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 99,
 	  "spawn_interval": 0.12,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 290,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1160,
 	  "enemies": {
-		"fast": 0.22,
-		"tank": 0.12,
-		"elite": 0.28,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.22,
+		"masquito_shooter2": 0.12,
+		"mashroom_blue": 0.28,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 5,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  }
 	},
 	{
 	  "wave": 100,
 	  "spawn_interval": 0.12,
-	  "hp_growth": 0.4,
-	  "damage_growth": 0.4,
-	  "total_count": 293,
+	  "hp_growth": 4.0,
+	  "damage_growth": 2.4,
+	  "total_count": 1172,
 	  "enemies": {
-		"fast": 0.21,
-		"tank": 0.12,
-		"elite": 0.29,
-		"charging_enemy": 0.17,
-		"shooting_enemy": 0.11,
-		"exploding_enemy": 0.1
+		"masquito": 0.21,
+		"masquito_shooter2": 0.12,
+		"mashroom_blue": 0.29,
+		"bee": 0.17,
+		"masquito_shooter": 0.11,
+		"mashroom_red": 0.1
 	  },
 	  "boss_config": {
 		"count": 6,
-		"enemy_id": "last_enemy",
+		"enemy_id": "ent",
 		"spawn_at_end": true
 	  },
 	  "special_spawns": [
 		{
 		  "position": 143,
-		  "enemy_id": "last_enemy"
+		  "enemy_id": "ent"
 		},
 		{
 		  "position": 215,
-		  "enemy_id": "last_enemy"
+		  "enemy_id": "ent"
 		}
 	  ]
 	}
