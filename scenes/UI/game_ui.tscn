@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c44attsrfmghf"]
+[gd_scene load_steps=22 format=3 uid="uid://c44attsrfmghf"]
 
 [ext_resource type="Script" uid="uid://nlex2b6w38gk" path="res://Scripts/UI/game_ui.gd" id="1_168mx"]
 [ext_resource type="Script" uid="uid://bgraqcbpydou6" path="res://Scripts/UI/dash_ui.gd" id="1_dash_ui"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://cdgw3r2x4s6xu" path="res://assets/UI/game_ui/bg-icon-01.png" id="13_uki5y"]
 [ext_resource type="Texture2D" uid="uid://b4jvdqrxsfhbm" path="res://assets/UI/game_ui/skill-dash-123-01.png" id="14_6yovt"]
 [ext_resource type="Texture2D" uid="uid://b5afcqikftque" path="res://assets/UI/game_ui/panel-keys-01.png" id="14_hvehc"]
+[ext_resource type="PackedScene" uid="uid://cjwclt4j7ayhl" path="res://scenes/UI/warning_ui.tscn" id="18_uki5y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t7mk8"]
 bg_color = Color(0.2901961, 0.2901961, 0.2901961, 1)
@@ -484,3 +485,5 @@ texture = ExtResource("14_hvehc")
 [node name="resourcePanel2" type="TextureRect" parent="resource/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("14_hvehc")
+
+[node name="WarningUi" parent="." instance=ExtResource("18_uki5y")]

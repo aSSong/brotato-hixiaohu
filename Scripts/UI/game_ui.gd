@@ -13,6 +13,8 @@ extends CanvasLayer
 @onready var kpi_label: Label = $KPI
 @onready var player_stats_info: PlayerStatsInfo = $PlayerStatsInfo
 @onready var damage_flash: DamageFlash = %DamageFlash
+@onready var warning_ui: Control = $WarningUi
+@onready var warning_animation: AnimationPlayer = $WarningUi/AnimationPlayer
 
 # 内部引用
 var hp_label: Label = null  # HP标签
@@ -189,9 +191,18 @@ func _find_wave_manager_periodically() -> void:
 func _on_wave_started(_wave_number: int) -> void:
 	_update_wave_display()
 	
+	# 播放波次开始警告动画
+	_play_wave_begin_animation()
+	
 	# 如果是波次胜利条件，更新 KPI（波次开始时）
 	if current_mode and current_mode.victory_condition_type == "waves":
 		_update_kpi_display()
+
+## 播放波次开始警告动画
+func _play_wave_begin_animation() -> void:
+	if warning_animation and is_instance_valid(warning_animation):
+		warning_animation.stop()
+		warning_animation.play("wave_begin")
 
 ## 波次敌人击杀回调
 func _on_wave_enemy_killed(_wave_number: int, _killed: int, _total: int) -> void:
