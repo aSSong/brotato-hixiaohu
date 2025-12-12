@@ -18,6 +18,7 @@ boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="uid://bju8tojjbfboi"
+config/defaults/default_clear_color=Color(0.3, 0.3, 0.3, 1)
 
 [autoload]
 
