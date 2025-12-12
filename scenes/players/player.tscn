@@ -75,29 +75,27 @@ script = ExtResource("1_ldeu4")
 
 [node name="PlayerSpeechBubble" parent="." instance=ExtResource("2_sguum")]
 z_index = 98
-offset_left = -118.3333
-offset_top = -315.0003
-offset_right = 81.6667
-offset_bottom = -255.0003
+offset_left = -103.33333
+offset_top = -303.33334
+offset_right = 96.66667
+offset_bottom = -243.33334
 
 [node name="shadow" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 0.24313726)
 z_index = 1
-position = Vector2(-10, 111.66668)
 scale = Vector2(0.8, 0.7)
 texture = ExtResource("2_edvpf")
+offset = Vector2(0, 225)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
 light_mask = 0
 z_index = 5
 material = SubResource("ShaderMaterial_phaeh")
-position = Vector2(-10, -24.999989)
 sprite_frames = SubResource("SpriteFrames_5iv5l")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-11.666668, -15.33334)
 shape = SubResource("CapsuleShape2D_sguum")
 debug_color = Color(0.5792219, 0.38419825, 1, 0.41960785)
 
@@ -117,7 +115,6 @@ position_smoothing_enabled = true
 collision_mask = 0
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="stop"]
-position = Vector2(-11.666668, -15.333341)
 shape = SubResource("CapsuleShape2D_sguum")
 
 [node name="now_weapons" parent="." instance=ExtResource("3_kc87p")]
@@ -138,9 +135,9 @@ texture = ExtResource("5_olb2f")
 
 [node name="NameLabel" type="Label" parent="."]
 offset_left = -135.0
-offset_top = -233.3334
+offset_top = -221.66666
 offset_right = 116.0
-offset_bottom = -181.3334
+offset_bottom = -169.66666
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 36
