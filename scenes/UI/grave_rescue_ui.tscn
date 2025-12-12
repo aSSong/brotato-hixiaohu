@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://yjtcj0iybywp"]
+[gd_scene load_steps=10 format=3 uid="uid://yjtcj0iybywp"]
 
 [ext_resource type="Script" uid="uid://c8tqf4himll6k" path="res://Scripts/UI/grave_rescue_ui.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://by7fwqoe2sm6" path="res://assets/UI/rescue/bg-rescue-01.png" id="2_77vvw"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cwh4ath052q28" path="res://assets/UI/rescue/btn-lilred-01.png" id="5_j2mh0"]
 [ext_resource type="Texture2D" uid="uid://o5ymn337opim" path="res://assets/UI/rescue/btn-close-01.png" id="6_50hfg"]
 [ext_resource type="Texture2D" uid="uid://djldbbvdpqhbd" path="res://assets/UI/rescue/btn-lilgray-01.png" id="6_i76ly"]
+[ext_resource type="Texture2D" uid="uid://ddmnvrm44cdy1" path="res://assets/UI/rescue/btn-lilred-disabled-01.png" id="6_j2mh0"]
 [ext_resource type="Texture2D" uid="uid://s2qmk6kfsc0n" path="res://assets/UI/rescue/bg-rescue-name-01.png" id="7_gm5k2"]
 
 [node name="GraveRescueUI" type="CanvasLayer"]
@@ -111,7 +112,7 @@ offset_bottom = -5.0
 texture_normal = ExtResource("5_j2mh0")
 texture_pressed = ExtResource("5_j2mh0")
 texture_hover = ExtResource("5_j2mh0")
-texture_disabled = ExtResource("5_j2mh0")
+texture_disabled = ExtResource("6_j2mh0")
 texture_focused = ExtResource("5_j2mh0")
 
 [node name="warningLabel" type="Label" parent="Panel/ButtonContainer/RescueButton"]

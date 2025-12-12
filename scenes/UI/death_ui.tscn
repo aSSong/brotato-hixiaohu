@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://poo5j107el5u"]
+[gd_scene load_steps=9 format=3 uid="uid://poo5j107el5u"]
 
 [ext_resource type="Script" uid="uid://d170ibjmyne1" path="res://Scripts/UI/death_ui.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://covbybgf45frm" path="res://assets/UI/death_ui/bg-deathpanel-01.png" id="2_7cw4p"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dcmfnqa10kh11" path="res://assets/UI/class_poster/dead-as-01.png" id="4_7cw4p"]
 [ext_resource type="Texture2D" uid="uid://cwh4ath052q28" path="res://assets/UI/rescue/btn-lilred-01.png" id="5_qy3gh"]
 [ext_resource type="Texture2D" uid="uid://diebj44vwffon" path="res://assets/UI/common/btn_mid_gred_01.png" id="6_kqsbh"]
+[ext_resource type="Texture2D" uid="uid://ddmnvrm44cdy1" path="res://assets/UI/rescue/btn-lilred-disabled-01.png" id="6_sb8yb"]
 [ext_resource type="Texture2D" uid="uid://8nckqj8kk1o0" path="res://assets/UI/common/btn_mid_gray_01.png" id="7_83ndf"]
 
 [node name="DeathUI" type="CanvasLayer"]
@@ -99,7 +100,7 @@ size_flags_horizontal = 4
 texture_normal = ExtResource("5_qy3gh")
 texture_pressed = ExtResource("5_qy3gh")
 texture_hover = ExtResource("5_qy3gh")
-texture_disabled = ExtResource("5_qy3gh")
+texture_disabled = ExtResource("6_sb8yb")
 texture_focused = ExtResource("5_qy3gh")
 
 [node name="reviveLabel" type="RichTextLabel" parent="Panel/VBoxContainer/ButtonContainer/ReviveButton"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cmru2nlk6bx6s"]
+[gd_scene load_steps=12 format=3 uid="uid://cmru2nlk6bx6s"]
 
 [ext_resource type="Script" uid="uid://cd71et64p8kkg" path="res://Scripts/UI/upgrade_shop.gd" id="1_upgrade_shop"]
 [ext_resource type="Texture2D" uid="uid://dyshj6vfwbbpd" path="res://assets/UI/shop_ui/bg-shop-01.jpg" id="2_ow4b2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cukcxr563a1p8" path="res://assets/UI/class_poster/portrait-babayaga-01.png" id="7_hrmsk"]
 [ext_resource type="Texture2D" uid="uid://c6nku3xu00b2f" path="res://assets/UI/common/btn-right-white-01.png" id="7_kme6m"]
 [ext_resource type="Texture2D" uid="uid://caaop1fglq53m" path="res://assets/UI/shop_ui/btn-shop-fresh-01.png" id="7_wesum"]
+[ext_resource type="Texture2D" uid="uid://bekukhxlbg3uc" path="res://assets/UI/shop_ui/btn-shop-fresh-disabled-01.png" id="10_mdw2h"]
 
 [node name="UpgradeShop" type="Control"]
 process_mode = 3
@@ -137,6 +138,7 @@ layout_mode = 2
 texture_normal = ExtResource("7_wesum")
 texture_pressed = ExtResource("7_wesum")
 texture_hover = ExtResource("7_wesum")
+texture_disabled = ExtResource("10_mdw2h")
 stretch_mode = 0
 
 [node name="refreshLabel" type="RichTextLabel" parent="RefreshSection/RefreshButton"]
@@ -253,4 +255,4 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 50
-text = "继续战斗"
+text = "开始下一波"
