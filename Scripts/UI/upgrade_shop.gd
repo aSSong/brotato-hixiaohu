@@ -19,7 +19,7 @@ class_name UpgradeShop
 var weapon_compact_scene: PackedScene = preload("res://scenes/UI/components/weapon_compact.tscn")
 
 ## 常量
-const WEAPON_SPAWN_CHANCE := 0.35
+const WEAPON_SPAWN_CHANCE := 0.25
 const FLIP_ANIMATION_DELAY := 0.08
 const SHOP_SLOTS := 4 # 商店槽位数量
 const costbywave_multiA := 0.5 # 波次价格修正系数a
