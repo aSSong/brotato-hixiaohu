@@ -5,12 +5,12 @@ class_name GraveRescueUI
 ## 显示Ghost信息，提供救援、超度、取消选项
 
 @onready var panel: TextureRect = $Panel
-@onready var cost_label: Label = $Panel/ButtonContainer/RescueButton/CostLabel
 @onready var rescue_button: TextureButton = $Panel/ButtonContainer/RescueButton
-@onready var rescue_label: Label = $"Panel/ButtonContainer/RescueButton/rescue-label"
+@onready var rescue_label: RichTextLabel = $"Panel/ButtonContainer/RescueButton/rescue-label"
+@onready var warning_label: Label = $Panel/ButtonContainer/RescueButton/warningLabel
 @onready var transcend_button: TextureButton = $Panel/ButtonContainer/TranscendButton
 @onready var cancel_button: TextureButton = $Panel/ButtonContainer/CancelButton
-@onready var dead_poster: TextureRect = $Panel/centersection/"dead-poster"
+@onready var dead_poster: TextureRect = $"Panel/centersection/dead-poster"
 @onready var name_label: Label = $Panel/name/name
 @onready var weapon_list: GridContainer = $Panel/weaponlist
 
@@ -53,17 +53,14 @@ func show_rescue_dialog(data: GhostData) -> void:
 	# 填充武器列表
 	_populate_weapon_list()
 	
-	# 检查是否有足够的masterkey并更新费用显示
+	# 检查是否有足够的masterkey并更新按钮状态
 	var current_keys = GameMain.master_key
-	cost_label.text = "费用：2把 生命钥匙 \n(当前：" + str(current_keys) + "把)"
-	
-	# 更新救援按钮状态（动态内容）
 	if current_keys >= 2:
 		rescue_button.disabled = false
-		rescue_label.text = "拯  救"
+		warning_label.visible = false
 	else:
 		rescue_button.disabled = true
-		rescue_label.text = "生命钥匙不足"
+		warning_label.visible = true
 	
 	# 显示界面
 	show()

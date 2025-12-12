@@ -298,9 +298,8 @@ func _show_death_ui() -> void:
 	tree.paused = true
 	
 	# 显示死亡界面（传入当前模式，death_ui会自己检查master_key）
-	var current_gold = GameMain.gold  # 保留参数以保持兼容性
 	var current_mode = GameMain.current_mode_id
-	death_ui.show_death_screen(revive_count, current_gold, current_mode)
+	death_ui.show_death_screen(revive_count, current_mode)
 	
 	var current_master_key = GameMain.master_key
 	print("[DeathManager] 显示死亡UI | 模式:", current_mode, " 主钥匙:", current_master_key, " 复活费用: 2")

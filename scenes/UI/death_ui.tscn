@@ -38,6 +38,9 @@ offset_right = -132.5
 offset_bottom = 94.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.2509804, 0.2509804, 0.2509804, 0.39607844)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
 theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 55
 text = "你 钥 匙 翘 翘 了 ！"
@@ -75,23 +78,13 @@ grow_vertical = 0
 theme_override_constants/separation = 5
 alignment = 1
 
-[node name="InfoLabel" type="Label" parent="Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+[node name="warningLable" type="Label" parent="Panel/VBoxContainer"]
+visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_sb8yb")
-theme_override_font_sizes/font_size = 20
-text = "选择【复活】，继续游戏；
-选择【放弃】，本局游戏。"
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="CostLabel" type="Label" parent="Panel/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.85904455, 0, 0.06298676, 1)
 theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 24
-text = "复活费用：2 生命钥匙"
+text = "生命钥匙不足"
 horizontal_alignment = 1
 
 [node name="ButtonContainer" type="VBoxContainer" parent="Panel/VBoxContainer"]
@@ -109,22 +102,26 @@ texture_hover = ExtResource("5_qy3gh")
 texture_disabled = ExtResource("5_qy3gh")
 texture_focused = ExtResource("5_qy3gh")
 
-[node name="reviveLabel" type="Label" parent="Panel/VBoxContainer/ButtonContainer/ReviveButton"]
+[node name="reviveLabel" type="RichTextLabel" parent="Panel/VBoxContainer/ButtonContainer/ReviveButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.5
-offset_top = -12.0
-offset_right = 20.5
-offset_bottom = 12.0
+offset_left = -121.5
+offset_top = -35.0
+offset_right = 121.5
+offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_sb8yb")
-theme_override_font_sizes/font_size = 55
-text = "复  活"
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_fonts/normal_font = ExtResource("3_sb8yb")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "复活  [img=28]res://assets/items/bbc-mkey.png[/img] 2"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="RestartButton" type="TextureButton" parent="Panel/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(150, 60)
@@ -151,7 +148,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 40
-text = "再  战"
+text = "重  来"
 
 [node name="GiveUpButton" type="TextureButton" parent="Panel/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(150, 60)

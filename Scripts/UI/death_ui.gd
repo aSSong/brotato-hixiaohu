@@ -6,12 +6,11 @@ class_name DeathUI
 
 @onready var death_panel: TextureRect = $Panel
 @onready var title_label: Label = $Panel/TitleLabel
-@onready var info_label: Label = $Panel/VBoxContainer/InfoLabel
+@onready var warning_label: Label = $Panel/VBoxContainer/warningLable
 @onready var revive_button: TextureButton = $Panel/VBoxContainer/ButtonContainer/ReviveButton
-@onready var revive_label: Label = $Panel/VBoxContainer/ButtonContainer/ReviveButton/reviveLabel
+@onready var revive_label: RichTextLabel = $Panel/VBoxContainer/ButtonContainer/ReviveButton/reviveLabel
 @onready var give_up_button: TextureButton = $Panel/VBoxContainer/ButtonContainer/GiveUpButton
 @onready var restart_button: TextureButton = $Panel/VBoxContainer/ButtonContainer/RestartButton
-@onready var cost_label: Label = $Panel/VBoxContainer/CostLabel
 @onready var dead_poster: TextureRect = $Panel/dead_poster
 
 ## 信号
@@ -32,7 +31,7 @@ func _ready() -> void:
 	hide()
 
 ## 显示死亡界面
-func show_death_screen(revive_count: int, current_gold: int, mode_id: String = "survival") -> void:
+func show_death_screen(revive_count: int, mode_id: String = "survival") -> void:
 	# 固定复活费用：2个masterkey
 	revive_cost = 2
 	var current_master_key = GameMain.master_key
@@ -44,28 +43,21 @@ func show_death_screen(revive_count: int, current_gold: int, mode_id: String = "
 	# Multi模式下隐藏复活相关UI
 	if mode_id == "multi":
 		revive_button.visible = false
-		cost_label.visible = false
 		restart_button.visible = true
-		info_label.text = "选择【再战】，重选角色；\n选择【放弃】，返回标题。"
+		warning_label.visible = false
 		print("[DeathUI] Multi模式 - 隐藏复活选项")
 	else:
 		# Survival模式：正常显示复活选项
 		revive_button.visible = true
-		cost_label.visible = true
 		restart_button.visible = true
 		
-		# 更新动态文本（masterkey数量和按钮状态）
-		cost_label.text = "复活费用：%d 生命钥匙" % revive_cost
-		
-		# 更新复活按钮状态和提示文本
+		# 更新复活按钮状态
 		if can_afford:
 			revive_button.disabled = false
-			revive_label.text = "复  活"
-			info_label.text = "选择【复活】，继续游戏；\n选择【再战】，重选角色；\n选择【放弃】，返回标题。"
+			warning_label.visible = false
 		else:
 			revive_button.disabled = true
-			revive_label.text = "生命钥匙不足"
-			info_label.text = "选择【再战】，重选角色；\n选择【放弃】，返回标题。"
+			warning_label.visible = true
 	
 	# 显示界面
 	show()
