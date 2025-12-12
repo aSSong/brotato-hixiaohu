@@ -39,6 +39,8 @@ LeaderboardManager="*res://Scripts/managers/leaderboard_manager.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
+mouse_cursor/custom_image="uid://bfu7q5kec38nq"
+mouse_cursor/custom_image_hotspot=Vector2(4, 4)
 
 [global_group]
 
