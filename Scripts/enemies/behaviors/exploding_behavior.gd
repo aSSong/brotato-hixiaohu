@@ -43,10 +43,6 @@ var flash_timer: float = 0.0
 var flash_interval: float = 0.1  # 闪烁间隔（秒）
 var is_flashing: bool = false
 
-## 爆炸效果场景
-var explosion_effect_scene: PackedScene = null
-var explosion_effect_path: String = "res://scenes/effects/meteor_explosion.tscn"
-
 func _on_initialize() -> void:
 	# 从配置中读取参数
 	explosion_range = config.get("explosion_range", 200.0)
@@ -54,7 +50,6 @@ func _on_initialize() -> void:
 	low_hp_threshold = config.get("low_hp_threshold", 0.3)
 	trigger_distance = config.get("trigger_distance", 150.0)
 	countdown_duration = config.get("countdown_duration", 3.0)
-	explosion_effect_path = config.get("explosion_effect_path", "res://scenes/effects/meteor_explosion.tscn")
 	
 	# 解析触发条件
 	var trigger_str = config.get("trigger_condition", "low_hp")
@@ -67,10 +62,6 @@ func _on_initialize() -> void:
 			trigger_condition = ExplodeTrigger.ON_DEATH
 		_:
 			trigger_condition = ExplodeTrigger.LOW_HP
-	
-	# 加载爆炸效果场景
-	if explosion_effect_path != "":
-		explosion_effect_scene = load(explosion_effect_path) as PackedScene
 	
 	state = ExplodeState.IDLE
 	countdown_timer = 0.0
@@ -267,8 +258,8 @@ func _hide_range_indicator() -> void:
 
 ## 创建爆炸效果
 func _create_explosion_effect(pos: Vector2) -> void:
-	# 使用统一的特效管理器
-	CombatEffectManager.play_enemy_death(pos, 1.5)
+	# 使用统一的特效管理器播放自爆特效
+	CombatEffectManager.play_enemy_explosion(pos, 1.5)
 	
 	# 震动屏幕
 	CameraShake.shake(0.3, 15.0)

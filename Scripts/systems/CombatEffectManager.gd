@@ -133,6 +133,14 @@ static func _setup_effect_configs() -> void:
 		"particles": [],
 		"animations": ["enemies_hurt"]  # 简单格式：使用默认 animations.tscn
 	}
+	effect_configs["敌人_自爆"] = {
+		"particles": ["res://FX/gpu_particles_2d_enemy_dead.tscn"],
+		"animations": [{
+			"scene_path": "res://scenes/effects/explosion_sprites.tscn",
+			"ani_name": "fire_explode",
+			"scale": 1.5
+		}]
+	}
 	
 	# 预留扩展接口示例（未来可以添加）
 	# effect_configs["陨石_击中"] = {
@@ -176,6 +184,17 @@ static func play_enemy_death(position: Vector2, scale: float = 1.0) -> void:
 		return
 	
 	print("[CombatEffectManager] 播放敌人死亡特效，位置: %s" % position)
+	var config = effect_configs[config_key]
+	_play_effect_config(config, position, scale)
+
+## 播放敌人自爆特效
+static func play_enemy_explosion(position: Vector2, scale: float = 1.0) -> void:
+	var config_key = "敌人_自爆"
+	if not effect_configs.has(config_key):
+		push_warning("[CombatEffectManager] 未找到敌人自爆特效配置")
+		return
+	
+	print("[CombatEffectManager] 播放敌人自爆特效，位置: %s" % position)
 	var config = effect_configs[config_key]
 	_play_effect_config(config, position, scale)
 
