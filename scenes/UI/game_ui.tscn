@@ -5,8 +5,8 @@
 [ext_resource type="Script" uid="uid://cljkxwaoks3ai" path="res://Scripts/UI/skill_icon.gd" id="1_skill_icon"]
 [ext_resource type="PackedScene" uid="uid://cqi5j0ht5t7pd" path="res://scenes/UI/components/resource_counter.tscn" id="2_5b3ti"]
 [ext_resource type="PackedScene" uid="uid://d3m1tn5m8yxoe" path="res://scenes/UI/components/player_stats_info.tscn" id="2_owrpm"]
-[ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="2_yr8ot"]
 [ext_resource type="Texture2D" uid="uid://d0y4qqnoa48r2" path="res://assets/items/mkey.png" id="3_5b3ti"]
+[ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="5_uki5y"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="6_jqo5s"]
 [ext_resource type="Texture2D" uid="uid://2lva8wut6pmt" path="res://assets/UI/game_ui/lcom-rmb.png" id="8_7klwy"]
 [ext_resource type="StyleBox" uid="uid://ed2fpeb8vfie" path="res://scenes/UI/class_state_bar_fill.tres" id="8_jtm65"]
@@ -92,7 +92,7 @@ offset_left = 1571.0
 offset_top = 45.0
 offset_right = 1771.0
 offset_bottom = 94.0
-icon_texture = ExtResource("2_yr8ot")
+icon_texture = ExtResource("5_uki5y")
 
 [node name="wave_info" type="MarginContainer" parent="."]
 anchors_preset = 5
