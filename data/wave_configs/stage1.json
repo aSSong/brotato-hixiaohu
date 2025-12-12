@@ -7,7 +7,7 @@
 	  "spawn_interval": 0.5,
 	  "hp_growth": 0.0,
 	  "damage_growth": 0.0,
-	  "total_count": 20,
+	  "total_count": 15,
 	  "enemies": {
 		"creeper": 0.6,
 		"creeper_fast": 0.2,
@@ -25,7 +25,7 @@
 	  "spawn_interval": 0.5,
 	  "hp_growth": 0.1,
 	  "damage_growth": 0.1,
-	  "total_count": 30,
+	  "total_count": 25,
 	  "enemies": {
 		"creeper": 0.5,
 		"creeper_fast": 0.3,
@@ -43,7 +43,7 @@
 	  "spawn_interval": 0.48,
 	  "hp_growth": 0.15,
 	  "damage_growth": 0.15,
-	  "total_count": 40,
+	  "total_count": 35,
 	  "enemies": {
 		"creeper": 0.55,
 		"creeper_fast": 0.25,
@@ -61,7 +61,7 @@
 	  "spawn_interval": 0.46,
 	  "hp_growth": 0.2,
 	  "damage_growth": 0.2,
-	  "total_count": 50,
+	  "total_count": 45,
 	  "enemies": {
 		"creeper": 0.5,
 		"creeper_fast": 0.25,
