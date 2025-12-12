@@ -82,10 +82,10 @@ static func initialize_weapons() -> void:
 		{
 			"type": "burn",
 			"params": {
-				"chance": 0.4,
+				"chance": 0.3,
 				"tick_interval": 0.5,
-				"damage": 5.0,
-				"duration": 3.0
+				"damage": 6.0,
+				"duration": 2.0
 			}
 		}
 	]
@@ -100,7 +100,7 @@ static func initialize_weapons() -> void:
 			"damage": 2,
 			"attack_speed": 0.3,
 			"range": 200.0,
-			"orbit_radius": 200.0,
+			"orbit_radius": 250.0,
 			"orbit_speed": 240.0, # 每秒转多少度
 			"hit_range": 200.0,
 			"knockback_force": 280.0,
@@ -158,7 +158,7 @@ static func initialize_weapons() -> void:
 			"spread_angle": 0.0
 		},
 		"res://assets/weapon/weapon_machinegun.png",
-		Vector2(1, 1)
+		Vector2(0.7, 0.7)
 	)
 	machine_gun.description = "超高攻击速度的远程武器"
 	weapons["machine_gun"] = machine_gun
@@ -178,7 +178,7 @@ static func initialize_weapons() -> void:
 			"spread_angle": 120.0
 		},
 		"res://assets/weapon/weapon_shotgun.png",
-		Vector2(0.8, 0.8)
+		Vector2(0.7, 0.7)
 	)
 	shotgun.description = "近距离高伤害，发射多颗弹丸"
 	weapons["shotgun"] = shotgun
@@ -207,7 +207,7 @@ static func initialize_weapons() -> void:
 			"params": {
 				"chance": 0.3,
 				"tick_interval": 0.5,
-				"damage": 3.0,
+				"damage": 4.0,
 				"duration": 2.0
 			}
 		}
@@ -261,7 +261,7 @@ static func initialize_weapons() -> void:
 			"attack_speed": 1.4,
 			"range": 900.0,
 			"bullet_id": "heavy_bullet",
-			"pierce_count": 1,
+			"pierce_count": 2,
 			"projectile_count": 1,
 			"spread_angle": 0.0
 		},
@@ -313,7 +313,7 @@ static func initialize_weapons() -> void:
 			"damage": 4,
 			"attack_speed": 2.0,
 			"range": 900.0,
-			"explosion_radius": 100.0,
+			"explosion_radius": 150.0,
 			"explosion_damage_multiplier": 0.8,
 			"cast_delay": 0.3,
 			"is_target_locked": false,
@@ -330,7 +330,7 @@ static func initialize_weapons() -> void:
 		{
 			"type": "freeze",
 			"params": {
-				"chance": 0.1,
+				"chance": 0.15,
 				"duration": 2.0
 			}
 		}
