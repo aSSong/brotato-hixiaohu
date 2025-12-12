@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dnt2sd4mt6yw8"]
+[gd_scene load_steps=16 format=3 uid="uid://dnt2sd4mt6yw8"]
 
 [ext_resource type="Script" uid="uid://dfrk5jfj3ogys" path="res://Scripts/UI/main_title.gd" id="1_3tovs"]
 [ext_resource type="Texture2D" uid="uid://dwf4dbg8vqiqd" path="res://assets/UI/maintitle/bg-maintitle-01.png" id="2_um0kg"]
@@ -11,6 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://hhrlu5odkkv1" path="res://assets/UI/maintitle/btn-other-pressed-01.png" id="9_nb8ff"]
 [ext_resource type="Texture2D" uid="uid://5xdtdejhi11r" path="res://assets/UI/maintitle/btn-other-hover-01.png" id="10_adb34"]
 [ext_resource type="Texture2D" uid="uid://ceqcch27fc2qw" path="res://assets/UI/maintitle/btn-other-disabled-01.png" id="11_h860p"]
+[ext_resource type="Texture2D" uid="uid://j375vxhenoe6" path="res://assets/UI/maintitle/btn-settings-normal-01.png" id="12_wl6us"]
+[ext_resource type="Texture2D" uid="uid://btsml47xswt8d" path="res://assets/UI/maintitle/btn-settings-pressed-01.png" id="13_lpsgw"]
+[ext_resource type="Texture2D" uid="uid://bnjo2ikct7aj5" path="res://assets/UI/maintitle/btn-settings-hover-01.png" id="14_f6rfw"]
+[ext_resource type="Texture2D" uid="uid://d4cwpwnvxtqpu" path="res://assets/UI/maintitle/btn-settings-disabledl-01.png" id="15_8af6u"]
 
 [node name="MainTitle" type="Control"]
 layout_mode = 3
@@ -190,4 +194,21 @@ theme_override_font_sizes/font_size = 40
 text = "注意：PlayerName已为空值"
 horizontal_alignment = 2
 
+[node name="settingsbtn" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -171.0
+offset_top = 49.0
+offset_right = -54.0
+offset_bottom = 165.0
+grow_horizontal = 0
+texture_normal = ExtResource("12_wl6us")
+texture_pressed = ExtResource("13_lpsgw")
+texture_hover = ExtResource("14_f6rfw")
+texture_disabled = ExtResource("15_8af6u")
+texture_focused = ExtResource("14_f6rfw")
+
 [connection signal="pressed" from="menu/VBoxContainer/btn_Quit" to="." method="_on_btn_quit_pressed"]
+[connection signal="pressed" from="settingsbtn" to="." method="_on_settingsbtn_pressed"]

@@ -69,3 +69,7 @@ func _on_clean_name_btn_pressed() -> void:
 	player_info.visible = false
 	info_label.visible = true
 	print("[MainTitle] 玩家名字已清空")
+
+
+func _on_settingsbtn_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/UI/settings_ui.tscn")
