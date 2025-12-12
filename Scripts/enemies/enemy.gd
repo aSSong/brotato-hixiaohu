@@ -25,6 +25,10 @@ var knockback_decay: float = 0.9  # 击退衰减系数（每帧衰减10%）
 ## 停止距离（敌人会在这个距离外停下，避免贴脸）
 var stop_distance: float = 100.0  # 可以设置为略大于攻击范围
 
+## 软分离配置（防止敌人完全重叠）
+var separation_radius: float = 60.0  # 分离检测半径
+var separation_strength: float = 120.0  # 分离力度
+
 ## 是否为本波最后一个敌人（用于掉落masterKey）
 var is_last_enemy_in_wave: bool = false
 
@@ -281,15 +285,18 @@ func _process(delta: float) -> void:
 		# 设置停止距离（小于攻击范围，确保攻击生效）
 		var min_distance = attack_range_value - 20.0  # 攻击范围 + 20像素缓冲
 		
+		# 计算分离力（防止敌人重叠）
+		var separation = _calculate_separation_force()
+		
 		if player_distance > min_distance:
 			dir = (target.global_position - self.global_position).normalized()
 			# 应用减速效果
 			var current_speed = speed * get_slow_multiplier()
-			# 基础移动速度 + 击退速度
-			velocity = dir * current_speed + knockback_velocity
+			# 基础移动速度 + 击退速度 + 分离力
+			velocity = dir * current_speed + knockback_velocity + separation
 		else:
-			# 距离足够近，停止移动
-			velocity = Vector2.ZERO
+			# 距离足够近，停止追踪但仍应用分离力
+			velocity = separation
 		move_and_slide()
 		
 		# 朝向修正：图片默认向左，当玩家在右侧时翻转
@@ -313,6 +320,22 @@ func _update_facing_direction() -> void:
 		$AnimatedSprite2D.flip_h = true  # 翻转，朝右
 	else:
 		$AnimatedSprite2D.flip_h = false  # 不翻转，朝左（默认）
+
+## 计算软分离力（防止敌人完全重叠）
+func _calculate_separation_force() -> Vector2:
+	var separation_force = Vector2.ZERO
+	var enemies = get_tree().get_nodes_in_group("enemy")
+	
+	for other in enemies:
+		if other == self or not is_instance_valid(other):
+			continue
+		var to_other = other.global_position - global_position
+		var distance = to_other.length()
+		if distance < separation_radius and distance > 0.1:
+			var strength = (separation_radius - distance) / separation_radius
+			separation_force += -to_other.normalized() * strength * separation_strength
+	
+	return separation_force
 
 func _attack_player() -> void:
 	if attack_cooldown > 0:
