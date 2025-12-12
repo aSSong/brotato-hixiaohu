@@ -252,7 +252,8 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 50
-text = "Chapet1 Rank"
+text = "最后的防线"
+horizontal_alignment = 1
 
 [node name="swich1Button2" type="TextureButton" parent="bg_panel/labelContainer"]
 layout_mode = 2
@@ -278,7 +279,8 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 50
-text = "Chapter2 Rank"
+text = "反击大作战"
+horizontal_alignment = 1
 
 [node name="backButton" type="TextureButton" parent="."]
 z_index = 1
