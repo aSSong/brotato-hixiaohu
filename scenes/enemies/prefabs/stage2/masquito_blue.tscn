@@ -1,15 +1,72 @@
-[gd_scene load_steps=7 format=3 uid="uid://cciesik1a62dx"]
+[gd_scene load_steps=15 format=3 uid="uid://cciesik1a62dx"]
 
 [ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_57a5g"]
 [ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_8ukcr"]
 [ext_resource type="Shader" uid="uid://dsun82e56sau7" path="res://Shaders/flash.gdshader" id="3_dkn4i"]
-[ext_resource type="SpriteFrames" uid="uid://csaftlp3ip7io" path="res://resources/enemies/animations/stage2/masquito_blue_sprites.tres" id="4_57a5g"]
+[ext_resource type="Texture2D" uid="uid://bvyfg2hvknkbs" path="res://assets/enemy/stage2/masquto-blue-run-Sheet.png" id="4_57a5g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
 resource_local_to_scene = true
 shader = ExtResource("3_dkn4i")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_opacity = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_by4rq"]
+atlas = ExtResource("4_57a5g")
+region = Rect2(0, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skcbs"]
+atlas = ExtResource("4_57a5g")
+region = Rect2(327, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_akwhq"]
+atlas = ExtResource("4_57a5g")
+region = Rect2(654, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6unys"]
+atlas = ExtResource("4_57a5g")
+region = Rect2(981, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4x0lf"]
+atlas = ExtResource("4_57a5g")
+region = Rect2(1308, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nnlyr"]
+atlas = ExtResource("4_57a5g")
+region = Rect2(1635, 0, 327, 300)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aw021"]
+atlas = ExtResource("4_57a5g")
+region = Rect2(1962, 0, 327, 300)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8ukcr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_by4rq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_skcbs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_akwhq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6unys")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4x0lf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nnlyr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aw021")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
 radius = 175.05453
@@ -18,7 +75,7 @@ radius = 175.05453
 z_index = 8
 scale = Vector2(0.4, 0.4)
 collision_layer = 8
-collision_mask = 10
+collision_mask = 2
 script = ExtResource("1_57a5g")
 
 [node name="shadow" type="Sprite2D" parent="."]
@@ -33,7 +90,7 @@ offset = Vector2(0, 524.56)
 z_index = 1
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_flash")
-sprite_frames = ExtResource("4_57a5g")
+sprite_frames = SubResource("SpriteFrames_8ukcr")
 animation = &"walk"
 autoplay = "walk"
 offset = Vector2(0, 30.37)
