@@ -139,34 +139,26 @@ texture_pressed = ExtResource("7_wesum")
 texture_hover = ExtResource("7_wesum")
 stretch_mode = 0
 
-[node name="refreshLabel" type="Label" parent="RefreshSection/RefreshButton"]
+[node name="refreshLabel" type="RichTextLabel" parent="RefreshSection/RefreshButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -91.000244
+offset_left = -100.0
 offset_top = -23.0
-offset_right = -19.000244
+offset_right = 100.0
 offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 36
-text = "刷新"
-
-[node name="RefreshCostLabel" type="Label" parent="RefreshSection/RefreshButton"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 94.0
-offset_right = 182.0001
-offset_bottom = 62.0
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(1, 0.84313726, 0, 1)
-theme_override_font_sizes/font_size = 40
-text = "🔑 2"
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("4_font")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "刷新  [img=20]res://assets/items/bbc-nkey.png[/img] 2"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MainPanel" type="Control" parent="."]

@@ -8,7 +8,7 @@ class_name UpgradeShop
 @onready var upgrade_container: HBoxContainer = %UpgradeContainer
 @onready var refresh_button: TextureButton = %RefreshButton
 @onready var close_button: TextureButton = %CloseButton
-@onready var refresh_cost_label: Label = %RefreshCostLabel
+@onready var refresh_label: RichTextLabel = $RefreshSection/RefreshButton/refreshLabel
 
 ## 新版 UI 节点引用
 @onready var player_portrait: TextureRect = %PlayerPortrait
@@ -547,16 +547,14 @@ func _on_gold_changed(_new_amount: int, _change: int) -> void:
 
 ## 更新刷新费用显示
 func _update_refresh_cost_display() -> void:
-	if refresh_cost_label:
-		refresh_cost_label.text = " 🔑 %d" % refresh_cost
+	# 更新 refreshLabel 中的费用数字
+	if refresh_label:
+		refresh_label.text = "刷新  [img=20]res://assets/items/bbc-nkey.png[/img] %d" % refresh_cost
 	
-	# 检查钥匙是否足够刷新，不足时按钮变灰
+	# 检查钥匙是否足够刷新，不足时禁用按钮
 	if refresh_button:
 		var can_afford = GameMain.gold >= refresh_cost
-		if can_afford:
-			refresh_button.modulate = Color.WHITE
-		else:
-			refresh_button.modulate = Color(0.5, 0.5, 0.5)  # 灰色
+		refresh_button.disabled = not can_afford
 
 ## 初始化玩家信息显示
 func _initialize_player_info() -> void:

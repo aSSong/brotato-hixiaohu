@@ -5,7 +5,7 @@ class_name UpgradeOption
 
 @onready var icon_texture: TextureRect = %IconTexture
 @onready var name_label: Label = %NameLabel
-@onready var cost_label: Label = %CostLabel
+@onready var buy_label: RichTextLabel = $VBoxContainer/HBoxContainer2/BuyButton/buyLabel
 @onready var description_label: Label = %DescriptionLabel
 @onready var buy_button: TextureButton = %BuyButton
 @onready var lock_button: TextureButton = %LockButton
@@ -76,7 +76,7 @@ func set_upgrade_data(data: UpgradeData) -> void:
 		return
 	
 	# 如果@onready变量还没初始化，等待一帧
-	if not name_label or not cost_label or not description_label or not lock_button:
+	if not name_label or not buy_label or not description_label or not lock_button:
 		await get_tree().process_frame
 	
 	_initialize_ui()
@@ -129,9 +129,9 @@ func get_upgrade_data() -> UpgradeData:
 	return upgrade_data
 
 func _update_cost_display() -> void:
-	if cost_label and upgrade_data:
+	if buy_label and upgrade_data:
 		var display_cost = get_display_cost()
-		cost_label.text = "🔑 %d" % display_cost
+		buy_label.text = "买它  [img=20]res://assets/items/bbc-nkey.png[/img] %d" % display_cost
 	_update_buy_button()
 
 func _update_buy_button() -> void:
