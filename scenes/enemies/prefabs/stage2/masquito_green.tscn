@@ -12,11 +12,11 @@ shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_opacity = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
-radius = 175.05453
+radius = 140.08926
 
 [node name="masquito_green" type="CharacterBody2D" groups=["enemy"]]
 z_index = 8
-scale = Vector2(0.4, 0.4)
+scale = Vector2(0.6, 0.6)
 collision_layer = 8
 collision_mask = 10
 script = ExtResource("1_elffy")

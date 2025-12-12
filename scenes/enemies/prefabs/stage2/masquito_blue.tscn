@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_57a5g"]
 [ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_8ukcr"]
 [ext_resource type="Shader" uid="uid://dsun82e56sau7" path="res://Shaders/flash.gdshader" id="3_dkn4i"]
-[ext_resource type="SpriteFrames" uid="uid://csaftlp3ip7io" path="res://resources/enemies/animations/stage2/masquito_blue_sprites.tres" id="4_kismr"]
+[ext_resource type="SpriteFrames" uid="uid://csaftlp3ip7io" path="res://resources/enemies/animations/stage2/masquito_blue_sprites.tres" id="4_57a5g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
 resource_local_to_scene = true
@@ -33,7 +33,7 @@ offset = Vector2(0, 524.56)
 z_index = 1
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_flash")
-sprite_frames = ExtResource("4_kismr")
+sprite_frames = ExtResource("4_57a5g")
 animation = &"walk"
 autoplay = "walk"
 offset = Vector2(0, 30.37)
