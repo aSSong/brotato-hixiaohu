@@ -12,10 +12,10 @@
 [ext_resource type="StyleBox" uid="uid://ed2fpeb8vfie" path="res://scenes/UI/class_state_bar_fill.tres" id="8_jtm65"]
 [ext_resource type="Texture2D" uid="uid://bijoqd3cifawg" path="res://assets/UI/game_ui/icon-skill2-01.png" id="9_jtm65"]
 [ext_resource type="Texture2D" uid="uid://ib6slp588m2v" path="res://assets/UI/game_ui/player-onhit-effect.png" id="9_r4w1u"]
-[ext_resource type="Texture2D" uid="uid://valm5ab35hcu" path="res://assets/UI/game_ui/icon-dash-01.png" id="10_7klwy"]
 [ext_resource type="Script" uid="uid://bhol8gfndxu2u" path="res://Scripts/UI/damage_flash.gd" id="10_dmgflash"]
 [ext_resource type="Texture2D" uid="uid://83wa773ks6hh" path="res://assets/UI/game_ui/icon-lmb.png" id="11_hvehc"]
-[ext_resource type="Texture2D" uid="uid://48fm6fetn4uy" path="res://assets/UI/game_ui/mask_skillCD.png" id="12_5r867"]
+[ext_resource type="Texture2D" uid="uid://cdgw3r2x4s6xu" path="res://assets/UI/game_ui/bg-icon-01.png" id="13_uki5y"]
+[ext_resource type="Texture2D" uid="uid://b4jvdqrxsfhbm" path="res://assets/UI/game_ui/skill-dash-123-01.png" id="14_6yovt"]
 [ext_resource type="Texture2D" uid="uid://b5afcqikftque" path="res://assets/UI/game_ui/panel-keys-01.png" id="14_hvehc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t7mk8"]
@@ -236,6 +236,14 @@ offset_bottom = -57.0
 grow_vertical = 0
 script = ExtResource("1_skill_icon")
 
+[node name="bg_Icon" type="TextureRect" parent="SkillIcon"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("13_uki5y")
+expand_mode = 2
+stretch_mode = 5
+
 [node name="Icon" type="TextureRect" parent="SkillIcon"]
 layout_mode = 1
 anchors_preset = 8
@@ -270,7 +278,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.4, 0.4)
 mouse_filter = 2
-texture = ExtResource("12_5r867")
+texture = ExtResource("13_uki5y")
 expand_mode = 2
 
 [node name="CDText" type="Label" parent="SkillIcon"]
@@ -350,21 +358,30 @@ offset_right = 1660.0
 offset_bottom = 1023.0
 script = ExtResource("1_dash_ui")
 
+[node name="bg_Icon" type="TextureRect" parent="Dash_ui"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("13_uki5y")
+expand_mode = 2
+stretch_mode = 5
+
 [node name="Icon" type="TextureRect" parent="Dash_ui"]
 layout_mode = 0
-offset_right = 250.0
-offset_bottom = 250.0
-scale = Vector2(0.4, 0.4)
-texture = ExtResource("10_7klwy")
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("14_6yovt")
+expand_mode = 2
+stretch_mode = 5
 
 [node name="CDMask" type="TextureRect" parent="Dash_ui"]
-self_modulate = Color(1, 1, 1, 0.75686276)
+self_modulate = Color(1, 1, 1, 0.93333334)
 layout_mode = 0
 offset_right = 250.0
 offset_bottom = 250.0
 scale = Vector2(0.4, 0.4)
 mouse_filter = 2
-texture = ExtResource("12_5r867")
+texture = ExtResource("13_uki5y")
 
 [node name="CDText" type="Label" parent="Dash_ui"]
 layout_mode = 0

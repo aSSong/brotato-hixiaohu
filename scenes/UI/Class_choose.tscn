@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cp3uspdkmrgxt"]
+[gd_scene load_steps=25 format=3 uid="uid://cp3uspdkmrgxt"]
 
 [ext_resource type="Script" uid="uid://bhy28alx8jccx" path="res://Scripts/UI/class_choose.gd" id="1_class"]
 [ext_resource type="Texture2D" uid="uid://bc0lbov8wglen" path="res://assets/UI/class_choose/classchoose-bg-01.png" id="2_h8tvr"]
@@ -21,6 +21,8 @@
 [ext_resource type="StyleBox" uid="uid://ed2fpeb8vfie" path="res://scenes/UI/class_state_bar_fill.tres" id="13_sq8rm"]
 [ext_resource type="Texture2D" uid="uid://c78yiaya06kpp" path="res://assets/UI/class_poster/portrait-betty-01.png" id="13_wjeio"]
 [ext_resource type="Texture2D" uid="uid://bfnwdgtlxrlii" path="res://assets/UI/class_choose/check-red-01.png" id="14_wjeio"]
+[ext_resource type="Texture2D" uid="uid://cmr8ff25lc4e" path="res://assets/skillicon/skill-as-01.png" id="16_2leu4"]
+[ext_resource type="Texture2D" uid="uid://cdgw3r2x4s6xu" path="res://assets/UI/game_ui/bg-icon-01.png" id="16_et8gw"]
 [ext_resource type="Texture2D" uid="uid://8dptkrniv1x6" path="res://assets/UI/class_poster/portrait-mrwill-01.png" id="17_sq8rm"]
 
 [node name="ClassChoose" type="Control"]
@@ -449,9 +451,23 @@ theme_override_font_sizes/font_size = 22
 text = "Skill"
 
 [node name="SkillIcon" type="TextureRect" parent="MainContent/RightSection/InfoContainer/SkillSection"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 0
+texture = ExtResource("16_2leu4")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="bg_icon" type="TextureRect" parent="MainContent/RightSection/InfoContainer/SkillSection/SkillIcon"]
+self_modulate = Color(7.8348074, 7.8348074, 7.8348074, 0.2509804)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_et8gw")
 expand_mode = 1
 stretch_mode = 5
 
@@ -460,7 +476,8 @@ layout_mode = 2
 
 [node name="SkillName" type="Label" parent="MainContent/RightSection/InfoContainer/SkillSection/SkillInfo"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_fonts/font = ExtResource("4_sq8rm")
+theme_override_font_sizes/font_size = 20
 text = "技能名称"
 
 [node name="SkillDesc" type="RichTextLabel" parent="MainContent/RightSection/InfoContainer/SkillSection/SkillInfo"]
