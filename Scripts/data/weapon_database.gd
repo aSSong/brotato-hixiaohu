@@ -154,7 +154,7 @@ static func initialize_weapons() -> void:
 			"range": 800.0,
 			"bullet_id": "fast_bullet",
 			"pierce_count": 0,
-			"projectile_count": 2,
+			"projectile_count": 1,
 			"spread_angle": 0.0
 		},
 		"res://assets/weapon/weapon_machinegun.png",
@@ -362,28 +362,28 @@ static func initialize_weapons() -> void:
 	weapons["meteor"] = meteor
 	
 	# 闪电（魔法行为 + 魔法结算 + 多目标）
-	var lightning = WeaponData.new(
-		"连锁闪电",
-		WeaponData.BehaviorType.MAGIC,
-		WeaponData.CalculationType.MAGIC,
-		{
-			"damage": 3,
-			"attack_speed": 1.4,
-			"range": 850.0,
-			"explosion_radius": 80.0,
-			"explosion_damage_multiplier": 0.6,
-			"cast_delay": 0.2,
-			"is_target_locked": true,
-			"max_targets": 3,
-			"has_explosion_damage": true,
-			"indicator_color": Color(0.8, 0.8, 1.0, 0.3),
-			"effect_lead_time": 0.1  # 特效短，提前 0.1 秒播放
-		},
-		"res://assets/weapon/weapon_lightwand.png",
-		Vector2(0.6, 0.6)
-	)
-	lightning.description = "快速魔法武器，可同时攻击多个目标"
-	weapons["lightning"] = lightning
+	# var lightning = WeaponData.new(
+	# 	"多头闪电",
+	# 	WeaponData.BehaviorType.MAGIC,
+	# 	WeaponData.CalculationType.MAGIC,
+	# 	{
+	# 		"damage": 3,
+	# 		"attack_speed": 1.4,
+	# 		"range": 850.0,
+	# 		"explosion_radius": 80.0,
+	# 		"explosion_damage_multiplier": 0.6,
+	# 		"cast_delay": 0.2,
+	# 		"is_target_locked": true,
+	# 		"max_targets": 3,
+	# 		"has_explosion_damage": true,
+	# 		"indicator_color": Color(0.8, 0.8, 1.0, 0.3),
+	# 		"effect_lead_time": 0.1  # 特效短，提前 0.1 秒播放
+	# 	},
+	# 	"res://assets/weapon/weapon_lightwand.png",
+	# 	Vector2(0.6, 0.6)
+	# )
+	# lightning.description = "快速魔法武器，可同时攻击多个目标"
+	# weapons["lightning"] = lightning
 	
 	# 追踪导弹（远程行为 + 远程结算 + 追踪子弹）
 	var arcane_missile = WeaponData.new(
