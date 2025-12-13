@@ -195,9 +195,12 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 			enemy.max_enemyHP = int(enemy.max_enemyHP * hp_multiplier)
 			enemy.enemyHP = enemy.max_enemyHP
 			
-			# 应用伤害成长
+			# 应用伤害成长（触碰伤害）
 			if "attack_damage" in enemy:
 				enemy.attack_damage = int(enemy.attack_damage * damage_multiplier)
+			
+			# 应用技能伤害成长
+			_apply_skill_damage_growth(enemy, damage_multiplier)
 			
 			print("[EnemySpawner V3] 生成敌人：", enemy_id, " 波次:", wave_number, 
 				  " HP倍数:", hp_multiplier, " 实际HP:", enemy.max_enemyHP,
@@ -215,6 +218,30 @@ func _is_far_enough_from_player(spawn_pos: Vector2) -> bool:
 	
 	var distance := spawn_pos.distance_to(player.global_position)
 	return distance >= min_distance_from_player
+
+## 应用技能伤害成长
+func _apply_skill_damage_growth(enemy: Node, damage_multiplier: float) -> void:
+	if not "behaviors" in enemy:
+		return
+	
+	for behavior in enemy.behaviors:
+		if not is_instance_valid(behavior):
+			continue
+		
+		# 冲锋技能：额外伤害成长
+		if behavior is ChargingBehavior:
+			var charging = behavior as ChargingBehavior
+			charging.extra_damage = int(charging.extra_damage * damage_multiplier)
+		
+		# 射击技能：子弹伤害成长
+		elif behavior is ShootingBehavior:
+			var shooting = behavior as ShootingBehavior
+			shooting.bullet_damage = int(shooting.bullet_damage * damage_multiplier)
+		
+		# 自爆技能：爆炸伤害成长
+		elif behavior is ExplodingBehavior:
+			var exploding = behavior as ExplodingBehavior
+			exploding.explosion_damage = int(exploding.explosion_damage * damage_multiplier)
 
 ## 清理所有敌人（调试用）
 func clear_all_enemies() -> void:
