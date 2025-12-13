@@ -50,6 +50,12 @@ enum EnemySkillType {
 @export var shake_duration: float = 0.2
 @export var shake_amount: float = 8.0
 
+## 击退抗性（0.0-1.0，0表示无抗性，1表示完全免疫击退）
+@export_range(0.0, 1.0) var knockback_resistance: float = 0.0
+
+## 金币掉落数量（死亡时掉落的gold数量，对masterkey无效）
+@export var gold_drop_count: int = 1
+
 ## 初始化函数（简化版，主要用于代码创建）
 func _init(
 	p_enemy_name: String = "默认敌人",

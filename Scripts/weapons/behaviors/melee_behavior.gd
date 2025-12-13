@@ -167,8 +167,12 @@ func _apply_knockback(enemy: Node2D, force: float) -> void:
 	
 	if enemy is CharacterBody2D:
 		if enemy.has_method("apply_knockback"):
+			# 优先使用 apply_knockback 方法（会自动应用击退抗性）
 			enemy.apply_knockback(knockback_dir * force)
 		elif "knockback_velocity" in enemy:
-			enemy.knockback_velocity += knockback_dir * force
+			# 备用方案：手动考虑击退抗性
+			var resistance = enemy.knockback_resistance if "knockback_resistance" in enemy else 0.0
+			var resistance_multiplier = 1.0 - resistance
+			enemy.knockback_velocity += knockback_dir * force * resistance_multiplier
 		elif "velocity" in enemy:
 			enemy.velocity += knockback_dir * force

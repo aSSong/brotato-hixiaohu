@@ -33,6 +33,7 @@ var state_timer: float = 0.0
 var charge_start_pos: Vector2 = Vector2.ZERO
 var charge_direction: Vector2 = Vector2.ZERO
 var is_charging: bool = false
+var original_knockback_resistance: float = 0.0  # 保存原始击退抗性
 
 func _on_initialize() -> void:
 	# 从配置中读取参数
@@ -103,6 +104,11 @@ func _start_charge() -> void:
 	is_charging = true
 	_hide_indicator()
 	
+	# 冲锋期间完全无视击退
+	original_knockback_resistance = enemy.knockback_resistance
+	enemy.knockback_resistance = 1.0
+	enemy.knockback_velocity = Vector2.ZERO  # 清除已有的击退速度
+	
 	# 设置冲锋距离的计时器（基于速度计算）
 	var charge_duration = charge_distance / charge_speed
 	state_timer = charge_duration
@@ -117,6 +123,9 @@ func _start_charge() -> void:
 func _update_charge(_delta: float) -> void:
 	if not enemy:
 		return
+	
+	# 冲锋期间持续清除击退速度，确保不受干扰
+	enemy.knockback_velocity = Vector2.ZERO
 	
 	# 计算冲锋移动
 	var charge_velocity = charge_direction * charge_speed
@@ -162,8 +171,9 @@ func _end_charge() -> void:
 	enemy.velocity = Vector2.ZERO
 	_hide_indicator()
 	
-	# 恢复走路动画
+	# 恢复原始击退抗性
 	if enemy:
+		enemy.knockback_resistance = original_knockback_resistance
 		enemy.play_animation("walk")
 		enemy.stop_skill_animation()
 	

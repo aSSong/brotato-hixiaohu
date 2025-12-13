@@ -21,6 +21,10 @@ var attack_damage: int = 5  # 每次攻击造成的伤害
 ## 击退相关
 var knockback_velocity: Vector2 = Vector2.ZERO  # 击退速度
 var knockback_decay: float = 0.9  # 击退衰减系数（每帧衰减10%）
+var knockback_resistance: float = 0.0  # 击退抗性（0-1，1表示完全免疫）
+
+## 金币掉落数量
+var gold_drop_count: int = 1
 
 ## 停止距离（敌人会在这个距离外停下，避免贴脸）
 var stop_distance: float = 100.0  # 可以设置为略大于攻击范围
@@ -200,6 +204,10 @@ func _apply_enemy_data() -> void:
 	shake_on_death = enemy_data.shake_on_death
 	shake_duration = enemy_data.shake_duration
 	shake_amount = enemy_data.shake_amount
+	
+	# 应用击退抗性和掉落设置
+	knockback_resistance = enemy_data.knockback_resistance
+	gold_drop_count = enemy_data.gold_drop_count
 	
 	# 初始化技能行为
 	_setup_skill_behavior()
@@ -431,16 +439,28 @@ func enemy_dead():
 	CombatEffectManager.play_enemy_death(global_position)
 	
 	# 判断掉落物品类型
-	var item_name = "gold"  # 默认掉落金币
-	
 	if is_last_enemy_in_wave:
-		item_name = "masterkey"
-	
-	GameMain.drop_item_scene_obj.gen_drop_item({
-		"ani_name": item_name,
-		"position": self.global_position,
-		"scale":Vector2(4,4)
-	})
+		# 掉落 masterkey（只掉一个，不受 gold_drop_count 影响）
+		GameMain.drop_item_scene_obj.gen_drop_item({
+			"ani_name": "masterkey",
+			"position": self.global_position,
+			"scale": Vector2(4, 4)
+		})
+	else:
+		# 掉落 gold，根据 gold_drop_count 掉落多个
+		for i in range(gold_drop_count):
+			# 添加随机偏移，防止多个金币重叠
+			var offset = Vector2.ZERO
+			if gold_drop_count > 1:
+				var angle = randf() * TAU  # 0 到 2π 的随机角度
+				var distance = randf_range(15.0, 35.0)  # 随机距离
+				offset = Vector2(cos(angle), sin(angle)) * distance
+			
+			GameMain.drop_item_scene_obj.gen_drop_item({
+				"ani_name": "gold",
+				"position": self.global_position + offset,
+				"scale": Vector2(4, 4)
+			})
 	
 	# 发送敌人死亡信号（在queue_free之前）
 	enemy_killed.emit(self)
@@ -491,6 +511,13 @@ func enemy_flash():
 ## 设置无敌状态
 func set_invincible(value: bool) -> void:
 	is_invincible = value
+
+## 应用击退（考虑击退抗性）
+## @param knockback_force 击退力向量
+func apply_knockback(knockback_force: Vector2) -> void:
+	# 根据击退抗性减少击退力
+	var resistance_multiplier = 1.0 - knockback_resistance
+	knockback_velocity += knockback_force * resistance_multiplier
 
 ## 设置技能行为
 func _setup_skill_behavior() -> void:
