@@ -5,9 +5,10 @@
 [resource]
 script = ExtResource("1_script")
 enemy_name = "鼠标怪-红色"
-description = "快速但脆弱的敌人"
+description = "快速的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage1/creeper_fast.tscn"
-max_hp = 10
+max_hp = 5
+attack_damage = 3
 move_speed = 500.0
 attack_interval = 0.3
 attack_range = 58.0
