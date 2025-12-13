@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Enemy
 
-## 调试显示开关（全局静态变量，按 F3 切换）
+## 调试显示开关（全局静态变量，按 R键 切换）
 static var debug_show_range: bool = false
 
 var dir = null
@@ -62,9 +62,13 @@ signal enemy_killed(enemy_ref: Enemy)
 
 ## ==================== 调试可视化 ====================
 
-## 处理按键输入（F3 切换显示攻击范围）
+## 处理按键输入（R键 切换显示攻击范围）
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_F3:
+	# 只在调试版本中启用
+	if not OS.is_debug_build():
+		return
+	
+	if event is InputEventKey and event.pressed and event.keycode == KEY_R:
 		debug_show_range = !debug_show_range
 		print("[Debug] 攻击范围显示: ", "开启" if debug_show_range else "关闭")
 		# 通知所有敌人重绘
@@ -74,7 +78,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## 绘制调试图形（攻击范围、追踪停止距离）
 func _draw() -> void:
-	if not debug_show_range:
+	# 只在调试版本中绘制
+	if not OS.is_debug_build() or not debug_show_range:
 		return
 	
 	var attack_range_value = enemy_data.attack_range if enemy_data else 80.0
@@ -288,8 +293,8 @@ func stop_skill_animation() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	# 调试模式下持续重绘
-	if debug_show_range:
+	# 调试模式下持续重绘（仅调试版本）
+	if OS.is_debug_build() and debug_show_range:
 		queue_redraw()
 	
 	# 更新攻击冷却时间
