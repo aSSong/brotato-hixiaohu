@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=34 format=3 uid="uid://c18c1pgbfhloi"]
+[gd_resource type="SpriteFrames" load_steps=32 format=3 uid="uid://c18c1pgbfhloi"]
 
 [ext_resource type="Texture2D" uid="uid://b1i74ocwhj81e" path="res://assets/enemy/stage1/powerbank-run-Sheet.png" id="1_lu4ga"]
 [ext_resource type="Texture2D" uid="uid://cvwfda1skfkmt" path="res://assets/enemy/stage1/powerbank-exploding-Sheet.png" id="1_uqspe"]
@@ -74,14 +74,6 @@ region = Rect2(636, 1200, 636, 400)
 [sub_resource type="AtlasTexture" id="AtlasTexture_n4y6w"]
 atlas = ExtResource("1_uqspe")
 region = Rect2(1272, 1200, 636, 400)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k7sfc"]
-atlas = ExtResource("1_uqspe")
-region = Rect2(1908, 1200, 636, 400)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xu7vs"]
-atlas = ExtResource("1_uqspe")
-region = Rect2(2544, 1200, 636, 400)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_uqspe"]
 atlas = ExtResource("1_lu4ga")
@@ -183,16 +175,10 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_n4y6w")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k7sfc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xu7vs")
 }],
-"loop": true,
+"loop": false,
 "name": &"explode",
-"speed": 20.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,

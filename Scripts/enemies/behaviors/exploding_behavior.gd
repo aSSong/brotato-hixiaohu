@@ -29,6 +29,11 @@ var low_hp_threshold: float = 0.3      # 低血量阈值（百分比，如0.3表
 var trigger_distance: float = 150.0    # 触发距离（用于DISTANCE条件）
 var countdown_duration: float = 3.0    # 倒数时长（秒）
 
+## 动画配置（从config字典读取，通用化）
+var prepare_anim_player: String = ""   # AnimationPlayer 准备动画名
+var execute_anim_player: String = ""   # AnimationPlayer 爆炸动画名
+var wait_explode_animation: bool = true  # 是否等待爆炸动画完成再删除敌人
+
 ## 倒数相关
 var countdown_timer: float = 0.0
 var is_invincible: bool = false  # 倒数期间无敌
@@ -50,6 +55,11 @@ func _on_initialize() -> void:
 	low_hp_threshold = config.get("low_hp_threshold", 0.3)
 	trigger_distance = config.get("trigger_distance", 150.0)
 	countdown_duration = config.get("countdown_duration", 3.0)
+	
+	# 从配置中读取动画名（通用化，不再硬编码）
+	prepare_anim_player = config.get("prepare_anim_player", "")
+	execute_anim_player = config.get("execute_anim_player", "")
+	wait_explode_animation = config.get("wait_explode_animation", true)
 	
 	# 解析触发条件
 	var trigger_str = config.get("trigger_condition", "low_hp")
@@ -131,9 +141,10 @@ func _start_countdown() -> void:
 	if enemy.has_method("set_invincible"):
 		enemy.set_invincible(true)
 	
-	# 播放自爆准备动画
-	enemy.play_animation("skill_prepare")
-	enemy.play_skill_animation("explode_countdown")
+	# 播放准备动画（通用化：从配置读取）
+	enemy.play_animation("skill_prepare")  # SpriteFrames 动画（通过 animations 字典映射）
+	if prepare_anim_player != "":
+		enemy.play_skill_animation(prepare_anim_player)  # AnimationPlayer 动画
 	
 	print("[ExplodingBehavior] 开始倒数 | 时长:", countdown_duration, "秒")
 
@@ -186,6 +197,7 @@ func _explode() -> void:
 	if enemy.has_node("AnimatedSprite2D"):
 		var sprite = enemy.get_node("AnimatedSprite2D")
 		sprite.modulate = Color.WHITE
+		sprite.material.set_shader_parameter("flash_opacity", 0.0)
 	
 	# 隐藏范围指示器
 	_hide_range_indicator()
@@ -194,20 +206,61 @@ func _explode() -> void:
 	
 	print("[ExplodingBehavior] 爆炸！| 位置:", explode_pos, " 范围:", explosion_range, " 伤害:", explosion_damage)
 	
-	# 创建爆炸效果
-	_create_explosion_effect(explode_pos)
+	# 禁用敌人的碰撞和移动（防止在动画期间继续交互）
+	enemy.set_physics_process(false)
+	enemy.set_process(false)
+	if enemy.has_node("CollisionShape2D"):
+		enemy.get_node("CollisionShape2D").set_deferred("disabled", true)
 	
-	# 对范围内玩家造成伤害
+	# 播放爆炸动画（通用化）
+	var has_sprite_anim = false
+	
+	# 1. 播放 SpriteFrames 爆炸动画（通过 animations 字典映射）
+	if enemy.enemy_data and enemy.enemy_data.animations.get("skill_execute", "") != "":
+		enemy.play_animation("skill_execute")
+		has_sprite_anim = true
+	
+	# 2. 播放 AnimationPlayer 爆炸动画（从配置读取）
+	if execute_anim_player != "":
+		enemy.play_skill_animation(execute_anim_player)
+	
+	# 对范围内玩家造成伤害（立即生效）
 	_damage_players_in_range(explode_pos)
 	
-	# 如果触发条件是死亡时，不在这里杀死敌人
-	# 否则，爆炸后敌人死亡
+	# 播放通用爆炸特效（粒子等）
+	_create_explosion_effect(explode_pos)
+	
+	# 处理敌人死亡
 	if trigger_condition != ExplodeTrigger.ON_DEATH:
-		if enemy and not enemy.is_dead:
-			# 取消无敌状态
-			if enemy.has_method("set_invincible"):
-				enemy.set_invincible(false)
-			enemy.enemy_dead()
+		if wait_explode_animation and has_sprite_anim:
+			# 等待序列帧动画播放完成后再删除
+			_wait_and_die()
+		else:
+			# 立即死亡
+			_do_die()
+
+## 等待动画完成后死亡
+func _wait_and_die() -> void:
+	if not enemy or not enemy.has_node("AnimatedSprite2D"):
+		_do_die()
+		return
+	
+	var sprite = enemy.get_node("AnimatedSprite2D")
+	
+	# 连接动画完成信号
+	if not sprite.animation_finished.is_connected(_on_explode_animation_finished):
+		sprite.animation_finished.connect(_on_explode_animation_finished, CONNECT_ONE_SHOT)
+
+## 爆炸动画播放完成
+func _on_explode_animation_finished() -> void:
+	_do_die()
+
+## 执行死亡
+func _do_die() -> void:
+	if enemy and not enemy.is_dead:
+		if enemy.has_method("set_invincible"):
+			enemy.set_invincible(false)
+		enemy.enemy_dead()
 
 ## 创建范围指示器节点（使用预加载的纹理，与grave_rescue_manager一致）
 func _create_range_indicator() -> void:

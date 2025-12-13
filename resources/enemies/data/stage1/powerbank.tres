@@ -15,9 +15,20 @@ attack_range = 114.0
 skill_type = 3
 skill_config = {
 "countdown_duration": 3.0,
+"execute_anim_player": "",
 "explosion_damage": 30,
 "explosion_range": 300.0,
 "low_hp_threshold": 0.3,
-"trigger_condition": "low_hp"
+"prepare_anim_player": "pre_explode",
+"trigger_condition": "low_hp",
+"wait_explode_animation": true
+}
+animations = {
+"attack": "",
+"hurt": "",
+"idle": "",
+"skill_execute": "explode",
+"skill_prepare": "",
+"walk": "walk"
 }
 knockback_resistance = 0.3

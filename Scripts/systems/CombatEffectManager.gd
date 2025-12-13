@@ -134,12 +134,12 @@ static func _setup_effect_configs() -> void:
 		"animations": ["enemies_hurt"]  # 简单格式：使用默认 animations.tscn
 	}
 	effect_configs["敌人_自爆"] = {
-		"particles": ["res://FX/gpu_particles_2d_enemy_dead.tscn"],
-		"animations": [{
-			"scene_path": "res://scenes/effects/explosion_sprites.tscn",
-			"ani_name": "fire_explode",
-			"scale": 1.5
-		}]
+		#"particles": ["res://FX/gpu_particles_2d_enemy_dead.tscn"],
+		#"animations": [{
+			#"scene_path": "res://scenes/effects/explosion_sprites.tscn",
+			#"ani_name": "fire_explode",
+			#"scale": 1.5
+		#}]
 	}
 	
 	# 预留扩展接口示例（未来可以添加）
