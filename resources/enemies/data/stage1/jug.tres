@@ -7,7 +7,7 @@ script = ExtResource("1_script")
 enemy_name = "射击敌人"
 description = "会远程射击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage1/jug.tscn"
-attack_damage = 4
+attack_damage = 10
 move_speed = 250.0
 attack_interval = 0.3
 attack_range = 182.0
@@ -19,3 +19,4 @@ skill_config = {
 "shoot_interval": 0.5,
 "shoot_range": 800.0
 }
+knockback_resistance = 0.5

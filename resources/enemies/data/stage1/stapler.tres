@@ -13,10 +13,11 @@ attack_interval = 0.3
 attack_range = 103.0
 skill_type = 1
 skill_config = {
-"charge_distance": 1000.0,
+"charge_distance": 1500.0,
 "charge_speed": 800.0,
 "cooldown": 3.0,
 "extra_damage": 10,
 "prepare_time": 0.3,
 "trigger_distance": 500.0
 }
+knockback_resistance = 0.7
