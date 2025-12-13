@@ -1,6 +1,9 @@
 extends CharacterBody2D
 class_name Enemy
 
+## 调试显示开关（全局静态变量，按 F3 切换）
+static var debug_show_range: bool = false
+
 var dir = null
 var speed = 300
 var target = null
@@ -56,6 +59,39 @@ var is_flashing: bool = false
 
 ## 信号：敌人死亡
 signal enemy_killed(enemy_ref: Enemy)
+
+## ==================== 调试可视化 ====================
+
+## 处理按键输入（F3 切换显示攻击范围）
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_F3:
+		debug_show_range = !debug_show_range
+		print("[Debug] 攻击范围显示: ", "开启" if debug_show_range else "关闭")
+		# 通知所有敌人重绘
+		for enemy in get_tree().get_nodes_in_group("enemy"):
+			if is_instance_valid(enemy):
+				enemy.queue_redraw()
+
+## 绘制调试图形（攻击范围、追踪停止距离）
+func _draw() -> void:
+	if not debug_show_range:
+		return
+	
+	var attack_range_value = enemy_data.attack_range if enemy_data else 80.0
+	var min_chase_distance = attack_range_value - 20.0
+	
+	# 考虑节点缩放（绘制时需要反向补偿）
+	var current_scale = scale.x if scale.x != 0 else 1.0
+	var draw_attack_range = attack_range_value / current_scale
+	var draw_chase_distance = min_chase_distance / current_scale
+	
+	# 绘制攻击范围（红色圆圈）
+	draw_arc(Vector2.ZERO, draw_attack_range, 0, TAU, 32, Color.RED, 2.0)
+	
+	# 绘制停止追踪距离（黄色圆圈）
+	draw_arc(Vector2.ZERO, draw_chase_distance, 0, TAU, 32, Color.YELLOW, 1.5)
+
+## ==================== 生命周期函数 ====================
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -209,6 +245,9 @@ func _apply_enemy_data() -> void:
 	knockback_resistance = enemy_data.knockback_resistance
 	gold_drop_count = enemy_data.gold_drop_count
 	
+	# 应用缩放（在场景原始scale基础上叠加）
+	self.scale *= enemy_data.scale
+	
 	# 初始化技能行为
 	_setup_skill_behavior()
 
@@ -249,6 +288,10 @@ func stop_skill_animation() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# 调试模式下持续重绘
+	if debug_show_range:
+		queue_redraw()
+	
 	# 更新攻击冷却时间
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
