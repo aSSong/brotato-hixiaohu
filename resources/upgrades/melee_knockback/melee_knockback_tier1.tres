@@ -16,6 +16,6 @@ upgrade_type = 11
 name = "近战击退+12%"
 description = "近战武器击退效果提升12%"
 cost = 3
-icon_path = "res://assets/upgrades/up-melee-attack.png"
+icon_path = "res://assets/upgrades/up-melee-kb.png"
 actual_cost = 3
 stats_modifier = SubResource("Resource_6lswp")

@@ -16,6 +16,6 @@ upgrade_type = 18
 name = "爆炸范围+12%"
 description = "魔法武器爆炸范围提升12%"
 cost = 3
-icon_path = "res://assets/skillicon/10.png"
+icon_path = "res://assets/upgrades/up-magic-explode.png"
 actual_cost = 3
 stats_modifier = SubResource("Resource_bgx3x")

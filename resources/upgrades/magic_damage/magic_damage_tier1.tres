@@ -16,6 +16,6 @@ upgrade_type = 15
 name = "魔法伤害+5%"
 description = "魔法武器伤害提升5%"
 cost = 3
-icon_path = "res://assets/skillicon/10.png"
+icon_path = "res://assets/upgrades/up-magic-damage.png"
 actual_cost = 3
 stats_modifier = SubResource("Resource_g2c2d")

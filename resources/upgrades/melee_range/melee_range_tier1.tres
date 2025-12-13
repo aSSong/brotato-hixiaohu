@@ -16,6 +16,6 @@ upgrade_type = 9
 name = "近战范围+8%"
 description = "近战武器攻击范围提升8%"
 cost = 3
-icon_path = "res://assets/skillicon/10.png"
+icon_path = "res://assets/upgrades/up-melee-range.png"
 actual_cost = 3
 stats_modifier = SubResource("Resource_7aipk")
