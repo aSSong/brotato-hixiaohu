@@ -77,7 +77,10 @@ func _build_spawn_list(config: Dictionary) -> Array:
 			for i in range(enemy_group.count):
 				list.append(enemy_group.id)
 	
-	# 添加最后的敌人
+	# 打乱顺序，让不同类型的敌人随机混合出现
+	list.shuffle()
+	
+	# 添加最后的敌人（BOSS放在最后，不参与打乱）
 	if config.has("last_enemy"):
 		for i in range(config.last_enemy.count):
 			list.append(config.last_enemy.id)
