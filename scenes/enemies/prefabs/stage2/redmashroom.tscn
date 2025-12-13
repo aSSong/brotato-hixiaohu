@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://5b5ntkmg16iw"]
+[gd_scene load_steps=10 format=3 uid="uid://5b5ntkmg16iw"]
 
 [ext_resource type="Script" uid="uid://dytbbc52ko0bp" path="res://Scripts/enemies/enemy.gd" id="1_v647m"]
 [ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_lshdh"]
@@ -10,6 +10,44 @@ resource_local_to_scene = true
 shader = ExtResource("3_cs52j")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_opacity = 0.0
+
+[sub_resource type="Animation" id="Animation_v647m"]
+resource_name = "pre_explode"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.3)]
+}
+
+[sub_resource type="Animation" id="Animation_lshdh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cs52j"]
+_data = {
+&"RESET": SubResource("Animation_lshdh"),
+&"pre_explode": SubResource("Animation_v647m")
+}
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
 radius = 247.49997
@@ -33,11 +71,16 @@ offset = Vector2(0, 118.26)
 z_index = 1
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_flash")
+position = Vector2(0, 249.99997)
 sprite_frames = ExtResource("4_v647m")
 animation = &"walk"
 autoplay = "walk"
+offset = Vector2(0, -249.99997)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_cs52j")
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_collision")
