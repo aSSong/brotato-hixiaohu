@@ -22,6 +22,9 @@ var revive_cost: int = 0
 var can_afford: bool = false
 
 func _ready() -> void:
+	# 添加到组（用于场景清理）
+	add_to_group("death_ui")
+	
 	# 连接按钮信号
 	revive_button.pressed.connect(_on_revive_pressed)
 	give_up_button.pressed.connect(_on_give_up_pressed)

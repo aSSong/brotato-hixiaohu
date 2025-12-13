@@ -33,6 +33,9 @@ var _choosed_texture: Texture2D
 var _restore_tween: Tween = null
 
 func _ready() -> void:
+	# 添加到组（用于场景清理）
+	add_to_group("esc_menu")
+	
 	# 设置为暂停时也能处理（关键！）
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -250,16 +253,13 @@ func _return_to_main_menu() -> void:
 	# 停止计时器（最高波次记录已在波次完成时统一处理）
 	_stop_timer_on_exit()
 	
-	# 重置游戏数据
-	GameMain.reset_game()
-	
 	# 发送信号
 	main_menu_requested.emit()
 	
 	print("[ESC Menu] 正在返回主菜单...")
 	
-	# 直接切换场景，不使用await（避免场景销毁期间信号触发问题）
-	get_tree().change_scene_to_file("res://scenes/UI/main_title.tscn")
+	# 使用SceneCleanupManager安全切换场景（会清理所有游戏对象：Ghost、掉落物、敌人、子弹、墓碑、特效等）
+	SceneCleanupManager.change_scene_safely("res://scenes/UI/main_title.tscn")
 
 ## 处理ESC键输入（关闭菜单）
 func _input(event: InputEvent) -> void:

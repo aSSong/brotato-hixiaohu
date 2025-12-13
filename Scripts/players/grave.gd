@@ -36,6 +36,9 @@ var is_reading: bool = false
 var rescue_ui: CanvasLayer = null
 
 func _ready() -> void:
+	# 添加到组（用于场景清理）
+	add_to_group("grave")
+	
 	# 初始隐藏范围圈和进度条
 	if range_circle:
 		range_circle.visible = false

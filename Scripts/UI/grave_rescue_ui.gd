@@ -25,6 +25,9 @@ signal cancelled  # 取消
 var ghost_data: GhostData = null
 
 func _ready() -> void:
+	# 添加到组（用于场景清理）
+	add_to_group("rescue_ui")
+	
 	# 连接按钮信号
 	rescue_button.pressed.connect(_on_rescue_pressed)
 	transcend_button.pressed.connect(_on_transcend_pressed)

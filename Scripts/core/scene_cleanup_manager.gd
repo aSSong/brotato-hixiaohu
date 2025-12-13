@@ -20,7 +20,16 @@ static func cleanup_game_scene() -> void:
 	# 4. 清理所有子弹
 	_cleanup_bullets()
 	
-	# 5. 重置GameMain数据
+	# 5. 清理所有墓碑
+	_cleanup_graves()
+	
+	# 6. 清理所有特效/动画（duplicate_node的子节点）
+	_cleanup_effects()
+	
+	# 7. 清理root上添加的UI（死亡UI、ESC菜单、救援UI等）
+	_cleanup_root_ui()
+	
+	# 8. 重置GameMain数据
 	_reset_game_data()
 	
 	print("[SceneCleanup] ========== 场景清理完成 ==========")
@@ -76,6 +85,97 @@ static func _cleanup_bullets() -> void:
 	for bullet in bullets:
 		if is_instance_valid(bullet):
 			bullet.queue_free()
+
+## 清理所有墓碑
+static func _cleanup_graves() -> void:
+	var tree = Engine.get_main_loop() as SceneTree
+	if not tree:
+		return
+	
+	# 清理普通墓碑
+	var graves = tree.get_nodes_in_group("grave")
+	print("[SceneCleanup] 清理 %d 个墓碑" % graves.size())
+	
+	for grave in graves:
+		if is_instance_valid(grave):
+			# 调用cleanup方法（如果有）来清理关联的UI等
+			if grave.has_method("cleanup"):
+				grave.cleanup()
+			else:
+				grave.queue_free()
+	
+	# 清理Multi模式墓碑
+	var multi_graves = tree.get_nodes_in_group("multi_grave")
+	print("[SceneCleanup] 清理 %d 个Multi墓碑" % multi_graves.size())
+	
+	for grave in multi_graves:
+		if is_instance_valid(grave):
+			if grave.has_method("cleanup"):
+				grave.cleanup()
+			else:
+				grave.queue_free()
+
+## 清理所有特效/动画（duplicate_node的子节点）
+static func _cleanup_effects() -> void:
+	# 清理 GameMain.duplicate_node 的所有子节点（特效、动画、粒子等）
+	if GameMain and GameMain.duplicate_node and is_instance_valid(GameMain.duplicate_node):
+		var child_count = GameMain.duplicate_node.get_child_count()
+		print("[SceneCleanup] 清理 %d 个特效/动画" % child_count)
+		
+		for child in GameMain.duplicate_node.get_children():
+			if is_instance_valid(child):
+				child.queue_free()
+	
+	# 清理可能残留的粒子特效（通过组）
+	var tree = Engine.get_main_loop() as SceneTree
+	if tree:
+		var particles = tree.get_nodes_in_group("effect")
+		for particle in particles:
+			if is_instance_valid(particle):
+				particle.queue_free()
+
+## 清理添加到root的UI节点（死亡UI、ESC菜单、救援UI等）
+static func _cleanup_root_ui() -> void:
+	var tree = Engine.get_main_loop() as SceneTree
+	if not tree:
+		return
+	
+	var cleaned_count = 0
+	
+	# 通过组清理死亡UI
+	var death_uis = tree.get_nodes_in_group("death_ui")
+	for ui in death_uis:
+		if is_instance_valid(ui):
+			ui.queue_free()
+			cleaned_count += 1
+	
+	# 通过组清理ESC菜单
+	var esc_menus = tree.get_nodes_in_group("esc_menu")
+	for menu in esc_menus:
+		if is_instance_valid(menu):
+			menu.queue_free()
+			cleaned_count += 1
+	
+	# 通过组清理救援UI
+	var rescue_uis = tree.get_nodes_in_group("rescue_ui")
+	for ui in rescue_uis:
+		if is_instance_valid(ui):
+			ui.queue_free()
+			cleaned_count += 1
+	
+	# 通过类名检查root直接子节点（备用方案）
+	var root = tree.root
+	if root:
+		for child in root.get_children():
+			if not is_instance_valid(child):
+				continue
+			# 检查是否是需要清理的UI类型
+			if child is DeathUI or child is ESCMenu:
+				child.queue_free()
+				cleaned_count += 1
+	
+	if cleaned_count > 0:
+		print("[SceneCleanup] 清理 %d 个root UI节点" % cleaned_count)
 
 ## 重置游戏数据
 static func _reset_game_data() -> void:
@@ -192,6 +292,9 @@ static func change_scene_to_packed_safely_keep_player_info(packed_scene: PackedS
 	_cleanup_drop_items()
 	_cleanup_enemies()
 	_cleanup_bullets()
+	_cleanup_graves()
+	_cleanup_effects()
+	_cleanup_root_ui()  # 清理root上的UI
 	
 	# 等待一帧确保清理完成
 	await tree.process_frame

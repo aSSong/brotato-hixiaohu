@@ -88,8 +88,6 @@ func _update_poster() -> void:
 
 ## 返回主菜单
 func _on_return_button_pressed() -> void:
-	var start_menu_scene = load("res://scenes/UI/main_title.tscn")
-	if start_menu_scene:
-		get_tree().change_scene_to_packed(start_menu_scene)
-		# 重置游戏数据
-		GameMain.reset_game()
+	print("[VictoryUI] 返回主菜单...")
+	# 使用SceneCleanupManager安全切换场景（会清理所有游戏对象并重置数据）
+	SceneCleanupManager.change_scene_safely("res://scenes/UI/main_title.tscn")
