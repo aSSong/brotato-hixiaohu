@@ -3,6 +3,13 @@ extends CharacterBody2D
 @onready var trail: Trail = %Trail
 @onready var name_label: Label = $NameLabel
 
+## ===== 受伤闪白效果配置 =====
+const HURT_FLASH_COLOR: Color = Color(1.0, 1.0, 1.0, 1.0)  # 闪白颜色
+const HURT_FLASH_DURATION: float = 0.1  # 闪白持续时间（秒）
+
+## 是否正在闪白
+var is_flashing: bool = false
+
 var dir = Vector2.ZERO
 var base_speed = 400  # 基础速度
 var speed = 400
@@ -459,6 +466,9 @@ func player_hurt(damage: int) -> void:
 		true  # 玩家受伤总是使用大字体/动画效果
 	)
 	
+	# 播放受伤闪白效果
+	player_flash()
+	
 	# 检查是否死亡
 	if now_hp <= 0:
 		now_hp = 0
@@ -502,6 +512,29 @@ func enable_weapons() -> void:
 		if weapons_node.has_method("reapply_all_bonuses"):
 			weapons_node.reapply_all_bonuses()
 		print("[Player] 武器已启用")
+
+## 受伤闪白效果
+func player_flash() -> void:
+	if not playerAni or not playerAni.material:
+		return
+	
+	# 如果已经在闪白，不重复触发
+	if is_flashing:
+		return
+	
+	is_flashing = true
+	
+	# 设置 shader 闪白参数
+	playerAni.material.set_shader_parameter("flash_color", HURT_FLASH_COLOR)
+	playerAni.material.set_shader_parameter("flash_opacity", 1.0)
+	
+	# 等待闪白持续时间
+	await get_tree().create_timer(HURT_FLASH_DURATION).timeout
+	
+	# 恢复原状
+	playerAni.material.set_shader_parameter("flash_opacity", 0.0)
+	
+	is_flashing = false
 
 ## 记录路径点（用于Ghost跟随）
 func _record_path_point() -> void:

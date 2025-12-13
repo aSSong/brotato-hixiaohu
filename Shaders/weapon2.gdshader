@@ -6,6 +6,10 @@ uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
 uniform bool inside = false;
 uniform bool add_margins = true; // only useful when inside is false
 
+// Flash 效果参数
+uniform vec4 flash_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float flash_opacity : hint_range(0.0, 1.0, 0.1) = 0.0;
+
 void vertex() {
 	if (add_margins) {
 		VERTEX += (UV * 2.0 - 1.0) * width;
@@ -59,4 +63,7 @@ void fragment() {
 		COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
 		COLOR.a += (1.0 - COLOR.a) * color.a;
 	}
+	
+	// 应用 Flash 效果
+	COLOR.rgb = mix(COLOR.rgb, flash_color.rgb, flash_opacity);
 }
