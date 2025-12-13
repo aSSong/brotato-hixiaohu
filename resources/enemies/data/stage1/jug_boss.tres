@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://cik74q50bk7ol"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_1lbur"]
+
+[resource]
+script = ExtResource("1_1lbur")
+enemy_name = "绿水桶BOSS"
+description = "会远程射击的敌人"
+scene_path = "res://scenes/enemies/prefabs/stage1/jug_green.tscn"
+max_hp = 100
+attack_damage = 20
+move_speed = 250.0
+attack_interval = 0.3
+attack_range = 182.0
+skill_type = 2
+skill_config = {
+"bullet_damage": 10,
+"bullet_id": "basic",
+"bullet_speed": 800.0,
+"shoot_interval": 0.5,
+"shoot_range": 1500.0
+}
+knockback_resistance = 0.5
