@@ -11,3 +11,4 @@ max_hp = 150
 attack_damage = 8
 move_speed = 350.0
 scale = Vector2(0.9, 0.9)
+knockback_resistance = 1.0
