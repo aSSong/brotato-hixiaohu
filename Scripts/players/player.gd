@@ -45,7 +45,7 @@ var max_path_points: int = 300  # 最多记录的路径点数量（增加以支�
 ## Dash系统
 @export var dash_duration := 0.5
 @export var dash_speed_multi := 2.0
-@export var dash_cooldown := 5.0
+@export var dash_cooldown := 5.4
 var dash_timer: Timer = null
 var dash_cooldown_timer: Timer = null
 var is_dashing := false

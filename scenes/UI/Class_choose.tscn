@@ -354,8 +354,8 @@ custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 theme_override_styles/background = ExtResource("12_3kugd")
 theme_override_styles/fill = ExtResource("13_sq8rm")
-min_value = 260.0
-max_value = 400.0
+min_value = 340.0
+max_value = 440.0
 value = 360.0
 show_percentage = false
 
@@ -389,7 +389,8 @@ custom_minimum_size = Vector2(200, 20)
 layout_mode = 2
 theme_override_styles/background = ExtResource("12_3kugd")
 theme_override_styles/fill = ExtResource("13_sq8rm")
-max_value = 8.0
+min_value = 1.0
+max_value = 5.0
 value = 5.0
 show_percentage = false
 

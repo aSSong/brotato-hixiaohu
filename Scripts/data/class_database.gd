@@ -17,7 +17,7 @@ static func initialize_classes() -> void:
 	var betty = ClassData.new(
 		"小美 Betty",
 		50,  # max_hp
-		370.0,  # speed
+		400.0,  # speed
 		1.10,  # attack_multiplier（所有武器伤害+15%）
 		2,  # defense
 		0.1,  # crit_chance
@@ -49,9 +49,9 @@ static func initialize_classes() -> void:
 	var warrior = ClassData.new(
 		"雅加婆婆 Baba Yaga",
 		60,  # max_hp
-		350.0,  # speed (稍慢)
+		380.0,  # speed (稍慢)
 		1.0,  # attack_multiplier
-		5,  # defense
+		4,  # defense
 		0.1,  # crit_chance
 		2.0,  # crit_damage
 		"",  # skill_name (已废弃，使用 skill_data)
@@ -80,9 +80,9 @@ static func initialize_classes() -> void:
 	var ranger = ClassData.new(
 		"威儿先生 Mr.Will",
 		40,  # max_hp
-		380.0,  # speed (较快)
+		420.0,  # speed (较快)
 		1.0,  # attack_multiplier
-		0,  # defense
+		2,  # defense
 		0.1,  # crit_chance (高暴击)
 		2.0,  # crit_damage
 		"",  # skill_name (已废弃，使用 skill_data)
@@ -111,9 +111,9 @@ static func initialize_classes() -> void:
 	var mage = ClassData.new(
 		"大壮 Armstrong",
 		40,  # max_hp (低血量)
-		390.0,  # speed
+		420.0,  # speed
 		1.0,  # attack_multiplier (基础攻击稍低)
-		0,  # defense
+		2,  # defense
 		0.1,  # crit_chance
 		2.0,  # crit_damage
 		"",  # skill_name (已废弃，使用 skill_data)
@@ -142,10 +142,10 @@ static func initialize_classes() -> void:
 	# 平衡者 - 均衡属性
 	var balanced = ClassData.new(
 		"窦老板 Mr.dot",
-		40,  # max_hp
-		400.0,  # speed
+		50,  # max_hp
+		440.0,  # speed
 		0.9,  # attack_multiplier（所有武器伤害+15%）
-		2,  # defense
+		3,  # defense
 		0.1,  # crit_chance
 		2.0,  # crit_damage
 		"",  # skill_name (已废弃，使用 skill_data)
@@ -174,9 +174,9 @@ static func initialize_classes() -> void:
 	var tank = ClassData.new(
 		"关键先生 KeyPerson",
 		80,  # max_hp (超高)
-		300.0,  # speed (慢)
+		350.0,  # speed (慢)
 		0.8,  # attack_multiplier (低攻击)
-		8,  # defense (高防御)
+		5,  # defense (高防御)
 		0.1,  # crit_chance
 		2.0,  # crit_damage
 		"",  # skill_name (已废弃，使用 skill_data)
