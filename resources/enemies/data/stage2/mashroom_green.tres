@@ -9,4 +9,5 @@ description = "标准敌人，平衡的属性"
 scene_path = "res://scenes/enemies/prefabs/stage2/greenmashroom.tscn"
 max_hp = 20
 move_speed = 330.0
-scale = Vector2(0.4, 0.4)
+attack_interval = 0.3
+attack_range = 99.0

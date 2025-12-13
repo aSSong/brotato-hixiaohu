@@ -19,4 +19,5 @@ skill_config = {
 "prepare_time": 0.3,
 "trigger_distance": 500.0
 }
-scale = Vector2(0.6, 0.6)
+attack_range = 66.0
+scale = Vector2(1.0, 1.0)

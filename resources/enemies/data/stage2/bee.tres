@@ -10,6 +10,8 @@ scene_path = "res://scenes/enemies/prefabs/stage2/bee.tscn"
 max_hp = 100
 attack_damage = 6
 move_speed = 350.0
+attack_interval = 0.3
+attack_range = 70.0
 skill_type = 1
 skill_config = {
 "charge_distance": 1000.0,
@@ -19,4 +21,3 @@ skill_config = {
 "prepare_time": 0.3,
 "trigger_distance": 500.0
 }
-scale = Vector2(0.6, 0.6)

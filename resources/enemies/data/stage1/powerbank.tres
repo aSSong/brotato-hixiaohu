@@ -10,6 +10,8 @@ scene_path = "res://scenes/enemies/prefabs/stage1/powerbank.tscn"
 max_hp = 12
 attack_damage = 3
 move_speed = 280.0
+attack_interval = 0.3
+attack_range = 114.0
 skill_type = 3
 skill_config = {
 "countdown_duration": 3.0,
@@ -18,4 +20,3 @@ skill_config = {
 "low_hp_threshold": 0.3,
 "trigger_condition": "low_hp"
 }
-scale = Vector2(0.6, 0.6)

@@ -10,4 +10,5 @@ scene_path = "res://scenes/enemies/prefabs/stage2/masquito_blue.tscn"
 max_hp = 20
 attack_damage = 3
 move_speed = 500.0
-scale = Vector2(0.6, 0.6)
+attack_interval = 0.3
+attack_range = 70.0

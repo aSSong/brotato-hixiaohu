@@ -11,7 +11,7 @@ max_hp = 15
 attack_damage = 4
 move_speed = 250.0
 attack_interval = 1.0
-attack_range = 80.0
+attack_range = 66.0
 skill_type = 2
 skill_config = {
 "shoot_range": 600.0,
@@ -28,7 +28,7 @@ animations = {
 "skill_prepare": "",
 "skill_execute": ""
 }
-scale = Vector2(0.6, 0.6)
+scale = Vector2(1.0, 1.0)
 shake_on_death = true
 shake_duration = 0.2
 shake_amount = 8.0

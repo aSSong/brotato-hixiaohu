@@ -9,4 +9,5 @@ description = "标准敌人，平衡的属性"
 scene_path = "res://scenes/enemies/prefabs/stage1/creeper.tscn"
 max_hp = 10
 move_speed = 330.0
-scale = Vector2(0.2, 0.2)
+attack_interval = 0.3
+attack_range = 58.0

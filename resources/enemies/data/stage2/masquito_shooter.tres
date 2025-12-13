@@ -9,12 +9,13 @@ description = "会远程射击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage2/masquito_green.tscn"
 attack_damage = 4
 move_speed = 250.0
+attack_interval = 0.3
+attack_range = 84.0
 skill_type = 2
 skill_config = {
 "bullet_damage": 5,
 "bullet_id": "basic",
-"bullet_speed": 350.0,
+"bullet_speed": 600.0,
 "shoot_interval": 0.3,
 "shoot_range": 800.0
 }
-scale = Vector2(0.6, 0.6)
