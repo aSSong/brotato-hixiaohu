@@ -56,7 +56,33 @@ static func initialize_bullets() -> void:
 	mg_bullet.hit_effect_scale = 1.0
 	bullets["mg_bullet"] = mg_bullet
 	
-	# ----闪电长矛的子弹（重型子弹）---------
+	# ----闪电长矛的子弹---------
+	
+	var ls_bullet = BulletData.new("ls_bullet", 1500.0, 4.0, "res://assets/weapon/lighitningspear/ls-bullet.png")
+	ls_bullet.bullet_name = "闪电长矛子弹"
+	ls_bullet.scale = Vector2(1.0, 1.0)
+	ls_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	ls_bullet.movement_params = {
+		"rotate_to_direction": true  # 朝向飞行方向
+	}
+	# 序列帧动画配置：横2竖4，10fps
+	ls_bullet.hframes = 2
+	ls_bullet.vframes = 4
+	ls_bullet.animation_speed = 10.0
+	ls_bullet.loop_animation = true
+	# 枪口特效配置
+	ls_bullet.muzzle_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	ls_bullet.muzzle_effect_ani_name = "ls_fx"
+	ls_bullet.muzzle_effect_scale = 1.5
+	# 击中特效配置
+	ls_bullet.hit_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	ls_bullet.hit_effect_ani_name = "ls_hit"
+	ls_bullet.hit_effect_scale = 1.0
+	# 拖尾特效（需要单独的拖尾场景）
+	ls_bullet.trail_effect_path = "res://scenes/effects/ls_trail.tscn"
+	bullets["ls_bullet"] = ls_bullet
+	
+	# ----旧版重型子弹（保留兼容）---------
 	
 	var heavy_bullet = BulletData.new("heavy_bullet", 1500.0, 4.0, "res://FX/fx-spark-Sheet-01.png")
 	heavy_bullet.bullet_name = "重型子弹"

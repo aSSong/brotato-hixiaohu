@@ -252,7 +252,7 @@ static func initialize_weapons() -> void:
 	#]
 	#weapons["fireball"] = fireball
 	
-		# 闪电长矛（远程行为 + 远程结算 + 流血效果）
+		# 闪电长矛（远程行为 + 魔法结算）
 	var rifle = WeaponData.new(
 		"闪电长矛",
 		WeaponData.BehaviorType.RANGED,
@@ -261,10 +261,11 @@ static func initialize_weapons() -> void:
 			"damage": 4,
 			"attack_speed": 1.4,
 			"range": 900.0,
-			"bullet_id": "heavy_bullet",
+			"bullet_id": "ls_bullet",  # 使用闪电长矛专属子弹
 			"pierce_count": 2,
 			"projectile_count": 1,
-			"spread_angle": 0.0
+			"spread_angle": 0.0,
+			"shoot_offset": Vector2(100, 0)  # 发射位置偏移
 		},
 		"res://assets/weapon/weapon_lightspear.png",
 		Vector2(0.7, 0.7)
