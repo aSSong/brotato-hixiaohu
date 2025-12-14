@@ -33,6 +33,31 @@ static func initialize_bullets() -> void:
 	#}
 	bullets["fast_bullet"] = fast_bullet
 	
+	# 机枪子弹（基于 fast_bullet 参数，带枪口和击中特效）
+	var mg_bullet = BulletData.new("mg_bullet", 3000.0, 2.5, "res://assets/weapon/machinegun/mg-bullet.png")
+	mg_bullet.bullet_name = "机枪子弹"
+	mg_bullet.scale = Vector2(0.3, 0.3)
+	mg_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	mg_bullet.movement_params = {
+		"rotate_to_direction": true  # 朝向飞行方向
+	}
+	# 序列帧动画配置：横3竖3，20fps
+	mg_bullet.hframes = 3
+	mg_bullet.vframes = 3
+	mg_bullet.animation_speed = 20.0
+	mg_bullet.loop_animation = true
+	# 枪口特效配置
+	mg_bullet.muzzle_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	mg_bullet.muzzle_effect_ani_name = "mg_muzzle"
+	mg_bullet.muzzle_effect_scale = 2.5
+	# 击中特效配置
+	mg_bullet.hit_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	mg_bullet.hit_effect_ani_name = "mg_hit"
+	mg_bullet.hit_effect_scale = 1.0
+	bullets["mg_bullet"] = mg_bullet
+	
+	# ----闪电长矛的子弹（重型子弹）---------
+	
 	var heavy_bullet = BulletData.new("heavy_bullet", 1500.0, 4.0, "res://FX/fx-spark-Sheet-01.png")
 	heavy_bullet.bullet_name = "重型子弹"
 	heavy_bullet.scale = Vector2(1.0, 1.0)

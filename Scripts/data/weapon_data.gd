@@ -67,6 +67,7 @@ enum CalculationType {
 ##   - spread_angle: float (散射角度)
 ##   - attack_speed: float (攻击间隔)
 ##   - range: float (检测范围)
+##   - shoot_offset: Vector2 (发射位置偏移，相对于武器中心)
 ## 
 ## MAGIC 参数:
 ##   - damage: int

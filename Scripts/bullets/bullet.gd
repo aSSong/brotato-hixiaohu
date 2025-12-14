@@ -327,6 +327,9 @@ func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, 
 	if pierced_enemies.has(body):
 		return
 	
+	# 播放击中特效
+	_play_hit_effect()
+	
 	# 造成伤害
 	if body.has_method("enemy_hurt"):
 		body.enemy_hurt(hurt, is_critical)
@@ -349,6 +352,23 @@ func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, 
 	# 销毁子弹
 	if bullet_data == null or bullet_data.destroy_on_hit:
 		queue_free()
+
+## 播放击中特效
+func _play_hit_effect() -> void:
+	if not bullet_data:
+		return
+	
+	# 检查是否配置了击中特效
+	if bullet_data.hit_effect_scene_path == "" or bullet_data.hit_effect_ani_name == "":
+		return
+	
+	# 在子弹当前位置播放击中特效
+	CombatEffectManager.play_bullet_hit(
+		bullet_data.hit_effect_scene_path,
+		bullet_data.hit_effect_ani_name,
+		global_position,
+		bullet_data.hit_effect_scale
+	)
 
 ## 应用特效到目标
 func _apply_effects_to_target(target: Node) -> void:

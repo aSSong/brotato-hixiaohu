@@ -30,8 +30,11 @@ func _on_initialize() -> void:
 		if not shoot_pos:
 			shoot_pos = Marker2D.new()
 			shoot_pos.name = "shoot_pos"
-			shoot_pos.position = Vector2(16, 0)
 			weapon.add_child(shoot_pos)
+		
+		# 从 params 中读取发射位置偏移，如果没有则使用默认值
+		var shoot_offset = params.get("shoot_offset", Vector2(16, 0))
+		shoot_pos.position = shoot_offset
 
 func get_behavior_type() -> int:
 	return WeaponData.BehaviorType.RANGED
@@ -84,6 +87,9 @@ func perform_attack(enemies: Array) -> void:
 	# 计算基础方向
 	var base_direction = (target_enemy.global_position - shoot_pos.global_position).normalized()
 	
+	# 播放枪口特效
+	_play_muzzle_effect(bullet_data, base_direction)
+	
 	# 计算伤害和暴击
 	var base_damage = get_final_damage()
 	var is_critical = roll_critical()
@@ -106,6 +112,28 @@ func perform_attack(enemies: Array) -> void:
 		
 		# 创建子弹
 		_spawn_bullet(direction, final_damage, is_critical, bullet_data)
+
+## 播放枪口特效
+func _play_muzzle_effect(bullet_data: BulletData, direction: Vector2) -> void:
+	if not bullet_data:
+		return
+	
+	# 检查是否配置了枪口特效
+	if bullet_data.muzzle_effect_scene_path == "" or bullet_data.muzzle_effect_ani_name == "":
+		return
+	
+	# 计算朝向角度
+	var rotation_angle = direction.angle()
+	
+	# 调用 CombatEffectManager 播放特效，绑定到 shoot_pos 上跟随武器移动
+	CombatEffectManager.play_muzzle_flash(
+		bullet_data.muzzle_effect_scene_path,
+		bullet_data.muzzle_effect_ani_name,
+		shoot_pos,        # 父节点，特效会跟随移动
+		Vector2.ZERO,     # 本地位置（相对于 shoot_pos）
+		rotation_angle,
+		bullet_data.muzzle_effect_scale
+	)
 
 ## 生成子弹
 func _spawn_bullet(direction: Vector2, damage: int, is_critical: bool, bullet_data: BulletData) -> void:

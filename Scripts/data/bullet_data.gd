@@ -36,8 +36,18 @@ enum MovementType {
 
 ## 视觉效果
 @export var trail_effect_path: String = ""  # 轨迹特效场景路径
-@export var hit_effect_path: String = ""    # 命中特效场景路径
-@export var muzzle_effect_path: String = "" # 枪口特效路径
+@export var hit_effect_path: String = ""    # 命中特效场景路径（旧版，保留兼容）
+@export var muzzle_effect_path: String = "" # 枪口特效路径（旧版，保留兼容）
+
+## 击中特效配置（新版：场景+动画名）
+@export var hit_effect_scene_path: String = ""  # 击中特效场景路径
+@export var hit_effect_ani_name: String = ""    # 击中特效动画名
+@export var hit_effect_scale: float = 1.0       # 击中特效缩放
+
+## 枪口特效配置（新版：场景+动画名）
+@export var muzzle_effect_scene_path: String = ""  # 枪口特效场景路径
+@export var muzzle_effect_ani_name: String = ""    # 枪口特效动画名
+@export var muzzle_effect_scale: float = 1.0       # 枪口特效缩放
 
 ## 移动类型
 @export var movement_type: MovementType = MovementType.STRAIGHT
@@ -79,9 +89,21 @@ func duplicate_data() -> BulletData:
 	copy.trail_effect_path = trail_effect_path
 	copy.hit_effect_path = hit_effect_path
 	copy.muzzle_effect_path = muzzle_effect_path
+	# 新版特效配置
+	copy.hit_effect_scene_path = hit_effect_scene_path
+	copy.hit_effect_ani_name = hit_effect_ani_name
+	copy.hit_effect_scale = hit_effect_scale
+	copy.muzzle_effect_scene_path = muzzle_effect_scene_path
+	copy.muzzle_effect_ani_name = muzzle_effect_ani_name
+	copy.muzzle_effect_scale = muzzle_effect_scale
+	# 其他
 	copy.movement_type = movement_type
 	copy.movement_params = movement_params.duplicate()
 	copy.collision_radius = collision_radius
 	copy.destroy_on_hit = destroy_on_hit
+	copy.hframes = hframes
+	copy.vframes = vframes
+	copy.animation_speed = animation_speed
+	copy.loop_animation = loop_animation
 	return copy
 

@@ -213,6 +213,121 @@ static func play_hit_effect(effect_type: EffectType, position: Vector2, scale: f
 	# 未来实现
 	pass
 
+## ========== 武器特效（场景+动画名模式） ==========
+
+## 播放枪口特效（绑定到父节点，跟随移动）
+## 
+## @param scene_path 特效场景路径
+## @param ani_name 动画名称
+## @param parent_node 父节点（特效会作为其子节点，跟随移动）
+## @param local_position 相对于父节点的本地位置
+## @param rotation 特效旋转角度（弧度，全局方向）
+## @param scale 缩放倍数
+static func play_muzzle_flash(scene_path: String, ani_name: String, parent_node: Node2D, local_position: Vector2 = Vector2.ZERO, rotation: float = 0.0, scale: float = 1.0) -> void:
+	if scene_path == "" or ani_name == "":
+		return
+	
+	if not parent_node or not is_instance_valid(parent_node):
+		push_error("[CombatEffectManager] 枪口特效的父节点无效")
+		return
+	
+	# 确保场景已预加载
+	if not effect_scenes.has(scene_path):
+		if ResourceLoader.exists(scene_path):
+			var scene = load(scene_path)
+			if scene:
+				effect_scenes[scene_path] = scene
+			else:
+				push_error("[CombatEffectManager] 无法加载枪口特效场景: %s" % scene_path)
+				return
+		else:
+			push_error("[CombatEffectManager] 枪口特效场景不存在: %s" % scene_path)
+			return
+	
+	var anim_scene = effect_scenes[scene_path]
+	if anim_scene == null:
+		return
+	
+	# 创建特效实例并作为父节点的子节点
+	var instance = anim_scene.instantiate()
+	if instance:
+		parent_node.add_child(instance)
+		instance.position = local_position  # 使用本地坐标
+		instance.rotation = rotation - parent_node.global_rotation  # 补偿父节点的旋转
+		instance.scale = Vector2(scale, scale)
+		instance.show()
+		
+		# 查找并播放动画
+		var animated_sprite = _find_animated_sprite_in_node(instance)
+		if animated_sprite:
+			if animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(ani_name):
+				animated_sprite.play(ani_name)
+				# 连接动画完成信号
+				if not animated_sprite.sprite_frames.get_animation_loop(ani_name):
+					animated_sprite.animation_finished.connect(func(): instance.queue_free())
+				else:
+					# 循环动画，延迟清理
+					var frame_count = animated_sprite.sprite_frames.get_frame_count(ani_name)
+					var anim_speed = animated_sprite.sprite_frames.get_animation_speed(ani_name)
+					var duration = frame_count / anim_speed if anim_speed > 0 else 0.5
+					_delayed_cleanup(instance, duration)
+			else:
+				push_warning("[CombatEffectManager] 枪口动画不存在: %s" % ani_name)
+				instance.queue_free()
+		else:
+			push_warning("[CombatEffectManager] 未找到 AnimatedSprite2D")
+			instance.queue_free()
+
+## 播放子弹击中特效
+## 
+## @param scene_path 特效场景路径
+## @param ani_name 动画名称
+## @param position 特效位置
+## @param scale 缩放倍数
+static func play_bullet_hit(scene_path: String, ani_name: String, position: Vector2, scale: float = 1.0) -> void:
+	if scene_path == "" or ani_name == "":
+		return
+	
+	if not GameMain or not GameMain.animation_scene_obj:
+		push_error("[CombatEffectManager] GameMain 或 animation_scene_obj 未初始化")
+		return
+	
+	# 确保场景已预加载
+	if not effect_scenes.has(scene_path):
+		if ResourceLoader.exists(scene_path):
+			var scene = load(scene_path)
+			if scene:
+				effect_scenes[scene_path] = scene
+			else:
+				push_error("[CombatEffectManager] 无法加载击中特效场景: %s" % scene_path)
+				return
+		else:
+			push_error("[CombatEffectManager] 击中特效场景不存在: %s" % scene_path)
+			return
+	
+	var anim_scene = effect_scenes[scene_path]
+	if anim_scene == null:
+		return
+	
+	# 使用 run_animation_from_scene 播放
+	if GameMain.animation_scene_obj.has_method("run_animation_from_scene"):
+		GameMain.animation_scene_obj.run_animation_from_scene({
+			"animation_scene": anim_scene,
+			"ani_name": ani_name,
+			"position": position,
+			"scale": Vector2(scale, scale)
+		})
+
+## 延迟清理节点
+static func _delayed_cleanup(instance: Node, delay: float) -> void:
+	if not is_instance_valid(instance):
+		return
+	var tree = instance.get_tree()
+	if tree:
+		await tree.create_timer(delay).timeout
+		if is_instance_valid(instance):
+			instance.queue_free()
+
 ## 播放特效组（组合特效）
 ## 
 ## 同时播放多个特效（序列帧 + 粒子）

@@ -12,6 +12,8 @@ shader_parameter/width = 7.91600037601
 shader_parameter/pattern = 2
 shader_parameter/inside = false
 shader_parameter/add_margins = true
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_opacity = 0.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_eo7p8"]
 animations = [{
@@ -38,7 +40,7 @@ material = SubResource("ShaderMaterial_0rtie")
 sprite_frames = SubResource("SpriteFrames_eo7p8")
 
 [node name="shoot_pos" type="Marker2D" parent="."]
-position = Vector2(16.142859, 1.1428572)
+position = Vector2(61.285713, -28.428572)
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5

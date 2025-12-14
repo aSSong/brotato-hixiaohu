@@ -152,10 +152,11 @@ static func initialize_weapons() -> void:
 			"damage": 1,
 			"attack_speed": 0.3,
 			"range": 800.0,
-			"bullet_id": "fast_bullet",
+			"bullet_id": "mg_bullet",  # 使用机枪专属子弹（带枪口和击中特效）
 			"pierce_count": 0,
 			"projectile_count": 1,
-			"spread_angle": 0.0
+			"spread_angle": 0.0,
+			"shoot_offset": Vector2(200, -20)  # 发射位置偏移（枪口位置）
 		},
 		"res://assets/weapon/weapon_machinegun.png",
 		Vector2(0.7, 0.7)
