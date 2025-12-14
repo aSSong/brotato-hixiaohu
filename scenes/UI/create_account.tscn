@@ -10,12 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://ceqcch27fc2qw" path="res://assets/UI/maintitle/btn-other-disabled-01.png" id="8_plciu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anvro"]
-bg_color = Color(0.50140655, 0.5014065, 0.5014065, 0.7882353)
+bg_color = Color(0.5411765, 0.4745098, 0.5411765, 1)
 skew = Vector2(0.44, 0)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
 border_color = Color(1, 1, 1, 1)
 shadow_color = Color(0.3529412, 0.07450981, 0.62352943, 1)
 shadow_size = 4
