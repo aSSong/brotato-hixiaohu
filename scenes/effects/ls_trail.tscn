@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dls_trail_effect"]
+[gd_scene load_steps=16 format=3 uid="uid://e6jmlbrcaq7t"]
 
 [ext_resource type="Texture2D" uid="uid://dlh7xmsqmhivc" path="res://FX/particle-round-white-soft-01.png" id="1_trail"]
+[ext_resource type="Texture2D" uid="uid://c5s04ceyn3mcm" path="res://assets/weapon/lighitningspear/ls-trail.png" id="2_pl5q1"]
 
 [sub_resource type="Curve" id="Curve_scale"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.1), 0.0, 0.0, 0, 0]
@@ -22,7 +23,78 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.15
 scale_max = 0.25
 scale_curve = SubResource("CurveTexture_scale")
-color = Color(0.8, 0.9, 1.0, 0.9)
+color = Color(0.8, 0.9, 1, 0.9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgegs"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(0, 0, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6anx"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(341, 0, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gu3f4"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(682, 0, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djv57"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(0, 341, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbu1l"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(341, 341, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qqfg4"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(682, 341, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr47c"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(0, 682, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ygetn"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(341, 682, 341, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hq076"]
+atlas = ExtResource("2_pl5q1")
+region = Rect2(682, 682, 341, 341)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1o82c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qgegs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6anx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gu3f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djv57")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tbu1l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qqfg4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr47c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ygetn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hq076")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
 
 [node name="LsTrail" type="GPUParticles2D"]
 z_index = -1
@@ -33,3 +105,9 @@ preprocess = 0.05
 randomness = 0.2
 process_material = SubResource("ParticleProcessMaterial_trail")
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.74, 0.74)
+sprite_frames = SubResource("SpriteFrames_1o82c")
+autoplay = "default"
+frame_progress = 0.88620317
+offset = Vector2(-102.17, 0)
