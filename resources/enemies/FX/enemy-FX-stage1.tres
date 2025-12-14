@@ -61,7 +61,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_h0eyp")
 }],
-"loop": true,
+"loop": false,
 "name": &"bmt-ring",
-"speed": 5.0
+"speed": 10.0
 }]

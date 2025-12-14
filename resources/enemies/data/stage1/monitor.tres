@@ -12,5 +12,32 @@ attack_damage = 10
 move_speed = 400.0
 attack_interval = 0.3
 attack_range = 219.0
+skill_type = 4
+skill_config = {
+"bullet_count": 12,
+"bullet_damage": 8,
+"bullet_round_interval": 0.5,
+"bullet_rounds": 3,
+"bullet_scene_path": "res://scenes/bullets/monitor_bullet.tscn",
+"bullet_speed": 600.0,
+"fx_above_boss": false,
+"fx_animation_name": "bmt-ring",
+"fx_offset": Vector2(0, 350),
+"fx_scale": Vector2(2, 2),
+"fx_sprite_frames_path": "res://resources/enemies/FX/enemy-FX-stage1.tres",
+"prepare_time": 0.5,
+"shoot_offset": Vector2(50, -100),
+"skill_cooldown": 3.0,
+"skill_sprite_anim": "skill",
+"trigger_range": 800.0
+}
+animations = {
+"attack": "",
+"hurt": "",
+"idle": "",
+"skill_execute": "skill",
+"skill_prepare": "skill",
+"walk": "walk"
+}
 scale = Vector2(1.5, 1.5)
 knockback_resistance = 1.0

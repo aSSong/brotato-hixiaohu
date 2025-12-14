@@ -318,14 +318,20 @@ func _process(delta: float) -> void:
 		if is_instance_valid(behavior):
 			behavior.update_behavior(delta)
 	
-	# 检查是否有技能正在控制移动（如冲锋）
+	# 检查是否有技能正在控制移动（如冲锋、Boss射击）
 	var is_skill_controlling_movement = false
 	for behavior in behaviors:
-		if is_instance_valid(behavior) and behavior is ChargingBehavior:
-			var charging = behavior as ChargingBehavior
-			if charging.is_charging_now():
-				is_skill_controlling_movement = true
-				break
+		if is_instance_valid(behavior):
+			if behavior is ChargingBehavior:
+				var charging = behavior as ChargingBehavior
+				if charging.is_charging_now():
+					is_skill_controlling_movement = true
+					break
+			elif behavior is BossShootingBehavior:
+				var boss_shooting = behavior as BossShootingBehavior
+				if boss_shooting.is_skill_active():
+					is_skill_controlling_movement = true
+					break
 	
 	# 如果没有技能控制移动，执行正常移动逻辑
 	if not is_skill_controlling_movement and target:
@@ -600,6 +606,12 @@ func _setup_skill_behavior() -> void:
 			add_child(exploding)
 			exploding.initialize(self, enemy_data.skill_config)
 			behaviors.append(exploding)
+		
+		EnemyData.EnemySkillType.BOSS_SHOOTING:
+			var boss_shooting = BossShootingBehavior.new()
+			add_child(boss_shooting)
+			boss_shooting.initialize(self, enemy_data.skill_config)
+			behaviors.append(boss_shooting)
 		
 		EnemyData.EnemySkillType.NONE:
 			pass  # 无技能

@@ -7,10 +7,11 @@ class_name EnemyData
 
 ## 技能类型枚举
 enum EnemySkillType {
-	NONE,      # 无技能
-	CHARGING,  # 冲锋技能
-	SHOOTING,  # 射击技能
-	EXPLODING  # 自爆技能
+	NONE,          # 无技能
+	CHARGING,      # 冲锋技能
+	SHOOTING,      # 射击技能
+	EXPLODING,     # 自爆技能
+	BOSS_SHOOTING  # Boss专属360度射击技能
 }
 
 @export var enemy_name: String = "默认敌人"
