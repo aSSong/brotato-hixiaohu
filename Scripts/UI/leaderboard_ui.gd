@@ -388,13 +388,13 @@ func _format_floor(floor_id: int) -> String:
 		return str(floor_id) + "F"
 	return floor_text
 
-## 格式化通关时间 (秒 -> xxx'xx''xx 格式：分'秒''毫秒，使用半角引号)
+## 格式化通关时间 (秒 -> xx分xx秒xx 格式)
 func _format_time(seconds: float) -> String:
 	var total_seconds = int(seconds)
 	var mins = total_seconds / 60
 	var secs = total_seconds % 60
 	var ms = int((seconds - total_seconds) * 100)
-	return "%d'%02d''%02d" % [mins, secs, ms]
+	return "%d分%02d秒%02d" % [mins, secs, ms]
 
 ## 格式化日期时间 (ISO 8601 -> YYYY/MM/DD HH:MM)
 func _format_datetime(iso_date: String) -> String:
