@@ -111,24 +111,53 @@ static func initialize_bullets() -> void:
 	
 	# ========== 特殊子弹 ==========
 	
+	## 追踪导弹子弹
+	var ms_bullet = BulletData.new("ms_bullet", 1000.0, 8.0, "res://assets/weapon/missle/ms-bullet.png")
+	ms_bullet.bullet_name = "追踪导弹子弹"
+	ms_bullet.scale = Vector2(0.5, 0.5)
+	ms_bullet.movement_type = BulletData.MovementType.HOMING
+	ms_bullet.movement_params = {
+		"turn_speed": 8.0,        # 转向速度
+		"acceleration": 100.0,    # 加速度
+		"max_speed": 1200.0,      # 最大速度
+		"homing_delay": 0.2,      # 发射后延迟追踪
+		"wobble_amount": 15.0,    # 左右摆动幅度
+		"wobble_frequency": 8.0   # 摆动频率
+	}
+	# 序列帧动画配置：横4竖4，10fps
+	ms_bullet.hframes = 4
+	ms_bullet.vframes = 4
+	ms_bullet.animation_speed = 26.0
+	ms_bullet.loop_animation = true
+	# 枪口特效配置
+	ms_bullet.muzzle_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	ms_bullet.muzzle_effect_ani_name = "ms_muzzle"
+	ms_bullet.muzzle_effect_scale = 2.0
+	# 击中特效配置
+	ms_bullet.hit_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	ms_bullet.hit_effect_ani_name = "ms_hit"
+	ms_bullet.hit_effect_scale = 1.8
+	ms_bullet.trail_effect_path = "res://scenes/effects/ms_trail.tscn"
+	bullets["ms_bullet"] = ms_bullet
+	
+	# 旧版追踪子弹（保留兼容）
 	var homing_bullet = BulletData.new("homing_bullet", 1000.0, 8.0,"res://FX/fx-missle-Sheet-01.png")
 	homing_bullet.bullet_name = "追踪子弹"
 	homing_bullet.scale = Vector2(2.5, 2.5)
 	homing_bullet.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	homing_bullet.movement_type = BulletData.MovementType.HOMING
 	homing_bullet.movement_params = {
-		"turn_speed": 8.0,        # 降低转向速度，让它转大弯
-		"acceleration": 100.0,    # 增加加速度，越飞越快
-		"max_speed": 1200.0,      # 稍微降低极速，让玩家看清轨迹
-		"homing_delay": 0.2,      # 发射后 0.2秒内直飞，不追踪
-		"wobble_amount": 15.0,    # 15度的左右摆动
-		"wobble_frequency": 8.0   # 摆动频率
+		"turn_speed": 8.0,
+		"acceleration": 100.0,
+		"max_speed": 1200.0,
+		"homing_delay": 0.2,
+		"wobble_amount": 15.0,
+		"wobble_frequency": 8.0
 	}
-	# 序列帧动画配置
-	homing_bullet.hframes = 4           # 水平帧数（4列）
-	homing_bullet.vframes = 1           # 垂直帧数（1行）
-	homing_bullet.animation_speed = 10.0  # 播放速度 10fps
-	homing_bullet.loop_animation = true   # 循环播放（默认就是true，可省略）
+	homing_bullet.hframes = 4
+	homing_bullet.vframes = 1
+	homing_bullet.animation_speed = 10.0
+	homing_bullet.loop_animation = true
 	bullets["homing_bullet"] = homing_bullet
 	
 	

@@ -188,15 +188,16 @@ static func initialize_weapons() -> void:
 	var homing_missile = WeaponData.new(
 		"追踪导弹",
 		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.RANGED,  # 魔法结算！
+		WeaponData.CalculationType.RANGED,
 		{
 			"damage": 8,
 			"attack_speed": 2.4,
 			"range": 1800.0,
-			"bullet_id": "homing_bullet",
+			"bullet_id": "ms_bullet",  # 使用追踪导弹专属子弹
 			"pierce_count": 0,
 			"projectile_count": 1,
-			"spread_angle": 0.0
+			"spread_angle": 0.0,
+			"shoot_offset": Vector2(320, 0)  # 发射位置偏移
 		},
 		"res://assets/weapon/weapon_missle.png",
 		Vector2(0.7, 0.7)

@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3 uid="uid://cqhib88a1yao1"]
+
+[ext_resource type="Texture2D" uid="uid://cxk47kfbdlmj8" path="res://assets/weapon/missle/ms-trail.png" id="2_dd4st"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3ob2"]
+atlas = ExtResource("2_dd4st")
+region = Rect2(0, 0, 341, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_opmqm"]
+atlas = ExtResource("2_dd4st")
+region = Rect2(341, 0, 341, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ulcb"]
+atlas = ExtResource("2_dd4st")
+region = Rect2(682, 0, 341, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aq3ce"]
+atlas = ExtResource("2_dd4st")
+region = Rect2(0, 256, 341, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mlmo1"]
+atlas = ExtResource("2_dd4st")
+region = Rect2(341, 256, 341, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4k7sf"]
+atlas = ExtResource("2_dd4st")
+region = Rect2(682, 256, 341, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1o82c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3ob2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_opmqm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ulcb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aq3ce")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mlmo1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4k7sf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 14.0
+}]
+
+[node name="LcTrail" type="Node2D"]
+z_index = -1
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_1o82c")
+autoplay = "default"
+frame_progress = 0.7239256
+offset = Vector2(-102.17, 0)
+flip_h = true
