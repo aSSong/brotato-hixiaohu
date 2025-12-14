@@ -9,10 +9,7 @@
 	  "damage_growth": 0.0,
 	  "total_count": 15,
 	  "enemies": {
-		"creeper": 0.6,
-		"creeper_fast": 0.2,
-		"jug2": 0.1,
-		"jug3": 0.1
+		"creeper": 1.0,
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -27,10 +24,8 @@
 	  "damage_growth": 0.1,
 	  "total_count": 20,
 	  "enemies": {
-		"creeper": 0.5,
+		"creeper": 0.7,
 		"creeper_fast": 0.3,
-		"jug2": 0.1,
-		"jug3": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -45,10 +40,9 @@
 	  "damage_growth": 0.2,
 	  "total_count": 25,
 	  "enemies": {
-		"creeper": 0.55,
-		"creeper_fast": 0.25,
-		"jug2": 0.1,
-		"jug3": 0.1
+		"creeper": 0.65,
+		"creeper_fast": 0.3,
+		"jug2": 0.05,
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -63,10 +57,9 @@
 	  "damage_growth": 0.3,
 	  "total_count": 30,
 	  "enemies": {
-		"creeper": 0.5,
-		"creeper_fast": 0.25,
-		"jug2": 0.15,
-		"jug3": 0.1
+		"creeper": 0.6,
+		"creeper_fast": 0.3,
+		"jug2": 0.1,
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -81,10 +74,9 @@
 	  "damage_growth": 0.4,
 	  "total_count": 35,
 	  "enemies": {
-		"creeper": 0.5,
+		"creeper": 0.6,
 		"creeper_fast": 0.25,
 		"jug2": 0.15,
-		"jug3": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -99,9 +91,8 @@
 	  "damage_growth": 0.5,
 	  "total_count": 40,
 	  "enemies": {
-		"creeper": 0.45,
+		"creeper": 0.6,
 		"creeper_fast": 0.25,
-		"jug2": 0.15,
 		"jug3": 0.1,
 		"stapler": 0.05
 	  },
@@ -119,11 +110,10 @@
 	  "total_count": 45,
 	  "enemies": {
 		"creeper": 0.4,
-		"creeper_fast": 0.25,
-		"jug2": 0.15,
+		"creeper_fast": 0.3,
+		"jug2": 0.1,
 		"jug3": 0.1,
-		"stapler": 0.05,
-		"jug": 0.05
+		"stapler": 0.1,
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -139,11 +129,10 @@
 	  "total_count": 50,
 	  "enemies": {
 		"creeper": 0.35,
-		"creeper_fast": 0.25,
-		"jug2": 0.15,
+		"creeper_fast": 0.35,
+		"jug2": 0.1,
 		"jug3": 0.1,
 		"stapler": 0.05,
-		"jug": 0.05,
 		"powerbank": 0.05
 	  },
 	  "boss_config": {
@@ -159,11 +148,10 @@
 	  "damage_growth": 0.8,
 	  "total_count": 55,
 	  "enemies": {
-		"creeper": 0.35,
+		"creeper": 0.45,
 		"creeper_fast": 0.25,
-		"jug2": 0.15,
 		"jug3": 0.1,
-		"stapler": 0.05,
+		"stapler": 0.1,
 		"jug": 0.05,
 		"powerbank": 0.05
 	  },
@@ -184,8 +172,7 @@
 		"creeper_fast": 0.25,
 		"jug2": 0.15,
 		"jug3": 0.15,
-		"stapler": 0.05,
-		"jug": 0.05,
+		"stapler": 0.1,
 		"powerbank": 0.05
 	  },
 	  "boss_config": {
@@ -201,9 +188,8 @@
 	  "damage_growth": 1.0,
 	  "total_count": 65,
 	  "enemies": {
-		"creeper": 0.3,
+		"creeper": 0.45,
 		"creeper_fast": 0.25,
-		"jug2": 0.15,
 		"jug3": 0.15,
 		"stapler": 0.05,
 		"jug": 0.05,
