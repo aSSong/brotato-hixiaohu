@@ -120,6 +120,7 @@ text = "创作人员"
 horizontal_alignment = 1
 
 [node name="filesbtn" type="TextureButton" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 texture_normal = ExtResource("2_u4aqc")
 texture_pressed = ExtResource("3_m547k")
