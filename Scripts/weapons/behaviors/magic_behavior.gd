@@ -29,6 +29,9 @@ var indicator_color: Color = Color(1.0, 1.0, 1.0, 0.8)
 ## 缓存的自定义指示器纹理
 var _cached_indicator_texture: Texture2D = null
 
+## 射击位置节点（用于枪口特效）
+var shoot_pos: Marker2D = null
+
 func _on_initialize() -> void:
 	casting_attacks.clear()
 	
@@ -44,6 +47,18 @@ func _on_initialize() -> void:
 	var texture_path = params.get("indicator_texture_path", "")
 	if texture_path != "" and ResourceLoader.exists(texture_path):
 		_cached_indicator_texture = load(texture_path)
+	
+	# 获取或创建射击位置节点（用于枪口特效）
+	if weapon:
+		shoot_pos = weapon.get_node_or_null("shoot_pos")
+		if not shoot_pos:
+			shoot_pos = Marker2D.new()
+			shoot_pos.name = "shoot_pos"
+			weapon.add_child(shoot_pos)
+		
+		# 从 params 中读取发射位置偏移
+		var shoot_offset = params.get("shoot_offset", Vector2(16, 0))
+		shoot_pos.position = shoot_offset
 
 func get_behavior_type() -> int:
 	return WeaponData.BehaviorType.MAGIC
@@ -80,6 +95,22 @@ func has_explosion_damage() -> bool:
 ## 获取特效预播放时间（在伤害判定前多久开始播放特效）
 func get_effect_lead_time() -> float:
 	return params.get("effect_lead_time", 0.2)  # 默认提前 0.2 秒
+
+## 获取枪口特效场景路径
+func get_muzzle_effect_scene_path() -> String:
+	return params.get("muzzle_effect_scene_path", "")
+
+## 获取枪口特效动画名
+func get_muzzle_effect_ani_name() -> String:
+	return params.get("muzzle_effect_ani_name", "")
+
+## 获取枪口特效缩放
+func get_muzzle_effect_scale() -> float:
+	return params.get("muzzle_effect_scale", 1.0)
+
+## 获取枪口特效偏移
+func get_muzzle_effect_offset() -> Vector2:
+	return params.get("muzzle_effect_offset", Vector2.ZERO)
 
 func process(delta: float) -> void:
 	_update_casting_attacks(delta)
@@ -210,12 +241,43 @@ func perform_attack(enemies: Array) -> void:
 	if targets.is_empty():
 		return
 	
+	# 播放枪口特效（只播放一次，不管有多少目标）
+	if targets.size() > 0:
+		var first_target = targets[0]
+		var direction = (first_target.global_position - shoot_pos.global_position).normalized()
+		_play_muzzle_effect(direction)
+	
 	# 为每个目标创建攻击
 	for target in targets:
 		if cast_delay > 0:
 			_start_cast(target, damage, explosion_radius, cast_delay)
 		else:
 			_execute_immediate_attack(target, damage, explosion_radius)
+
+## 播放枪口特效
+func _play_muzzle_effect(direction: Vector2) -> void:
+	var scene_path = get_muzzle_effect_scene_path()
+	var ani_name = get_muzzle_effect_ani_name()
+	
+	# 检查是否配置了枪口特效
+	if scene_path == "" or ani_name == "":
+		return
+	
+	if not shoot_pos:
+		return
+	
+	# 计算朝向角度
+	var rotation_angle = direction.angle()
+	
+	# 调用 CombatEffectManager 播放特效，绑定到 shoot_pos 上跟随武器移动
+	CombatEffectManager.play_muzzle_flash(
+		scene_path,
+		ani_name,
+		shoot_pos,                    # 父节点，特效会跟随移动
+		get_muzzle_effect_offset(),   # 本地位置偏移（相对于 shoot_pos）
+		rotation_angle,
+		get_muzzle_effect_scale()
+	)
 
 ## 开始施法
 func _start_cast(target: Node2D, damage: int, radius: float, delay: float) -> void:

@@ -81,6 +81,11 @@ enum CalculationType {
 ##   - range: float (检测范围)
 ##   - indicator_color: Color (指示器颜色)
 ##   - weapon_name: String (用于特效查找)
+##   - shoot_offset: Vector2 (发射位置偏移，相对于武器中心)
+##   - muzzle_effect_scene_path: String (枪口特效场景路径)
+##   - muzzle_effect_ani_name: String (枪口特效动画名)
+##   - muzzle_effect_scale: float (枪口特效缩放)
+##   - muzzle_effect_offset: Vector2 (枪口特效位置偏移)
 @export var behavior_params: Dictionary = {}
 
 ## 结算类型

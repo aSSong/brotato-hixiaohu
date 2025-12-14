@@ -18,10 +18,31 @@ static func initialize_bullets() -> void:
 	normal_bullet.bullet_name = "普通子弹"
 	normal_bullet.scale = Vector2(1.0, 1.0)
 	normal_bullet.movement_type = BulletData.MovementType.STRAIGHT
-	#normal_bullet.movement_params = {
-		#"rotate_to_direction": true  # 朝向飞行方向
-	#}
 	bullets["normal_bullet"] = normal_bullet
+	
+	## 霰弹枪子弹
+	var sg_bullet = BulletData.new("sg_bullet", 1500.0, 1.5, "res://assets/weapon/shotgun/sg-bullet.png")
+	sg_bullet.bullet_name = "霰弹枪子弹"
+	sg_bullet.scale = Vector2(0.8, 0.8)
+	sg_bullet.movement_type = BulletData.MovementType.STRAIGHT
+	sg_bullet.movement_params = {
+		"rotate_to_direction": true  # 朝向飞行方向
+	}
+	# 序列帧动画配置：横4竖2，11fps
+	sg_bullet.hframes = 4
+	sg_bullet.vframes = 2
+	sg_bullet.animation_speed = 11.0
+	sg_bullet.loop_animation = true
+	# 枪口特效配置
+	sg_bullet.muzzle_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	sg_bullet.muzzle_effect_ani_name = "sg_muzzle"
+	sg_bullet.muzzle_effect_offset = Vector2(110, 0)
+	sg_bullet.muzzle_effect_scale = 1.0
+	# 击中特效配置
+	sg_bullet.hit_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	sg_bullet.hit_effect_ani_name = "sg_hit"
+	sg_bullet.hit_effect_scale = 2.0
+	bullets["sg_bullet"] = sg_bullet
 	
 	var fast_bullet = BulletData.new("fast_bullet", 3000.0, 2.5, "res://assets/bullet/bullet.png")
 	fast_bullet.bullet_name = "高速子弹"
@@ -161,24 +182,54 @@ static func initialize_bullets() -> void:
 	bullets["homing_bullet"] = homing_bullet
 	
 	
+	## 奥术飞弹子弹
+	var ag_bullet = BulletData.new("ag_bullet", 600.0, 8.0, "res://assets/weapon/arcane/ag-bullet.png")
+	ag_bullet.bullet_name = "奥术飞弹子弹"
+	ag_bullet.scale = Vector2(1.4, 1.4)
+	ag_bullet.movement_type = BulletData.MovementType.HOMING
+	ag_bullet.movement_params = {
+		"turn_speed": 8.0,        # 转向速度
+		"acceleration": 50.0,     # 加速度
+		"max_speed": 1200.0,      # 最大速度
+		"homing_delay": 0.2,      # 发射后延迟追踪
+		"wobble_amount": 15.0,    # 左右摆动幅度
+		"wobble_frequency": 8.0   # 摆动频率
+	}
+	# 序列帧动画配置：横4竖4，17fps
+	ag_bullet.hframes = 4
+	ag_bullet.vframes = 4
+	ag_bullet.animation_speed = 17.0
+	ag_bullet.loop_animation = true
+	# 枪口特效配置
+	ag_bullet.muzzle_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	ag_bullet.muzzle_effect_ani_name = "ag_muzzle"
+	ag_bullet.muzzle_effect_offset = Vector2(110, 0)
+	ag_bullet.muzzle_effect_scale = 0.5
+	# 击中特效配置
+	ag_bullet.hit_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	ag_bullet.hit_effect_ani_name = "ag_hit"
+	ag_bullet.hit_effect_scale = 1.0
+	# 紫色魔法拖尾特效
+	ag_bullet.trail_effect_path = "res://scenes/effects/ag_trail.tscn"
+	bullets["ag_bullet"] = ag_bullet
+	
+	# 旧版奥术飞弹（保留兼容）
 	var arcane_bullet = BulletData.new("arcane_bullet", 600.0, 8.0,"res://FX/fx-arcane-Sheet-01.png")
 	arcane_bullet.bullet_name = "奥术飞弹"
 	arcane_bullet.scale = Vector2(1.0, 1.0)
-	#arcane_bullet.modulate = Color(0.645, 0.51, 1.0, 1.0)
 	arcane_bullet.movement_type = BulletData.MovementType.HOMING
 	arcane_bullet.movement_params = {
-		"turn_speed": 8.0,        # 降低转向速度，让它转大弯
-		"acceleration": 50.0,    # 增加加速度，越飞越快
-		"max_speed": 1200.0,      # 稍微降低极速，让玩家看清轨迹
-		"homing_delay": 0.2,      # 发射后 0.2秒内直飞，不追踪
-		"wobble_amount": 15.0,    # 15度的左右摆动
-		"wobble_frequency": 8.0   # 摆动频率
+		"turn_speed": 8.0,
+		"acceleration": 50.0,
+		"max_speed": 1200.0,
+		"homing_delay": 0.2,
+		"wobble_amount": 15.0,
+		"wobble_frequency": 8.0
 	}
-	arcane_bullet.hframes = 10           # 水平帧数（4列）
-	arcane_bullet.vframes = 1           # 垂直帧数（1行）
-	arcane_bullet.animation_speed = 10.0  # 播放速度 10fps
-	arcane_bullet.loop_animation = true   # 循环播放（默认就是true，可省略）
-	# 紫色魔法拖尾特效
+	arcane_bullet.hframes = 10
+	arcane_bullet.vframes = 1
+	arcane_bullet.animation_speed = 10.0
+	arcane_bullet.loop_animation = true
 	arcane_bullet.trail_effect_path = "res://scenes/effects/arcane_trail.tscn"
 	bullets["arcane_bullet"] = arcane_bullet
 	

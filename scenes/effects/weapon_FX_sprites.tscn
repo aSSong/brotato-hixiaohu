@@ -6,4 +6,4 @@
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_jcmr8")
-animation = &"ms_muzzle"
+animation = &"ag_muzzle"

@@ -172,11 +172,12 @@ static func initialize_weapons() -> void:
 		{
 			"damage": 2,
 			"attack_speed": 1.6,
-			"range": 800.0,
-			"bullet_id": "normal_bullet",
+			"range": 1000.0,
+			"bullet_id": "sg_bullet",  # 使用霰弹枪专属子弹
 			"pierce_count": 0,
 			"projectile_count": 5,
-			"spread_angle": 120.0
+			"spread_angle": 120.0,
+			"shoot_offset": Vector2(90, 0)  # 发射位置偏移
 		},
 		"res://assets/weapon/weapon_shotgun.png",
 		Vector2(0.7, 0.7)
@@ -389,35 +390,25 @@ static func initialize_weapons() -> void:
 	# lightning.description = "快速魔法武器，可同时攻击多个目标"
 	# weapons["lightning"] = lightning
 	
-	# 追踪导弹（远程行为 + 远程结算 + 追踪子弹）
+	# 奥术飞弹（远程行为 + 魔法结算 + 追踪子弹）
 	var arcane_missile = WeaponData.new(
-		"奥术飞弹",
+		"魔力飞弹",
 		WeaponData.BehaviorType.RANGED,
-		WeaponData.CalculationType.MAGIC,  # 魔法结算！
+		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 6,
 			"attack_speed": 2.4,
 			"range": 1800.0,
-			"bullet_id": "arcane_bullet",
+			"bullet_id": "ag_bullet",  # 使用奥术飞弹专属子弹
 			"pierce_count": 0,
 			"projectile_count": 3,
-			"spread_angle": 90.0
+			"spread_angle": 90.0,
+			"shoot_offset": Vector2(130, 0)  # 发射位置偏移
 		},
 		"res://assets/weapon/weapon_arcane.png",
 		Vector2(0.7, 0.7)
 	)
 	arcane_missile.description = "发射3发追踪魔弹"
-	#arcane_missile.special_effects = [
-		#{
-			#"type": "burn",
-			#"params": {
-				#"chance": 0.3,
-				#"tick_interval": 0.5,
-				#"damage": 3.0,
-				#"duration": 2.0
-			#}
-		#}
-	#]
 	weapons["arcane_missile"] = arcane_missile
 
 ## 获取武器

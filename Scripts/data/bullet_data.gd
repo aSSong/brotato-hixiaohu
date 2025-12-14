@@ -48,6 +48,7 @@ enum MovementType {
 @export var muzzle_effect_scene_path: String = ""  # 枪口特效场景路径
 @export var muzzle_effect_ani_name: String = ""    # 枪口特效动画名
 @export var muzzle_effect_scale: float = 1.0       # 枪口特效缩放
+@export var muzzle_effect_offset: Vector2 = Vector2.ZERO  # 枪口特效位置偏移（相对于发射点）
 
 ## 移动类型
 @export var movement_type: MovementType = MovementType.STRAIGHT
@@ -96,6 +97,7 @@ func duplicate_data() -> BulletData:
 	copy.muzzle_effect_scene_path = muzzle_effect_scene_path
 	copy.muzzle_effect_ani_name = muzzle_effect_ani_name
 	copy.muzzle_effect_scale = muzzle_effect_scale
+	copy.muzzle_effect_offset = muzzle_effect_offset
 	# 其他
 	copy.movement_type = movement_type
 	copy.movement_params = movement_params.duplicate()

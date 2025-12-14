@@ -129,8 +129,8 @@ func _play_muzzle_effect(bullet_data: BulletData, direction: Vector2) -> void:
 	CombatEffectManager.play_muzzle_flash(
 		bullet_data.muzzle_effect_scene_path,
 		bullet_data.muzzle_effect_ani_name,
-		shoot_pos,        # 父节点，特效会跟随移动
-		Vector2.ZERO,     # 本地位置（相对于 shoot_pos）
+		shoot_pos,                        # 父节点，特效会跟随移动
+		bullet_data.muzzle_effect_offset, # 本地位置偏移（相对于 shoot_pos）
 		rotation_angle,
 		bullet_data.muzzle_effect_scale
 	)
