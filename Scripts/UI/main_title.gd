@@ -7,6 +7,7 @@ extends Control
 @onready var board_btn: TextureButton = $menu/VBoxContainer/boardButton
 @onready var info_label: Label = $player_info/infoLabel
 @onready var clean_name_btn: Button = $player_info/cleannameButton
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 
 # 检查存档中的名字
@@ -17,6 +18,8 @@ func _ready() -> void:
 	# 播放标题BGM
 	BGMManager.play_bgm("title")
 	print("[MainTitle] 开始播放标题BGM")
+	
+	animation_player.play("default")
 	
 	if player_name != "":
 		var floor_name = SaveManager.get_floor_name()

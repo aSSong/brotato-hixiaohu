@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://dnt2sd4mt6yw8"]
+[gd_scene load_steps=20 format=3 uid="uid://dnt2sd4mt6yw8"]
 
 [ext_resource type="Script" uid="uid://dfrk5jfj3ogys" path="res://Scripts/UI/main_title.gd" id="1_3tovs"]
-[ext_resource type="Texture2D" uid="uid://dwf4dbg8vqiqd" path="res://assets/UI/maintitle/bg-maintitle-01.png" id="2_um0kg"]
+[ext_resource type="Texture2D" uid="uid://nt3yak4cvwm5" path="res://assets/UI/common/bg_maintitle_neo.jpg" id="2_lpsgw"]
+[ext_resource type="Texture2D" uid="uid://bwfdkccwfhjql" path="res://assets/UI/maintitle/logo.png" id="3_f6rfw"]
 [ext_resource type="Texture2D" uid="uid://bwxn18efpuf7s" path="res://assets/UI/common/btn-level-normal-01.png" id="3_fraxl"]
 [ext_resource type="Texture2D" uid="uid://rkoedninn4cu" path="res://assets/UI/common/btn-level-pressed-01.png" id="4_nb8ff"]
 [ext_resource type="Texture2D" uid="uid://c6ru0ufa3c6xp" path="res://assets/UI/common/btn-level-hover-01.png" id="5_adb34"]
@@ -16,6 +17,69 @@
 [ext_resource type="Texture2D" uid="uid://bnjo2ikct7aj5" path="res://assets/UI/maintitle/btn-settings-hover-01.png" id="14_f6rfw"]
 [ext_resource type="Texture2D" uid="uid://d4cwpwnvxtqpu" path="res://assets/UI/maintitle/btn-settings-disabledl-01.png" id="15_8af6u"]
 
+[sub_resource type="Animation" id="Animation_lpsgw"]
+resource_name = "default"
+length = 36.0
+loop_mode = 1
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("background:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 8, 14, 19.5, 25, 31, 36),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(-370, -200), Vector2(-221, -85), Vector2(-8, -12), Vector2(-171, -184), Vector2(-168, -152), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("background:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2, 8, 31, 36),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_f6rfw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("background:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("background:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f6rfw"]
+_data = {
+&"RESET": SubResource("Animation_f6rfw"),
+&"default": SubResource("Animation_lpsgw")
+}
+
 [node name="MainTitle" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -25,14 +89,28 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3tovs")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="background" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_um0kg")
+texture = ExtResource("2_lpsgw")
+
+[node name="logo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 578.0
+offset_top = 90.0
+offset_right = 578.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.46, 0.46)
+texture = ExtResource("3_f6rfw")
 
 [node name="menu" type="MarginContainer" parent="."]
 custom_minimum_size = Vector2(600, 400)
@@ -209,6 +287,12 @@ texture_pressed = ExtResource("13_lpsgw")
 texture_hover = ExtResource("14_f6rfw")
 texture_disabled = ExtResource("15_8af6u")
 texture_focused = ExtResource("14_f6rfw")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_f6rfw")
+}
+autoplay = "default"
 
 [connection signal="pressed" from="menu/VBoxContainer/btn_Quit" to="." method="_on_btn_quit_pressed"]
 [connection signal="pressed" from="settingsbtn" to="." method="_on_settingsbtn_pressed"]
