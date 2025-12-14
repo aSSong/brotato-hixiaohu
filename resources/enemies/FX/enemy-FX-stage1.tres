@@ -1,0 +1,67 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://donirp2d2xano"]
+
+[ext_resource type="Texture2D" uid="uid://i7aoumtfd7ks" path="res://assets/enemy/FX/monitor-ring.png" id="1_u1usu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pll58"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(0, 0, 256, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3560m"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(256, 0, 256, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tr3r1"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(0, 128, 256, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_igyl7"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(256, 128, 256, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0kbi7"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(0, 256, 256, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfdgn"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(256, 256, 256, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ht6u5"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(0, 384, 256, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h0eyp"]
+atlas = ExtResource("1_u1usu")
+region = Rect2(256, 384, 256, 128)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pll58")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3560m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tr3r1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_igyl7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0kbi7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfdgn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ht6u5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h0eyp")
+}],
+"loop": true,
+"name": &"bmt-ring",
+"speed": 5.0
+}]

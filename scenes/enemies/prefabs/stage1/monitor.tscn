@@ -34,8 +34,10 @@ z_index = 1
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_flash")
 sprite_frames = ExtResource("4_sprite_frames")
-animation = &"walk"
+animation = &"skill"
 autoplay = "walk"
+frame = 32
+frame_progress = 1.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 

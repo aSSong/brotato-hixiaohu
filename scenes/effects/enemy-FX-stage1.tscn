@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbfnvhc8iatha"]
+
+[ext_resource type="SpriteFrames" uid="uid://donirp2d2xano" path="res://resources/enemies/FX/enemy-FX-stage1.tres" id="1_ys847"]
+
+[node name="EnemyFxStage1" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_ys847")
