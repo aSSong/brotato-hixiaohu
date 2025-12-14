@@ -99,7 +99,7 @@ static func initialize() -> void:
 ## 设置特效配置
 static func _setup_effect_configs() -> void:
 	# 武器爆炸特效（粒子）
-	effect_configs["陨石_爆炸"] = {
+	effect_configs["奥爆术_爆炸"] = {
 		"animations": [
 			{
 				"scene_path": "res://scenes/effects/explosion_sprites.tscn",
@@ -121,7 +121,7 @@ static func _setup_effect_configs() -> void:
 			 "scale": 1.3  # 自定义scale
 		 }]
 	}
-	effect_configs["冰刺_爆炸"] = {
+	effect_configs["冰棒_爆炸"] = {
 		"animations": [{
 			 "scene_path": "res://scenes/effects/explosion_sprites.tscn",
 			 "ani_name": "ice_explode",
