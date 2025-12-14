@@ -350,7 +350,7 @@ static func initialize_weapons() -> void:
 	
 	# 陨石（魔法行为 + 魔法结算）
 	var meteor = WeaponData.new(
-		"陨石",
+		"奥爆术",
 		WeaponData.BehaviorType.MAGIC,
 		WeaponData.CalculationType.MAGIC,
 		{

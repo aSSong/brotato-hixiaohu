@@ -100,13 +100,18 @@ static func initialize() -> void:
 static func _setup_effect_configs() -> void:
 	# 武器爆炸特效（粒子）
 	effect_configs["陨石_爆炸"] = {
-		#"particles": ["res://scenes/effects/meteor_explosion.tscn"],
-		#"animations": []  # 可以添加序列帧动画，例如：
-		 "animations": [{
-			 "scene_path": "res://scenes/effects/explosion_sprites.tscn",
-			 "ani_name": "Meteor_explode",
-			 "scale": 1.5  # 自定义scale
-		 }]
+		"animations": [
+			{
+				"scene_path": "res://scenes/effects/explosion_sprites.tscn",
+				"ani_name": "Meteor_explode",
+				"scale": 1.5
+			},
+			{
+				"scene_path": "res://scenes/effects/explosion_sprites.tscn",
+				"ani_name": "mt_fog",
+				"scale": 1.5
+			}
+		]
 	}
 	effect_configs["火球_爆炸"] = {
 		#"particles": ["res://scenes/effects/fireball_explosion.tscn"],

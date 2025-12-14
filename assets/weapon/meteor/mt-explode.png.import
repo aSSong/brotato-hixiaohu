@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kkqs6gak58sa"
-path="res://.godot/imported/811402-animation_12.png-b47578bb1fc961e9f8264dccbc378313.ctex"
+uid="uid://cblu5xfio76bi"
+path="res://.godot/imported/mt-explode.png-5e3105154ec5d678111a6f1ce0ced836.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://FX/meteor_explosion/811402-animation_12.png"
-dest_files=["res://.godot/imported/811402-animation_12.png-b47578bb1fc961e9f8264dccbc378313.ctex"]
+source_file="res://assets/weapon/meteor/mt-explode.png"
+dest_files=["res://.godot/imported/mt-explode.png-5e3105154ec5d678111a6f1ce0ced836.ctex"]
 
 [params]
 

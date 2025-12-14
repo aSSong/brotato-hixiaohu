@@ -6,4 +6,6 @@
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_jcmr8")
-animation = &"ag_muzzle"
+animation = &"mt_fx"
+frame = 15
+frame_progress = 1.0
