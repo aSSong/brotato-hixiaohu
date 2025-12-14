@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dhpmorc3nh0rx"]
+[gd_scene load_steps=18 format=3 uid="uid://dhpmorc3nh0rx"]
 
 [ext_resource type="Script" uid="uid://cbbs20aohqtja" path="res://Scripts/UI/weapon_choose.gd" id="1_weapon"]
 [ext_resource type="Texture2D" uid="uid://cv60hkdkrm472" path="res://assets/UI/weapon_choose/weaponchoose-bg-01.png" id="2_s4hvt"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://b5m4okwxeae3k" path="res://assets/UI/weapon_choose/weaponchoose-info-unchoosed-01.png" id="8_ysnaf"]
 [ext_resource type="StyleBox" uid="uid://brjva4kavfa5r" path="res://scenes/UI/weapon_state_bar_fill.tres" id="9_fp288"]
 [ext_resource type="Texture2D" uid="uid://bvn8auipbm3g2" path="res://assets/UI/weapon_choose/weaponchoose-info-bg-02.png" id="9_g7k44"]
+[ext_resource type="Texture2D" uid="uid://p245ib2mk6ax" path="res://assets/weapon/weapon_flame_sword.png" id="10_y6lot"]
 [ext_resource type="Texture2D" uid="uid://7oqiyvuqvk4x" path="res://assets/UI/weapon_choose/btn-fight-red-01.png" id="16_lfaaf"]
 
 [node name="WeaponChoose" type="Control"]
@@ -166,10 +167,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 25.0
-offset_top = 6.0
-offset_right = -5.0
-offset_bottom = -5.0
+offset_left = 68.0
+offset_top = 1.0
+offset_right = 38.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
@@ -183,16 +184,30 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 
-[node name="Weapon1Icon" type="TextureRect" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content"]
+[node name="Weapon1IconContainer" type="Control" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+
+[node name="Weapon1Icon" type="TextureRect" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1IconContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -56.000004
+offset_top = -9.038452
+offset_right = 144.0
+offset_bottom = 90.96155
+grow_vertical = 0
+rotation = -1.3962634
+texture = ExtResource("10_y6lot")
 expand_mode = 1
-stretch_mode = 5
+stretch_mode = 3
 
 [node name="Weapon1Stats" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 
 [node name="NameSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
 layout_mode = 2
@@ -335,7 +350,10 @@ text = "0"
 [node name="EffectSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats"]
 layout_mode = 2
 
-[node name="EffectLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/EffectSection"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/EffectSection"]
+layout_mode = 2
+
+[node name="EffectLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/EffectSection/VBoxContainer"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -346,7 +364,8 @@ text = "效果"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9882353, 0.039215688, 0.54509807, 1)
 theme_override_font_sizes/font_size = 14
-text = "无"
+text = "无
+无"
 
 [node name="spacer" type="Control" parent="MainContent/WeaponDetailSection"]
 layout_mode = 2
@@ -365,10 +384,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 25.0
-offset_top = 6.0
-offset_right = -5.0
-offset_bottom = -5.0
+offset_left = 68.0
+offset_top = 1.0
+offset_right = 38.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
@@ -382,16 +401,30 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 
-[node name="Weapon2Icon" type="TextureRect" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content"]
+[node name="Weapon2IconContainer" type="Control" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content"]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
+
+[node name="Weapon2Icon" type="TextureRect" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2IconContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -56.000004
+offset_top = -9.038452
+offset_right = 144.0
+offset_bottom = 90.96155
+grow_vertical = 0
+rotation = -1.3962634
+texture = ExtResource("10_y6lot")
 expand_mode = 1
-stretch_mode = 5
+stretch_mode = 3
 
 [node name="Weapon2Stats" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 
 [node name="NameSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
 layout_mode = 2
@@ -530,20 +563,30 @@ theme_override_font_sizes/font_size = 16
 text = "0"
 
 [node name="EffectSection" type="HBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection"]
 layout_mode = 2
 
-[node name="EffectLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection"]
+[node name="EffectLabel" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection/VBoxContainer"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
+size_flags_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "效果"
 
 [node name="EffectText" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/EffectSection"]
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.9882353, 0.039215688, 0.54509807, 1)
 theme_override_font_sizes/font_size = 14
-text = "无"
+text = "无
+无
+无"
 
 [node name="BottomSection" type="Control" parent="."]
 layout_mode = 1

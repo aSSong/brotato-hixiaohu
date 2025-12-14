@@ -77,7 +77,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_flame_sword.png",
 		Vector2(1.0, 1.0)
 	)
-	flame_sword.description = "附魔火焰的剑，近战行为但使用魔法伤害加成"
+	flame_sword.description = "环绕自身，火焰附魔"
 	flame_sword.special_effects = [
 		{
 			"type": "burn",
@@ -109,7 +109,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon-dagger.png",
 		Vector2(0.7, 0.7)
 	)
-	dagger.description = "快速攻击的近战武器，有吸血效果"
+	dagger.description = "环绕自身，吸血效果"
 	dagger.special_effects = [
 		{
 			"type": "lifesteal",
@@ -160,7 +160,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_machinegun.png",
 		Vector2(0.7, 0.7)
 	)
-	machine_gun.description = "超高攻击速度的远程武器"
+	machine_gun.description = "射速超高"
 	weapons["machine_gun"] = machine_gun
 	
 	# 散弹枪（远程行为 + 远程结算 + 多弹丸）
@@ -180,7 +180,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_shotgun.png",
 		Vector2(0.7, 0.7)
 	)
-	shotgun.description = "近距离高伤害，发射多颗弹丸"
+	shotgun.description = "每次发射5颗子弹"
 	weapons["shotgun"] = shotgun
 	
 	# 追踪导弹（远程行为 + 远程结算 + 追踪子弹）
@@ -200,7 +200,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_missle.png",
 		Vector2(0.7, 0.7)
 	)
-	homing_missile.description = "发射追踪导弹"
+	homing_missile.description = "追踪目标，燃烧效果"
 	homing_missile.special_effects = [
 		{
 			"type": "burn",
@@ -268,7 +268,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_lightspear.png",
 		Vector2(0.7, 0.7)
 	)
-	rifle.description = "高伤害远程武器，可穿透敌人"
+	rifle.description = "可穿透3名敌人"
 	#rifle.special_effects = [
 		#{
 			#"type": "bleed",
@@ -300,7 +300,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_lightwand.png",
 		Vector2(0.7, 0.7)
 	)
-	lightning_chain.description = "会寻找目标的魔法闪电"
+	lightning_chain.description = "自动弹射3名敌人"
 	weapons["lightning_chain"] = lightning_chain
 	
 	
@@ -325,7 +325,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_popsicle.png",
 		Vector2(0.7, 0.7)
 	)
-	ice_shard.description = "快速魔法武器，有几率冰冻敌人"
+	ice_shard.description = "快速魔法，冰冻效果"
 	ice_shard.special_effects = [
 		{
 			"type": "freeze",
@@ -358,7 +358,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_meteor.png",
 		Vector2(0.7, 0.7)
 	)
-	meteor.description = "高伤害魔法武器，超大爆炸范围"
+	meteor.description = "高伤害，大范围"
 	weapons["meteor"] = meteor
 	
 	# 闪电（魔法行为 + 魔法结算 + 多目标）
@@ -402,7 +402,7 @@ static func initialize_weapons() -> void:
 		"res://assets/weapon/weapon_arcane.png",
 		Vector2(0.7, 0.7)
 	)
-	arcane_missile.description = "发射奥术飞弹"
+	arcane_missile.description = "发射3发追踪魔弹"
 	#arcane_missile.special_effects = [
 		#{
 			#"type": "burn",

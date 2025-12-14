@@ -15,7 +15,7 @@ class_name WeaponChooseUI
 # 武器1面板
 @onready var weapon1_panel: TextureRect = $MainContent/WeaponDetailSection/Weapon1Panel
 @onready var weapon1_name: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/NameSection/Weapon1Name
-@onready var weapon1_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Icon
+@onready var weapon1_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1IconContainer/Weapon1Icon
 @onready var weapon1_caltype_label: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/calSection/caltypeLabel
 @onready var weapon1_damage_value: Label = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection/DamageBar/DamageValue
 @onready var weapon1_damage_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/DamageSection/DamageBar
@@ -30,7 +30,7 @@ class_name WeaponChooseUI
 @onready var weapon2_panel: TextureRect = $MainContent/WeaponDetailSection/Weapon2Panel
 @onready var weapon2_content: HBoxContainer = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content
 @onready var weapon2_name: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/NameSection/Weapon2Name
-@onready var weapon2_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Icon
+@onready var weapon2_icon: TextureRect = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2IconContainer/Weapon2Icon
 @onready var weapon2_caltype_label: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/calSection/caltypeLabel
 @onready var weapon2_damage_value: Label = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection/DamageBar/DamageValue
 @onready var weapon2_damage_bar: ProgressBar = $MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/DamageSection/DamageBar
@@ -311,10 +311,10 @@ func _update_weapon_panel(slot: int, weapon_data: WeaponData) -> void:
 	if range_bar:
 		range_bar.value = range_val
 	
-	# 特效
-	var effect_str = _get_weapon_effect_text(weapon_data)
+	# 描述 + 特效
+	var desc_and_effect = _get_description_and_effect_text(weapon_data)
 	if effect_text:
-		effect_text.text = effect_str
+		effect_text.text = desc_and_effect
 
 ## 获取结算类型的显示文字
 func _get_calculation_type_text(calc_type: WeaponData.CalculationType) -> String:
@@ -328,10 +328,25 @@ func _get_calculation_type_text(calc_type: WeaponData.CalculationType) -> String
 		_:
 			return "未知类型"
 
+## 获取武器描述和特效文字（描述在前，特效在后，用换行分隔）
+func _get_description_and_effect_text(weapon_data: WeaponData) -> String:
+	var lines = []
+	
+	# 第一行：武器描述
+	if weapon_data.description != "":
+		lines.append(weapon_data.description)
+	
+	# 第二行开始：特效效果
+	var effect_text = _get_weapon_effect_text(weapon_data)
+	if effect_text != "":
+		lines.append(effect_text)
+	
+	return "\n".join(lines)
+
 ## 获取武器特效文字
 func _get_weapon_effect_text(weapon_data: WeaponData) -> String:
 	if weapon_data.special_effects.is_empty():
-		return "无"
+		return ""
 	
 	# 新版结构：special_effects 直接是 Array
 	var effects = weapon_data.special_effects
@@ -357,7 +372,7 @@ func _get_weapon_effect_text(weapon_data: WeaponData) -> String:
 				var chance = params.get("chance", 0) * 100
 				texts.append("%d%%概率冰冻" % int(chance))
 	
-	return "\n".join(texts) if texts.size() > 0 else "无"
+	return "\n".join(texts)
 
 ## 清空武器面板
 func _clear_weapon_panel(slot: int) -> void:
@@ -381,7 +396,7 @@ func _clear_weapon_panel(slot: int) -> void:
 		if weapon1_range_bar:
 			weapon1_range_bar.value = 0
 		if weapon1_effect_text:
-			weapon1_effect_text.text = "无"
+			weapon1_effect_text.text = ""
 	else:
 		if weapon2_name:
 			weapon2_name.text = ""
@@ -402,7 +417,7 @@ func _clear_weapon_panel(slot: int) -> void:
 		if weapon2_range_bar:
 			weapon2_range_bar.value = 0
 		if weapon2_effect_text:
-			weapon2_effect_text.text = "无"
+			weapon2_effect_text.text = ""
 
 ## 更新开战按钮状态
 func _update_start_button() -> void:
