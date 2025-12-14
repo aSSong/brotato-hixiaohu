@@ -38,7 +38,17 @@ func _on_chapter2_begin_pressed() -> void:
 	# Chapter 2: 同心同力模式 - Multi
 	GameMain.current_mode_id = "multi"
 	print("[LevelSelect] 选择 Chapter 2: Multi 模式")
-	get_tree().change_scene_to_file("res://scenes/UI/cutscene_chapter2.tscn")
+	
+	# 检查玩家的最高波次，如果大于0则跳过动画直接进入选择界面
+	var multi_record = LeaderboardManager.get_multi_record()
+	var best_wave = multi_record.get("best_wave", 0)
+	
+	if best_wave > 0:
+		print("[LevelSelect] 玩家已有记录(最高波次: %d)，跳过动画" % best_wave)
+		get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
+	else:
+		print("[LevelSelect] 玩家首次进入，播放章节动画")
+		get_tree().change_scene_to_file("res://scenes/UI/cutscene_chapter2.tscn")
 
 
 func _on_back_button_pressed() -> void:

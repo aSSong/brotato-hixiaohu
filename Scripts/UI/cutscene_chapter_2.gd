@@ -7,27 +7,21 @@ func _ready() -> void:
 	# 暂停背景音乐（让视频音频不被干扰，保留播放位置）
 	BGMManager.pause_bgm()
 	print("[Cutscene_Chapter2] 章节2动画开始播放")
-	
-	## 连接视频播放完成信号
-	#if video_player:
-		#video_player.finished.connect(_on_video_finished)
-	#
-	## 连接跳过按钮信号
-	#if skip_button:
-		#skip_button.pressed.connect(_on_skip_pressed)
 
 
-#func _on_video_finished() -> void:
-	#print("[CutsceneOpen] 视频播放完成，跳转至 create_account")
-	#BGMManager.resume_bgm()  # 恢复背景音乐
-	#get_tree().change_scene_to_file("res://scenes/UI/create_account.tscn")
-#
-#
-#func _on_skip_pressed() -> void:
-	#print("[CutsceneOpen] 用户跳过视频，跳转至 create_account")
-	#BGMManager.resume_bgm()  # 恢复背景音乐
-	#get_tree().change_scene_to_file("res://scenes/UI/create_account.tscn")
+func _input(event: InputEvent) -> void:
+	# ESC键或鼠标左键点击结束播放
+	if event is InputEventKey:
+		if event.keycode == KEY_ESCAPE and event.pressed:
+			_skip_video()
+	elif event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			_skip_video()
 
+
+func _skip_video() -> void:
+	BGMManager.resume_bgm()  # 恢复背景音乐
+	get_tree().change_scene_to_file("res://scenes/UI/Class_choose.tscn")
 
 
 func _on_texture_button_pressed() -> void:
