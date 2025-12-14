@@ -8,13 +8,13 @@ enemy_name = "树精"
 description = "这是一只树怪"
 scene_path = "res://scenes/enemies/prefabs/stage2/ent.tscn"
 max_hp = 250
-attack_damage = 8
-move_speed = 330.0
+attack_damage = 12
+move_speed = 400.0
 attack_interval = 0.3
-attack_range = 188.0
+attack_range = 220.0
 skill_type = 4
 skill_config = {
-"bullet_count": 12,
+"bullet_count": 15,
 "bullet_damage": 8,
 "bullet_round_interval": 0.5,
 "bullet_rounds": 3,

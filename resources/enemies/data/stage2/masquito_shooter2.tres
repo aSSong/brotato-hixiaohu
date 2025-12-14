@@ -7,7 +7,6 @@ script = ExtResource("1_wd5q2")
 enemy_name = "绿蚊子"
 description = "会远程射击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage2/masquito_green.tscn"
-max_hp = 80
 attack_damage = 4
 move_speed = 250.0
 attack_interval = 0.3
@@ -18,5 +17,5 @@ skill_config = {
 "bullet_id": "basic",
 "bullet_speed": 600.0,
 "shoot_interval": 0.3,
-"shoot_range": 800.0
+"shoot_range": 1000.0
 }

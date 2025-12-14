@@ -18,6 +18,6 @@ skill_config = {
 "cooldown": 3.0,
 "extra_damage": 10,
 "prepare_time": 0.3,
-"trigger_distance": 500.0
+"trigger_distance": 700.0
 }
 knockback_resistance = 0.7
