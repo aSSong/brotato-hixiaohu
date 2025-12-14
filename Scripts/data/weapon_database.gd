@@ -311,7 +311,7 @@ static func initialize_weapons() -> void:
 	
 	# 冰刺（魔法行为 + 魔法结算）
 	var ice_shard = WeaponData.new(
-		"冰刺",
+		"冰棒",
 		WeaponData.BehaviorType.MAGIC,
 		WeaponData.CalculationType.MAGIC,
 		{
@@ -324,8 +324,14 @@ static func initialize_weapons() -> void:
 			"is_target_locked": false,
 			"max_targets": 1,
 			"has_explosion_damage": true,
-			"indicator_texture_path": "res://assets/skill_indicator/ice_range_circle.png",
-			"effect_lead_time": 0.2  # 特效提前 0.15 秒播放
+			"indicator_texture_path": "res://assets/weapon/ice/ice-floor.png",  # 魔法指示器
+			"effect_lead_time": 0.3,
+			# 枪口特效配置
+			"shoot_offset": Vector2(50, 0),
+			"muzzle_effect_scene_path": "res://scenes/effects/weapon_FX_sprites.tscn",
+			"muzzle_effect_ani_name": "ice_fx",
+			"muzzle_effect_scale": 1.0,
+			"muzzle_effect_offset": Vector2.ZERO
 		},
 		"res://assets/weapon/weapon_popsicle.png",
 		Vector2(0.7, 0.7)
