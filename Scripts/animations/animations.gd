@@ -36,6 +36,7 @@ func run_animation(options):
 ##   - ani_name: String 动画名称
 ##   - position: Vector2 特效位置
 ##   - scale: Vector2 缩放（可选）
+##   - z_index: int 层级（可选，默认不设置）
 func run_animation_from_scene(options: Dictionary) -> void:
 	if not options.has("animation_scene") or not options.has("ani_name"):
 		push_error("[Animations] run_animation_from_scene 缺少 animation_scene 或 ani_name")
@@ -58,6 +59,10 @@ func run_animation_from_scene(options: Dictionary) -> void:
 	
 	instance.global_position = position
 	instance.scale = scale_val if scale_val is Vector2 else Vector2(scale_val, scale_val)
+	
+	# 设置层级（如果指定）
+	if options.has("z_index"):
+		instance.z_index = options["z_index"]
 	
 	# 添加到场景树
 	var box = options.get("box", GameMain.duplicate_node)

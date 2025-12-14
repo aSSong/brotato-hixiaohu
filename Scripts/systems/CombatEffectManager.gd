@@ -278,6 +278,9 @@ static func play_muzzle_flash(scene_path: String, ani_name: String, parent_node:
 			push_warning("[CombatEffectManager] 未找到 AnimatedSprite2D")
 			instance.queue_free()
 
+## 击中特效默认层级（比敌人高，敌人通常在 z_index = 0 ~ 10）
+const HIT_EFFECT_Z_INDEX = 50
+
 ## 播放子弹击中特效
 ## 
 ## @param scene_path 特效场景路径
@@ -309,13 +312,14 @@ static func play_bullet_hit(scene_path: String, ani_name: String, position: Vect
 	if anim_scene == null:
 		return
 	
-	# 使用 run_animation_from_scene 播放
+	# 使用 run_animation_from_scene 播放，设置较高的 z_index
 	if GameMain.animation_scene_obj.has_method("run_animation_from_scene"):
 		GameMain.animation_scene_obj.run_animation_from_scene({
 			"animation_scene": anim_scene,
 			"ani_name": ani_name,
 			"position": position,
-			"scale": Vector2(scale, scale)
+			"scale": Vector2(scale, scale),
+			"z_index": HIT_EFFECT_Z_INDEX  # 设置层级，确保在敌人上方
 		})
 
 ## 延迟清理节点
