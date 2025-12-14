@@ -10,6 +10,7 @@ class_name UpgradeOption
 @onready var buy_button: TextureButton = %BuyButton
 @onready var lock_button: TextureButton = %LockButton
 @onready var lock_label: Label = $VBoxContainer/HBoxContainer2/LockButton/loockLabel
+@onready var weapon_particles: GPUParticles2D = $VBoxContainer/WeaponGPUParticles2D
 
 var upgrade_data: UpgradeData = null
 var is_locked: bool = false
@@ -107,8 +108,26 @@ func _initialize_ui() -> void:
 		var desc_text = upgrade_data.description if upgrade_data.description != "" else ""
 		description_label.text = desc_text
 	
+	# 根据升级类型控制武器粒子效果显示
+	_update_weapon_particles()
+	
 	_update_cost_display()
 	_update_lock_button()
+
+## 根据升级类型控制武器粒子效果显示
+## 只有武器类型（新武器或武器升级）才显示粒子
+func _update_weapon_particles() -> void:
+	if not weapon_particles:
+		return
+	
+	if upgrade_data:
+		var is_weapon = upgrade_data.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON \
+			or upgrade_data.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP
+		weapon_particles.visible = is_weapon
+		weapon_particles.emitting = is_weapon
+	else:
+		weapon_particles.visible = false
+		weapon_particles.emitting = false
 
 ## 根据品质更新背景面板纹理
 func _update_quality_panel() -> void:
