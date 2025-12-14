@@ -150,7 +150,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 40
-text = "重  来"
+text = "重来"
 
 [node name="GiveUpButton" type="TextureButton" parent="Panel/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(150, 60)
@@ -177,4 +177,4 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_sb8yb")
 theme_override_font_sizes/font_size = 32
-text = "放  弃"
+text = "放弃"

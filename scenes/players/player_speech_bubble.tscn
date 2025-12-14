@@ -7,11 +7,12 @@ _data = [Vector2(0.0018656701, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0
 point_count = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
-bg_color = Color(0.2, 0.2, 0.2, 0.9)
+bg_color = Color(0.15686275, 0.043137256, 0.14901961, 0.74509805)
 border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
+border_color = Color(0.73333335, 0.9882353, 0, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -40,6 +41,7 @@ position = Vector2(102, 59)
 points = PackedVector2Array(0, 0, 0, 20)
 width = 30.0
 width_curve = SubResource("Curve_6nvn2")
+default_color = Color(0.73333335, 0.9882353, 0, 1)
 
 [node name="Background" type="Panel" parent="."]
 unique_name_in_owner = true

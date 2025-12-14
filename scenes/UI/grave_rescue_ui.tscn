@@ -190,7 +190,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_thtr0")
 theme_override_font_sizes/font_size = 24
-text = "超  度"
+text = "超度"
 
 [node name="CancelButton" type="TextureButton" parent="Panel/ButtonContainer"]
 layout_mode = 0
