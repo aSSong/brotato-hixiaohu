@@ -285,7 +285,7 @@ static func initialize_weapons() -> void:
 	weapons["rifle"] = rifle
 	
 	
-		# 连锁闪电（远程行为 + 远程结算）
+		# 连锁闪电（远程行为 + 魔法结算）
 	var lightning_chain = WeaponData.new(
 		"连锁闪电",
 		WeaponData.BehaviorType.RANGED,
@@ -294,10 +294,11 @@ static func initialize_weapons() -> void:
 			"damage": 3,
 			"attack_speed": 1.4,
 			"range": 1000.0,
-			"bullet_id": "bounce_bullet",
-			"pierce_count": 0, # 穿透数
-			"projectile_count": 1, #子弹数
-			"spread_angle": 0.0
+			"bullet_id": "lc_bullet",  # 使用连锁闪电专属子弹
+			"pierce_count": 0,
+			"projectile_count": 1,
+			"spread_angle": 0.0,
+			"shoot_offset": Vector2(150, -20)  # 发射位置偏移
 		},
 		"res://assets/weapon/weapon_lightwand.png",
 		Vector2(0.7, 0.7)

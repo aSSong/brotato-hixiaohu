@@ -153,24 +153,51 @@ static func initialize_bullets() -> void:
 	arcane_bullet.trail_effect_path = "res://scenes/effects/arcane_trail.tscn"
 	bullets["arcane_bullet"] = arcane_bullet
 	
-	## 连锁闪电
-	# 名称，速度，存活时间，贴图
-	var bounce_bullet = BulletData.new("bounce_bullet", 1200.0, 6.0, "res://FX/fx-ligntningchain-Sheet-01.png")
-	bounce_bullet.bullet_name = "弹跳子弹"
-	bounce_bullet.scale = Vector2(1.0, 1.0)
-	#bounce_bullet.modulate = Color(0.8, 1.0, 0.5)
-	bounce_bullet.movement_type = BulletData.MovementType.BOUNCE
-	bounce_bullet.movement_params = {
+	## 连锁闪电子弹
+	var lc_bullet = BulletData.new("lc_bullet", 1200.0, 6.0, "res://assets/weapon/lightningchain/lc-bullet.png")
+	lc_bullet.bullet_name = "连锁闪电子弹"
+	lc_bullet.scale = Vector2(0.8, 0.8)
+	lc_bullet.movement_type = BulletData.MovementType.BOUNCE
+	lc_bullet.movement_params = {
 		"rotate_to_direction": true,  # 朝向飞行方向
 		"bounce_count": 3,      # 最大弹跳次数
 		"bounce_loss": 0.9,     # 每次弹跳速度保留比例
 		"search_range": 800.0   # 弹跳目标搜索范围
 	}
-	bounce_bullet.hframes = 10           # 水平帧数（4列）
-	bounce_bullet.vframes = 1           # 垂直帧数（1行）
-	bounce_bullet.animation_speed = 10.0  # 播放速度 10fps
-	bounce_bullet.loop_animation = true   # 循环播放（默认就是true，可省略）
-	bounce_bullet.destroy_on_hit = false  # 弹跳子弹不会立即销毁
+	# 序列帧动画配置：横4竖4，10fps
+	lc_bullet.hframes = 4
+	lc_bullet.vframes = 4
+	lc_bullet.animation_speed = 10.0
+	lc_bullet.loop_animation = true
+	lc_bullet.destroy_on_hit = false  # 弹跳子弹不会立即销毁
+	# 枪口特效配置
+	lc_bullet.muzzle_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	lc_bullet.muzzle_effect_ani_name = "lc_fx"
+	lc_bullet.muzzle_effect_scale = 1.5
+	# 击中特效配置
+	lc_bullet.hit_effect_scene_path = "res://scenes/effects/weapon_FX_sprites.tscn"
+	lc_bullet.hit_effect_ani_name = "lc_hit"
+	lc_bullet.hit_effect_scale = 1.0
+	# 拖尾特效（需要单独的拖尾场景）
+	lc_bullet.trail_effect_path = "res://scenes/effects/lc_trail.tscn"
+	bullets["lc_bullet"] = lc_bullet
+	
+	# 旧版弹跳子弹（保留兼容）
+	var bounce_bullet = BulletData.new("bounce_bullet", 1200.0, 6.0, "res://FX/fx-ligntningchain-Sheet-01.png")
+	bounce_bullet.bullet_name = "弹跳子弹"
+	bounce_bullet.scale = Vector2(1.0, 1.0)
+	bounce_bullet.movement_type = BulletData.MovementType.BOUNCE
+	bounce_bullet.movement_params = {
+		"rotate_to_direction": true,
+		"bounce_count": 3,
+		"bounce_loss": 0.9,
+		"search_range": 800.0
+	}
+	bounce_bullet.hframes = 10
+	bounce_bullet.vframes = 1
+	bounce_bullet.animation_speed = 10.0
+	bounce_bullet.loop_animation = true
+	bounce_bullet.destroy_on_hit = false
 	bullets["bounce_bullet"] = bounce_bullet
 	
 	var wave_bullet = BulletData.new("wave_bullet", 1800.0, 4.0, "res://assets/bullet/bullet.png")

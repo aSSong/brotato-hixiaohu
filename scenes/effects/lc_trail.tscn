@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=3 uid="uid://dtk5iv6jg8u7b"]
+
+[ext_resource type="Texture2D" uid="uid://dlh7xmsqmhivc" path="res://FX/particle-round-white-soft-01.png" id="1_nsqct"]
+[ext_resource type="Texture2D" uid="uid://cmhdvtvev564" path="res://assets/weapon/lightningchain/lc-trail.png" id="2_nsqct"]
+
+[sub_resource type="Curve" id="Curve_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_scale"]
+curve = SubResource("Curve_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_trail"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(15, 15, 1)
+emission_shape = 1
+emission_sphere_radius = 8.23
+direction = Vector3(0, 0, 0)
+spread = 10.0
+initial_velocity_min = 3.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.29999998
+scale_max = 0.79999995
+scale_curve = SubResource("CurveTexture_scale")
+color = Color(0.8, 0.9, 1, 0.9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m42qp"]
+atlas = ExtResource("2_nsqct")
+region = Rect2(0, 0, 232, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttvcy"]
+atlas = ExtResource("2_nsqct")
+region = Rect2(0, 58, 232, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lqrll"]
+atlas = ExtResource("2_nsqct")
+region = Rect2(0, 116, 232, 58)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgmle"]
+atlas = ExtResource("2_nsqct")
+region = Rect2(0, 174, 232, 58)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1o82c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m42qp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ttvcy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lqrll")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fgmle")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="LcTrail" type="GPUParticles2D"]
+z_index = -1
+amount = 20
+texture = ExtResource("1_nsqct")
+lifetime = 0.5
+preprocess = 0.05
+randomness = 0.2
+process_material = SubResource("ParticleProcessMaterial_trail")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_1o82c")
+autoplay = "default"
+frame_progress = 0.8421104
+offset = Vector2(-102.17, 0)

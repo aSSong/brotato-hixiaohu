@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dp3liiyunxhxi"]
+[gd_scene load_steps=8 format=3 uid="uid://dp3liiyunxhxi"]
 
 [ext_resource type="Script" uid="uid://dhmgi42r24mlb" path="res://Scripts/weapons/weapon.gd" id="1_0rtie"]
 [ext_resource type="Shader" uid="uid://b0mpedodgante" path="res://Shaders/weapon2.gdshader" id="2_0rtie"]
 [ext_resource type="Texture2D" uid="uid://cgujaspdbkut3" path="res://assets/weapon/WeaponPistol.png" id="3_0rtie"]
+[ext_resource type="Texture2D" uid="uid://dlvpu8yjypcxb" path="res://assets/weapon/weapon_lightwand.png" id="4_4uykt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0rtie"]
 resource_local_to_scene = true
@@ -20,6 +21,9 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("3_0rtie")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4uykt")
 }],
 "loop": true,
 "name": &"default",
