@@ -17,6 +17,9 @@ var max_enemyHP = 50
 ## 敌人数据
 var enemy_data: EnemyData = null
 
+## 敌人 ID（用于识别敌人类型，如 "ent"、"monitor" 等）
+var enemy_id: String = ""
+
 var attack_cooldown: float = 0.0
 var attack_interval: float = 1.0  # 攻击间隔（秒）
 var attack_damage: int = 5  # 每次攻击造成的伤害

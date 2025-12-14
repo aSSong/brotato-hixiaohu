@@ -54,6 +54,7 @@ signal wave_ended(wave_number: int)  # 兼容旧系统（与wave_completed相同
 signal all_waves_completed()
 signal state_changed(new_state: WaveState)
 signal enemy_killed(wave_number: int, killed: int, total: int)  # 兼容UI
+signal enemy_spawned(enemy: Enemy)  # 敌人生成信号（用于 BOSS 血条等）
 
 ## ========== 引用 ==========
 var enemy_spawner: Node = null  # 敌人生成器
@@ -323,6 +324,10 @@ func on_enemy_spawned(enemy: Node) -> void:
 	# 监听敌人被移除（queue_free）
 	if not enemy.tree_exiting.is_connected(_on_enemy_removed):
 		enemy.tree_exiting.connect(_on_enemy_removed.bind(enemy))
+	
+	# 发射敌人生成信号（用于 BOSS 血条等 UI）
+	if enemy is Enemy:
+		enemy_spawned.emit(enemy as Enemy)
 	
 	#print("[WaveSystem V3] 敌人生成：", spawned_enemies_this_wave, "/", total_enemies_this_wave, 
 		  #" | 存活：", active_enemies.size())

@@ -181,6 +181,9 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 			# 初始化敌人数据（只应用数值属性，动画已在预制场景中配置）
 			enemy.enemy_data = enemy_data
 			
+			# 设置敌人 ID（用于 BOSS 血条等功能）
+			enemy.enemy_id = enemy_id
+			
 			# 设置波次号（用于掉落判断）
 			enemy.current_wave_number = wave_number
 			

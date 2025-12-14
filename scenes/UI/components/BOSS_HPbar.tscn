@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhbgib24p07ow"]
+[gd_scene load_steps=5 format=3 uid="uid://bhbgib24p07ow"]
 
+[ext_resource type="Script" uid="uid://djtys8nipmkea" path="res://Scripts/UI/boss_hp_bar.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://5p8kn773pf2x" path="res://assets/UI/BOSSHP_ui/parrit-monitor.png" id="1_tgyt6"]
 [ext_resource type="StyleBox" uid="uid://brjva4kavfa5r" path="res://scenes/UI/weapon_state_bar_fill.tres" id="2_drc26"]
 
@@ -18,14 +19,17 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [node name="BossHPbar" type="Control"]
+custom_minimum_size = Vector2(600, 90)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_script")
 
 [node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 90)
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0

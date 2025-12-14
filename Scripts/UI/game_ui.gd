@@ -15,6 +15,10 @@ extends CanvasLayer
 @onready var damage_flash: DamageFlash = %DamageFlash
 @onready var warning_ui: Control = $WarningUi
 @onready var warning_animation: AnimationPlayer = $WarningUi/AnimationPlayer
+@onready var boss_bar_container: VBoxContainer = $BOSSbar_root/VBoxContainer
+
+## BOSS HP Bar 场景
+const BOSS_HP_BAR_SCENE = preload("res://scenes/UI/components/BOSS_HPbar.tscn")
 
 # 内部引用
 var hp_label: Label = null  # HP标签
@@ -158,6 +162,11 @@ func _setup_wave_display() -> void:
 			if not wave_manager_ref.wave_ended.is_connected(_on_wave_ended):
 				wave_manager_ref.wave_ended.connect(_on_wave_ended)
 		
+		# 连接敌人生成信号（用于 BOSS 血条）
+		if wave_manager_ref.has_signal("enemy_spawned"):
+			if not wave_manager_ref.enemy_spawned.is_connected(_on_enemy_spawned):
+				wave_manager_ref.enemy_spawned.connect(_on_enemy_spawned)
+		
 		# 初始化显示
 		_update_wave_display()
 	else:
@@ -183,6 +192,10 @@ func _find_wave_manager_periodically() -> void:
 				if wave_manager_ref.has_signal("wave_ended"):
 					if not wave_manager_ref.wave_ended.is_connected(_on_wave_ended):
 						wave_manager_ref.wave_ended.connect(_on_wave_ended)
+				# 连接敌人生成信号（用于 BOSS 血条）
+				if wave_manager_ref.has_signal("enemy_spawned"):
+					if not wave_manager_ref.enemy_spawned.is_connected(_on_enemy_spawned):
+						wave_manager_ref.enemy_spawned.connect(_on_enemy_spawned)
 				_update_wave_display()
 				return
 		attempts += 1
@@ -243,6 +256,78 @@ func _input(event: InputEvent) -> void:
 		if player_stats_info:
 			player_stats_info.toggle_visibility()
 
+## ==================== BOSS 血条管理 ====================
+
+## 敌人生成回调（用于显示 BOSS 血条）
+func _on_enemy_spawned(enemy: Enemy) -> void:
+	if not enemy or not is_instance_valid(enemy):
+		return
+	
+	# 检查是否是需要显示 BOSS 血条的敌人
+	if not BossHPBar.is_boss_enemy(enemy.enemy_id):
+		return
+	
+	# 创建 BOSS 血条
+	_create_boss_hp_bar(enemy)
+
+## 创建 BOSS 血条
+func _create_boss_hp_bar(enemy: Enemy) -> void:
+	if not boss_bar_container:
+		push_warning("[GameUI] boss_bar_container 未找到")
+		return
+	
+	# 实例化 BOSS 血条
+	var boss_bar = BOSS_HP_BAR_SCENE.instantiate()
+	boss_bar_container.add_child(boss_bar)
+	
+	# 获取 BossHPBar 脚本（如果有的话）
+	if boss_bar.has_method("set_enemy"):
+		boss_bar.set_enemy(enemy, enemy.enemy_id)
+	else:
+		# 手动设置（兜底方案）
+		_setup_boss_bar_manually(boss_bar, enemy)
+	
+	print("[GameUI] 创建 BOSS 血条: ", enemy.enemy_id)
+
+## 手动设置 BOSS 血条（兜底方案，如果场景没有脚本）
+func _setup_boss_bar_manually(boss_bar: Control, enemy: Enemy) -> void:
+	var partrit = boss_bar.get_node_or_null("Control/partrit")
+	var progress_bar = boss_bar.get_node_or_null("Control/partrit/ProgressBar")
+	
+	if not partrit or not progress_bar:
+		return
+	
+	# 设置纹理
+	match enemy.enemy_id:
+		"monitor":
+			partrit.texture = load("res://assets/UI/BOSSHP_ui/parrit-monitor.png")
+		"ent":
+			partrit.texture = load("res://assets/UI/BOSSHP_ui/partrit-ent.png")
+	
+	# 设置血量
+	progress_bar.max_value = enemy.max_enemyHP
+	progress_bar.value = enemy.enemyHP
+	
+	# 显示血条
+	boss_bar.visible = true
+	
+	# 创建更新计时器
+	var timer = Timer.new()
+	timer.wait_time = 0.1
+	timer.autostart = true
+	boss_bar.add_child(timer)
+	
+	timer.timeout.connect(func():
+		if not is_instance_valid(enemy) or enemy.is_dead:
+			boss_bar.queue_free()
+			return
+		progress_bar.value = enemy.enemyHP
+	)
+	
+	# 监听敌人死亡
+	if enemy.has_signal("enemy_killed"):
+		enemy.enemy_killed.connect(func(_e): boss_bar.queue_free())
+
 ## 节点退出时断开信号连接（防止信号残留）
 func _exit_tree() -> void:
 	# 断开GameMain信号
@@ -264,3 +349,5 @@ func _exit_tree() -> void:
 			wave_manager_ref.wave_started.disconnect(_on_wave_started)
 		if wave_manager_ref.has_signal("wave_ended") and wave_manager_ref.wave_ended.is_connected(_on_wave_ended):
 			wave_manager_ref.wave_ended.disconnect(_on_wave_ended)
+		if wave_manager_ref.has_signal("enemy_spawned") and wave_manager_ref.enemy_spawned.is_connected(_on_enemy_spawned):
+			wave_manager_ref.enemy_spawned.disconnect(_on_enemy_spawned)
