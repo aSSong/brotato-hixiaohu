@@ -1,4 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://c4b35vp8k62a"]
+[gd_scene load_steps=10 format=3 uid="uid://c4b35vp8k62a"]
+
+[ext_resource type="Texture2D" uid="uid://cm76ram63hskb" path="res://FX/circle_particale.png" id="1_dipyg"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d15qw"]
 particles_animation = true
@@ -39,10 +41,10 @@ gravity = Vector3(0, 0, 0)
 damping_min = 1.151
 damping_max = 9.328
 damping_curve = SubResource("CurveTexture_dipyg")
-scale_min = 5.0
-scale_max = 15.0
+scale_min = 0.099999994
+scale_max = 0.39999998
 scale_curve = SubResource("CurveTexture_52mmb")
-color = Color(0.55436885, 1.0627891, 1.0501835, 0.85882354)
+color = Color(0, 0.9384638, 0.03638066, 0.859)
 alpha_curve = SubResource("CurveTexture_3342k")
 anim_offset_min = 0.0177
 anim_offset_max = 0.17549999
@@ -52,6 +54,7 @@ z_index = 12
 material = SubResource("CanvasItemMaterial_d15qw")
 emitting = false
 amount = 40
+texture = ExtResource("1_dipyg")
 lifetime = 7.0
 one_shot = true
 speed_scale = 6.15
