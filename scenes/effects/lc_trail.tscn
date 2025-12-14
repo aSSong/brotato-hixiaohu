@@ -71,8 +71,8 @@ randomness = 0.2
 process_material = SubResource("ParticleProcessMaterial_trail")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(2, 2)
+scale = Vector2(1.6, 1.6)
 sprite_frames = SubResource("SpriteFrames_1o82c")
 autoplay = "default"
-frame_progress = 0.8421104
+frame_progress = 0.9103835
 offset = Vector2(-102.17, 0)

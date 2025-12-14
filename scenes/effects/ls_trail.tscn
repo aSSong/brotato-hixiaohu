@@ -14,14 +14,14 @@ curve = SubResource("Curve_scale")
 particle_flag_disable_z = true
 emission_shape_scale = Vector3(15, 15, 1)
 emission_shape = 1
-emission_sphere_radius = 2.0
+emission_sphere_radius = 5.25
 direction = Vector3(0, 0, 0)
 spread = 10.0
 initial_velocity_min = 3.0
 initial_velocity_max = 10.0
 gravity = Vector3(0, 0, 0)
-scale_min = 0.15
-scale_max = 0.25
+scale_min = 0.14999999
+scale_max = 0.5
 scale_curve = SubResource("CurveTexture_scale")
 color = Color(0.8, 0.9, 1, 0.9)
 
@@ -106,7 +106,6 @@ randomness = 0.2
 process_material = SubResource("ParticleProcessMaterial_trail")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.74, 0.74)
 sprite_frames = SubResource("SpriteFrames_1o82c")
 autoplay = "default"
 frame_progress = 0.88620317
