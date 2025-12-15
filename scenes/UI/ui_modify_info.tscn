@@ -1,0 +1,169 @@
+[gd_scene load_steps=11 format=3 uid="uid://nhkvjnrgcicv"]
+
+[ext_resource type="Script" uid="uid://djwlpr8m4hof0" path="res://Scripts/UI/modify_info.gd" id="1_xieki"]
+[ext_resource type="Texture2D" uid="uid://c8dkfudbqrq4n" path="res://assets/UI/common/bg_maintitle_neo.png" id="2_vxh54"]
+[ext_resource type="Texture2D" uid="uid://bvfywurmh4rjl" path="res://assets/UI/createaccount_ui/textimg-account-01.png" id="3_gpk3w"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="4_rw88p"]
+[ext_resource type="Texture2D" uid="uid://bmgip1e3l7qu0" path="res://assets/UI/maintitle/btn-other-normal-01.png" id="5_pvmdm"]
+[ext_resource type="Texture2D" uid="uid://hhrlu5odkkv1" path="res://assets/UI/maintitle/btn-other-pressed-01.png" id="6_julkr"]
+[ext_resource type="Texture2D" uid="uid://5xdtdejhi11r" path="res://assets/UI/maintitle/btn-other-hover-01.png" id="7_xi4yt"]
+[ext_resource type="Texture2D" uid="uid://ceqcch27fc2qw" path="res://assets/UI/maintitle/btn-other-disabled-01.png" id="8_to54v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anvro"]
+bg_color = Color(0.5411765, 0.4745098, 0.5411765, 1)
+skew = Vector2(0.44, 0)
+border_color = Color(1, 1, 1, 1)
+shadow_color = Color(0.3529412, 0.07450981, 0.62352943, 1)
+shadow_size = 4
+shadow_offset = Vector2(6, 15)
+
+[sub_resource type="Theme" id="Theme_lj4q7"]
+PopupMenu/font_sizes/font_size = 80
+
+[node name="create_account" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xieki")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+self_modulate = Color(0.36471108, 0.36471152, 0.3647114, 1)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_vxh54")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -291.0
+offset_right = 500.0
+offset_bottom = -177.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0.23921569, 0, 0, 0.7921569)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
+theme_override_font_sizes/font_size = 80
+
+[node name="TextureRect" type="TextureRect" parent="Label"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -467.0
+offset_top = -41.5
+offset_right = 467.0
+offset_bottom = 41.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_gpk3w")
+
+[node name="Label" type="Label" parent="Label"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -312.0
+offset_top = 67.0
+offset_right = 313.0
+offset_bottom = 124.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "(涉及到奖品信息，请尽量如实填写)"
+
+[node name="name_input" type="LineEdit" parent="Label"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = 142.0
+offset_right = 400.0
+offset_bottom = 272.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_rw88p")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxFlat_anvro")
+placeholder_text = "填入本名"
+alignment = 1
+caret_blink = true
+
+[node name="floor_choose" type="MenuButton" parent="Label"]
+custom_minimum_size = Vector2(800, 130)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = 316.0
+offset_right = 400.0
+offset_bottom = 446.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_lj4q7")
+theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 0.6627451)
+theme_override_fonts/font = ExtResource("4_rw88p")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxFlat_anvro")
+text = "你在哪个楼层"
+flat = false
+
+[node name="fight" type="TextureButton" parent="Label/floor_choose"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -202.0
+offset_top = 63.0
+offset_right = 151.0
+offset_bottom = 167.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.2, 1.2)
+texture_normal = ExtResource("5_pvmdm")
+texture_pressed = ExtResource("6_julkr")
+texture_hover = ExtResource("7_xi4yt")
+texture_disabled = ExtResource("8_to54v")
+
+[node name="Label" type="Label" parent="Label/floor_choose/fight"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -15.429993
+offset_right = 64.0
+offset_bottom = 38.570007
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.13962634
+theme_override_fonts/font = ExtResource("4_rw88p")
+theme_override_font_sizes/font_size = 42
+text = "确定"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="Label/floor_choose/fight" to="." method="_on_fight_pressed"]

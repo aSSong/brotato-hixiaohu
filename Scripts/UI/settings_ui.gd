@@ -14,7 +14,7 @@ func _on_stuffbtn_pressed() -> void:
 
 
 func _on_filesbtn_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/UI/cutscene_playback_1.tscn")
+	get_tree().change_scene_to_file("res://scenes/UI/ui_modify_info.tscn")
 
 
 func _on_backbtn_pressed() -> void:
