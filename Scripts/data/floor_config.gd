@@ -49,7 +49,7 @@ static func get_floor_short_text(floor_id: int) -> String:
 	if floor_id >= 1 and floor_id <= 38:
 		return str(floor_id) + "F"
 	elif floor_id == FLOOR_ID_OUTSIDE:
-		return "外"
+		return "其他"
 	else:
 		return ""
 
