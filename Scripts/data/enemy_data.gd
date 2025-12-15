@@ -57,6 +57,11 @@ enum EnemySkillType {
 ## 金币掉落数量（死亡时掉落的gold数量，对masterkey无效）
 @export var gold_drop_count: int = 1
 
+## 每波成长点数（在基础值上额外增加的固定数值，配合波次成长率使用）
+## 公式：(基础值 + 成长点数) * (1 + 波次成长率)
+@export var hp_growth_per_wave: float = 0.0  # HP成长点数
+@export var damage_growth_per_wave: float = 0.0  # 伤害成长点数
+
 ## 初始化函数（简化版，主要用于代码创建）
 func _init(
 	p_enemy_name: String = "默认敌人",

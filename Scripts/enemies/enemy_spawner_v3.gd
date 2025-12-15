@@ -194,23 +194,31 @@ func _spawn_single_enemy(enemy_id: String, is_last_in_wave: bool = false, wave_n
 			add_child(enemy)
 			
 			# 在_ready()执行完后，应用成长率（必须在add_child之后）
-			# HP成长：基础值 * (1 + 成长率)
+			# 公式：(基础值 + 成长点数 × (波次-1)) × (1 + 成长率)
 			var hp_multiplier = 1.0 + hp_growth
 			var damage_multiplier = 1.0 + damage_growth
 			
-			enemy.max_enemyHP = int(enemy.max_enemyHP * hp_multiplier)
+			# 获取敌人专属的成长点数（乘以波次-1，第1波不加成）
+			var wave_factor = max(0, wave_number - 1)
+			var hp_growth_points = enemy_data.hp_growth_per_wave if enemy_data else 0.0
+			var damage_growth_points = enemy_data.damage_growth_per_wave if enemy_data else 0.0
+			var hp_bonus = hp_growth_points * wave_factor
+			var damage_bonus = damage_growth_points * wave_factor
+			
+			# HP成长：(基础值 + 成长点数 × (波次-1)) × (1 + 成长率)
+			enemy.max_enemyHP = int((enemy.max_enemyHP + hp_bonus) * hp_multiplier)
 			enemy.enemyHP = enemy.max_enemyHP
 			
 			# 应用伤害成长（触碰伤害）
 			if "attack_damage" in enemy:
-				enemy.attack_damage = int(enemy.attack_damage * damage_multiplier)
+				enemy.attack_damage = int((enemy.attack_damage + damage_bonus) * damage_multiplier)
 			
-			# 应用技能伤害成长
-			_apply_skill_damage_growth(enemy, damage_multiplier)
+			# 应用技能伤害成长（传递累积后的成长点数）
+			_apply_skill_damage_growth(enemy, damage_multiplier, damage_bonus)
 			
 			print("[EnemySpawner V3] 生成敌人：", enemy_id, " 波次:", wave_number, 
-				  " HP倍数:", hp_multiplier, " 实际HP:", enemy.max_enemyHP,
-				  " 伤害倍数:", damage_multiplier)
+				  " HP:", enemy.max_enemyHP, "(基础+", hp_bonus, ")×", hp_multiplier,
+				  " 伤害:", enemy.attack_damage, "(基础+", damage_bonus, ")×", damage_multiplier)
 			return enemy
 	
 	# 尝试多次后仍失败
@@ -226,7 +234,8 @@ func _is_far_enough_from_player(spawn_pos: Vector2) -> bool:
 	return distance >= min_distance_from_player
 
 ## 应用技能伤害成长
-func _apply_skill_damage_growth(enemy: Node, damage_multiplier: float) -> void:
+## 公式：(基础值 + 成长点数) * (1 + 成长率)
+func _apply_skill_damage_growth(enemy: Node, damage_multiplier: float, damage_growth_points: float = 0.0) -> void:
 	if not "behaviors" in enemy:
 		return
 	
@@ -237,17 +246,22 @@ func _apply_skill_damage_growth(enemy: Node, damage_multiplier: float) -> void:
 		# 冲锋技能：额外伤害成长
 		if behavior is ChargingBehavior:
 			var charging = behavior as ChargingBehavior
-			charging.extra_damage = int(charging.extra_damage * damage_multiplier)
+			charging.extra_damage = int((charging.extra_damage + damage_growth_points) * damage_multiplier)
 		
 		# 射击技能：子弹伤害成长
 		elif behavior is ShootingBehavior:
 			var shooting = behavior as ShootingBehavior
-			shooting.bullet_damage = int(shooting.bullet_damage * damage_multiplier)
+			shooting.bullet_damage = int((shooting.bullet_damage + damage_growth_points) * damage_multiplier)
 		
 		# 自爆技能：爆炸伤害成长
 		elif behavior is ExplodingBehavior:
 			var exploding = behavior as ExplodingBehavior
-			exploding.explosion_damage = int(exploding.explosion_damage * damage_multiplier)
+			exploding.explosion_damage = int((exploding.explosion_damage + damage_growth_points) * damage_multiplier)
+		
+		# Boss射击技能：子弹伤害成长
+		elif behavior is BossShootingBehavior:
+			var boss_shooting = behavior as BossShootingBehavior
+			boss_shooting.bullet_damage = int((boss_shooting.bullet_damage + damage_growth_points) * damage_multiplier)
 
 ## 清理所有敌人（调试用）
 func clear_all_enemies() -> void:
