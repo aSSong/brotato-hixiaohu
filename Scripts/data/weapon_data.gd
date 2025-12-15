@@ -68,6 +68,8 @@ enum CalculationType {
 ##   - attack_speed: float (攻击间隔)
 ##   - range: float (检测范围)
 ##   - shoot_offset: Vector2 (发射位置偏移，相对于武器中心)
+##   - recoil_distance: float (后座力位移像素，可选，默认0)
+##   - recoil_duration: float (后座力恢复时间秒，可选，默认0.1)
 ## 
 ## MAGIC 参数:
 ##   - damage: int

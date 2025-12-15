@@ -13,12 +13,28 @@ class_name RangedBehavior
 ##   - spread_angle: float 散射角度（度）
 ##   - attack_speed: float 攻击间隔（秒）
 ##   - range: float 检测范围
+##   - recoil_distance: float 后座力位移像素（可选，默认0）
+##   - recoil_duration: float 后座力恢复时间秒（可选，默认0.1）
 
 ## 子弹场景
 var bullet_scene: PackedScene = null
 
 ## 射击位置节点
 var shoot_pos: Marker2D = null
+
+## ===== 后座力系统 =====
+## 后座力位移像素
+var recoil_distance: float = 0.0
+## 后座力恢复时间
+var recoil_duration: float = 0.1
+## 后座力计时器
+var recoil_timer: float = 0.0
+## 是否正在后座力恢复中
+var is_recoiling: bool = false
+## 武器原始本地位置
+var original_local_position: Vector2 = Vector2.ZERO
+## 后座力方向（武器朝向的反方向）
+var recoil_direction: Vector2 = Vector2.ZERO
 
 func _on_initialize() -> void:
 	# 加载子弹场景
@@ -35,6 +51,13 @@ func _on_initialize() -> void:
 		# 从 params 中读取发射位置偏移，如果没有则使用默认值
 		var shoot_offset = params.get("shoot_offset", Vector2(16, 0))
 		shoot_pos.position = shoot_offset
+		
+		# 读取后座力参数
+		recoil_distance = params.get("recoil_distance", 0.0)
+		recoil_duration = params.get("recoil_duration", 0.1)
+		
+		# 保存武器原始本地位置
+		original_local_position = weapon.position
 
 func get_behavior_type() -> int:
 	return WeaponData.BehaviorType.RANGED
@@ -90,6 +113,9 @@ func perform_attack(enemies: Array) -> void:
 	# 播放枪口特效
 	_play_muzzle_effect(bullet_data, base_direction)
 	
+	# 触发后座力（如果有配置）
+	_trigger_recoil(base_direction)
+	
 	# 计算伤害和暴击
 	var base_damage = get_final_damage()
 	var is_critical = roll_critical()
@@ -134,6 +160,51 @@ func _play_muzzle_effect(bullet_data: BulletData, direction: Vector2) -> void:
 		rotation_angle,
 		bullet_data.muzzle_effect_scale
 	)
+
+## 触发后座力
+func _trigger_recoil(_shoot_direction: Vector2) -> void:
+	if recoil_distance == 0 or not weapon:
+		return
+	
+	# 如果正在后座力恢复中，立即重置到原位再开始新的后座力
+	if is_recoiling:
+		weapon.position = original_local_position
+	
+	# 后座力方向是武器的负X方向（武器朝向的反方向）
+	# 武器会旋转朝向敌人，所以需要根据武器的旋转角度计算后座力方向
+	# Vector2(-1, 0) 是武器本地坐标的后方，旋转到父节点坐标系
+	recoil_direction = Vector2(-1, 0).rotated(weapon.rotation)
+	
+	# 立即将武器移动到后座位置
+	weapon.position = original_local_position + recoil_direction * recoil_distance
+	
+	# 开始后座力恢复计时
+	recoil_timer = 0.0
+	is_recoiling = true
+
+## 每帧更新 - 处理后座力恢复
+func process(delta: float) -> void:
+	if not is_recoiling or not weapon:
+		return
+	
+	# 更新后座力计时器
+	recoil_timer += delta
+	
+	# 计算恢复进度 (0 -> 1)
+	var progress = recoil_timer / recoil_duration if recoil_duration > 0 else 1.0
+	progress = clampf(progress, 0.0, 1.0)
+	
+	# 使用平滑插值从后座位置恢复到原位
+	# 使用 ease out 效果让恢复更自然
+	var eased_progress = 1.0 - pow(1.0 - progress, 2.0)  # ease out quad
+	var current_offset = recoil_direction * recoil_distance * (1.0 - eased_progress)
+	weapon.position = original_local_position + current_offset
+	
+	# 检查是否恢复完成
+	if progress >= 1.0:
+		weapon.position = original_local_position
+		is_recoiling = false
+		recoil_timer = 0.0
 
 ## 生成子弹
 func _spawn_bullet(direction: Vector2, damage: int, is_critical: bool, bullet_data: BulletData) -> void:

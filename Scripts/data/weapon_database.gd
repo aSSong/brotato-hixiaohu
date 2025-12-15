@@ -156,7 +156,9 @@ static func initialize_weapons() -> void:
 			"pierce_count": 0,
 			"projectile_count": 1,
 			"spread_angle": 0.0,
-			"shoot_offset": Vector2(200, -20)  # 发射位置偏移（枪口位置）
+			"shoot_offset": Vector2(200, -20),  # 发射位置偏移（枪口位置）
+			"recoil_distance": 8.0,  # 后座力位移像素
+			"recoil_duration": 0.08  # 后座力恢复时间
 		},
 		"res://assets/weapon/weapon_machinegun.png",
 		Vector2(0.7, 0.7)
@@ -177,7 +179,9 @@ static func initialize_weapons() -> void:
 			"pierce_count": 0,
 			"projectile_count": 5,
 			"spread_angle": 120.0,
-			"shoot_offset": Vector2(90, 0)  # 发射位置偏移
+			"shoot_offset": Vector2(90, 0),  # 发射位置偏移
+			"recoil_distance": 25.0,  # 后座力位移像素（霰弹枪后座力大）
+			"recoil_duration": 0.2  # 后座力恢复时间
 		},
 		"res://assets/weapon/weapon_shotgun.png",
 		Vector2(0.7, 0.7)
@@ -198,7 +202,9 @@ static func initialize_weapons() -> void:
 			"pierce_count": 0,
 			"projectile_count": 1,
 			"spread_angle": 0.0,
-			"shoot_offset": Vector2(320, 0)  # 发射位置偏移
+			"shoot_offset": Vector2(320, 0),  # 发射位置偏移
+			"recoil_distance": 15.0,  # 后座力位移像素
+			"recoil_duration": 0.15  # 后座力恢复时间
 		},
 		"res://assets/weapon/weapon_missle.png",
 		Vector2(0.7, 0.7)
@@ -267,7 +273,9 @@ static func initialize_weapons() -> void:
 			"pierce_count": 2,
 			"projectile_count": 1,
 			"spread_angle": 0.0,
-			"shoot_offset": Vector2(100, 0)  # 发射位置偏移
+			"shoot_offset": Vector2(100, 0),  # 发射位置偏移
+			"recoil_distance": -12.0,  # 后座力位移像素
+			"recoil_duration": 0.12  # 后座力恢复时间
 		},
 		"res://assets/weapon/weapon_lightspear.png",
 		Vector2(0.7, 0.7)
@@ -300,7 +308,9 @@ static func initialize_weapons() -> void:
 			"pierce_count": 0,
 			"projectile_count": 1,
 			"spread_angle": 0.0,
-			"shoot_offset": Vector2(150, -20)  # 发射位置偏移
+			"shoot_offset": Vector2(150, -20),  # 发射位置偏移
+			"recoil_distance": -10.0,  # 后座力位移像素
+			"recoil_duration": 0.1  # 后座力恢复时间
 		},
 		"res://assets/weapon/weapon_lightwand.png",
 		Vector2(0.7, 0.7)
@@ -409,7 +419,9 @@ static func initialize_weapons() -> void:
 			"pierce_count": 0,
 			"projectile_count": 3,
 			"spread_angle": 90.0,
-			"shoot_offset": Vector2(130, 0)  # 发射位置偏移
+			"shoot_offset": Vector2(130, 0),  # 发射位置偏移
+			"recoil_distance": 12.0,  # 后座力位移像素
+			"recoil_duration": 0.15  # 后座力恢复时间
 		},
 		"res://assets/weapon/weapon_arcane.png",
 		Vector2(0.7, 0.7)
