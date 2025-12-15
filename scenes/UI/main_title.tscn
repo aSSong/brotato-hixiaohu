@@ -1,7 +1,7 @@
 [gd_scene load_steps=20 format=3 uid="uid://dnt2sd4mt6yw8"]
 
 [ext_resource type="Script" uid="uid://dfrk5jfj3ogys" path="res://Scripts/UI/main_title.gd" id="1_3tovs"]
-[ext_resource type="Texture2D" uid="uid://nt3yak4cvwm5" path="res://assets/UI/common/bg_maintitle_neo.jpg" id="2_lpsgw"]
+[ext_resource type="Texture2D" uid="uid://c8dkfudbqrq4n" path="res://assets/UI/common/bg_maintitle_neo.png" id="2_lpsgw"]
 [ext_resource type="Texture2D" uid="uid://bwfdkccwfhjql" path="res://assets/UI/maintitle/logo.png" id="3_f6rfw"]
 [ext_resource type="Texture2D" uid="uid://bwxn18efpuf7s" path="res://assets/UI/common/btn-level-normal-01.png" id="3_fraxl"]
 [ext_resource type="Texture2D" uid="uid://rkoedninn4cu" path="res://assets/UI/common/btn-level-pressed-01.png" id="4_nb8ff"]
@@ -41,7 +41,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Vector2(0.5, 0.5)]
 }
 
 [sub_resource type="Animation" id="Animation_lpsgw"]
@@ -56,7 +56,7 @@ tracks/0/path = NodePath("background:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 2, 8, 14, 19.5, 25, 31, 36),
+"times": PackedFloat32Array(0, 2, 8, 14, 19.5, 28, 31, 36),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(0, 0), Vector2(0, 0), Vector2(-370, -200), Vector2(-221, -85), Vector2(-8, -12), Vector2(-171, -184), Vector2(-168, -152), Vector2(0, 0)]
@@ -71,7 +71,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 2, 8, 31, 36),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1.2, 1.2), Vector2(1, 1)]
+"values": [Vector2(0.5, 0.5), Vector2(0.5, 0.5), Vector2(0.6, 0.6), Vector2(0.6, 0.6), Vector2(0.5, 0.5)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_f6rfw"]
@@ -94,8 +94,11 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_lpsgw")
 
 [node name="logo" type="TextureRect" parent="."]
@@ -207,23 +210,6 @@ theme_override_font_sizes/font_size = 50
 text = "退出"
 horizontal_alignment = 1
 
-[node name="Verson" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -148.0
-offset_top = -46.0
-offset_right = -32.0
-offset_bottom = -22.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_color = Color(1, 1, 1, 0.33333334)
-theme_override_font_sizes/font_size = 36
-text = "当前版本：0.9.1.1"
-
 [node name="player_info" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 3
@@ -271,6 +257,23 @@ theme_override_fonts/font = ExtResource("7_wl6us")
 theme_override_font_sizes/font_size = 40
 text = "注意：PlayerName已为空值"
 horizontal_alignment = 2
+
+[node name="Verson" type="Label" parent="player_info"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -116.0
+offset_top = 33.5
+offset_right = 176.0
+offset_bottom = 83.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.33333334)
+theme_override_font_sizes/font_size = 36
+text = "当前版本：0.9.1.1"
 
 [node name="settingsbtn" type="TextureButton" parent="."]
 layout_mode = 1

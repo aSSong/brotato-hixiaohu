@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://dkl5ukxxqe48v"]
 
 [ext_resource type="Script" uid="uid://4ts3pjkf357j" path="res://Scripts/UI/level_select.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://nt3yak4cvwm5" path="res://assets/UI/common/bg_maintitle_neo.jpg" id="2_f431m"]
+[ext_resource type="Texture2D" uid="uid://c8dkfudbqrq4n" path="res://assets/UI/common/bg_maintitle_neo.png" id="2_f431m"]
 [ext_resource type="Texture2D" uid="uid://bbkdoqdj2q2uy" path="res://assets/UI/level_select_ui/panel-levelselect-01.png" id="2_l65nk"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_f431m"]
 [ext_resource type="Texture2D" uid="uid://bwxn18efpuf7s" path="res://assets/UI/common/btn-level-normal-01.png" id="4_1ep74"]
@@ -21,11 +21,21 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="bg" type="TextureRect" parent="."]
+[node name="bg" type="Control" parent="."]
+self_modulate = Color(0.18538326, 0.18538326, 0.18538326, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="bg"]
 self_modulate = Color(0.18538326, 0.18538326, 0.18538326, 1)
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 3840.0
+offset_bottom = 2160.0
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_f431m")
 
 [node name="MarginContainer" type="Control" parent="bg"]
