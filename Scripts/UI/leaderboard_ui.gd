@@ -42,6 +42,13 @@ var is_loading: bool = false
 # 当前选中的模式 (1 或 2)
 var current_mode: int = 1
 
+## ==================== 自动刷新 ====================
+
+## 自动刷新间隔（秒）
+@export var auto_refresh_interval_sec: float = 5.0
+
+var _refresh_timer: Timer = null
+
 ## ==================== 滚动背景 ====================
 
 ## 背景滚动速度（像素/秒）
@@ -80,8 +87,50 @@ func _ready() -> void:
 	if switch2_button:
 		switch2_button.grab_focus()
 	
-	# 加载数据
-	_load_leaderboard_data()
+	# 初始化自动刷新
+	_setup_auto_refresh()
+
+func _exit_tree() -> void:
+	_stop_auto_refresh()
+
+func _setup_auto_refresh() -> void:
+	# 监听可见性变化（UI 打开/关闭、显示/隐藏）
+	if not visibility_changed.is_connected(_on_visibility_changed):
+		visibility_changed.connect(_on_visibility_changed)
+	
+	# 初次进入：如果当前就可见，立刻拉一次并启动定时刷新
+	_on_visibility_changed()
+
+func _on_visibility_changed() -> void:
+	# UI 被显示时：立刻刷新并启动定时器；被隐藏时：停止定时器
+	if is_visible_in_tree():
+		_ensure_refresh_timer()
+		_load_leaderboard_data()
+		if _refresh_timer.is_stopped():
+			_refresh_timer.start()
+	else:
+		_stop_auto_refresh()
+
+func _on_auto_refresh_timeout() -> void:
+	# 定时刷新：UI 被显示时刷新
+	if is_visible_in_tree():
+		_ensure_refresh_timer()
+		_load_leaderboard_data()
+
+func _ensure_refresh_timer() -> void:
+	if _refresh_timer == null:
+		_refresh_timer = Timer.new()
+		_refresh_timer.name = "LeaderboardAutoRefreshTimer"
+		_refresh_timer.one_shot = false
+		_refresh_timer.autostart = false
+		_refresh_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+		add_child(_refresh_timer)
+		_refresh_timer.timeout.connect(_on_auto_refresh_timeout)
+	_refresh_timer.wait_time = maxf(0.2, auto_refresh_interval_sec)
+
+func _stop_auto_refresh() -> void:
+	if _refresh_timer and not _refresh_timer.is_stopped():
+		_refresh_timer.stop()
 
 ## 初始化滚动背景
 func _setup_scrolling_background() -> void:
@@ -400,27 +449,18 @@ func _format_time(seconds: float) -> String:
 func _format_datetime(iso_date: String) -> String:
 	if iso_date.is_empty():
 		return "???"
-	
-	# 解析 ISO 8601 格式: "2025-12-08T14:17:31Z"
-	var datetime_parts = iso_date.split("T")
-	if datetime_parts.size() < 2:
+
+	# ISO 8601 -> unix timestamp -> 本地时间字符串
+	var unix_time := int(Time.get_unix_time_from_datetime_string(iso_date))
+	if unix_time <= 0:
 		return iso_date
 	
-	var date_part = datetime_parts[0]
-	var time_part = datetime_parts[1].replace("Z", "")
+	# 手动添加时区偏移量
+	unix_time += 8 * 60 * 60
 	
-	var date_components = date_part.split("-")
-	var time_components = time_part.split(":")
-	
-	if date_components.size() >= 3 and time_components.size() >= 2:
-		var year = date_components[0]
-		var month = date_components[1]
-		var day = date_components[2]
-		var hour = time_components[0]
-		var minute = time_components[1]
-		return "%s/%s/%s %s:%s" % [year, month, day, hour, minute]
-	
-	return iso_date
+	# 获得本地时间
+	var local_dt: Dictionary = Time.get_datetime_dict_from_unix_time(unix_time)
+	return "%04d/%02d/%02d %02d:%02d" % [local_dt.year, local_dt.month, local_dt.day, local_dt.hour, local_dt.minute]
 
 ## ==================== 按钮回调 ====================
 
@@ -432,4 +472,5 @@ func _on_switch2_pressed() -> void:
 
 func _on_back_pressed() -> void:
 	print("[LeaderboardUI] 返回主菜单")
+	_stop_auto_refresh()
 	get_tree().change_scene_to_file("res://scenes/UI/main_title.tscn")
