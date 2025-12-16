@@ -149,7 +149,7 @@ static func initialize_weapons() -> void:
 		WeaponData.BehaviorType.RANGED,
 		WeaponData.CalculationType.RANGED,
 		{
-			"damage": 1,
+			"damage": 2,
 			"attack_speed": 0.3,
 			"range": 800.0,
 			"bullet_id": "mg_bullet",  # 使用机枪专属子弹（带枪口和击中特效）
@@ -302,7 +302,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 3,
-			"attack_speed": 1.4,
+			"attack_speed": 1.6,
 			"range": 1000.0,
 			"bullet_id": "lc_bullet",  # 使用连锁闪电专属子弹
 			"pierce_count": 0,
@@ -326,7 +326,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 4,
-			"attack_speed": 2.0,
+			"attack_speed": 1.4,
 			"range": 900.0,
 			"explosion_radius": 150.0,
 			"explosion_damage_multiplier": 0.8,
@@ -365,7 +365,7 @@ static func initialize_weapons() -> void:
 		WeaponData.CalculationType.MAGIC,
 		{
 			"damage": 10,
-			"attack_speed": 3.0,
+			"attack_speed": 2.0,
 			"range": 700.0,
 			"explosion_radius": 250.0,
 			"explosion_damage_multiplier": 1.5,
