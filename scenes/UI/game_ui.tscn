@@ -513,7 +513,6 @@ offset_bottom = 40.0
 theme_override_constants/separation = 10
 
 [node name="zoom-tips" type="TextureRect" parent="."]
-self_modulate = Color(1, 1, 1, 0.34117648)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
