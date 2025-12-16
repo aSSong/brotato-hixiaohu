@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cktxl6bnggc0p"]
+[gd_scene load_steps=19 format=3 uid="uid://cktxl6bnggc0p"]
 
 [ext_resource type="Script" uid="uid://vk8vnqvjt832" path="res://Scripts/players/player.gd" id="1_ldeu4"]
 [ext_resource type="Texture2D" uid="uid://cfe43qhbq2h15" path="res://assets/others/shadow.png" id="2_edvpf"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cgu6bmn3yknnu" path="res://scenes/weapons/now_weapons.tscn" id="3_kc87p"]
 [ext_resource type="Shader" uid="uid://b0mpedodgante" path="res://Shaders/weapon2.gdshader" id="4_jwv1m"]
 [ext_resource type="Texture2D" uid="uid://bbb22hdwja8mq" path="res://FX/light_test.png" id="5_olb2f"]
+[ext_resource type="SpriteFrames" uid="uid://24l7dlf0kn0e" path="res://resources/player/player_FX.tres" id="8_phaeh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_phaeh"]
 resource_local_to_scene = true
@@ -145,6 +146,25 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 36
 text = "樊万松 第144世"
+
+[node name="revive-FX" type="AnimatedSprite2D" parent="."]
+visible = false
+z_index = 6
+scale = Vector2(1.3523809, 1.3999999)
+sprite_frames = ExtResource("8_phaeh")
+animation = &"revive"
+autoplay = "revive"
+frame_progress = 0.96031183
+
+[node name="skill-FX" type="AnimatedSprite2D" parent="."]
+visible = false
+z_index = 6
+scale = Vector2(3.1875, 3)
+sprite_frames = ExtResource("8_phaeh")
+animation = &"skill"
+autoplay = "skill"
+frame_progress = 0.689533
+offset = Vector2(0, 23.95)
 
 [connection signal="area_entered" from="stop" to="." method="_on_stop_area_entered"]
 [connection signal="mouse_entered" from="stop" to="." method="_on_stop_mouse_entered"]

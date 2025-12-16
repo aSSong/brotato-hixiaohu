@@ -93,6 +93,12 @@ func _trigger_death() -> void:
 	
 	# 禁用玩家输入和武器（但不暂停游戏，等待death_delay后再暂停）
 	if player:
+		# 强制结束无敌状态（如果有）
+		if player.has_method("force_end_invincibility"):
+			player.force_end_invincibility()
+		# 强制停止技能特效（如果有）
+		if player.has_method("force_stop_skill_fx"):
+			player.force_stop_skill_fx()
 		if player.has_method("disable_weapons"):
 			player.disable_weapons()
 	
@@ -403,8 +409,13 @@ func _revive_player() -> void:
 	# 发出复活信号
 	player_revived.emit()
 	
+	# 启动复活无敌效果（3秒无敌 + 金黄色特效）
+	if player.has_method("start_revive_invincibility"):
+		player.start_revive_invincibility()
+	
 	print("[DeathManager] 玩家已复活 | HP:", player.now_hp, "/", player.max_hp, " 位置:", player.global_position)
 	print("[DeathManager] 墓碑保留用于救援")
+	print("[DeathManager] 复活无敌已启动")
 
 ## 在随机位置复活玩家
 func _respawn_player_at_random_position() -> void:

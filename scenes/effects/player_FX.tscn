@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://ds386o0ovi6cp"]
+
+[ext_resource type="SpriteFrames" uid="uid://24l7dlf0kn0e" path="res://resources/player/player_FX.tres" id="1_nb5at"]
+
+[node name="PlayerFx" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_nb5at")
+animation = &"shield"
+frame_progress = 0.13723674

@@ -197,6 +197,19 @@ func _process(delta: float) -> void:
 	# 移除已结束CD的技能
 	for skill_name in skills_to_remove:
 		active_skills.erase(skill_name)
+	
+	# 检查技能修改器是否已过期（AttributeManager会自动移除过期的modifier）
+	var expired_skills = []
+	for skill_name in skill_modifiers.keys():
+		var modifier = skill_modifiers[skill_name]
+		if modifier and modifier.is_expired():
+			expired_skills.append(skill_name)
+	
+	# 发出技能结束信号
+	for skill_name in expired_skills:
+		skill_modifiers.erase(skill_name)
+		skill_deactivated.emit(skill_name)
+		print("[ClassManager] 技能结束: %s" % skill_name)
 
 ## 检查技能是否在冷却中
 func is_skill_on_cooldown(skill_name: String) -> bool:

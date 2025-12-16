@@ -7,8 +7,19 @@ extends CharacterBody2D
 const HURT_FLASH_COLOR: Color = Color(1.0, 1.0, 1.0, 1.0)  # 闪白颜色
 const HURT_FLASH_DURATION: float = 0.1  # 闪白持续时间（秒）
 
+## ===== 复活无敌效果配置 =====
+const REVIVE_INVINCIBLE_DURATION: float = 5.0  # 复活无敌持续时间（秒）
+const REVIVE_FLASH_COLOR: Color = Color(1.0, 0.85, 0.0, 1.0)  # 金黄色
+
 ## 是否正在闪白
 var is_flashing: bool = false
+
+## 是否处于复活无敌状态
+var is_invincible: bool = false
+
+## FX 节点引用
+@onready var revive_fx: AnimatedSprite2D = $"revive-FX"
+@onready var skill_fx: AnimatedSprite2D = $"skill-FX"
 
 var dir = Vector2.ZERO
 var base_speed = 400  # 基础速度
@@ -127,6 +138,12 @@ func _ready() -> void:
 	
 	# 注册到说话管理器
 	call_deferred("_register_to_speech_manager")
+	
+	# 初始化时隐藏 FX 节点
+	if revive_fx:
+		revive_fx.visible = false
+	if skill_fx:
+		skill_fx.visible = false
 	pass
 
 func choosePlayer(type):
@@ -390,11 +407,37 @@ func activate_class_skill() -> void:
 ## 技能激活回调
 func _on_skill_activated(skill_name: String) -> void:
 	print("技能激活: ", skill_name)
-	# 可以在这里添加视觉特效等
+	
+	# 获取技能持续时间
+	var duration = 0.0
+	if class_manager and class_manager.current_class and class_manager.current_class.skill_data:
+		duration = class_manager.current_class.skill_data.duration
+	
+	# 播放 skill-FX 动画
+	if skill_fx and duration > 0:
+		skill_fx.visible = true
+		skill_fx.play("skill")
+		
+		# 持续时间结束后自动停止
+		await get_tree().create_timer(duration).timeout
+		
+		# 安全检查：节点是否有效
+		if is_instance_valid(self):
+			_stop_skill_fx()
 
 ## 技能取消激活回调
 func _on_skill_deactivated(skill_name: String) -> void:
 	print("技能结束: ", skill_name)
+
+## 停止技能特效
+func _stop_skill_fx() -> void:
+	if skill_fx:
+		skill_fx.stop()
+		skill_fx.visible = false
+
+## 强制停止技能特效（死亡时调用）
+func force_stop_skill_fx() -> void:
+	_stop_skill_fx()
 
 ## 获取攻击力倍数（用于武器伤害计算）
 func get_attack_multiplier() -> float:
@@ -427,6 +470,10 @@ func get_weapon_type_multiplier(weapon_type: WeaponData.WeaponType) -> float:
 func player_hurt(damage: int) -> void:
 	# 如果伤害 <= 0，直接返回（不造成伤害）
 	if damage <= 0:
+		return
+	
+	# 如果处于无敌状态，不受伤害
+	if is_invincible:
 		return
 	
 	# 使用新的DamageCalculator计算最终伤害
@@ -717,3 +764,57 @@ func set_camera_zoom(zoom_value: float) -> void:
 	current_zoom = clamp(zoom_value, CAMERA_ZOOM_MIN, CAMERA_ZOOM_MAX)
 	if camera:
 		camera.zoom = Vector2(current_zoom, current_zoom)
+
+## ===== 复活无敌功能 =====
+
+## 开始复活无敌效果
+func start_revive_invincibility() -> void:
+	if is_invincible:
+		return
+	
+	is_invincible = true
+	print("[Player] 开始复活无敌，持续 %.1f 秒" % REVIVE_INVINCIBLE_DURATION)
+	
+	# 播放 revive-FX 的 revive 动画
+	if revive_fx:
+		revive_fx.visible = true
+		revive_fx.play("revive")
+	
+	# 设置金黄色 shader 效果
+	if playerAni and playerAni.material:
+		playerAni.material.set_shader_parameter("flash_color", REVIVE_FLASH_COLOR)
+		playerAni.material.set_shader_parameter("flash_opacity", 0.5)  # 半透明金黄色
+	
+	# 5秒后结束无敌
+	await get_tree().create_timer(REVIVE_INVINCIBLE_DURATION).timeout
+	
+	# 安全检查：节点是否有效，是否仍在无敌状态
+	if is_instance_valid(self) and is_invincible:
+		_end_revive_invincibility()
+
+## 结束复活无敌效果
+func _end_revive_invincibility() -> void:
+	if not is_invincible:
+		return
+	
+	is_invincible = false
+	print("[Player] 复活无敌结束")
+	
+	# 停止 revive-FX 动画并隐藏
+	if revive_fx:
+		revive_fx.stop()
+		revive_fx.visible = false
+	
+	# 恢复 shader 效果
+	if playerAni and playerAni.material:
+		playerAni.material.set_shader_parameter("flash_opacity", 0.0)
+
+## 强制结束无敌（死亡时调用）
+func force_end_invincibility() -> void:
+	if is_invincible:
+		is_invincible = false
+		if revive_fx:
+			revive_fx.stop()
+			revive_fx.visible = false
+		if playerAni and playerAni.material:
+			playerAni.material.set_shader_parameter("flash_opacity", 0.0)
