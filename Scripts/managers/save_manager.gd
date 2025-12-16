@@ -14,12 +14,15 @@ var user_data: Dictionary = {
 	"best_waves": {  # 各模式最高波次记录
 		"survival": 0,
 		"multi": 0
-	}
+	},
+	"display_mode": "fullscreen"  # 显示模式: "fullscreen" 或 "windowed"
 }
 
 ## 初始化
 func _ready() -> void:
 	load_user_data()
+	# 应用保存的显示模式设置
+	apply_display_mode()
 	print("[SaveManager] 存档管理器初始化完成")
 
 ## 保存用户数据
@@ -71,6 +74,9 @@ func load_user_data() -> bool:
 			var best_waves = user_data["best_waves"]
 			for mode_id in best_waves.keys():
 				best_waves[mode_id] = int(best_waves[mode_id])
+		# 确保旧存档也有 display_mode 字段
+		if not user_data.has("display_mode"):
+			user_data["display_mode"] = "fullscreen"
 		# 迁移旧版 floor_id（0-38 索引制）到新版（1-38 真实楼层号）
 		_migrate_legacy_floor_id()
 		print("[SaveManager] 用户数据已加载: %s" % user_data)
@@ -113,7 +119,8 @@ func clear_save_data() -> void:
 		"floor_id": -1,
 		"floor_name": "",
 		"total_death_count": 0,
-		"best_waves": {"survival": 0, "multi": 0}
+		"best_waves": {"survival": 0, "multi": 0},
+		"display_mode": "fullscreen"
 	}
 	if FileAccess.file_exists(SAVE_FILE_PATH):
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
@@ -169,3 +176,26 @@ func _migrate_legacy_floor_id() -> void:
 		user_data["floor_id"] = 99
 		print("[SaveManager] 迁移旧版 floor_id: 38 → 99")
 		save_user_data()
+
+## ==================== 显示模式设置 ====================
+
+## 设置显示模式
+## mode: "fullscreen" 或 "windowed"
+func set_display_mode(mode: String) -> void:
+	user_data["display_mode"] = mode
+	save_user_data()
+	print("[SaveManager] 显示模式已保存: %s" % mode)
+
+## 获取显示模式
+func get_display_mode() -> String:
+	return user_data.get("display_mode", "fullscreen")
+
+## 应用保存的显示模式
+func apply_display_mode() -> void:
+	var mode = get_display_mode()
+	if mode == "windowed":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		print("[SaveManager] 应用显示模式: 窗口")
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		print("[SaveManager] 应用显示模式: 全屏")
