@@ -65,7 +65,15 @@ var speech_bubble: PlayerSpeechBubble = null
 
 ## 拾取范围相关
 @onready var drop_item_area: Area2D = $drop_item_area
+@onready var camera: Camera2D = $Camera2D
 var base_pickup_radius: float = 0.0  # 保存原始拾取半径
+
+## ===== 相机缩放配置 =====
+const CAMERA_ZOOM_DEFAULT: float = 0.9  # 默认缩放
+const CAMERA_ZOOM_MIN: float = 0.5  # 最小缩放（画面最大）
+const CAMERA_ZOOM_MAX: float = 1.8  # 最大缩放（画面最小）
+const CAMERA_ZOOM_STEP: float = 0.1  # 每次滚轮缩放的步长
+var current_zoom: float = CAMERA_ZOOM_DEFAULT
 
 func _ready() -> void:
 	# 初始化属性管理器
@@ -213,6 +221,17 @@ func _input(event):
 	if event.is_action("dash"):
 		# dash输入不应该影响移动状态，让_process中的can_dash()处理
 		return
+	
+	# 处理鼠标滚轮缩放
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			# 滚轮向上：放大画面（增加zoom值）
+			_zoom_camera(CAMERA_ZOOM_STEP)
+			return
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			# 滚轮向下：缩小画面（减少zoom值）
+			_zoom_camera(-CAMERA_ZOOM_STEP)
+			return
 	
 	# 处理鼠标左键的移动逻辑
 	# 但需要排除技能和dash输入的情况
@@ -687,3 +706,29 @@ func _register_to_speech_manager() -> void:
 			push_error("[Player] SpeechManager没有register_speaker方法！")
 	else:
 		push_warning("[Player] 未找到SpeechManager！")
+
+## ===== 相机缩放功能 =====
+
+## 缩放相机
+## @param delta_zoom: 缩放变化量（正值放大，负值缩小）
+func _zoom_camera(delta_zoom: float) -> void:
+	if not camera:
+		return
+	
+	# 计算新的缩放值
+	current_zoom = clamp(current_zoom + delta_zoom, CAMERA_ZOOM_MIN, CAMERA_ZOOM_MAX)
+	
+	# 应用缩放
+	camera.zoom = Vector2(current_zoom, current_zoom)
+
+## 重置相机缩放到默认值
+func reset_camera_zoom() -> void:
+	current_zoom = CAMERA_ZOOM_DEFAULT
+	if camera:
+		camera.zoom = Vector2(current_zoom, current_zoom)
+
+## 设置相机缩放值
+func set_camera_zoom(zoom_value: float) -> void:
+	current_zoom = clamp(zoom_value, CAMERA_ZOOM_MIN, CAMERA_ZOOM_MAX)
+	if camera:
+		camera.zoom = Vector2(current_zoom, current_zoom)

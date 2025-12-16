@@ -16,6 +16,8 @@ shader_parameter/width = 3.0000001425
 shader_parameter/pattern = 2
 shader_parameter/inside = false
 shader_parameter/add_margins = false
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_opacity = 0.0
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kc87p"]
 load_path = "res://.godot/imported/player1-sheet.png-57d31d2b924831737743db6eecd0d6e7.ctex"
