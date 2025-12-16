@@ -195,7 +195,27 @@ func apply_display_mode() -> void:
 	var mode = get_display_mode()
 	if mode == "windowed":
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		_set_windowed_size()
 		print("[SaveManager] 应用显示模式: 窗口")
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		print("[SaveManager] 应用显示模式: 全屏")
+
+## 根据屏幕分辨率设置窗口大小
+func _set_windowed_size() -> void:
+	var screen_size = DisplayServer.screen_get_size()
+	var window_size: Vector2i
+	
+	# 根据屏幕分辨率选择窗口大小
+	if screen_size.x > 1920 or screen_size.y > 1080:
+		# 大于 1920x1080 的屏幕，窗口设为 1920x1080
+		window_size = Vector2i(1920, 1080)
+	else:
+		# 1920x1080 或更小的屏幕，窗口设为 1600x900
+		window_size = Vector2i(1600, 900)
+	
+	DisplayServer.window_set_size(window_size)
+	# 居中显示
+	var window_pos = (screen_size - window_size) / 2
+	DisplayServer.window_set_position(window_pos)
+	print("[SaveManager] 窗口大小: %dx%d" % [window_size.x, window_size.y])

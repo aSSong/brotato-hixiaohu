@@ -24,8 +24,27 @@ func _on_fullscreen_btn_pressed() -> void:
 ## 窗口按钮按下
 func _on_window_btn_pressed() -> void:
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	_set_windowed_size()
 	SaveManager.set_display_mode("windowed")
 	print("[SettingsUI] 切换到窗口模式")
+
+## 根据屏幕分辨率设置窗口大小
+func _set_windowed_size() -> void:
+	var screen_size = DisplayServer.screen_get_size()
+	var window_size: Vector2i
+	
+	# 根据屏幕分辨率选择窗口大小
+	if screen_size.x > 1920 or screen_size.y > 1080:
+		# 大于 1920x1080 的屏幕，窗口设为 1920x1080
+		window_size = Vector2i(1920, 1080)
+	else:
+		# 1920x1080 或更小的屏幕，窗口设为 1600x900
+		window_size = Vector2i(1600, 900)
+	
+	DisplayServer.window_set_size(window_size)
+	# 居中显示
+	var window_pos = (screen_size - window_size) / 2
+	DisplayServer.window_set_position(window_pos)
 
 func _on_cut_1_btn_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/UI/cutscene_playback_1.tscn")
