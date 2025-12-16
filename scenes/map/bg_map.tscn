@@ -477,6 +477,7 @@ offset_left = -4164.0
 offset_top = -2570.0
 offset_right = 6836.0
 offset_bottom = 4430.0
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="TileMap_BG" type="TileMapLayer" parent="." groups=["floor_layer", "map"]]
