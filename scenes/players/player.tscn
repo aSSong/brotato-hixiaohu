@@ -111,7 +111,7 @@ default_color = Color(1, 1, 0.6509804, 0.40392157)
 script = ExtResource("3_edvpf")
 
 [node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
-zoom = Vector2(0.7, 0.7)
+zoom = Vector2(0.6, 0.6)
 position_smoothing_enabled = true
 
 [node name="stop" type="Area2D" parent="."]
