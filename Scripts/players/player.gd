@@ -14,7 +14,6 @@ var dir = Vector2.ZERO
 var base_speed = 400  # 基础速度
 var speed = 400
 var flip =false
-var canMove = true
 var stop = false
 
 var now_hp = 50
@@ -173,9 +172,7 @@ func _process(delta: float) -> void:
 	var mouse_pos = get_global_mouse_position()
 	var self_pos = position
 	
-
-	
-	if canMove and !stop:
+	if !stop:
 		if mouse_pos.x > self_pos.x:
 			flip = true
 		else:
@@ -233,27 +230,16 @@ func _input(event):
 			_zoom_camera(-CAMERA_ZOOM_STEP)
 			return
 	
-	# 处理鼠标左键的移动逻辑
-	# 但需要排除技能和dash输入的情况
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		# 如果这个鼠标事件是技能或dash输入的一部分，不处理移动逻辑
-		if not event.is_action("skill") and not event.is_action("dash"):
-			if event.is_pressed():
-				canMove = false
-			else:
-				canMove = true
-		
-	
 
 
 func _on_stop_mouse_entered() -> void:
 	stop = true
-	#print("STOP = TRUE")
+	print("STOP = TRUE")
 	
 
 func _on_stop_mouse_exited() -> void:
 	stop = false
-	#print("STOP = FALSE")
+	print("STOP = FALSE")
 
 
 func _on_drop_item_area_area_entered(area: Area2D) -> void:
@@ -492,7 +478,6 @@ func player_hurt(damage: int) -> void:
 	if now_hp <= 0:
 		now_hp = 0
 		# 立即禁用玩家控制和显示
-		canMove = false
 		stop = true
 		
 		# 隐藏玩家

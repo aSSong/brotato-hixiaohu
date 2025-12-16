@@ -130,9 +130,6 @@ func _trigger_death() -> void:
 	# 创建新墓碑
 	_create_grave()
 	
-	# 禁止玩家移动
-	if player:
-		player.canMove = false
 	
 	# Multi模式下：清理所有ghost（因为无法复活，必然会离开场景）
 	if GameMain.current_mode_id == "multi":
@@ -378,8 +375,6 @@ func _revive_player() -> void:
 	# 随机复活位置
 	_respawn_player_at_random_position()
 	
-	# 允许移动和行动
-	player.canMove = true
 	player.stop = false
 	
 	# 显示玩家
