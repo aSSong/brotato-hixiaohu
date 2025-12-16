@@ -114,10 +114,10 @@ func _create_speech_manager() -> void:
 	print("[GameInitializer] 说话管理器已创建")
 	
 	# 等待一帧后，主动注册所有Player和Ghost
-	var tree = get_tree()
-	if tree == null:
+	var scene_tree = get_tree()
+	if scene_tree == null:
 		return
-	await tree.process_frame
+	await scene_tree.process_frame
 	
 	# await后重新检查
 	if not is_inside_tree():
@@ -137,10 +137,10 @@ func _register_all_speakers(speech_manager: SpeechManager) -> void:
 			print("[GameInitializer] Player已注册到SpeechManager")
 	
 	# 注册所有Ghost
-	var tree = get_tree()
-	if tree == null:
+	var scene_tree = get_tree()
+	if scene_tree == null:
 		return
-	var ghosts = tree.get_nodes_in_group("ghost")
+	var ghosts = scene_tree.get_nodes_in_group("ghost")
 	for ghost in ghosts:
 		if ghost and is_instance_valid(ghost):
 			if speech_manager.has_method("register_speaker"):
@@ -200,23 +200,23 @@ func _on_resource_changed(_new_val: int, _change: int) -> void:
 ## 统一设置游戏流程监听
 func _setup_game_flow() -> void:
 	# 等待波次系统就绪
-	var tree = get_tree()
-	if tree == null:
+	var scene_tree = get_tree()
+	if scene_tree == null:
 		return
-	await tree.process_frame
+	await scene_tree.process_frame
 	
 	# await后重新检查
 	if not is_inside_tree():
 		return
-	tree = get_tree()
-	if tree == null:
+	scene_tree = get_tree()
+	if scene_tree == null:
 		return
 	
-	var wave_manager = tree.get_first_node_in_group("wave_manager")
+	var wave_manager = scene_tree.get_first_node_in_group("wave_manager")
 	
 	if wave_manager:
 		# 监听商店关闭信号
-		var shop = tree.get_first_node_in_group("upgrade_shop")
+		var shop = scene_tree.get_first_node_in_group("upgrade_shop")
 		if shop:
 			if not shop.has_signal("shop_closed"):
 				push_error("[GameInitializer] 商店没有shop_closed信号")
@@ -247,10 +247,10 @@ func _on_wave_flow_step(wave_number: int) -> void:
 	if GameState.current_state == GameState.State.PLAYER_DEAD:
 		print("[Flow] 玩家已死亡，等待复活...")
 		# 找到死亡管理器并等待复活信号
-		var tree = get_tree()
-		if tree == null:
+		var scene_tree_dead = get_tree()
+		if scene_tree_dead == null:
 			return
-		var dm = tree.get_first_node_in_group("death_manager")
+		var dm = scene_tree_dead.get_first_node_in_group("death_manager")
 		if dm and dm.has_signal("player_revived"):
 			# 使用字典来避免闭包变量捕获问题
 			var state = {"revive_or_quit": false, "quit_game": false}
@@ -267,10 +267,10 @@ func _on_wave_flow_step(wave_number: int) -> void:
 			
 			# 等待任一信号
 			while not state.revive_or_quit:
-				tree = get_tree()
-				if tree == null:
+				scene_tree_dead = get_tree()
+				if scene_tree_dead == null:
 					return
-				await tree.process_frame
+				await scene_tree_dead.process_frame
 				if not is_inside_tree():
 					return
 			
@@ -291,10 +291,10 @@ func _on_wave_flow_step(wave_number: int) -> void:
 	print("[Flow] 进入捡落物时间 (%.1f秒)" % delay_time)
 	
 	# 安全创建计时器
-	var tree = get_tree()
-	if tree == null:
+	var scene_tree_delay = get_tree()
+	if scene_tree_delay == null:
 		return
-	await tree.create_timer(delay_time).timeout
+	await scene_tree_delay.create_timer(delay_time).timeout
 	
 	# await后重新检查节点状态
 	if not is_inside_tree():
@@ -313,7 +313,7 @@ func _on_wave_flow_step(wave_number: int) -> void:
 
 	# 5. 既没死也没赢 -> 打开商店
 	print("[Flow] 进入商店阶段")
-	_open_shop_flow()
+	await _open_shop_flow()
 
 ## 打开商店的统一入口
 func _open_shop_flow() -> void:
@@ -321,24 +321,19 @@ func _open_shop_flow() -> void:
 	if not is_inside_tree():
 		return
 	
-	# 如果正在救援，等待救援结束（简单策略：不打开商店，等下次检查？或者暂时阻塞？）
-	# 这里采用：如果正在救援，稍后重试
-	if GameState.current_state == GameState.State.RESCUING:
-		print("[Flow] 玩家正在救援中，延迟打开商店...")
-		var tree = get_tree()
-		if tree == null:
-			return
-		await tree.create_timer(1.0).timeout
+	# 如果正在救援：必须等待救援结束再开商店
+	# 注意：RESCUING 会导致 get_tree().paused = true；不要用会被暂停影响的 create_timer()
+	while GameState.current_state == GameState.State.RESCUING:
+		print("[Flow] 玩家正在救援中，等待救援结束再打开商店...")
+		await GameState.state_changed
 		if not is_inside_tree():
 			return
-		_open_shop_flow()
-		return
 
 	GameState.change_state(GameState.State.SHOPPING)
 	# 通知商店打开
-	var tree = get_tree()
-	if tree:
-		tree.call_group("upgrade_shop", "open_shop")
+	var scene_tree_shop = get_tree()
+	if scene_tree_shop:
+		scene_tree_shop.call_group("upgrade_shop", "open_shop")
 
 ## 商店关闭回调
 func _on_shop_closed() -> void:
@@ -352,10 +347,10 @@ func _on_shop_closed() -> void:
 	GameState.change_state(GameState.State.WAVE_CLEARING)
 	
 	# 直接开始下一波（延迟由WaveSystem内部处理）
-	var tree = get_tree()
-	if tree == null:
+	var scene_tree = get_tree()
+	if scene_tree == null:
 		return
-	var wave_manager = tree.get_first_node_in_group("wave_manager")
+	var wave_manager = scene_tree.get_first_node_in_group("wave_manager")
 	if wave_manager and wave_manager.has_method("start_next_wave"):
 		wave_manager.start_next_wave()
 
@@ -406,18 +401,18 @@ func _trigger_victory() -> void:
 	GameState.change_state(GameState.State.GAME_VICTORY)
 	
 	# 清场（可选：消灭所有敌人）
-	var tree = get_tree()
-	if tree == null:
+	var scene_tree = get_tree()
+	if scene_tree == null:
 		return
-	var wave_manager = tree.get_first_node_in_group("wave_manager")
+	var wave_manager = scene_tree.get_first_node_in_group("wave_manager")
 	if wave_manager and wave_manager.has_method("force_end_wave"):
 		wave_manager.force_end_wave()
 	
 	# 等待1秒（如需求所述）
-	tree = get_tree()
-	if tree == null:
+	scene_tree = get_tree()
+	if scene_tree == null:
 		return
-	await tree.create_timer(1.0).timeout
+	await scene_tree.create_timer(1.0).timeout
 	
 	# await后重新检查
 	if not is_inside_tree():

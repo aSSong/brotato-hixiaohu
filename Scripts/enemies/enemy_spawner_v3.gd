@@ -97,13 +97,33 @@ func _build_spawn_list(config: Dictionary) -> Array:
 	
 	# 打乱顺序，让不同类型的敌人随机混合出现
 	list.shuffle()
+
+	# 插入特殊刷怪（基于刷怪序列的位置 position）
+	# JSON格式示例: { "position": 143, "enemy_id": "last_enemy" }
+	if config.has("special_spawns"):
+		var spawns = config.special_spawns
+		if spawns is Array and spawns.size() > 0:
+			# 按position升序插入，避免插入导致后续索引偏移不受控
+			spawns.sort_custom(func(a, b):
+				return int(a.get("position", 0)) < int(b.get("position", 0))
+			)
+			for spawn in spawns:
+				if not (spawn is Dictionary):
+					continue
+				var enemy_id = str(spawn.get("enemy_id", ""))
+				if enemy_id.is_empty():
+					continue
+				var pos = int(spawn.get("position", list.size()))
+				pos = clamp(pos, 0, list.size())
+				list.insert(pos, enemy_id)
+			print("[EnemySpawner V3] 已插入 special_spawns: ", spawns.size())
 	
 	# 添加最后的敌人（BOSS放在最后，不参与打乱）
 	if config.has("last_enemy"):
 		for i in range(config.last_enemy.count):
 			list.append(config.last_enemy.id)
 	
-	print("[EnemySpawner V3] 生成列表：", list.size(), " 个敌人")
+	print("[EnemySpawner V3] 生成列表：", list.size(), " 个敌人（含special_spawns/last_enemy）")
 	return list
 
 ## 异步生成敌人列表
