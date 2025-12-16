@@ -14,7 +14,7 @@ magic_explosion_radius_mult = 2.0
 
 [resource]
 script = ExtResource("2_a8x68")
-name = "魔法爆发"
+name = "抓紧下班"
 description = "魔法伤害+50%
 爆炸范围+100%"
 icon = ExtResource("1_p8k4d")
