@@ -55,9 +55,6 @@ func _on_initialize() -> void:
 		# 读取后座力参数
 		recoil_distance = params.get("recoil_distance", 0.0)
 		recoil_duration = params.get("recoil_duration", 0.1)
-		
-		# 保存武器原始本地位置
-		original_local_position = weapon.position
 
 func get_behavior_type() -> int:
 	return WeaponData.BehaviorType.RANGED
@@ -184,7 +181,12 @@ func _trigger_recoil(_shoot_direction: Vector2) -> void:
 
 ## 每帧更新 - 处理后座力恢复
 func process(delta: float) -> void:
-	if not is_recoiling or not weapon:
+	if not weapon:
+		return
+	
+	# 不在后座力状态时，持续记录武器的正常位置
+	if not is_recoiling:
+		original_local_position = weapon.position
 		return
 	
 	# 更新后座力计时器
