@@ -549,10 +549,10 @@ func enemy_flash():
 	
 	# 白色flash效果（受伤时）
 	sprite.material.set_shader_parameter("flash_color", Color(1.0, 1.0, 1.0, 1.0))
-	sprite.material.set_shader_parameter("flash_opacity", 1.0)
+	sprite.material.set_shader_parameter("flash_opacity", 0.5)
 	
 	# 等待0.1秒
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.05).timeout
 	
 	# 恢复异常效果的shader（如果有），否则恢复原状
 	if current_status != "":
