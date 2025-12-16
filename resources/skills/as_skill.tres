@@ -10,13 +10,13 @@ max_hp = 0
 speed = 0.0
 crit_damage = 0.0
 magic_damage_mult = 1.5
-magic_explosion_radius_mult = 2.0
+magic_speed_mult = 1.5
 
 [resource]
 script = ExtResource("2_a8x68")
 name = "抓紧下班"
 description = "魔法伤害+50%
-爆炸范围+100%"
+魔法速度+50%"
 icon = ExtResource("1_p8k4d")
 cooldown = 30.0
 stats_modifier = SubResource("Resource_m1wn4")
