@@ -15,7 +15,11 @@ skill_type = 2
 skill_config = {
 "bullet_damage": 5,
 "bullet_id": "basic",
+"bullet_round_interval": 0.5,
+"bullet_rounds": 3,
 "bullet_speed": 600.0,
-"shoot_interval": 0.3,
-"shoot_range": 1000.0
+"bullets_per_round": 1,
+"shoot_interval": 3.0,
+"shoot_range": 1000.0,
+"spread_angle": 0.0
 }

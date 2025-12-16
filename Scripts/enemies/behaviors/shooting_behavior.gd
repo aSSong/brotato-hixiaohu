@@ -3,24 +3,61 @@ class_name ShootingBehavior
 
 ## 射击技能行为
 ## 敌人在射程内时，定时向玩家发射子弹
+## 支持多轮散射发射、发射特效、自定义动作
+## 技能期间正常移动和受伤
 
-## 配置参数（从config字典读取）
-var shoot_range: float = 600.0        # 射击范围
-var shoot_interval: float = 2.0       # 射击间隔（秒）
-var bullet_speed: float = 400.0      # 子弹速度
+## 状态枚举
+enum ShootState {
+	IDLE,      # 待机状态，正常移动，检测触发
+	SHOOTING   # 发射中，执行多轮发射
+}
+
+var state: ShootState = ShootState.IDLE
+
+## ==================== 可配置参数 ====================
+
+## 基础射击配置
+var shoot_range: float = 600.0        # 射击范围（触发距离）
+var shoot_interval: float = 2.0       # 射击间隔（冷却时间，秒）
+
+## 子弹配置
+var bullet_speed: float = 400.0       # 子弹速度
 var bullet_damage: int = 10           # 子弹伤害
 var bullet_id: String = "basic"       # 子弹ID（从数据库获取）
-var bullet_scene_path: String = ""   # 子弹场景路径（可选，优先使用）
+var bullet_scene_path: String = ""    # 子弹场景路径（可选，优先使用）
 
-## 射击相关
-var shoot_timer: float = 0.0
+## 多轮发射配置
+var bullet_rounds: int = 1            # 发射轮次
+var bullet_round_interval: float = 0.5 # 每轮间隔时间（秒）
+var bullets_per_round: int = 1        # 每轮发射颗数
+var spread_angle: float = 0.0         # 散射角度（度），如60度 = -30°, 0°, +30°
+
+## 发射位置
+var shoot_offset: Vector2 = Vector2(0, -30)  # 发射位置偏移（相对于敌人中心）
+
+## 发射特效配置
+var fx_sprite_frames_path: String = ""  # 特效 SpriteFrames 资源路径
+var fx_animation_name: String = ""      # 特效动画名
+var fx_offset: Vector2 = Vector2.ZERO   # 特效偏移（相对于发射位置）
+var fx_scale: Vector2 = Vector2(1.0, 1.0) # 特效缩放
+
+## 发射动作配置
+var shoot_sprite_anim: String = ""      # SpriteFrames 发射动画名
+var shoot_anim_player: String = ""      # AnimationPlayer 动画名
+
+## ==================== 内部状态 ====================
+
+var shoot_timer: float = 0.0          # 射击冷却计时器
 var bullet_scene: PackedScene = null
+var fx_sprite_frames: SpriteFrames = null
 
-## 射击位置偏移（相对于敌人中心）
-var shoot_offset: Vector2 = Vector2(0, -30)
+## 多轮发射状态
+var current_round: int = 0            # 当前发射轮次
+var round_timer: float = 0.0          # 轮次间隔计时器
+var base_direction: Vector2 = Vector2.RIGHT  # 基准发射方向（朝向玩家）
 
 func _on_initialize() -> void:
-	# 从配置中读取参数
+	# 从配置中读取基础参数
 	shoot_range = config.get("shoot_range", 600.0)
 	shoot_interval = config.get("shoot_interval", 2.0)
 	bullet_speed = config.get("bullet_speed", 400.0)
@@ -28,23 +65,59 @@ func _on_initialize() -> void:
 	bullet_id = config.get("bullet_id", "basic")
 	bullet_scene_path = config.get("bullet_scene_path", "")
 	
+	# 多轮发射配置
+	bullet_rounds = config.get("bullet_rounds", 1)
+	bullet_round_interval = config.get("bullet_round_interval", 0.5)
+	bullets_per_round = config.get("bullets_per_round", 1)
+	spread_angle = config.get("spread_angle", 0.0)
+	
+	# 发射位置
+	shoot_offset = config.get("shoot_offset", Vector2(0, -30))
+	
+	# 特效配置
+	fx_sprite_frames_path = config.get("fx_sprite_frames_path", "")
+	fx_animation_name = config.get("fx_animation_name", "")
+	fx_offset = config.get("fx_offset", Vector2.ZERO)
+	fx_scale = config.get("fx_scale", Vector2(1.0, 1.0))
+	
+	# 动作配置
+	shoot_sprite_anim = config.get("shoot_sprite_anim", "")
+	shoot_anim_player = config.get("shoot_anim_player", "")
+	
 	# 加载子弹场景
 	if bullet_scene_path != "":
 		bullet_scene = load(bullet_scene_path) as PackedScene
 	else:
-		# 使用默认的敌人子弹场景
 		bullet_scene = load("res://scenes/bullets/enemy_bullet.tscn") as PackedScene
 	
 	if not bullet_scene:
 		push_error("[ShootingBehavior] 无法加载子弹场景")
 	
+	# 加载特效资源
+	if fx_sprite_frames_path != "":
+		fx_sprite_frames = load(fx_sprite_frames_path) as SpriteFrames
+		if not fx_sprite_frames:
+			push_error("[ShootingBehavior] 无法加载特效资源: " + fx_sprite_frames_path)
+	
+	state = ShootState.IDLE
 	shoot_timer = 0.0
 
 func _on_update(delta: float) -> void:
 	if not enemy or enemy.is_dead:
 		return
 	
-	shoot_timer -= delta
+	match state:
+		ShootState.IDLE:
+			_update_idle(delta)
+		
+		ShootState.SHOOTING:
+			_update_shooting(delta)
+
+## 更新待机状态
+func _update_idle(delta: float) -> void:
+	# 更新冷却计时器
+	if shoot_timer > 0:
+		shoot_timer -= delta
 	
 	# 检查是否在射程内
 	var player = get_player()
@@ -52,24 +125,93 @@ func _on_update(delta: float) -> void:
 		return
 	
 	var distance = get_distance_to_player()
-	if distance <= shoot_range:
-		# 在射程内，检查是否可以射击
-		if shoot_timer <= 0:
-			_shoot_at_player()
+	if distance <= shoot_range and shoot_timer <= 0:
+		# 在射程内且冷却完成，开始射击
+		_start_shooting()
 
-func _shoot_at_player() -> void:
+## 开始射击
+func _start_shooting() -> void:
+	var player = get_player()
+	if not player or not enemy:
+		return
+	
+	state = ShootState.SHOOTING
+	current_round = 0
+	round_timer = 0.0
+	
+	# 记录基准发射方向（朝向玩家）
+	base_direction = get_direction_to_player()
+	
+	# 播放发射动作
+	_play_shoot_animation()
+	
+	# 立即发射第一轮
+	_shoot_one_round()
+	current_round = 1
+	
+	print("[ShootingBehavior] 开始射击 | 总轮次:", bullet_rounds, " 每轮:", bullets_per_round, "颗 散射:", spread_angle, "度")
+
+## 更新射击状态
+func _update_shooting(delta: float) -> void:
+	if not enemy:
+		return
+	
+	# 检查是否已完成所有轮次
+	if current_round >= bullet_rounds:
+		_end_shooting()
+		return
+	
+	# 更新轮次间隔计时器
+	round_timer += delta
+	
+	# 检查是否可以发射下一轮
+	if round_timer >= bullet_round_interval:
+		# 更新基准方向（每轮重新瞄准玩家）
+		base_direction = get_direction_to_player()
+		
+		_shoot_one_round()
+		current_round += 1
+		round_timer = 0.0
+		print("[ShootingBehavior] 发射第", current_round, "/", bullet_rounds, "轮")
+
+## 发射一轮子弹（支持散射）
+func _shoot_one_round() -> void:
 	if not bullet_scene or not enemy:
 		return
 	
-	var player = get_player()
-	if not player:
-		return
+	var shoot_pos = enemy.global_position + shoot_offset
 	
-	# 播放攻击/技能动画
-	enemy.play_animation("attack")
-	enemy.play_skill_animation("shoot")
+	# 播放特效（每轮一次）
+	_play_fx_effect(shoot_pos)
 	
-	# 创建子弹实例
+	# 计算散射角度
+	var angles: Array[float] = _calculate_spread_angles()
+	
+	# 发射每颗子弹
+	for angle_offset in angles:
+		var direction = base_direction.rotated(deg_to_rad(angle_offset))
+		_spawn_bullet(shoot_pos, direction)
+
+## 计算散射角度数组
+func _calculate_spread_angles() -> Array[float]:
+	var angles: Array[float] = []
+	
+	if bullets_per_round <= 1 or spread_angle <= 0:
+		# 单颗子弹或无散射，只有0度
+		angles.append(0.0)
+	else:
+		# 多颗子弹，均匀分布在 [-spread_angle/2, +spread_angle/2]
+		var half_spread = spread_angle / 2.0
+		var step = spread_angle / (bullets_per_round - 1)
+		
+		for i in range(bullets_per_round):
+			var angle = -half_spread + i * step
+			angles.append(angle)
+	
+	return angles
+
+## 生成一颗子弹
+func _spawn_bullet(pos: Vector2, direction: Vector2) -> void:
 	var bullet = bullet_scene.instantiate()
 	if not bullet:
 		push_error("[ShootingBehavior] 无法实例化子弹")
@@ -78,32 +220,79 @@ func _shoot_at_player() -> void:
 	# 添加到场景树
 	get_tree().root.add_child(bullet)
 	
-	# 计算射击位置和方向
-	var shoot_pos = enemy.global_position + shoot_offset
-	var direction = get_direction_to_player()
+	# 设置子弹朝向（子弹右侧为正方向）
+	bullet.rotation = direction.angle()
 	
 	# 初始化子弹
 	if bullet.has_method("start"):
-		# 使用start方法（兼容旧接口）
-		bullet.start(shoot_pos, direction, bullet_speed, bullet_damage)
+		bullet.start(pos, direction, bullet_speed, bullet_damage)
 	elif bullet.has_method("initialize_with_data"):
-		# 使用子弹数据初始化（推荐）
 		var bullet_data = EnemyBulletDatabase.get_bullet_data(bullet_id)
 		if bullet_data:
-			# 覆盖配置的伤害和速度
 			bullet_data.damage = bullet_damage
 			bullet_data.speed = bullet_speed
-			bullet.initialize_with_data(shoot_pos, direction, bullet_data)
+			bullet.initialize_with_data(pos, direction, bullet_data)
 		else:
-			# 回退到start方法
-			bullet.start(shoot_pos, direction, bullet_speed, bullet_damage)
+			bullet.start(pos, direction, bullet_speed, bullet_damage)
 	else:
 		push_error("[ShootingBehavior] 子弹没有start或initialize_with_data方法")
 		bullet.queue_free()
+
+## 播放发射动作
+func _play_shoot_animation() -> void:
+	if not enemy:
 		return
 	
-	# 重置射击计时器
-	shoot_timer = shoot_interval
+	# 播放 SpriteFrames 动画
+	if shoot_sprite_anim != "":
+		var sprite = enemy.get_node_or_null("AnimatedSprite2D")
+		if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(shoot_sprite_anim):
+			sprite.play(shoot_sprite_anim)
+	else:
+		# 默认使用 attack 动画
+		enemy.play_animation("attack")
 	
-	print("[ShootingBehavior] 射击 | 位置:", shoot_pos, " 方向:", direction, " 伤害:", bullet_damage)
+	# 播放 AnimationPlayer 动画
+	if shoot_anim_player != "":
+		enemy.play_skill_animation(shoot_anim_player)
+	else:
+		# 默认使用 shoot 动画
+		enemy.play_skill_animation("shoot")
 
+## 播放发射特效（每轮一次）
+func _play_fx_effect(shoot_pos: Vector2) -> void:
+	if not enemy or not fx_sprite_frames or fx_animation_name == "":
+		return
+	
+	# 检查是否有这个动画
+	if not fx_sprite_frames.has_animation(fx_animation_name):
+		push_error("[ShootingBehavior] 特效资源中没有动画: " + fx_animation_name)
+		return
+	
+	# 创建特效节点
+	var fx_node = AnimatedSprite2D.new()
+	fx_node.sprite_frames = fx_sprite_frames
+	fx_node.global_position = shoot_pos + fx_offset
+	fx_node.scale = fx_scale
+	fx_node.z_index = 10  # 在上层显示
+	
+	# 添加到场景树（作为顶层节点，不跟随敌人）
+	get_tree().root.add_child(fx_node)
+	
+	# 播放动画
+	fx_node.play(fx_animation_name)
+	
+	# 动画结束后自动清理
+	fx_node.animation_finished.connect(func(): fx_node.queue_free())
+
+## 结束射击
+func _end_shooting() -> void:
+	state = ShootState.IDLE
+	shoot_timer = shoot_interval  # 设置冷却时间
+	
+	# 恢复行走动画
+	if enemy:
+		enemy.play_animation("walk")
+		enemy.stop_skill_animation()
+	
+	print("[ShootingBehavior] 射击结束，进入冷却 | 冷却时间:", shoot_interval, "秒")
