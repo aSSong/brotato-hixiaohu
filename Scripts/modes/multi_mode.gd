@@ -21,6 +21,7 @@ func _init() -> void:
 	allow_revive = false  # Multi模式不允许复活
 	initial_gold = 10  # Multi模式初始gold数量
 	initial_master_key = 3  # Multi模式初始masterkey数量
+	spawn_indicator_delay = 0.5  # 敌人刷新预警延迟（秒）
 
 ## 注意：波次配置已由wave_system_v3从JSON文件（wave_config_id）加载，不再使用硬编码配置
 ## 注意：胜利失败判定已由base_game_mode统一实现，通过配置参数控制

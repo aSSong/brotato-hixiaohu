@@ -27,6 +27,9 @@ var allow_revive: bool = true  # 是否允许复活（影响失败判定逻辑�
 var initial_gold: int = 0  # 游戏开始时初始获得的gold数量
 var initial_master_key: int = 0  # 游戏开始时初始获得的masterkey数量
 
+## 敌人刷新预警配置参数
+var spawn_indicator_delay: float = 0.5  # 预警图片显示后多久刷新敌人（秒）
+
 ## 初始化模式
 func initialize(config: Dictionary = {}) -> void:
 	mode_id = config.get("mode_id", "")
@@ -40,6 +43,7 @@ func initialize(config: Dictionary = {}) -> void:
 	allow_revive = config.get("allow_revive", true)
 	initial_gold = config.get("initial_gold", 0)
 	initial_master_key = config.get("initial_master_key", 0)
+	spawn_indicator_delay = config.get("spawn_indicator_delay", 0.5)
 	print("[BaseGameMode] 模式初始化: %s (%s)" % [mode_name, mode_id])
 
 ## 开始模式
