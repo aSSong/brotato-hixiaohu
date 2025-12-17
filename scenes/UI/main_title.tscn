@@ -273,7 +273,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.33333334)
 theme_override_font_sizes/font_size = 36
-text = "当前版本：0.9.1.3"
+text = "当前版本：0.9.1.4"
 
 [node name="settingsbtn" type="TextureButton" parent="."]
 layout_mode = 1

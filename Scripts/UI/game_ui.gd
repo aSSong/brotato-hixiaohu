@@ -195,9 +195,9 @@ func _setup_debug_panel() -> void:
 	_debug_panel.anchor_right = 0.0
 	_debug_panel.anchor_bottom = 0.0
 	_debug_panel.offset_left = 12
-	_debug_panel.offset_top = 12
+	_debug_panel.offset_top = 312
 	_debug_panel.offset_right = 520
-	_debug_panel.offset_bottom = 280
+	_debug_panel.offset_bottom = 580
 	
 	_debug_label = RichTextLabel.new()
 	_debug_label.name = "DebugLabel"
@@ -209,10 +209,10 @@ func _setup_debug_panel() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# R键切换调试面板（避免改 InputMap，降低发行风险）
+	# G键切换调试面板（避免改 InputMap，降低发行风险）
 	if event is InputEventKey:
 		var e := event as InputEventKey
-		if e.pressed and not e.echo and e.keycode == KEY_R:
+		if e.pressed and not e.echo and e.keycode == KEY_G:
 			_debug_visible = not _debug_visible
 			if _debug_panel:
 				_debug_panel.visible = _debug_visible
