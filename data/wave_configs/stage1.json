@@ -9,7 +9,8 @@
 	  "damage_growth": 0.0,
 	  "total_count": 15,
 	  "enemies": {
-		"creeper": 1.0,
+		"creeper": 0.5,
+		"stapler": 0.5,
 	  },
 	  "boss_config": {
 		"count": 1,
