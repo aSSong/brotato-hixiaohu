@@ -491,7 +491,6 @@ layout_mode = 2
 texture = ExtResource("14_hvehc")
 
 [node name="WarningUi" parent="." instance=ExtResource("18_uki5y")]
-visible = false
 mouse_filter = 2
 
 [node name="BOSSbar_root" type="Control" parent="."]
