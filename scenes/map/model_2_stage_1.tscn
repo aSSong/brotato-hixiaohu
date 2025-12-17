@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=4 uid="uid://ckq0qaddif3x8"]
+[gd_scene load_steps=37 format=4 uid="uid://ckq0qaddif3x8"]
 
 [ext_resource type="Texture2D" uid="uid://bbt2ogwu3myns" path="res://assets/bg/bg.png" id="1_8v2cd"]
 [ext_resource type="Script" uid="uid://bocg7winkh2ib" path="res://Scripts/maps/model2_stage1_extension.gd" id="1_extension"]
@@ -32,6 +32,8 @@
 [ext_resource type="Texture2D" uid="uid://cafqympbgcyuc" path="res://assets/map_new/stage2/stage2-edge-r-01.png" id="25_jl8yg"]
 [ext_resource type="Texture2D" uid="uid://bli4bp3f4ksy8" path="res://assets/map_new/stage2/stage2-blackfog-l-01.png" id="26_t41rh"]
 [ext_resource type="Texture2D" uid="uid://cgnr8qef2m0yk" path="res://assets/map_new/stage2/stage2-blackfog-r-01.png" id="27_sfxe6"]
+[ext_resource type="Texture2D" uid="uid://cnhlv5kajxt30" path="res://assets/map_new/stage2/stage2-leaf-02.png" id="29_t41rh"]
+[ext_resource type="Texture2D" uid="uid://c1x5wytnkbtj4" path="res://assets/map_new/stage2/stage2-leaf-01.png" id="30_sfxe6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0fb4v"]
 texture = ExtResource("1_8v2cd")
@@ -563,17 +565,19 @@ scale = Vector2(4, 4)
 texture = ExtResource("26_t41rh")
 
 [node name="Stage2BlackfogR01" type="Sprite2D" parent="Map"]
-position = Vector2(4969.25, 997.16064)
-scale = Vector2(4, 4)
+position = Vector2(4964, 977)
+scale = Vector2(4.1, 4.1)
 texture = ExtResource("27_sfxe6")
 
 [node name="Stage2Treeshadow" type="Sprite2D" parent="Map"]
+visible = false
 z_index = 25
 position = Vector2(5269, -130)
 scale = Vector2(3, 3)
 texture = ExtResource("24_m7s85")
 
 [node name="Stage2Treeshadow2" type="Sprite2D" parent="Map"]
+visible = false
 z_index = 25
 position = Vector2(5281, 2101)
 scale = Vector2(3, 3)
@@ -581,6 +585,7 @@ texture = ExtResource("24_m7s85")
 flip_v = true
 
 [node name="Stage2Treeshadow3" type="Sprite2D" parent="Map"]
+visible = false
 z_index = 25
 position = Vector2(-3124, 2108)
 scale = Vector2(3, 3)
@@ -589,11 +594,52 @@ flip_h = true
 flip_v = true
 
 [node name="Stage2Treeshadow4" type="Sprite2D" parent="Map"]
+visible = false
 z_index = 25
 position = Vector2(-3124, -113)
 scale = Vector2(3, 3)
 texture = ExtResource("24_m7s85")
 flip_h = true
+
+[node name="Stage2Leaf01" type="Sprite2D" parent="Map"]
+z_index = 25
+position = Vector2(6098.9995, 943.9998)
+rotation = 1.5707964
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("29_t41rh")
+
+[node name="Stage2Leaf03" type="Sprite2D" parent="Map"]
+z_index = 25
+position = Vector2(-3692, 1027.9999)
+rotation = -1.5707964
+scale = Vector2(1.7, 1.7)
+texture = ExtResource("30_sfxe6")
+
+[node name="Stage2Leaf02" type="Sprite2D" parent="Map"]
+z_index = 25
+position = Vector2(-557, -1161)
+scale = Vector2(2, 2)
+texture = ExtResource("29_t41rh")
+
+[node name="Stage2Leaf04" type="Sprite2D" parent="Map"]
+z_index = 25
+position = Vector2(5157, -1157)
+scale = Vector2(2, 2)
+texture = ExtResource("29_t41rh")
+
+[node name="Stage2Leaf05" type="Sprite2D" parent="Map"]
+z_index = 25
+position = Vector2(26, 3151)
+scale = Vector2(2, 2)
+texture = ExtResource("29_t41rh")
+flip_v = true
+
+[node name="Stage2Leaf06" type="Sprite2D" parent="Map"]
+z_index = 25
+position = Vector2(5395, 3217)
+scale = Vector2(2, 2)
+texture = ExtResource("29_t41rh")
+flip_v = true
 
 [node name="TileMap_BG" type="TileMapLayer" parent="." groups=["floor_layer", "map"]]
 z_index = -10
