@@ -10,11 +10,11 @@
 	  "total_count": 15,
 	  "enemies": {
 		"creeper": 0.5,
-		"stapler": 0.5,
+		"powerbank": 0.5,
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "jug_boss",
+		"enemy_id": "stapler",
 		"spawn_at_end": true
 	  }
 	},
@@ -30,7 +30,7 @@
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "jug_boss",
+		"enemy_id": "stapler",
 		"spawn_at_end": true
 	  }
 	},
@@ -47,7 +47,7 @@
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "jug_boss",
+		"enemy_id": "stapler",
 		"spawn_at_end": true
 	  }
 	},
@@ -60,11 +60,11 @@
 	  "enemies": {
 		"creeper": 0.6,
 		"creeper_fast": 0.3,
-		"jug2": 0.1,
+		"stapler": 0.1,
 	  },
 	  "boss_config": {
 		"count": 1,
-		"enemy_id": "jug_boss",
+		"enemy_id": "jug",
 		"spawn_at_end": true
 	  }
 	},
