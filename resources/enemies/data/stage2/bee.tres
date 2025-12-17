@@ -16,7 +16,7 @@ attack_range = 70.0
 skill_type = 1
 skill_config = {
 "charge_distance": 1500.0,
-"charge_speed": 800.0,
+"charge_speed": 1200.0,
 "cooldown": 3.0,
 "extra_damage": 10,
 "indicator_animation": "bee-charging",
