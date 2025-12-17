@@ -12,11 +12,10 @@ shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_opacity = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kqpo7"]
-radius = 257.54852
+radius = 126.035706
 
 [node name="stapler" type="CharacterBody2D" groups=["enemy"]]
 z_index = 8
-scale = Vector2(0.4, 0.4)
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_enemy_script")
@@ -25,9 +24,9 @@ script = ExtResource("1_enemy_script")
 modulate = Color(0, 0, 0, 0.45490196)
 z_index = 7
 z_as_relative = false
-scale = Vector2(2.265, 0.93)
+scale = Vector2(1.2, 0.8)
 texture = ExtResource("3_shadow_tex")
-offset = Vector2(0, 173.99)
+offset = Vector2(0, 53.64)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
@@ -36,9 +35,10 @@ material = SubResource("ShaderMaterial_flash")
 sprite_frames = ExtResource("4_sprite_frames")
 animation = &"walk"
 autoplay = "walk"
-offset = Vector2(23.92, -47.48)
+offset = Vector2(-8.42, -79.2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-12, -29)
 shape = SubResource("CircleShape2D_kqpo7")

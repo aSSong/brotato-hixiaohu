@@ -24,7 +24,8 @@ var prepare_time: float = 0.3       # 准备时间
 
 ## 指示器
 var indicator_sprite: Sprite2D = null
-var indicator_texture: Texture2D = preload("res://assets/skill_indicator/charging-range-rect.png")
+var indicator_texture: Texture2D = null
+const DEFAULT_INDICATOR_TEXTURE_PATH: String = "res://assets/skill_indicator/charging-range-rect.png"
 
 ## 状态计时器
 var state_timer: float = 0.0
@@ -43,6 +44,13 @@ func _on_initialize() -> void:
 	cooldown = config.get("cooldown", 3.0)
 	extra_damage = config.get("extra_damage", 10)
 	prepare_time = config.get("prepare_time", 0.3)
+	
+	# 加载指示器纹理（支持自定义配置）
+	var custom_indicator_path = config.get("indicator_texture", "")
+	if custom_indicator_path != "" and ResourceLoader.exists(custom_indicator_path):
+		indicator_texture = load(custom_indicator_path)
+	else:
+		indicator_texture = load(DEFAULT_INDICATOR_TEXTURE_PATH)
 	
 	state = ChargeState.IDLE
 	state_timer = 0.0

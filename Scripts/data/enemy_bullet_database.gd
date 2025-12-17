@@ -68,4 +68,3 @@ static func get_all_bullet_ids() -> Array:
 	if bullets.is_empty():
 		initialize_bullets()
 	return bullets.keys()
-
