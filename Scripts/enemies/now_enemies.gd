@@ -6,8 +6,8 @@ extends Node2D
 
 @export var enemy_scene: PackedScene
 @export var floor_layer_path: NodePath
-@export var min_distance_from_player: float = 300.0  # 玩家周围的安全距离
 @export var max_spawn_attempts: int = 20  # 最多尝试找位置的次数
+# 刷怪距离范围现在在 EnemySpawnerV3 中以常量定义（SPAWN_MIN_DISTANCE / SPAWN_MAX_DISTANCE）
 # spawn_delay 已移除，现在从波次配置JSON中读取
 
 @onready var floor_layer: TileMapLayer = get_node(floor_layer_path)
@@ -38,9 +38,8 @@ func _ready() -> void:
 	enemy_spawner.fallback_enemy_scene = enemy_scene
 	enemy_spawner.floor_layer = floor_layer
 	enemy_spawner.player = player
-	enemy_spawner.min_distance_from_player = min_distance_from_player
 	enemy_spawner.max_spawn_attempts = max_spawn_attempts
-	# spawn_delay 现在从波次配置中读取，不再需要手动设置
+	# 刷怪距离范围在 EnemySpawnerV3 中以常量定义，不再需要手动设置
 	
 	# 连接系统
 	wave_system.set_enemy_spawner(enemy_spawner)
