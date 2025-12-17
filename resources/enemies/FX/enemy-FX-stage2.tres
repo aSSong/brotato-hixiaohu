@@ -1,6 +1,7 @@
-[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://l81wolesjtae"]
+[gd_resource type="SpriteFrames" load_steps=21 format=3 uid="uid://l81wolesjtae"]
 
 [ext_resource type="Texture2D" uid="uid://cix2vjiagi81l" path="res://assets/enemy/FX/bee-charging.png" id="1_c7v33"]
+[ext_resource type="Texture2D" uid="uid://ow2gycjxqi05" path="res://assets/enemy/FX/rm-explode.png" id="2_gf3io"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gf3io"]
 atlas = ExtResource("1_c7v33")
@@ -26,6 +27,54 @@ region = Rect2(451, 151, 451, 151)
 atlas = ExtResource("1_c7v33")
 region = Rect2(902, 151, 451, 151)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_es7vm"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(0, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvxaw"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(500, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vdalv"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(1000, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjr1i"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(1500, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7u6w4"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(0, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xdhtc"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(500, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7julj"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(1000, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5jny"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(1500, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5sv0o"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(0, 1000, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhixn"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(500, 1000, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vtvaq"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(1000, 1000, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4oifh"]
+atlas = ExtResource("2_gf3io")
+region = Rect2(1500, 1000, 500, 500)
+
 [resource]
 animations = [{
 "frames": [{
@@ -50,4 +99,45 @@ animations = [{
 "loop": false,
 "name": &"bee-charging",
 "speed": 18.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_es7vm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvxaw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vdalv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjr1i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7u6w4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xdhtc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7julj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5jny")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5sv0o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uhixn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vtvaq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4oifh")
+}],
+"loop": false,
+"name": &"rm-explode",
+"speed": 10.0
 }]

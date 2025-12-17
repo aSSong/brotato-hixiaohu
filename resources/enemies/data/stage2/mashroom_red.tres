@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://bvdxtab1ifo8e"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://bvdxtab1ifo8e"]
 
 [ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_ksri0"]
+[ext_resource type="SpriteFrames" uid="uid://l81wolesjtae" path="res://resources/enemies/FX/enemy-FX-stage2.tres" id="2_8wi02"]
 
 [resource]
 script = ExtResource("1_ksri0")
@@ -16,6 +17,9 @@ skill_type = 3
 skill_config = {
 "countdown_duration": 3.0,
 "execute_anim_player": "",
+"explode_fx_animation": "rm-explode",
+"explode_fx_scale": 1.6,
+"explode_fx_sprite_frames": ExtResource("2_8wi02"),
 "explosion_damage": 30,
 "explosion_range": 300.0,
 "low_hp_threshold": 0.3,
