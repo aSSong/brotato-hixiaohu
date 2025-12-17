@@ -606,9 +606,9 @@ scale = Vector2(1, 2.0203364)
 texture = ExtResource("6_xaroc")
 
 [node name="Stage1Wall13" type="Sprite2D" parent="stage1/wall"]
-position = Vector2(-1501, -881)
+position = Vector2(-1495.7301, -881)
 rotation = 1.5707964
-scale = Vector2(1, 2.0203364)
+scale = Vector2(1, 2.0845063)
 texture = ExtResource("6_xaroc")
 
 [node name="Stage1Wall14" type="Sprite2D" parent="stage1/wall"]
