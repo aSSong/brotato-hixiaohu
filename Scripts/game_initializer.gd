@@ -10,6 +10,13 @@ var floor_layer: TileMapLayer = null
 var current_mode: BaseGameMode = null
 var victory_triggered: bool = false
 
+# ========= Flow Guard（发行中项目止血：避免流程协程/状态卡死） =========
+var flow_in_progress: bool = false
+var flow_wave_number: int = 0
+
+const FLOW_WAIT_REVIVE_TIMEOUT_SEC: float = 15.0
+const FLOW_WAIT_RESCUING_TIMEOUT_SEC: float = 12.0
+
 func _ready() -> void:
 	# 等待场景完全加载
 	await get_tree().process_frame
@@ -230,11 +237,45 @@ func _setup_game_flow() -> void:
 				wave_manager.wave_completed.connect(_on_wave_flow_step)
 				print("[GameInitializer] 已接管波次流程控制")
 
+	# 监听复活信号（用于流程补偿/兜底；实现放到后续 todo）
+	var dm = scene_tree.get_first_node_in_group("death_manager")
+	if dm and dm.has_signal("player_revived"):
+		if not dm.player_revived.is_connected(_on_player_revived_flow_reconcile):
+			dm.player_revived.connect(_on_player_revived_flow_reconcile)
+			print("[GameInitializer] 已连接 player_revived（用于流程兜底）")
+
+
+func _reset_flow_guard() -> void:
+	flow_in_progress = false
+	flow_wave_number = 0
+
+
+func _has_visible_rescue_ui() -> bool:
+	var tree = get_tree()
+	if tree == null:
+		return false
+	var nodes = tree.get_nodes_in_group("rescue_ui")
+	for n in nodes:
+		if n and is_instance_valid(n) and n.visible:
+			return true
+	return false
+
 ## 核心流程控制函数：波次结束后的统筹安排
 func _on_wave_flow_step(wave_number: int) -> void:
 	# 安全检查：确保节点仍在树中
 	if not is_inside_tree():
 		return
+
+	# 幂等保护：同一波只允许一个流程实例运行
+	if flow_in_progress:
+		if flow_wave_number == wave_number:
+			print("[FlowGuard] wave=%d 流程已在运行，忽略重复触发" % wave_number)
+			return
+		else:
+			print("[FlowGuard] 流程已在运行（wave=%d），忽略新的 wave_completed=%d" % [flow_wave_number, wave_number])
+			return
+	flow_in_progress = true
+	flow_wave_number = wave_number
 	
 	print("[Flow] 波次 %d 结束，开始流程结算..." % wave_number)
 	
@@ -265,24 +306,33 @@ func _on_wave_flow_step(wave_number: int) -> void:
 			if dm.has_signal("game_over"):
 				dm.game_over.connect(quit_callback, CONNECT_ONE_SHOT)
 			
-			# 等待任一信号
+			# 等待任一信号（带超时，避免无限卡死）
+			var start_ms = Time.get_ticks_msec()
 			while not state.revive_or_quit:
 				scene_tree_dead = get_tree()
 				if scene_tree_dead == null:
+					_reset_flow_guard()
 					return
 				await scene_tree_dead.process_frame
 				if not is_inside_tree():
+					_reset_flow_guard()
+					return
+				if (Time.get_ticks_msec() - start_ms) > int(FLOW_WAIT_REVIVE_TIMEOUT_SEC * 1000.0):
+					print("[FlowGuard] 等待复活超时(%.1fs)，终止本次流程 wave=%d（避免卡死）" % [FLOW_WAIT_REVIVE_TIMEOUT_SEC, wave_number])
+					_reset_flow_guard()
 					return
 			
 			# 如果玩家选择放弃，终止流程
 			if state.quit_game:
 				print("[Flow] 玩家放弃游戏，终止流程")
+				_reset_flow_guard()
 				return
 			
 			print("[Flow] 玩家已复活，继续流程结算...")
 		else:
 			# 如果找不到死亡管理器或没有复活信号，直接返回
 			print("[Flow] 无法等待复活信号，终止流程")
+			_reset_flow_guard()
 			return
 
 	# 2. 进入清扫阶段（捡东西时间），也就是你想要的延迟
@@ -302,6 +352,7 @@ func _on_wave_flow_step(wave_number: int) -> void:
 	
 	# 3. 再次检查死亡（防止延迟期间暴毙）
 	if GameState.current_state == GameState.State.PLAYER_DEAD:
+		_reset_flow_guard()
 		return
 
 	# 4. 胜利检测 (仅针对Wave类型，Key类型由资源回调处理)
@@ -309,31 +360,60 @@ func _on_wave_flow_step(wave_number: int) -> void:
 		if current_mode.check_victory_condition():
 			print("[Flow] 触发胜利！")
 			_trigger_victory()
+			_reset_flow_guard()
 			return
 
 	# 5. 既没死也没赢 -> 打开商店
 	print("[Flow] 进入商店阶段")
 	await _open_shop_flow()
 
+	# 注意：flow_guard 会在商店关闭回调中释放；如果商店压根没打开，会在 _open_shop_flow 内释放
+
 ## 打开商店的统一入口
 func _open_shop_flow() -> void:
 	# 安全检查
 	if not is_inside_tree():
+		_reset_flow_guard()
 		return
 	
 	# 如果正在救援：必须等待救援结束再开商店
 	# 注意：RESCUING 会导致 get_tree().paused = true；不要用会被暂停影响的 create_timer()
+	var rescuing_start_ms = Time.get_ticks_msec()
 	while GameState.current_state == GameState.State.RESCUING:
 		print("[Flow] 玩家正在救援中，等待救援结束再打开商店...")
 		await GameState.state_changed
 		if not is_inside_tree():
+			_reset_flow_guard()
 			return
+		if (Time.get_ticks_msec() - rescuing_start_ms) > int(FLOW_WAIT_RESCUING_TIMEOUT_SEC * 1000.0):
+			# 只有在救援UI不可见时才强制恢复，避免误伤玩家正在操作
+			if not _has_visible_rescue_ui():
+				print("[FlowGuard] RESCUING 超时(%.1fs)且救援UI不可见，强制恢复到 WAVE_CLEARING 并继续开商店" % FLOW_WAIT_RESCUING_TIMEOUT_SEC)
+				GameState.change_state(GameState.State.WAVE_CLEARING)
+				break
+			else:
+				# UI仍可见：继续等待，但重置计时避免刷屏
+				rescuing_start_ms = Time.get_ticks_msec()
+
+	# 进入SHOPPING前先验证商店节点存在，避免“切到SHOPPING后 call_group 找不到商店 → 永久paused”
+	var scene_tree_shop = get_tree()
+	if scene_tree_shop == null:
+		print("[FlowGuard] SceneTree为空，终止开店流程")
+		_reset_flow_guard()
+		return
+	var shop = scene_tree_shop.get_first_node_in_group("upgrade_shop")
+	if not shop or not is_instance_valid(shop):
+		print("[FlowGuard] 找不到 upgrade_shop，跳过商店并强制开始下一波（避免卡死）")
+		GameState.change_state(GameState.State.WAVE_CLEARING)
+		var wave_manager = scene_tree_shop.get_first_node_in_group("wave_manager")
+		if wave_manager and wave_manager.has_method("start_next_wave"):
+			wave_manager.start_next_wave()
+		_reset_flow_guard()
+		return
 
 	GameState.change_state(GameState.State.SHOPPING)
 	# 通知商店打开
-	var scene_tree_shop = get_tree()
-	if scene_tree_shop:
-		scene_tree_shop.call_group("upgrade_shop", "open_shop")
+	scene_tree_shop.call_group("upgrade_shop", "open_shop")
 
 ## 商店关闭回调
 func _on_shop_closed() -> void:
@@ -353,6 +433,90 @@ func _on_shop_closed() -> void:
 	var wave_manager = scene_tree.get_first_node_in_group("wave_manager")
 	if wave_manager and wave_manager.has_method("start_next_wave"):
 		wave_manager.start_next_wave()
+	
+	_reset_flow_guard()
+
+
+# TODO（revive-reconcile）：先占位，后续在第二个 todo 中完善逻辑
+func _on_player_revived_flow_reconcile() -> void:
+	# 复活兜底：如果本波已清空但没有进入商店/下一波，补触发一次流程
+	if not is_inside_tree():
+		return
+	if victory_triggered:
+		return
+	if flow_in_progress:
+		return
+	
+	# 这些状态下不做补偿，避免重复/干扰
+	if GameState.current_state == GameState.State.SHOPPING:
+		return
+	if GameState.current_state == GameState.State.GAME_VICTORY or GameState.current_state == GameState.State.GAME_OVER:
+		return
+	if GameState.current_state == GameState.State.RESCUING:
+		return
+	
+	var tree = get_tree()
+	if tree == null:
+		return
+	
+	var wave_manager = tree.get_first_node_in_group("wave_manager")
+	if not wave_manager:
+		return
+	
+	var wave_number: int = 0
+	if GameMain.current_session:
+		wave_number = int(GameMain.current_session.current_wave)
+	elif "current_wave" in wave_manager:
+		wave_number = int(wave_manager.current_wave)
+	
+	if wave_number <= 0:
+		return
+	
+	# 优先使用 WaveSystemV3 的 status_info（若存在）
+	var status: Dictionary = {}
+	if wave_manager.has_method("get_status_info"):
+		status = wave_manager.get_status_info()
+	
+	var total_enemies: int = 0
+	var spawned: int = 0
+	var active_count: int = -1
+	var status_wave: int = wave_number
+	
+	if not status.is_empty():
+		status_wave = int(status.get("wave", wave_number))
+		total_enemies = int(status.get("total_enemies", 0))
+		spawned = int(status.get("spawned", 0))
+		active_count = int(status.get("active", -1))
+	else:
+		# 兼容性：从属性读取（UI也用这些）
+		if "enemies_total_this_wave" in wave_manager:
+			total_enemies = int(wave_manager.enemies_total_this_wave)
+		if "enemies_spawned_this_wave" in wave_manager:
+			spawned = int(wave_manager.enemies_spawned_this_wave)
+		# active_enemies 只在 V3 存在
+		if "active_enemies" in wave_manager:
+			active_count = int((wave_manager.active_enemies as Array).size())
+	
+	# 只在“当前波”且“看起来已经清空”时触发
+	if status_wave != wave_number:
+		return
+	
+	var cleared_by_ui = (total_enemies > 0 and spawned >= total_enemies and active_count == 0)
+	if not cleared_by_ui:
+		return
+	
+	print("[FlowGuard] 复活补偿：检测到 wave=%d 已清空(total=%d spawned=%d active=%d)，尝试推进流程" % [wave_number, total_enemies, spawned, active_count])
+	
+	# 1) 如果波次仍被视为“进行中”，先用 wave_system.force_end_wave 触发 wave_completed（更正宗）
+	if "is_wave_in_progress" in wave_manager and bool(wave_manager.is_wave_in_progress):
+		if wave_manager.has_method("force_end_wave"):
+			print("[FlowGuard] 复活补偿：调用 wave_manager.force_end_wave() 重新触发完成判定")
+			wave_manager.force_end_wave()
+			return
+	
+	# 2) 否则直接补走一次流程（幂等锁会兜底避免重复）
+	print("[FlowGuard] 复活补偿：直接调用 _on_wave_flow_step(%d) 补开商店" % wave_number)
+	_on_wave_flow_step(wave_number)
 
 ## 检查胜利条件
 func _check_victory() -> void:

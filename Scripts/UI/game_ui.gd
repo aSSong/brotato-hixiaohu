@@ -26,6 +26,11 @@ var player_ref: CharacterBody2D = null  # 玩家引用
 var wave_manager_ref = null  # 波次管理器引用
 var current_mode: BaseGameMode = null  # 当前游戏模式
 
+# ===== Debug Panel（发行版保留，默认隐藏；R键切换）=====
+var _debug_panel: PanelContainer = null
+var _debug_label: RichTextLabel = null
+var _debug_visible: bool = false
+
 func _ready() -> void:
 	# 获取当前游戏模式
 	_setup_game_mode()
@@ -53,6 +58,9 @@ func _ready() -> void:
 	
 	# 初始化 KPI 显示
 	_update_kpi_display()
+	
+	# 调试面板（默认隐藏）
+	_setup_debug_panel()
 
 ## 设置游戏模式
 func _setup_game_mode() -> void:
@@ -173,6 +181,44 @@ func _setup_wave_display() -> void:
 		# 如果找不到，定期查找
 		_find_wave_manager_periodically()
 
+
+func _setup_debug_panel() -> void:
+	_debug_panel = PanelContainer.new()
+	_debug_panel.name = "DebugPanel"
+	_debug_panel.visible = false
+	_debug_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_debug_panel)
+	
+	# 布局：左上角小面板
+	_debug_panel.anchor_left = 0.0
+	_debug_panel.anchor_top = 0.0
+	_debug_panel.anchor_right = 0.0
+	_debug_panel.anchor_bottom = 0.0
+	_debug_panel.offset_left = 12
+	_debug_panel.offset_top = 12
+	_debug_panel.offset_right = 520
+	_debug_panel.offset_bottom = 280
+	
+	_debug_label = RichTextLabel.new()
+	_debug_label.name = "DebugLabel"
+	_debug_label.fit_content = true
+	_debug_label.scroll_active = false
+	_debug_label.bbcode_enabled = false
+	_debug_label.text = ""
+	_debug_panel.add_child(_debug_label)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	# R键切换调试面板（避免改 InputMap，降低发行风险）
+	if event is InputEventKey:
+		var e := event as InputEventKey
+		if e.pressed and not e.echo and e.keycode == KEY_R:
+			_debug_visible = not _debug_visible
+			if _debug_panel:
+				_debug_panel.visible = _debug_visible
+			# 立刻刷新一次
+			_update_debug_panel()
+
 ## 定期查找波次管理器
 func _find_wave_manager_periodically() -> void:
 	var attempts = 0
@@ -237,6 +283,97 @@ func _update_wave_display() -> void:
 	var total = wave_manager_ref.enemies_total_this_wave
 	
 	wave_label.text = "第 %d 波 (消灭: %d / 总计: %d )" % [wave_num, killed, total]
+
+
+func _process(_delta: float) -> void:
+	# 只在面板显示时刷新，避免无谓开销
+	if _debug_visible:
+		_update_debug_panel()
+
+
+func _ws_state_name(state_id: int) -> String:
+	# WaveSystemV3.WaveState: 0 IDLE, 1 SPAWNING, 2 FIGHTING, 3 WAVE_COMPLETE, 4 SHOP_OPEN
+	match state_id:
+		0: return "IDLE"
+		1: return "SPAWNING"
+		2: return "FIGHTING"
+		3: return "WAVE_COMPLETE"
+		4: return "SHOP_OPEN"
+		_: return "UNKNOWN"
+
+
+func _update_debug_panel() -> void:
+	if not _debug_panel or not _debug_label:
+		return
+	
+	var tree = get_tree()
+	var paused = tree.paused if tree else false
+	
+	# GameState
+	var gs_id = GameState.current_state
+	var gs_name = str(gs_id)
+	if GameState.has_method("_state_name"):
+		gs_name = GameState._state_name(gs_id)
+	
+	# DeathManager
+	var dm = tree.get_first_node_in_group("death_manager") if tree else null
+	var is_dead = false
+	if dm and "is_dead" in dm:
+		is_dead = bool(dm.is_dead)
+	
+	# Shop
+	var shop = tree.get_first_node_in_group("upgrade_shop") if tree else null
+	var shop_exists = shop != null and is_instance_valid(shop)
+	var shop_visible = shop_exists and shop.visible
+	
+	# Rescue UI
+	var rescue_nodes = tree.get_nodes_in_group("rescue_ui") if tree else []
+	var rescue_exists = false
+	var rescue_visible = false
+	for n in rescue_nodes:
+		if n and is_instance_valid(n):
+			rescue_exists = true
+			if n.visible:
+				rescue_visible = true
+				break
+	
+	# Wave system
+	var ws = wave_manager_ref
+	if ws == null and tree:
+		ws = tree.get_first_node_in_group("wave_manager")
+	
+	var wave_num = 0
+	var killed = 0
+	var total = 0
+	var spawned = 0
+	var active = -1
+	var ws_state_id = -1
+	var ws_state = ""
+	var in_progress = false
+	
+	if ws and is_instance_valid(ws):
+		if "current_wave" in ws: wave_num = int(ws.current_wave)
+		if "enemies_killed_this_wave" in ws: killed = int(ws.enemies_killed_this_wave)
+		if "enemies_total_this_wave" in ws: total = int(ws.enemies_total_this_wave)
+		if "enemies_spawned_this_wave" in ws: spawned = int(ws.enemies_spawned_this_wave)
+		if "active_enemies" in ws: active = int((ws.active_enemies as Array).size())
+		if "current_state" in ws:
+			ws_state_id = int(ws.current_state)
+			ws_state = "%s(%d)" % [_ws_state_name(ws_state_id), ws_state_id]
+		if "is_wave_in_progress" in ws:
+			in_progress = bool(ws.is_wave_in_progress)
+	
+	_debug_label.text = (
+		"[Debug]\n" +
+		"paused: %s\n" % str(paused) +
+		"GameState: %s\n" % gs_name +
+		"DeathManager.is_dead: %s\n" % str(is_dead) +
+		"Shop: exists=%s visible=%s\n" % [str(shop_exists), str(shop_visible)] +
+		"RescueUI: exists=%s visible=%s\n" % [str(rescue_exists), str(rescue_visible)] +
+		"Wave: %d  killed=%d total=%d spawned=%d active=%d in_progress=%s state=%s\n" % [
+			wave_num, killed, total, spawned, active, str(in_progress), ws_state
+		]
+	)
 
 ## 主钥数量改变回调
 func _on_master_key_changed(new_amount: int, change: int) -> void:

@@ -142,6 +142,9 @@ func _spawn_enemies_async(spawn_list: Array, wave_number: int, spawn_interval: f
 			wave_system.on_enemy_spawned(enemy)
 		else:
 			push_warning("[EnemySpawner V3] 敌人生成失败：", enemy_id)
+			# 失败也要推进波次生成进度，避免波次系统卡在 SPAWNING
+			if wave_system and wave_system.has_method("on_enemy_spawn_failed"):
+				wave_system.on_enemy_spawn_failed(enemy_id)
 		
 		# 等待间隔（受游戏暂停影响）
 		# 第二个参数为false表示当游戏暂停时，计时器也暂停

@@ -27,6 +27,7 @@ var active_enemies: Array = []  # 当前存活的敌人实例列表（直接引�
 var total_enemies_this_wave: int = 0
 var spawned_enemies_this_wave: int = 0
 var killed_enemies_this_wave: int = 0  # 用于统计击杀数
+var failed_spawns_this_wave: int = 0  # 生成失败次数（用于止血：避免SPAWNING卡死）
 
 ## ========== 兼容性属性（供UI等外部访问）==========
 ## 为了兼容旧代码，提供这些属性的访问
@@ -277,6 +278,7 @@ func start_next_wave() -> void:
 	
 	spawned_enemies_this_wave = 0
 	killed_enemies_this_wave = 0  # 重置击杀计数
+	failed_spawns_this_wave = 0
 	
 	_change_state(WaveState.SPAWNING)
 	wave_started.emit(current_wave)
@@ -336,6 +338,24 @@ func on_enemy_spawned(enemy: Node) -> void:
 	if spawned_enemies_this_wave >= total_enemies_this_wave:
 		_on_spawn_complete()
 
+## 敌人生成失败的回调（由生成器调用；失败也算一次生成尝试）
+func on_enemy_spawn_failed(enemy_id: String = "") -> void:
+	if current_state != WaveState.SPAWNING:
+		return
+	
+	spawned_enemies_this_wave += 1
+	failed_spawns_this_wave += 1
+	
+	# 失败视为“已击杀”（否则UI和流程可能卡死）
+	killed_enemies_this_wave += 1
+	enemy_killed.emit(current_wave, killed_enemies_this_wave, total_enemies_this_wave)
+	
+	push_warning("[WaveSystem V3] 敌人生成失败计入进度：%s (%d/%d)" % [enemy_id, spawned_enemies_this_wave, total_enemies_this_wave])
+	
+	# 生成完毕判定
+	if spawned_enemies_this_wave >= total_enemies_this_wave:
+		_on_spawn_complete()
+
 ## 生成完毕
 func _on_spawn_complete() -> void:
 	if current_state != WaveState.SPAWNING:
@@ -344,6 +364,9 @@ func _on_spawn_complete() -> void:
 	_change_state(WaveState.FIGHTING)
 	print("[WaveSystem V3] ========== 生成完毕，进入战斗 ==========")
 	#print("[WaveSystem V3] 场上敌人数：", active_enemies.size())
+	
+	# 止血：如果生成结束时场上为空（例如全部生成失败），立刻检查完成，避免永远卡在FIGHTING
+	_check_wave_complete()
 
 ## 敌人死亡回调
 func _on_enemy_died(enemy_ref: Node) -> void:
@@ -429,6 +452,8 @@ func _cleanup_wave_data() -> void:
 	active_enemies.clear()
 	spawned_enemies_this_wave = 0
 	total_enemies_this_wave = 0
+	killed_enemies_this_wave = 0
+	failed_spawns_this_wave = 0
 
 ## 改变状态
 func _change_state(new_state: WaveState) -> void:
