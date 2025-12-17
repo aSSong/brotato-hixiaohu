@@ -34,6 +34,11 @@ var prepare_anim_player: String = ""   # AnimationPlayer 准备动画名
 var execute_anim_player: String = ""   # AnimationPlayer 爆炸动画名
 var wait_explode_animation: bool = true  # 是否等待爆炸动画完成再删除敌人
 
+## 爆炸特效配置（支持拖拽 SpriteFrames 资源）
+var explode_fx_sprite_frames: SpriteFrames = null  # 爆炸特效动画帧
+var explode_fx_animation: String = "default"       # 爆炸特效动画名
+var explode_fx_scale: Vector2 = Vector2.ONE        # 爆炸特效缩放
+
 ## 倒数相关
 var countdown_timer: float = 0.0
 var is_invincible: bool = false  # 倒数期间无敌
@@ -60,6 +65,15 @@ func _on_initialize() -> void:
 	prepare_anim_player = config.get("prepare_anim_player", "")
 	execute_anim_player = config.get("execute_anim_player", "")
 	wait_explode_animation = config.get("wait_explode_animation", true)
+	
+	# 读取爆炸特效配置（支持拖拽资源）
+	explode_fx_sprite_frames = config.get("explode_fx_sprite_frames", null)
+	explode_fx_animation = config.get("explode_fx_animation", "default")
+	var fx_scale_value = config.get("explode_fx_scale", 1.0)
+	if fx_scale_value is Vector2:
+		explode_fx_scale = fx_scale_value
+	else:
+		explode_fx_scale = Vector2(fx_scale_value, fx_scale_value)
 	
 	# 解析触发条件
 	var trigger_str = config.get("trigger_condition", "low_hp")
@@ -227,6 +241,9 @@ func _explode() -> void:
 	# 对范围内玩家造成伤害（立即生效）
 	_damage_players_in_range(explode_pos)
 	
+	# 播放自定义爆炸特效（如果配置了）
+	_play_explode_fx(explode_pos)
+	
 	# 播放通用爆炸特效（粒子等）
 	_create_explosion_effect(explode_pos)
 	
@@ -308,6 +325,44 @@ func _show_range_indicator() -> void:
 func _hide_range_indicator() -> void:
 	if range_indicator:
 		range_indicator.visible = false
+
+## 播放自定义爆炸特效
+func _play_explode_fx(pos: Vector2) -> void:
+	if explode_fx_sprite_frames == null:
+		return
+	
+	# 检查动画是否存在
+	if not explode_fx_sprite_frames.has_animation(explode_fx_animation):
+		push_warning("[ExplodingBehavior] 特效资源中没有动画: " + explode_fx_animation)
+		return
+	
+	# 创建特效节点
+	var fx_node = AnimatedSprite2D.new()
+	fx_node.sprite_frames = explode_fx_sprite_frames
+	fx_node.global_position = pos
+	fx_node.scale = explode_fx_scale
+	fx_node.z_index = 10  # 在上层显示
+	
+	# 添加到场景树
+	get_tree().root.add_child(fx_node)
+	
+	# 播放动画
+	fx_node.play(explode_fx_animation)
+	
+	# 计算动画时长并用定时器清理（避免循环动画不触发 animation_finished 的问题）
+	var frame_count = explode_fx_sprite_frames.get_frame_count(explode_fx_animation)
+	var fps = explode_fx_sprite_frames.get_animation_speed(explode_fx_animation)
+	if fps <= 0:
+		fps = 5.0  # 默认帧率
+	var duration = frame_count / fps
+	
+	# 使用定时器延迟清理
+	get_tree().create_timer(duration + 0.1).timeout.connect(func():
+		if is_instance_valid(fx_node):
+			fx_node.queue_free()
+	)
+	
+	print("[ExplodingBehavior] 播放爆炸特效 | 动画:", explode_fx_animation, " 帧数:", frame_count, " 时长:", duration, "秒")
 
 ## 创建爆炸效果
 func _create_explosion_effect(pos: Vector2) -> void:
