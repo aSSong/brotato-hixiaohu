@@ -1,6 +1,7 @@
-[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://donirp2d2xano"]
+[gd_resource type="SpriteFrames" load_steps=19 format=3 uid="uid://donirp2d2xano"]
 
 [ext_resource type="Texture2D" uid="uid://i7aoumtfd7ks" path="res://assets/enemy/FX/monitor-ring.png" id="1_u1usu"]
+[ext_resource type="Texture2D" uid="uid://biv0dclqivkxu" path="res://assets/enemy/FX/stapler-charging.png" id="2_pll58"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pll58"]
 atlas = ExtResource("1_u1usu")
@@ -34,6 +35,38 @@ region = Rect2(0, 384, 256, 128)
 atlas = ExtResource("1_u1usu")
 region = Rect2(256, 384, 256, 128)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrmrv"]
+atlas = ExtResource("2_pll58")
+region = Rect2(0, 0, 414, 227)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dly5p"]
+atlas = ExtResource("2_pll58")
+region = Rect2(414, 0, 414, 227)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m3l8a"]
+atlas = ExtResource("2_pll58")
+region = Rect2(828, 0, 414, 227)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mvaax"]
+atlas = ExtResource("2_pll58")
+region = Rect2(0, 227, 414, 227)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3og3"]
+atlas = ExtResource("2_pll58")
+region = Rect2(414, 227, 414, 227)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_16grt"]
+atlas = ExtResource("2_pll58")
+region = Rect2(828, 227, 414, 227)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nbubv"]
+atlas = ExtResource("2_pll58")
+region = Rect2(0, 454, 414, 227)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xkn4y"]
+atlas = ExtResource("2_pll58")
+region = Rect2(414, 454, 414, 227)
+
 [resource]
 animations = [{
 "frames": [{
@@ -64,4 +97,33 @@ animations = [{
 "loop": false,
 "name": &"bmt-ring",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrmrv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dly5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m3l8a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mvaax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3og3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_16grt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nbubv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xkn4y")
+}],
+"loop": false,
+"name": &"stapler-charging",
+"speed": 24.0
 }]

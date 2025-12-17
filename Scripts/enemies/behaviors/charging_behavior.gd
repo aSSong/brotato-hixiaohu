@@ -23,8 +23,11 @@ var extra_damage: int = 10          # 冲锋命中额外伤害
 var prepare_time: float = 0.3       # 准备时间
 
 ## 指示器
-var indicator_sprite: Sprite2D = null
-var indicator_texture: Texture2D = null
+var indicator_node: Node2D = null  # 可以是 Sprite2D 或 AnimatedSprite2D
+var indicator_texture: Texture2D = null  # 静态纹理（可拖拽配置）
+var indicator_sprite_frames: SpriteFrames = null  # 动画帧（可拖拽配置）
+var indicator_animation: String = "default"  # 动画名称
+var indicator_scale: Vector2 = Vector2.ONE  # 指示器缩放
 const DEFAULT_INDICATOR_TEXTURE_PATH: String = "res://assets/skill_indicator/charging-range-rect.png"
 
 ## 状态计时器
@@ -45,12 +48,22 @@ func _on_initialize() -> void:
 	extra_damage = config.get("extra_damage", 10)
 	prepare_time = config.get("prepare_time", 0.3)
 	
-	# 加载指示器纹理（支持自定义配置）
-	var custom_indicator_path = config.get("indicator_texture", "")
-	if custom_indicator_path != "" and ResourceLoader.exists(custom_indicator_path):
-		indicator_texture = load(custom_indicator_path)
-	else:
+	# 加载指示器配置（支持拖拽资源）
+	# 优先使用动画帧，其次使用静态纹理
+	indicator_sprite_frames = config.get("indicator_sprite_frames", null)
+	indicator_animation = config.get("indicator_animation", "default")
+	indicator_texture = config.get("indicator_texture", null)
+	
+	# 如果都没配置，使用默认静态纹理
+	if indicator_sprite_frames == null and indicator_texture == null:
 		indicator_texture = load(DEFAULT_INDICATOR_TEXTURE_PATH)
+	
+	# 读取缩放参数
+	var scale_value = config.get("indicator_scale", 1.0)
+	if scale_value is Vector2:
+		indicator_scale = scale_value
+	else:
+		indicator_scale = Vector2(scale_value, scale_value)
 	
 	state = ChargeState.IDLE
 	state_timer = 0.0
@@ -193,35 +206,66 @@ func is_charging_now() -> bool:
 
 ## 指示器相关
 func _create_indicator() -> void:
-	if is_instance_valid(indicator_sprite):
+	if is_instance_valid(indicator_node):
 		return
 	
 	if not enemy:
 		return
-		
-	indicator_sprite = Sprite2D.new()
-	indicator_sprite.texture = indicator_texture
-	indicator_sprite.centered = false
-	if indicator_texture:
-		indicator_sprite.offset = Vector2(0, -indicator_texture.get_height() / 2.0)
 	
-	indicator_sprite.visible = false
-	indicator_sprite.top_level = true
-	indicator_sprite.z_index = -1
-	enemy.add_child(indicator_sprite)
+	# 根据配置创建不同类型的指示器
+	if indicator_sprite_frames != null:
+		# 使用 AnimatedSprite2D（动态指示器）
+		var animated_sprite = AnimatedSprite2D.new()
+		animated_sprite.sprite_frames = indicator_sprite_frames
+		animated_sprite.centered = false
+		
+		# 计算偏移（垂直居中）
+		if indicator_sprite_frames.has_animation(indicator_animation):
+			var frame_texture = indicator_sprite_frames.get_frame_texture(indicator_animation, 0)
+			if frame_texture:
+				animated_sprite.offset = Vector2(0, -frame_texture.get_height() / 2.0)
+		
+		indicator_node = animated_sprite
+	else:
+		# 使用 Sprite2D（静态指示器）
+		var sprite = Sprite2D.new()
+		sprite.texture = indicator_texture
+		sprite.centered = false
+		if indicator_texture:
+			sprite.offset = Vector2(0, -indicator_texture.get_height() / 2.0)
+		
+		indicator_node = sprite
+	
+	# 通用设置
+	indicator_node.visible = false
+	indicator_node.top_level = true
+	indicator_node.z_index = -1
+	indicator_node.scale = indicator_scale
+	enemy.add_child(indicator_node)
 
 func _show_indicator() -> void:
 	_create_indicator()
-	if is_instance_valid(indicator_sprite):
-		indicator_sprite.visible = true
+	if is_instance_valid(indicator_node):
+		indicator_node.visible = true
+		
+		# 如果是动画指示器，播放动画
+		if indicator_node is AnimatedSprite2D:
+			var anim_sprite = indicator_node as AnimatedSprite2D
+			if anim_sprite.sprite_frames and anim_sprite.sprite_frames.has_animation(indicator_animation):
+				anim_sprite.play(indicator_animation)
+		
 		_update_indicator()
 
 func _hide_indicator() -> void:
-	if is_instance_valid(indicator_sprite):
-		indicator_sprite.visible = false
+	if is_instance_valid(indicator_node):
+		indicator_node.visible = false
+		
+		# 如果是动画指示器，停止动画
+		if indicator_node is AnimatedSprite2D:
+			(indicator_node as AnimatedSprite2D).stop()
 
 func _update_indicator() -> void:
-	if not is_instance_valid(indicator_sprite) or not indicator_sprite.visible or not enemy:
+	if not is_instance_valid(indicator_node) or not indicator_node.visible or not enemy:
 		return
 	
 	var player = get_player()
@@ -229,15 +273,8 @@ func _update_indicator() -> void:
 		return
 		
 	# 更新位置
-	indicator_sprite.global_position = enemy.global_position
+	indicator_node.global_position = enemy.global_position
 	
 	# 更新朝向
 	var dir = (player.global_position - enemy.global_position).normalized()
-	indicator_sprite.rotation = dir.angle()
-	
-	# 更新缩放（长度）
-	if indicator_texture:
-		var texture_width = indicator_texture.get_width()
-		if texture_width > 0:
-			var scale_x = charge_distance / texture_width
-			indicator_sprite.scale = Vector2(scale_x, 1.0)
+	indicator_node.rotation = dir.angle()

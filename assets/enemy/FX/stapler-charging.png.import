@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxgmkjie6m6kk"
-path="res://.godot/imported/stapler-charging-range.png-bbfc249b21b9b3215d606254f23e45e0.ctex"
+uid="uid://biv0dclqivkxu"
+path="res://.godot/imported/stapler-charging.png-837d33cdb4d9fb9a9c5d7751c0b8878f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/skill_indicator/stapler-charging-range.png"
-dest_files=["res://.godot/imported/stapler-charging-range.png-bbfc249b21b9b3215d606254f23e45e0.ctex"]
+source_file="res://assets/enemy/FX/stapler-charging.png"
+dest_files=["res://.godot/imported/stapler-charging.png-837d33cdb4d9fb9a9c5d7751c0b8878f.ctex"]
 
 [params]
 

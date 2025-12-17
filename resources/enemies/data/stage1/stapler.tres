@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://bhgklada2p51s"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://bhgklada2p51s"]
 
 [ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://donirp2d2xano" path="res://resources/enemies/FX/enemy-FX-stage1.tres" id="2_fx"]
 
 [resource]
 script = ExtResource("1_script")
@@ -17,9 +18,11 @@ skill_config = {
 "charge_speed": 1000.0,
 "cooldown": 3.0,
 "extra_damage": 10,
-"indicator_texture": "res://assets/skill_indicator/stapler-charging-range.png",
+"indicator_animation": "stapler-charging",
+"indicator_scale": 1.5,
+"indicator_sprite_frames": ExtResource("2_fx"),
 "prepare_time": 0.3,
-"trigger_distance": 700.0
+"trigger_distance": 800.0
 }
 animations = {
 "attack": "",
