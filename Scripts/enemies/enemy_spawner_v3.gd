@@ -25,7 +25,10 @@ var scene_cache: Dictionary = {}
 var spawn_indicator_delay: float = 0.5  # 默认预警延迟，会从模式配置覆盖
 
 ## ========== 生成参数 ==========
-var min_distance_from_player: float = 300.0
+## 刷怪距离范围（相对于玩家）
+const SPAWN_MIN_DISTANCE: float = 500.0   # 最小距离：敌人不会在玩家 500 像素内刷新
+const SPAWN_MAX_DISTANCE: float = 1200.0  # 最大距离：敌人不会在玩家 1200 像素外刷新
+
 var max_spawn_attempts: int = 30
 
 ## ========== 状态 ==========
@@ -200,8 +203,8 @@ func _find_spawn_position() -> Vector2:
 		var cell := used[randi() % used.size()]
 		var world_pos := floor_layer.map_to_local(cell) * 6
 		
-		# 检查距离玩家是否足够远
-		if _is_far_enough_from_player(world_pos):
+		# 检查是否在有效刷怪范围内（500 ~ 1200 像素）
+		if _is_valid_spawn_distance(world_pos):
 			return world_pos
 	
 	return Vector2.INF
@@ -306,13 +309,13 @@ func _spawn_single_enemy_at_position(enemy_id: String, spawn_pos: Vector2, is_la
 		  " 伤害:", enemy.attack_damage, "(基础+", damage_bonus, ")×", damage_multiplier)
 	return enemy
 
-## 检查位置是否足够远
-func _is_far_enough_from_player(spawn_pos: Vector2) -> bool:
+## 检查位置是否在有效刷怪范围内（最小距离 ~ 最大距离）
+func _is_valid_spawn_distance(spawn_pos: Vector2) -> bool:
 	if not player or not is_instance_valid(player):
 		return true
 	
 	var distance := spawn_pos.distance_to(player.global_position)
-	return distance >= min_distance_from_player
+	return distance >= SPAWN_MIN_DISTANCE and distance <= SPAWN_MAX_DISTANCE
 
 ## 应用技能伤害成长
 ## 公式：(基础值 + 成长点数) * (1 + 成长率)
