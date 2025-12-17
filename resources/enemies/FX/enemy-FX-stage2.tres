@@ -1,0 +1,53 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://l81wolesjtae"]
+
+[ext_resource type="Texture2D" uid="uid://cix2vjiagi81l" path="res://assets/enemy/FX/bee-charging.png" id="1_c7v33"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gf3io"]
+atlas = ExtResource("1_c7v33")
+region = Rect2(0, 0, 451, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d88eu"]
+atlas = ExtResource("1_c7v33")
+region = Rect2(451, 0, 451, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c8ur6"]
+atlas = ExtResource("1_c7v33")
+region = Rect2(902, 0, 451, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0frvb"]
+atlas = ExtResource("1_c7v33")
+region = Rect2(0, 151, 451, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgp63"]
+atlas = ExtResource("1_c7v33")
+region = Rect2(451, 151, 451, 151)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_83mdf"]
+atlas = ExtResource("1_c7v33")
+region = Rect2(902, 151, 451, 151)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gf3io")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d88eu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c8ur6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0frvb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgp63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_83mdf")
+}],
+"loop": false,
+"name": &"bee-charging",
+"speed": 18.0
+}]

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://clrta6ptolnfd"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://clrta6ptolnfd"]
 
 [ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_3054c"]
+[ext_resource type="SpriteFrames" uid="uid://l81wolesjtae" path="res://resources/enemies/FX/enemy-FX-stage2.tres" id="2_fx"]
 
 [resource]
 script = ExtResource("1_3054c")
@@ -18,6 +19,17 @@ skill_config = {
 "charge_speed": 800.0,
 "cooldown": 3.0,
 "extra_damage": 10,
+"indicator_animation": "bee-charging",
+"indicator_scale": 1.0,
+"indicator_sprite_frames": ExtResource("2_fx"),
 "prepare_time": 0.3,
 "trigger_distance": 800.0
+}
+animations = {
+"attack": "",
+"hurt": "",
+"idle": "",
+"skill_execute": "charging",
+"skill_prepare": "charging",
+"walk": "walk"
 }

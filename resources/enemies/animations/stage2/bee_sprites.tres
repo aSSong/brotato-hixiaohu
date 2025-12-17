@@ -1,6 +1,15 @@
-[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://cdfdsv8mtmkml"]
+[gd_resource type="SpriteFrames" load_steps=15 format=3 uid="uid://cdfdsv8mtmkml"]
 
 [ext_resource type="Texture2D" uid="uid://ci4nh3a0auj6n" path="res://assets/enemy/stage2/bee-run-Sheet.png" id="1_5wb83"]
+[ext_resource type="Texture2D" uid="uid://bajx55xt8qn02" path="res://assets/enemy/stage2/bee-charging-Sheet.png" id="1_kj44j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44exf"]
+atlas = ExtResource("1_kj44j")
+region = Rect2(0, 0, 432, 378)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2k0ya"]
+atlas = ExtResource("1_kj44j")
+region = Rect2(432, 0, 432, 378)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kj44j"]
 atlas = ExtResource("1_5wb83")
@@ -44,6 +53,17 @@ region = Rect2(2538, 0, 282, 300)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44exf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2k0ya")
+}],
+"loop": true,
+"name": &"charging",
+"speed": 10.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kj44j")
