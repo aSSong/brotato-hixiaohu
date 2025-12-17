@@ -62,7 +62,7 @@ func _enter_state(state: State) -> void:
 	print("[GameState] 进入状态: %s" % _state_name(state))
 	
 	match state:
-		State.WAVE_FIGHTING, State.WAVE_CLEARING:
+		State.GAME_INITIALIZING, State.WAVE_FIGHTING, State.WAVE_CLEARING:
 			get_tree().paused = false
 		State.SHOPPING, State.PLAYER_DEAD, State.GAME_PAUSED, State.RESCUING, State.ESC_MENU:
 			get_tree().paused = true

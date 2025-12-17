@@ -32,6 +32,9 @@ var _choosed_texture: Texture2D
 ## 延迟恢复的Tween引用（用于中断）
 var _restore_tween: Tween = null
 
+## 隐藏动画Tween引用（避免 await 在未被持有时中断）
+var _hide_tween: Tween = null
+
 func _ready() -> void:
 	# 添加到组（用于场景清理）
 	add_to_group("esc_menu")
@@ -195,17 +198,27 @@ func _reset_to_default_state() -> void:
 ## 隐藏菜单
 func hide_menu() -> void:
 	print("[ESC Menu] 准备关闭菜单")
+	# 取消之前的隐藏动画（如果有）
+	if _hide_tween and _hide_tween.is_valid():
+		_hide_tween.kill()
+		_hide_tween = null
 	
-	# 播放淡出动画
-	await _play_hide_animation()
+	# 如果没有背景或背景无效，直接隐藏
+	if not background or not is_instance_valid(background):
+		hide()
+		print("[ESC Menu] 菜单已关闭（无动画）")
+		return
 	
-	# 隐藏菜单
-	hide()
-	
-	# 恢复游戏 - 由 GameState 管理
-	# get_tree().paused = false
-	
-	print("[ESC Menu] 菜单已关闭")
+	# 背景淡出（暂停时也能运行）
+	_hide_tween = create_tween()
+	_hide_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_hide_tween.tween_property(background, "modulate:a", 0.0, 0.15)
+	_hide_tween.finished.connect(func ():
+		# 隐藏菜单
+		hide()
+		_hide_tween = null
+		print("[ESC Menu] 菜单已关闭")
+	, CONNECT_ONE_SHOT)
 
 ## 播放显示动画
 func _play_show_animation() -> void:
@@ -227,7 +240,11 @@ func _play_hide_animation() -> void:
 func _on_resume_pressed() -> void:
 	print("[ESC Menu] 玩家选择继续游戏")
 	hide_menu()
-	resume_requested.emit()
+	# 在隐藏完成后再发resume（避免菜单残留遮挡造成“没恢复”的错觉）
+	if _hide_tween and _hide_tween.is_valid():
+		_hide_tween.finished.connect(func(): resume_requested.emit(), CONNECT_ONE_SHOT)
+	else:
+		resume_requested.emit()
 
 ## 返回主菜单按钮
 func _on_main_menu_pressed() -> void:
