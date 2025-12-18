@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://cjw1tgtkybjxp"]
+
+[ext_resource type="Script" uid="uid://cu8iudilpydhv" path="res://Scripts/bullets/enemy_bullet.gd" id="1_kd5fa"]
+[ext_resource type="Texture2D" uid="uid://b23uutpovcfge" path="res://assets/bullet/masquito-bullet.png" id="2_xdb0f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5616"]
+atlas = ExtResource("2_xdb0f")
+region = Rect2(0, 0, 200, 44)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_enemy_bullet"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x5616")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xdb0f"]
+radius = 37.500004
+height = 270.00003
+
+[node name="masquito_bullet" type="Area2D"]
+z_index = 15
+scale = Vector2(0.4, 0.4)
+collision_layer = 4
+script = ExtResource("1_kd5fa")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 25
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_enemy_bullet")
+autoplay = "default"
+frame_progress = 0.055626914
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 18
+rotation = 1.5707964
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("CapsuleShape2D_xdb0f")
+
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
