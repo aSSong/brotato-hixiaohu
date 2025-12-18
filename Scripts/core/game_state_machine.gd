@@ -66,6 +66,9 @@ func _enter_state(state: State) -> void:
 			get_tree().paused = false
 		State.SHOPPING, State.PLAYER_DEAD, State.GAME_PAUSED, State.RESCUING, State.ESC_MENU:
 			get_tree().paused = true
+			# 暂停游戏计时器（ESC界面、商店、死亡界面）
+			if state in [State.SHOPPING, State.PLAYER_DEAD, State.ESC_MENU]:
+				_pause_game_timer()
 		State.GAME_VICTORY, State.GAME_OVER:
 			get_tree().paused = false
 	
@@ -74,6 +77,11 @@ func _enter_state(state: State) -> void:
 ## 退出状态
 func _exit_state(state: State) -> void:
 	print("[GameState] 退出状态: %s" % _state_name(state))
+	
+	# 恢复游戏计时器（离开ESC界面、商店、死亡界面时）
+	if state in [State.SHOPPING, State.PLAYER_DEAD, State.ESC_MENU]:
+		_resume_game_timer()
+	
 	state_exited.emit(state)
 
 ## 检查是否在指定状态
@@ -116,3 +124,15 @@ func reset() -> void:
 	state_history.clear()
 	get_tree().paused = false
 	print("[GameState] 状态机已重置")
+
+## ==================== 计时器控制 ====================
+
+## 暂停游戏计时器
+func _pause_game_timer() -> void:
+	if GameMain.current_session:
+		GameMain.current_session.pause_timer()
+
+## 恢复游戏计时器
+func _resume_game_timer() -> void:
+	if GameMain.current_session:
+		GameMain.current_session.resume_timer()

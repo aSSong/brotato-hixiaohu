@@ -16,6 +16,8 @@ extends CanvasLayer
 @onready var warning_ui: Control = $WarningUi
 @onready var warning_animation: AnimationPlayer = $WarningUi/AnimationPlayer
 @onready var boss_bar_container: VBoxContainer = $BOSSbar_root/VBoxContainer
+@onready var timing_text: Label = $timing/timingText
+@onready var new_record_sign: Control = $timing/timingText/newRecordSign
 
 ## BOSS HP Bar 场景
 const BOSS_HP_BAR_SCENE = preload("res://scenes/UI/components/BOSS_HPbar.tscn")
@@ -30,6 +32,11 @@ var current_mode: BaseGameMode = null  # 当前游戏模式
 var _debug_panel: PanelContainer = null
 var _debug_label: RichTextLabel = null
 var _debug_visible: bool = false
+
+# ===== 计时器显示 =====
+var _best_record_wave: int = -1  # 历史最佳波次（-1 表示无记录）
+var _best_record_time: float = INF  # 历史最佳时间
+var _completed_waves: int = 0  # 本局已完成的波次数
 
 func _ready() -> void:
 	# 获取当前游戏模式
@@ -50,6 +57,9 @@ func _ready() -> void:
 	# 默认隐藏属性面板（可选）
 	if player_stats_info:
 		player_stats_info.visible = false
+		
+	# 默认隐藏新纪录提示
+	new_record_sign.visible = false
 	
 	# 初始化各个子系统
 	_setup_skill_icon()
@@ -61,6 +71,9 @@ func _ready() -> void:
 	
 	# 调试面板（默认隐藏）
 	_setup_debug_panel()
+	
+	# 初始化计时器显示
+	_setup_timing_display()
 
 ## 设置游戏模式
 func _setup_game_mode() -> void:
@@ -207,6 +220,74 @@ func _setup_debug_panel() -> void:
 	_debug_label.text = ""
 	_debug_panel.add_child(_debug_label)
 
+## 设置计时器显示
+func _setup_timing_display() -> void:
+	# 获取当前模式的历史最佳记录
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"
+	
+	if mode_id == "survival":
+		var record = LeaderboardManager.get_survival_record()
+		if not record.is_empty():
+			_best_record_wave = record.get("best_wave", 30)
+			_best_record_time = record.get("completion_time_seconds", INF)
+	elif mode_id == "multi":
+		var record = LeaderboardManager.get_multi_record()
+		if not record.is_empty():
+			_best_record_wave = record.get("best_wave", 0)
+			_best_record_time = INF  # Multi模式不比较时间
+	
+	# 默认隐藏新纪录标志
+	if new_record_sign:
+		new_record_sign.visible = false
+
+## 更新计时器显示
+func _update_timing_display() -> void:
+	if not timing_text:
+		return
+	
+	# 获取当前游戏时间
+	var elapsed_time: float = 0.0
+	if GameMain.current_session:
+		elapsed_time = GameMain.current_session.get_elapsed_time()
+	
+	# 格式化时间为 "XX分XX秒XX" 格式
+	timing_text.text = _format_time_chinese(elapsed_time)
+	
+	# 检查是否优于历史记录（只有完成波次后才判断）
+	if new_record_sign:
+		var is_better = false
+		
+		# 必须至少完成1波才能算新纪录
+		if _completed_waves > 0:
+			if GameMain.current_mode_id == "survival":
+				# Survival模式：已完成波次更高，或波次相同且时间更短
+				if _best_record_wave < 0:
+					# 无历史记录，当前进度即为新纪录
+					is_better = true
+				elif _completed_waves > _best_record_wave:
+					is_better = true
+				elif _completed_waves == _best_record_wave and elapsed_time < _best_record_time:
+					is_better = true
+			elif GameMain.current_mode_id == "multi":
+				# Multi模式：仅已完成波次更高
+				if _best_record_wave < 0:
+					# 无历史记录，当前进度即为新纪录
+					is_better = true
+				elif _completed_waves > _best_record_wave:
+					is_better = true
+		
+		new_record_sign.visible = is_better
+
+## 格式化时间为中文格式 "XX分XX秒XX"
+func _format_time_chinese(seconds: float) -> String:
+	var total_seconds = int(seconds)
+	var centiseconds = int((seconds - total_seconds) * 100)
+	var mins = total_seconds / 60
+	var secs = total_seconds % 60
+	return "%d分%02d秒%02d" % [mins, secs, centiseconds]
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	# G键切换调试面板（避免改 InputMap，降低发行风险）
@@ -268,7 +349,10 @@ func _on_wave_enemy_killed(_wave_number: int, _killed: int, _total: int) -> void
 	_update_wave_display()
 
 ## 波次结束回调
-func _on_wave_ended(_wave_number: int) -> void:
+func _on_wave_ended(wave_number: int) -> void:
+	# 更新已完成波次数
+	_completed_waves = wave_number
+	
 	# 如果是波次胜利条件，更新 KPI（波次结束后，已消灭波数会+1）
 	if current_mode and current_mode.victory_condition_type == "waves":
 		_update_kpi_display()
@@ -289,6 +373,9 @@ func _process(_delta: float) -> void:
 	# 只在面板显示时刷新，避免无谓开销
 	if _debug_visible:
 		_update_debug_panel()
+	
+	# 更新计时器显示
+	_update_timing_display()
 
 
 func _ws_state_name(state_id: int) -> String:

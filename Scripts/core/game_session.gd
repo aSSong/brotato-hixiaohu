@@ -42,6 +42,7 @@ var current_map_id: String = ""  # 当前地图ID
 var _timer_start_time: float = 0.0  # 计时器开始时的时间戳
 var _timer_accumulated: float = 0.0  # 累计游戏时间（秒）
 var _timer_running: bool = false  # 计时器是否正在运行
+var _timer_paused: bool = false  # 计时器是否暂停中
 
 func reset() -> void:
 	gold = 0
@@ -57,6 +58,7 @@ func reset() -> void:
 	_timer_start_time = 0.0
 	_timer_accumulated = 0.0
 	_timer_running = false
+	_timer_paused = false
 	print("[GameSession] 会话数据已重置")
 
 func add_gold(amount: int) -> void:
@@ -96,11 +98,30 @@ func stop_timer() -> void:
 		return
 	_timer_accumulated += Time.get_unix_time_from_system() - _timer_start_time
 	_timer_running = false
+	_timer_paused = false
 	print("[GameSession] 计时器已停止，累计时间: %.2f 秒" % _timer_accumulated)
+
+## 暂停计时器（进入商店/死亡/ESC界面时调用）
+func pause_timer() -> void:
+	if not _timer_running or _timer_paused:
+		return
+	# 累计当前时间段
+	_timer_accumulated += Time.get_unix_time_from_system() - _timer_start_time
+	_timer_paused = true
+	print("[GameSession] 计时器已暂停，累计时间: %.2f 秒" % _timer_accumulated)
+
+## 恢复计时器（离开商店/复活/关闭ESC界面时调用）
+func resume_timer() -> void:
+	if not _timer_running or not _timer_paused:
+		return
+	# 重新记录起始时间
+	_timer_start_time = Time.get_unix_time_from_system()
+	_timer_paused = false
+	print("[GameSession] 计时器已恢复")
 
 ## 获取已用时间（秒）
 func get_elapsed_time() -> float:
-	if _timer_running:
+	if _timer_running and not _timer_paused:
 		return _timer_accumulated + (Time.get_unix_time_from_system() - _timer_start_time)
 	return _timer_accumulated
 
@@ -109,4 +130,5 @@ func reset_timer() -> void:
 	_timer_start_time = 0.0
 	_timer_accumulated = 0.0
 	_timer_running = false
+	_timer_paused = false
 	print("[GameSession] 计时器已重置")

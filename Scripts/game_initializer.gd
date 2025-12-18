@@ -283,6 +283,11 @@ func _on_wave_flow_step(wave_number: int) -> void:
 	SaveManager.try_update_best_wave(GameMain.current_mode_id, wave_number)
 	if GameMain.current_mode_id == "multi":
 		LeaderboardManager.try_update_multi_record(wave_number, SaveManager.get_total_death_count())
+	elif GameMain.current_mode_id == "survival":
+		# Survival 模式每波完成时也更新排行榜记录（wave 优先判定）
+		var elapsed_time = GameMain.current_session.get_elapsed_time() if GameMain.current_session else 0.0
+		var death_count = SaveManager.get_total_death_count()
+		LeaderboardManager.try_update_survival_record(wave_number, elapsed_time, death_count)
 	
 	# 1. 状态检查：如果玩家已经死了，等待复活而不是直接终止
 	if GameState.current_state == GameState.State.PLAYER_DEAD:
@@ -551,13 +556,16 @@ func _trigger_victory() -> void:
 	if GameMain.current_session:
 		GameMain.current_session.stop_timer()
 	
-	# 更新排行榜记录（仅 Survival 模式在胜利时更新，记录最短完成时间）
+	# 获取当前波次（胜利时的最终波次）
+	var victory_wave = current_mode.victory_waves if current_mode else 30
+	
+	# 更新排行榜记录（Survival 模式在胜利时更新，使用 wave 优先判定）
 	if GameMain.current_mode_id == "survival":
 		var elapsed_time = GameMain.current_session.get_elapsed_time() if GameMain.current_session else 0.0
 		var death_count = SaveManager.get_total_death_count()
-		var is_new_record = LeaderboardManager.try_update_survival_record(elapsed_time, death_count)
+		var is_new_record = LeaderboardManager.try_update_survival_record(victory_wave, elapsed_time, death_count)
 		if is_new_record:
-			print("[GameInitializer] Survival 模式新纪录！时间: %.2f秒" % elapsed_time)
+			print("[GameInitializer] Survival 模式新纪录！波次: %d, 时间: %.2f秒" % [victory_wave, elapsed_time])
 	
 	# 注意：最高波次记录已在 _on_wave_flow_step 中统一处理
 	

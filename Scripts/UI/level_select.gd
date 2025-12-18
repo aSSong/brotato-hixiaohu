@@ -61,11 +61,17 @@ func _update_record_labels() -> void:
 	if chapter1_record_label:
 		var survival_record = LeaderboardManager.get_survival_record()
 		if survival_record.is_empty():
-			chapter1_record_label.text = "[i]个人最速通关：[color=#ea33bf]--[/color][/i]"
+			chapter1_record_label.text = "[i]个人最高波次：[color=#ea33bf]--[/color][/i]"
 		else:
-			var time_seconds = survival_record.get("completion_time_seconds", 0.0)
-			var time_str = _format_time(time_seconds)
-			chapter1_record_label.text = "[i]个人最速通关：[color=#ea33bf]%s[/color][/i]" % time_str
+			var best_wave = survival_record.get("best_wave", 30)
+			if best_wave >= 30:
+				# 已通关，显示最速通关时间
+				var time_seconds = survival_record.get("completion_time_seconds", 0.0)
+				var time_str = _format_time(time_seconds)
+				chapter1_record_label.text = "[i]个人最速通关：[color=#ea33bf]%s[/color][/i]" % time_str
+			else:
+				# 未通关，显示最高波次
+				chapter1_record_label.text = "[i]个人最高波次：[color=#ea33bf]%d[/color][/i]" % best_wave
 	
 	# 更新 Chapter 2 (Multi 模式) 记录
 	if chapter2_record_label:

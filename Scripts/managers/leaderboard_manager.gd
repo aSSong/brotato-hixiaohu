@@ -34,21 +34,45 @@ func _ready() -> void:
 
 ## ==================== 公共方法 ====================
 
-## 尝试更新 Survival 模式记录（只在胜利时调用）
+## 尝试更新 Survival 模式记录（波次完成或胜利时调用）
+## 新纪录判定逻辑：wave 优先，wave 相同时比较时间
 ## 返回 true 表示创建了新纪录
-func try_update_survival_record(completion_time: float, death_count: int) -> bool:
+func try_update_survival_record(wave: int, completion_time: float, death_count: int) -> bool:
 	var current = records.get("survival")
 	
-	# 如果没有记录，或者新时间更短，则更新
-	if current == null or completion_time < current.get("completion_time_seconds", INF):
-		records["survival"] = _create_survival_record(completion_time, death_count)
-		_pending_upload["survival"] = true  # 标记需要上传
+	# 如果没有记录，直接创建新纪录
+	if current == null:
+		records["survival"] = _create_survival_record(wave, completion_time, death_count)
+		_pending_upload["survival"] = true
 		save_records()
 		_upload_in_background("survival", 1, records["survival"])
-		print("[LeaderboardManager] Survival模式新纪录! 时间: %.2f秒" % completion_time)
+		print("[LeaderboardManager] Survival模式新纪录! 波次: %d, 时间: %.2f秒" % [wave, completion_time])
 		return true
 	
-	print("[LeaderboardManager] Survival模式未打破纪录 (当前: %.2f秒, 最佳: %.2f秒)" % [completion_time, current.get("completion_time_seconds", 0)])
+	var current_wave = current.get("best_wave", 30)  # 兼容旧数据，默认30波
+	var current_time = current.get("completion_time_seconds", INF)
+	
+	var is_new_record = false
+	
+	# 判定逻辑：
+	# 1. wave > 存档 wave → 新纪录
+	# 2. wave == 存档 wave 且 time < 存档 time → 新纪录
+	# 3. wave < 存档 wave → 不是新纪录
+	if wave > current_wave:
+		is_new_record = true
+		print("[LeaderboardManager] Survival模式新纪录! 波次突破: %d → %d" % [current_wave, wave])
+	elif wave == current_wave and completion_time < current_time:
+		is_new_record = true
+		print("[LeaderboardManager] Survival模式新纪录! 同波次更快: %.2f秒 → %.2f秒" % [current_time, completion_time])
+	
+	if is_new_record:
+		records["survival"] = _create_survival_record(wave, completion_time, death_count)
+		_pending_upload["survival"] = true
+		save_records()
+		_upload_in_background("survival", 1, records["survival"])
+		return true
+	
+	print("[LeaderboardManager] Survival模式未打破纪录 (当前: 波次%d/%.2f秒, 最佳: 波次%d/%.2f秒)" % [wave, completion_time, current_wave, current_time])
 	return false
 
 ## 尝试更新 Multi 模式记录（游戏结束时调用）
@@ -190,6 +214,10 @@ func load_records() -> bool:
 		else:
 			# 旧格式兼容：直接就是 records
 			records = loaded_data
+		
+		# 迁移旧版 Survival 记录（添加 best_wave 字段）
+		_migrate_survival_record()
+		
 		print("[LeaderboardManager] 记录已加载 | 待上传: %s" % _pending_upload)
 		return true
 	
@@ -274,11 +302,12 @@ func force_upload_all() -> void:
 ## ==================== 私有方法 ====================
 
 ## 创建 Survival 模式记录
-func _create_survival_record(completion_time: float, death_count: int) -> Dictionary:
+func _create_survival_record(wave: int, completion_time: float, death_count: int) -> Dictionary:
 	return {
 		"mode": "survival",
 		"player_name": SaveManager.get_player_name(),
 		"floor_id": SaveManager.get_floor_id(),
+		"best_wave": wave,
 		"completion_time_seconds": completion_time,
 		"total_death_count": death_count,
 		"completed_at": _get_iso_timestamp()
@@ -341,3 +370,17 @@ func _clear_corrupted_data() -> void:
 	}
 	if FileAccess.file_exists(SAVE_FILE_PATH):
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
+
+## 迁移旧版 Survival 记录（添加 best_wave 字段）
+## 旧数据：有 completion_time_seconds 但没有 best_wave
+## 迁移策略：best_wave 默认为 30（胜利波次）
+func _migrate_survival_record() -> void:
+	var survival_record = records.get("survival")
+	if survival_record == null:
+		return
+	
+	# 检查是否需要迁移（有时间记录但没有 best_wave）
+	if not survival_record.has("best_wave") and survival_record.has("completion_time_seconds"):
+		survival_record["best_wave"] = 30  # 默认胜利波次
+		print("[LeaderboardManager] 迁移旧版 Survival 记录: 添加 best_wave = 30")
+		save_records()
