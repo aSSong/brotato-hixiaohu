@@ -16,6 +16,7 @@ extends CanvasLayer
 @onready var warning_ui: Control = $WarningUi
 @onready var warning_animation: AnimationPlayer = $WarningUi/AnimationPlayer
 @onready var boss_bar_container: VBoxContainer = $BOSSbar_root/VBoxContainer
+@onready var timing_container: Control = $timing
 @onready var timing_text: Label = $timing/timingText
 @onready var new_record_sign: Control = $timing/timingText/newRecordSign
 
@@ -222,21 +223,25 @@ func _setup_debug_panel() -> void:
 
 ## 设置计时器显示
 func _setup_timing_display() -> void:
-	# 获取当前模式的历史最佳记录
+	# 获取当前模式
 	var mode_id = GameMain.current_mode_id
 	if mode_id.is_empty():
 		mode_id = "survival"
 	
-	if mode_id == "survival":
-		var record = LeaderboardManager.get_survival_record()
-		if not record.is_empty():
-			_best_record_wave = record.get("best_wave", 30)
-			_best_record_time = record.get("completion_time_seconds", INF)
-	elif mode_id == "multi":
-		var record = LeaderboardManager.get_multi_record()
-		if not record.is_empty():
-			_best_record_wave = record.get("best_wave", 0)
-			_best_record_time = INF  # Multi模式不比较时间
+	# Multi模式不显示计时器
+	if mode_id == "multi":
+		if timing_container:
+			timing_container.visible = false
+		return
+	
+	# Survival模式：显示计时器并获取历史最佳记录
+	if timing_container:
+		timing_container.visible = true
+	
+	var record = LeaderboardManager.get_survival_record()
+	if not record.is_empty():
+		_best_record_wave = record.get("best_wave", 30)
+		_best_record_time = record.get("completion_time_seconds", INF)
 	
 	# 默认隐藏新纪录标志
 	if new_record_sign:
@@ -244,6 +249,10 @@ func _setup_timing_display() -> void:
 
 ## 更新计时器显示
 func _update_timing_display() -> void:
+	# Multi模式不处理计时器逻辑
+	if GameMain.current_mode_id == "multi":
+		return
+	
 	if not timing_text:
 		return
 	
@@ -261,22 +270,14 @@ func _update_timing_display() -> void:
 		
 		# 必须至少完成1波才能算新纪录
 		if _completed_waves > 0:
-			if GameMain.current_mode_id == "survival":
-				# Survival模式：已完成波次更高，或波次相同且时间更短
-				if _best_record_wave < 0:
-					# 无历史记录，当前进度即为新纪录
-					is_better = true
-				elif _completed_waves > _best_record_wave:
-					is_better = true
-				elif _completed_waves == _best_record_wave and elapsed_time < _best_record_time:
-					is_better = true
-			elif GameMain.current_mode_id == "multi":
-				# Multi模式：仅已完成波次更高
-				if _best_record_wave < 0:
-					# 无历史记录，当前进度即为新纪录
-					is_better = true
-				elif _completed_waves > _best_record_wave:
-					is_better = true
+			# Survival模式：已完成波次更高，或波次相同且时间更短
+			if _best_record_wave < 0:
+				# 无历史记录，当前进度即为新纪录
+				is_better = true
+			elif _completed_waves > _best_record_wave:
+				is_better = true
+			elif _completed_waves == _best_record_wave and elapsed_time < _best_record_time:
+				is_better = true
 		
 		new_record_sign.visible = is_better
 
