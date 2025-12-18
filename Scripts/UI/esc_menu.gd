@@ -35,6 +35,11 @@ const RESTORE_DELAY := 0.5
 ## 选中按钮的背景纹理
 var _choosed_texture: Texture2D
 
+## 本局开始时的历史记录（用于判断新纪录）
+var _initial_best_wave: int = -1  # -1 表示无记录
+var _initial_best_time: float = INF
+var _initial_record_saved: bool = false  # 是否已保存初始记录
+
 ## 延迟恢复的Tween引用（用于中断）
 var _restore_tween: Tween = null
 
@@ -320,8 +325,34 @@ func _stop_timer_on_exit() -> void:
 	if GameMain.current_session:
 		GameMain.current_session.stop_timer()
 
+## 保存本局开始时的初始记录（仅在第一次调用时保存）
+func _save_initial_record() -> void:
+	if _initial_record_saved:
+		return
+	
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"
+	
+	if mode_id == "survival":
+		var record = LeaderboardManager.get_survival_record()
+		if not record.is_empty():
+			_initial_best_wave = record.get("best_wave", 30)
+			_initial_best_time = record.get("completion_time_seconds", INF)
+	else:
+		var record = LeaderboardManager.get_multi_record()
+		if not record.is_empty():
+			_initial_best_wave = record.get("best_wave", 0)
+			_initial_best_time = INF  # Multi模式不比较时间
+	
+	_initial_record_saved = true
+	print("[ESC Menu] 已保存本局初始记录: wave=%d, time=%.2f" % [_initial_best_wave, _initial_best_time])
+
 ## 更新记录显示
 func _update_record_display() -> void:
+	# 首次显示时保存初始记录
+	_save_initial_record()
+	
 	var mode_id = GameMain.current_mode_id
 	if mode_id.is_empty():
 		mode_id = "survival"
@@ -345,14 +376,9 @@ func _update_record_display() -> void:
 
 ## 更新 Survival 模式记录显示
 func _update_survival_record_display(completed_waves: int, elapsed_time: float) -> void:
-	# 获取历史最佳记录
-	var record = LeaderboardManager.get_survival_record()
-	var best_wave: int = -1
-	var best_time: float = INF
-	
-	if not record.is_empty():
-		best_wave = record.get("best_wave", 30)
-		best_time = record.get("completion_time_seconds", INF)
+	# 使用本局开始时保存的初始记录进行比较
+	var best_wave: int = _initial_best_wave
+	var best_time: float = _initial_best_time
 	
 	# 更新当前纪录标签
 	if now_record_label:
@@ -367,7 +393,7 @@ func _update_survival_record_display(completed_waves: int, elapsed_time: float) 
 			var best_time_str = _format_time_chinese(best_time)
 			history_record_label.text = "历史最佳：Wave %d  /  %s" % [best_wave, best_time_str]
 	
-	# 判断是否为新纪录
+	# 判断是否为新纪录（与本局开始时的记录比较）
 	if new_record_sign:
 		var is_new_record = false
 		if completed_waves > 0:
@@ -384,12 +410,8 @@ func _update_survival_record_display(completed_waves: int, elapsed_time: float) 
 
 ## 更新 Multi 模式记录显示
 func _update_multi_record_display(completed_waves: int) -> void:
-	# 获取历史最佳记录
-	var record = LeaderboardManager.get_multi_record()
-	var best_wave: int = -1
-	
-	if not record.is_empty():
-		best_wave = record.get("best_wave", 0)
+	# 使用本局开始时保存的初始记录进行比较
+	var best_wave: int = _initial_best_wave
 	
 	# 更新当前纪录标签（Multi模式不显示时间）
 	if now_record_label:
@@ -402,7 +424,7 @@ func _update_multi_record_display(completed_waves: int) -> void:
 		else:
 			history_record_label.text = "历史最佳：Wave %d" % best_wave
 	
-	# 判断是否为新纪录
+	# 判断是否为新纪录（与本局开始时的记录比较）
 	if new_record_sign:
 		var is_new_record = false
 		if completed_waves > 0:
