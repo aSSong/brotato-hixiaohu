@@ -22,7 +22,7 @@ animations = [{
 radius = 34.999996
 
 [node name="enemy_bullet" type="Area2D"]
-z_index = 15
+z_index = 17
 scale = Vector2(0.4, 0.4)
 collision_layer = 4
 script = ExtResource("2_enemy_bullet")

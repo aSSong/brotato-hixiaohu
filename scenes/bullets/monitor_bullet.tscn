@@ -84,6 +84,7 @@ autoplay = "default"
 frame_progress = 0.055626914
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 18
 scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("CircleShape2D_enemy_bullet")
 
