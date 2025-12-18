@@ -252,7 +252,7 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 50
-text = "最后的防线"
+text = "关卡1竞速榜"
 horizontal_alignment = 1
 
 [node name="swich1Button2" type="TextureButton" parent="bg_panel/labelContainer"]
@@ -279,7 +279,35 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 50
-text = "反击大作战"
+text = "关卡2楼层榜"
+horizontal_alignment = 1
+
+[node name="swich3Button" type="TextureButton" parent="bg_panel/labelContainer"]
+visible = false
+layout_mode = 2
+texture_normal = ExtResource("2_egwti")
+texture_pressed = ExtResource("3_b7iye")
+texture_hover = ExtResource("5_ppf2r")
+texture_disabled = ExtResource("2_egwti")
+texture_focused = ExtResource("5_ppf2r")
+
+[node name="swich3Label" type="Label" parent="bg_panel/labelContainer/swich3Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -40.5
+offset_right = 190.0
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_x26nh")
+theme_override_font_sizes/font_size = 50
+text = "关卡2个人榜"
 horizontal_alignment = 1
 
 [node name="backButton" type="TextureButton" parent="."]
