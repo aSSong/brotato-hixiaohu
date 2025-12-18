@@ -22,8 +22,11 @@ func _ready() -> void:
 	animation_player.play("default")
 	
 	if player_name != "":
-		var floor_name = SaveManager.get_floor_name()
-		player_info.text = player_name + "  " + floor_name
+		var floor_id = SaveManager.get_floor_id()
+		var floor_text = FloorConfig.get_floor_short_text(floor_id)
+		if floor_text == "":
+			floor_text = str(floor_id) + "F"
+		player_info.text = player_name + "  " + floor_text
 	else:
 		player_info.visible = false
 	#信息公告不可见

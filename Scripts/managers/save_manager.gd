@@ -15,7 +15,8 @@ var user_data: Dictionary = {
 		"survival": 0,
 		"multi": 0
 	},
-	"display_mode": "fullscreen"  # 显示模式: "fullscreen" 或 "windowed"
+	"display_mode": "fullscreen",  # 显示模式: "fullscreen" 或 "windowed"
+	"floor_version": 0  # 楼层版本，用于迁移逻辑控制（0: 旧版, 1: 迁移中, 2: 新版）
 }
 
 ## 初始化
@@ -77,6 +78,11 @@ func load_user_data() -> bool:
 		# 确保旧存档也有 display_mode 字段
 		if not user_data.has("display_mode"):
 			user_data["display_mode"] = "fullscreen"
+		
+		# 确保旧存档也有 floor_version 字段
+		if not user_data.has("floor_version"):
+			user_data["floor_version"] = 0
+			
 		# 迁移旧版 floor_id（0-38 索引制）到新版（1-38 真实楼层号）
 		_migrate_legacy_floor_id()
 		print("[SaveManager] 用户数据已加载: %s" % user_data)
@@ -86,14 +92,15 @@ func load_user_data() -> bool:
 		return false
 
 ## 设置玩家名字
-func set_player_name(name: String) -> void:
-	user_data["player_name"] = name
+func set_player_name(p_name: String) -> void:
+	user_data["player_name"] = p_name
 	save_user_data()
 
 ## 设置楼层信息
 func set_floor(floor_id: int, floor_name: String) -> void:
 	user_data["floor_id"] = floor_id
 	user_data["floor_name"] = floor_name
+	user_data["floor_version"] = 2  # 设置为新版
 	save_user_data()
 
 ## 获取玩家名字
@@ -164,18 +171,47 @@ func try_update_best_wave(mode_id: String, wave: int) -> bool:
 ## 新版: 1-38 对应真实楼层，99 对应"不在漕河泾"
 func _migrate_legacy_floor_id() -> void:
 	var floor_id = user_data.get("floor_id", -1)
-	# 检测是否为旧版格式（0-38 范围且不是有效的新版ID）
-	# 旧版: floor_id 0 对应 "1 楼"，新版: floor_id 1 对应 "1 楼"
-	# 如果 floor_id 为 0，肯定是旧版（新版中 0 无效）
+	var floor_name = user_data.get("floor_name", "")
+	var changed = false
+	
+	# --- 自愈逻辑 1: 修复可能被之前的 bug 误改到 99 的 38 楼玩家 ---
+	# 即使已经是新版标记，如果发现这种不一致也进行修复
+	if floor_id == 99 and (floor_name == "38 楼" or floor_name == "38F"):
+		user_data["floor_id"] = 38
+		print("[SaveManager] 自愈：检测到 38 楼文本但 ID 为 99，已修正 ID 为 38")
+		changed = true
+	
+	# 如果已经是新版且没有发生自愈修复，则跳过后续旧版迁移逻辑
+	if not changed and user_data.get("floor_version", 0) >= 2:
+		return
+		
+	# --- 旧版迁移逻辑 ---
+	
+	# 1. floor_id 为 0，肯定是旧版（旧版 0 = 1楼，新版没有0）
 	if floor_id == 0:
 		user_data["floor_id"] = 1
-		print("[SaveManager] 迁移旧版 floor_id: 0 → 1")
-		save_user_data()
+		if floor_name == "": user_data["floor_name"] = "1 楼"
+		print("[SaveManager] 迁移：旧版 ID 0 -> 1")
+		changed = true
+		
+	# 2. floor_id 为 38，需要根据 floor_name 区分
 	elif floor_id == 38:
-		# 旧版 38 表示"不在漕河泾"，新版用 99
-		user_data["floor_id"] = 99
-		print("[SaveManager] 迁移旧版 floor_id: 38 → 99")
+		# 如果名字不是 "38 楼" 且不是 "38F"，说明是旧版的 "不在漕河泾" (38 -> 99)
+		if floor_name != "38 楼" and floor_name != "38F":
+			user_data["floor_id"] = 99
+			if floor_name == "" or floor_name == "不在漕河泾": 
+				user_data["floor_name"] = "其他"
+			print("[SaveManager] 迁移：旧版 ID 38 -> 99 (其他)")
+			changed = true
+		else:
+			# 确认为新版 38 楼，虽然 ID 对了，但可能还没打版本号
+			pass
+			
+	# 如果有改动，或者版本号不对，统一标记为新版并保存
+	if changed or user_data.get("floor_version", 0) < 2:
+		user_data["floor_version"] = 2
 		save_user_data()
+		print("[SaveManager] 存档已升级到最新楼层逻辑版本")
 
 ## ==================== 显示模式设置 ====================
 
