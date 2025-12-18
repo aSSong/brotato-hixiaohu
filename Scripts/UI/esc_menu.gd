@@ -19,6 +19,12 @@ signal main_menu_requested
 @onready var restart_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/restart/restartLabel
 @onready var main_menu_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ButtonsContainer/MainMenuButton/mainmenuLabel
 
+## 记录显示节点引用
+@onready var record_container: Control = $CenterContainer/PanelContainer/record
+@onready var now_record_label: Label = $CenterContainer/PanelContainer/record/nowRecord
+@onready var history_record_label: Label = $CenterContainer/PanelContainer/record/histroyRecord
+@onready var new_record_sign: Control = $CenterContainer/PanelContainer/record/newRecordSign
+
 ## 颜色常量
 const COLOR_NORMAL := Color.BLACK
 const COLOR_HIGHLIGHT := Color.WHITE
@@ -47,6 +53,10 @@ func _ready() -> void:
 	
 	# 初始隐藏
 	hide()
+	
+	# 初始隐藏新纪录标志
+	if new_record_sign:
+		new_record_sign.visible = false
 	
 	# 加载选中状态的背景纹理
 	_choosed_texture = load("res://assets/UI/esc_ui/btn-esc-choosed.png")
@@ -166,6 +176,9 @@ func show_menu() -> void:
 	
 	# 重置为默认状态：ResumeButton激活，其他按钮正常
 	_reset_to_default_state()
+	
+	# 更新记录显示
+	_update_record_display()
 	
 	# 聚焦到继续按钮
 	if resume_button:
@@ -306,3 +319,105 @@ func _on_restart_pressed() -> void:
 func _stop_timer_on_exit() -> void:
 	if GameMain.current_session:
 		GameMain.current_session.stop_timer()
+
+## 更新记录显示
+func _update_record_display() -> void:
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"
+	
+	# 获取当前已完成的波次（不是正在进行的波次）
+	var completed_waves: int = 0
+	if GameMain.current_session:
+		completed_waves = GameMain.current_session.current_wave - 1
+		if completed_waves < 0:
+			completed_waves = 0
+	
+	# 获取当前游戏时间
+	var elapsed_time: float = 0.0
+	if GameMain.current_session:
+		elapsed_time = GameMain.current_session.get_elapsed_time()
+	
+	if mode_id == "survival":
+		_update_survival_record_display(completed_waves, elapsed_time)
+	else:
+		_update_multi_record_display(completed_waves)
+
+## 更新 Survival 模式记录显示
+func _update_survival_record_display(completed_waves: int, elapsed_time: float) -> void:
+	# 获取历史最佳记录
+	var record = LeaderboardManager.get_survival_record()
+	var best_wave: int = -1
+	var best_time: float = INF
+	
+	if not record.is_empty():
+		best_wave = record.get("best_wave", 30)
+		best_time = record.get("completion_time_seconds", INF)
+	
+	# 更新当前纪录标签
+	if now_record_label:
+		var time_str = _format_time_chinese(elapsed_time)
+		now_record_label.text = "当前纪录：Wave %d  /  %s" % [completed_waves, time_str]
+	
+	# 更新历史最佳标签
+	if history_record_label:
+		if best_wave < 0:
+			history_record_label.text = "历史最佳：--"
+		else:
+			var best_time_str = _format_time_chinese(best_time)
+			history_record_label.text = "历史最佳：Wave %d  /  %s" % [best_wave, best_time_str]
+	
+	# 判断是否为新纪录
+	if new_record_sign:
+		var is_new_record = false
+		if completed_waves > 0:
+			if best_wave < 0:
+				# 无历史记录，当前即为新纪录
+				is_new_record = true
+			elif completed_waves > best_wave:
+				# 已完成波次更高
+				is_new_record = true
+			elif completed_waves == best_wave and elapsed_time < best_time:
+				# 波次相同但时间更短
+				is_new_record = true
+		new_record_sign.visible = is_new_record
+
+## 更新 Multi 模式记录显示
+func _update_multi_record_display(completed_waves: int) -> void:
+	# 获取历史最佳记录
+	var record = LeaderboardManager.get_multi_record()
+	var best_wave: int = -1
+	
+	if not record.is_empty():
+		best_wave = record.get("best_wave", 0)
+	
+	# 更新当前纪录标签（Multi模式不显示时间）
+	if now_record_label:
+		now_record_label.text = "当前纪录：Wave %d" % completed_waves
+	
+	# 更新历史最佳标签
+	if history_record_label:
+		if best_wave < 0:
+			history_record_label.text = "历史最佳：--"
+		else:
+			history_record_label.text = "历史最佳：Wave %d" % best_wave
+	
+	# 判断是否为新纪录
+	if new_record_sign:
+		var is_new_record = false
+		if completed_waves > 0:
+			if best_wave < 0:
+				# 无历史记录，当前即为新纪录
+				is_new_record = true
+			elif completed_waves > best_wave:
+				# 已完成波次更高
+				is_new_record = true
+		new_record_sign.visible = is_new_record
+
+## 格式化时间为中文格式 "XX分XX秒XX"
+func _format_time_chinese(seconds: float) -> String:
+	var total_seconds = int(seconds)
+	var centiseconds = int((seconds - total_seconds) * 100)
+	var mins = total_seconds / 60
+	var secs = total_seconds % 60
+	return "%d分%02d秒%02d" % [mins, secs, centiseconds]

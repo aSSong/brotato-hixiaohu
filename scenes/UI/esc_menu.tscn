@@ -31,6 +31,51 @@ layout_mode = 2
 texture = ExtResource("2_jjfny")
 stretch_mode = 2
 
+[node name="record" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -42.5
+offset_top = -174.0
+offset_right = 257.5
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+alignment = 1
+
+[node name="newRecordSign" type="RichTextLabel" parent="CenterContainer/PanelContainer/record"]
+custom_minimum_size = Vector2(300, 40)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.9397013, 0.6616966, 3.85046e-06, 1)
+theme_override_fonts/normal_font = ExtResource("3_np8wt")
+theme_override_font_sizes/normal_font_size = 24
+text = "🏆新纪录"
+fit_content = true
+scroll_active = false
+vertical_alignment = 1
+
+[node name="nowRecord" type="Label" parent="CenterContainer/PanelContainer/record"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_np8wt")
+theme_override_font_sizes/font_size = 32
+text = "当前纪录：Wave 15 /  14分48秒32 "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="histroyRecord" type="Label" parent="CenterContainer/PanelContainer/record"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8392157, 0.49411765, 1, 1)
+theme_override_fonts/font = ExtResource("3_np8wt")
+theme_override_font_sizes/font_size = 28
+text = "历史最佳：Wave 18  /  14分48秒32 "
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
 layout_mode = 1
 anchors_preset = 8
