@@ -4,6 +4,10 @@ extends Node
 ## 管理本地排行榜数据的存储和读取
 ## 数据使用 Base64 编码 + SHA-256 哈希校验，防止简单篡改
 
+## 上传状态信号
+## state: "uploading" | "success" | "failed"
+signal upload_state_changed(mode_id: String, state: String)
+
 const SAVE_FILE_PATH = "user://leaderboard.dat"
 const HASH_SALT = "brotato_hxh_2025_leaderboard"  # 哈希盐值
 
@@ -105,6 +109,23 @@ func get_multi_record() -> Dictionary:
 	if record == null:
 		return {}
 	return record
+
+## 获取指定模式的上传状态
+## 返回: "idle" | "uploading" | "pending"
+func get_upload_state(mode_id: String) -> String:
+	if _uploading.get(mode_id, false):
+		return "uploading"
+	if _pending_upload.get(mode_id, false):
+		return "pending"
+	return "idle"
+
+## 检查指定模式是否正在上传
+func is_uploading(mode_id: String) -> bool:
+	return _uploading.get(mode_id, false)
+
+## 检查指定模式是否有待上传的记录
+func is_pending_upload(mode_id: String) -> bool:
+	return _pending_upload.get(mode_id, false)
 
 ## 清除所有记录
 func clear_all_records() -> void:
@@ -256,6 +277,9 @@ func _upload_in_background(mode_id: String, type: int, data: Dictionary) -> void
 	
 	_uploading[mode_id] = true
 	
+	# 发出上传中信号
+	upload_state_changed.emit(mode_id, "uploading")
+	
 	# 执行上传
 	var success = await _do_upload(type, data)
 	
@@ -266,9 +290,13 @@ func _upload_in_background(mode_id: String, type: int, data: Dictionary) -> void
 		_pending_upload[mode_id] = false
 		save_records()  # 保存更新后的状态
 		print("[LeaderboardManager] %s 模式上传完成，已清除待上传标记" % mode_id)
+		# 发出上传成功信号
+		upload_state_changed.emit(mode_id, "success")
 	else:
 		# 上传失败，保持待上传标记，下次启动时重试
 		print("[LeaderboardManager] %s 模式上传失败，将在下次启动时重试" % mode_id)
+		# 发出上传失败信号
+		upload_state_changed.emit(mode_id, "failed")
 
 ## 启动时重试上传未成功的记录
 func _retry_pending_uploads() -> void:

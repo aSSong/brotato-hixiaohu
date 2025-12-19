@@ -7,8 +7,20 @@ class_name VictoryUI
 @onready var bg_key: TextureRect = $MainPanel/"bg-key"
 @onready var poster: TextureRect = $MainPanel/poster
 
+## 记录显示节点引用
+@onready var record_container: Control = $MainPanel/record
+@onready var now_record_label: Label = $MainPanel/record/nowRecord
+@onready var history_record_label: Label = $MainPanel/record/histroyRecord
+@onready var new_record_sign: Control = $MainPanel/record/newRecordSign
+
+## 上传状态标签
+@onready var upload_state_label: Label = $MainPanel/ReturnButton/uploadstateLabel
+
 ## 背景滚动速度（像素/秒）
 @export var scroll_speed: Vector2 = Vector2(100, 100)
+
+## 是否有新纪录需要上传
+var _has_new_record: bool = false
 
 ## 背景贴图尺寸（用于无缝循环）
 var bg_texture_size: Vector2 = Vector2.ZERO
@@ -28,6 +40,12 @@ func _ready() -> void:
 	
 	# 更新职业海报
 	_update_poster()
+	
+	# 更新记录显示（仅 Survival 模式）
+	_update_record_display()
+	
+	# 初始化上传状态显示
+	_setup_upload_state_display()
 
 ## 初始化滚动背景
 func _setup_scrolling_background() -> void:
@@ -91,3 +109,144 @@ func _on_return_button_pressed() -> void:
 	print("[VictoryUI] 返回主菜单...")
 	# 使用SceneCleanupManager安全切换场景（会清理所有游戏对象并重置数据）
 	SceneCleanupManager.change_scene_safely("res://scenes/UI/main_title.tscn")
+
+## 更新记录显示
+func _update_record_display() -> void:
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"
+	
+	# 仅 Survival 模式显示记录容器
+	if mode_id != "survival":
+		if record_container:
+			record_container.visible = false
+	else:
+		# 显示记录容器
+		if record_container:
+			record_container.visible = true
+	
+	# 获取当前通关时间
+	var elapsed_time: float = 0.0
+	if GameMain.current_session:
+		elapsed_time = GameMain.current_session.get_elapsed_time()
+	
+	# 根据模式获取历史最佳记录和判断新纪录
+	if mode_id == "survival":
+		_update_survival_record(elapsed_time)
+	else:
+		_update_multi_record()
+
+## 更新 Survival 模式记录显示
+func _update_survival_record(elapsed_time: float) -> void:
+	# 获取历史最佳记录
+	var record = LeaderboardManager.get_survival_record()
+	var best_time: float = INF
+	if not record.is_empty():
+		best_time = record.get("completion_time_seconds", INF)
+	
+	# 更新当前通关时间标签
+	if now_record_label:
+		var time_str = _format_time_chinese(elapsed_time)
+		now_record_label.text = "通关时间：%s" % time_str
+	
+	# 更新历史最佳标签
+	if history_record_label:
+		if best_time == INF or best_time <= 0:
+			history_record_label.text = "历史最佳：--"
+		else:
+			var best_time_str = _format_time_chinese(best_time)
+			history_record_label.text = "历史最佳：%s" % best_time_str
+	
+	# 判断是否为新纪录
+	# 胜利界面只在通关时显示，所以如果当前时间比历史最佳更短就是新纪录
+	# 注意：这里需要检查 pending_upload 来判断是否刚刚创建了新纪录
+	_has_new_record = LeaderboardManager.is_pending_upload("survival") or LeaderboardManager.is_uploading("survival")
+	
+	if new_record_sign:
+		new_record_sign.visible = _has_new_record
+
+## 更新 Multi 模式记录显示（Multi 模式不显示记录容器，只处理上传状态）
+func _update_multi_record() -> void:
+	# 检查是否有新纪录需要上传
+	_has_new_record = LeaderboardManager.is_pending_upload("multi") or LeaderboardManager.is_uploading("multi")
+
+## 格式化时间为中文格式 "XX分XX秒XX"
+func _format_time_chinese(seconds: float) -> String:
+	var total_seconds = int(seconds)
+	var centiseconds = int((seconds - total_seconds) * 100)
+	var mins = total_seconds / 60
+	var secs = total_seconds % 60
+	return "%d分%02d秒%02d" % [mins, secs, centiseconds]
+
+## 初始化上传状态显示
+func _setup_upload_state_display() -> void:
+	# 默认隐藏上传状态标签
+	if upload_state_label:
+		upload_state_label.visible = false
+	
+	# 如果没有新纪录，不显示上传状态
+	if not _has_new_record:
+		return
+	
+	# 连接上传状态信号
+	if not LeaderboardManager.upload_state_changed.is_connected(_on_upload_state_changed):
+		LeaderboardManager.upload_state_changed.connect(_on_upload_state_changed)
+	
+	# 获取当前模式
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"
+	
+	# 检查当前上传状态
+	var current_state = LeaderboardManager.get_upload_state(mode_id)
+	_update_upload_state_display(mode_id, current_state)
+
+## 上传状态变化回调
+func _on_upload_state_changed(mode_id: String, state: String) -> void:
+	# 获取当前模式
+	var current_mode_id = GameMain.current_mode_id
+	if current_mode_id.is_empty():
+		current_mode_id = "survival"
+	
+	# 只处理当前模式的上传状态
+	if mode_id != current_mode_id:
+		return
+	
+	_update_upload_state_display(mode_id, state)
+
+## 更新上传状态显示
+func _update_upload_state_display(mode_id: String, state: String) -> void:
+	if not upload_state_label:
+		return
+	
+	# 如果没有新纪录，不显示
+	if not _has_new_record:
+		upload_state_label.visible = false
+		return
+	
+	match state:
+		"uploading":
+			upload_state_label.visible = true
+			upload_state_label.text = "新记录上传中……建议稍后再切换画面"
+			upload_state_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.67))
+		"success":
+			upload_state_label.visible = true
+			upload_state_label.text = "新记录已上传成功！"
+			upload_state_label.add_theme_color_override("font_color", Color(0.3, 1, 0.3, 1))
+		"failed":
+			upload_state_label.visible = true
+			upload_state_label.text = "上传失败，重启游戏会再次上传"
+			upload_state_label.add_theme_color_override("font_color", Color(1, 0.5, 0.5, 1))
+		"pending":
+			# 待上传状态（正在等待上传）
+			upload_state_label.visible = true
+			upload_state_label.text = "新记录上传中……建议稍后再切换画面"
+			upload_state_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.67))
+		_:
+			# idle 或其他状态，隐藏
+			upload_state_label.visible = false
+
+## 节点退出时断开信号
+func _exit_tree() -> void:
+	if LeaderboardManager.upload_state_changed.is_connected(_on_upload_state_changed):
+		LeaderboardManager.upload_state_changed.disconnect(_on_upload_state_changed)
