@@ -4,8 +4,24 @@ class_name VictoryUI
 ## 胜利UI
 ## 当玩家达到目标时显示
 @onready var return_button: TextureButton = $MainPanel/ReturnButton
+@onready var main_panel: ColorRect = $MainPanel
 @onready var bg_key: TextureRect = $MainPanel/"bg-key"
+@onready var victory_text: TextureRect = $MainPanel/text
 @onready var poster: TextureRect = $MainPanel/poster
+
+## 模式样式配置
+const MODE_STYLES = {
+	"survival": {
+		"panel_color": Color(0.20392157, 0.84313726, 0.62352943, 1),  # #34d79f
+		"bg_texture": "res://assets/UI/common/bg-greenkey-01.png",
+		"text_texture": "res://assets/UI/victory_ui/text_victory_01.png"
+	},
+	"multi": {
+		"panel_color": Color(0.95686275, 0.17254902, 0.29019608, 1),  # #f42c4a
+		"bg_texture": "res://assets/UI/common/bg-redkey-01.png",
+		"text_texture": "res://assets/UI/victory_ui/text_victory_02.png"
+	}
+}
 
 ## 记录显示节点引用
 @onready var record_container: Control = $MainPanel/record
@@ -35,6 +51,9 @@ func _ready() -> void:
 	if return_button:
 		return_button.pressed.connect(_on_return_button_pressed)
 	
+	# 根据模式设置样式
+	_setup_mode_style()
+	
 	# 初始化背景
 	_setup_scrolling_background()
 	
@@ -46,6 +65,31 @@ func _ready() -> void:
 	
 	# 初始化上传状态显示
 	_setup_upload_state_display()
+
+## 根据模式设置样式
+func _setup_mode_style() -> void:
+	var mode_id = GameMain.current_mode_id
+	if mode_id.is_empty():
+		mode_id = "survival"
+	
+	# 获取模式样式配置，默认使用 survival 样式
+	var style = MODE_STYLES.get(mode_id, MODE_STYLES["survival"])
+	
+	# 设置面板颜色
+	if main_panel:
+		main_panel.color = style["panel_color"]
+	
+	# 设置背景纹理
+	if bg_key:
+		var bg_texture = load(style["bg_texture"])
+		if bg_texture:
+			bg_key.texture = bg_texture
+	
+	# 设置胜利文字纹理
+	if victory_text:
+		var text_texture = load(style["text_texture"])
+		if text_texture:
+			victory_text.texture = text_texture
 
 ## 初始化滚动背景
 func _setup_scrolling_background() -> void:
