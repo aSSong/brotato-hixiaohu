@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dlc5uuk0wev3m"
-path="res://.godot/imported/bg-victory-01.png-42ca214059d3211d6b99e0a71e378855.ctex"
+uid="uid://fmtfodf7snjb"
+path="res://.godot/imported/text_victory_02.png-41dd64bc0a4ab6c3d54d7c1d7835433b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/victory_ui/bg-victory-01.png"
-dest_files=["res://.godot/imported/bg-victory-01.png-42ca214059d3211d6b99e0a71e378855.ctex"]
+source_file="res://assets/UI/victory_ui/text_victory_02.png"
+dest_files=["res://.godot/imported/text_victory_02.png-41dd64bc0a4ab6c3d54d7c1d7835433b.ctex"]
 
 [params]
 
