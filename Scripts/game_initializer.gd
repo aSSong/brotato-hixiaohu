@@ -29,6 +29,9 @@ func _ready() -> void:
 	# 设置游戏初始化状态
 	GameState.change_state(GameState.State.GAME_INITIALIZING)
 	
+	# 重置本局新纪录标志
+	LeaderboardManager.reset_session_new_record()
+	
 	# 播放战斗BGM
 	BGMManager.play_bgm("fight")
 	print("[GameInitializer] 开始播放战斗BGM")

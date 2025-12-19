@@ -182,7 +182,10 @@ func _update_record_display() -> void:
 
 ## 更新 Survival 模式记录显示
 func _update_survival_record(elapsed_time: float) -> void:
-	# 获取历史最佳记录
+	# 使用 LeaderboardManager 的标志判断是否为新纪录
+	_has_new_record = LeaderboardManager.has_new_record_this_session("survival")
+	
+	# 获取历史最佳记录（如果是新纪录，这里获取的已经是更新后的记录）
 	var record = LeaderboardManager.get_survival_record()
 	var best_time: float = INF
 	if not record.is_empty():
@@ -195,24 +198,23 @@ func _update_survival_record(elapsed_time: float) -> void:
 	
 	# 更新历史最佳标签
 	if history_record_label:
-		if best_time == INF or best_time <= 0:
+		if _has_new_record:
+			# 新纪录时，历史最佳就是当前时间
+			history_record_label.text = "历史最佳：--"
+		elif best_time == INF or best_time <= 0:
 			history_record_label.text = "历史最佳：--"
 		else:
 			var best_time_str = _format_time_chinese(best_time)
 			history_record_label.text = "历史最佳：%s" % best_time_str
 	
-	# 判断是否为新纪录
-	# 胜利界面只在通关时显示，所以如果当前时间比历史最佳更短就是新纪录
-	# 注意：这里需要检查 pending_upload 来判断是否刚刚创建了新纪录
-	_has_new_record = LeaderboardManager.is_pending_upload("survival") or LeaderboardManager.is_uploading("survival")
-	
+	# 显示新纪录标志
 	if new_record_sign:
 		new_record_sign.visible = _has_new_record
 
 ## 更新 Multi 模式记录显示（Multi 模式不显示记录容器，只处理上传状态）
 func _update_multi_record() -> void:
-	# 检查是否有新纪录需要上传
-	_has_new_record = LeaderboardManager.is_pending_upload("multi") or LeaderboardManager.is_uploading("multi")
+	# 使用 LeaderboardManager 的标志判断是否为新纪录
+	_has_new_record = LeaderboardManager.has_new_record_this_session("multi")
 
 ## 格式化时间为中文格式 "XX分XX秒XX"
 func _format_time_chinese(seconds: float) -> String:
@@ -241,9 +243,14 @@ func _setup_upload_state_display() -> void:
 	if mode_id.is_empty():
 		mode_id = "survival"
 	
-	# 检查当前上传状态
-	var current_state = LeaderboardManager.get_upload_state(mode_id)
-	_update_upload_state_display(mode_id, current_state)
+	# 优先使用本局上传结果（处理上传在UI显示前完成的情况）
+	var session_result = LeaderboardManager.get_session_upload_result(mode_id)
+	if session_result != "none":
+		_update_upload_state_display(mode_id, session_result)
+	else:
+		# 回退到检查当前上传状态
+		var current_state = LeaderboardManager.get_upload_state(mode_id)
+		_update_upload_state_display(mode_id, current_state)
 
 ## 上传状态变化回调
 func _on_upload_state_changed(mode_id: String, state: String) -> void:

@@ -29,6 +29,19 @@ var _uploading: Dictionary = {
 	"multi": false
 }
 
+## 本局是否创建了新纪录（用于 UI 显示，在新局开始时重置）
+var _session_new_record: Dictionary = {
+	"survival": false,
+	"multi": false
+}
+
+## 本局上传结果（用于 UI 显示，在新局开始时重置）
+## "none" | "uploading" | "success" | "failed"
+var _session_upload_result: Dictionary = {
+	"survival": "none",
+	"multi": "none"
+}
+
 func _ready() -> void:
 	load_records()
 	print("[LeaderboardManager] 排行榜管理器初始化完成")
@@ -48,6 +61,7 @@ func try_update_survival_record(wave: int, completion_time: float, death_count: 
 	if current == null:
 		records["survival"] = _create_survival_record(wave, completion_time, death_count)
 		_pending_upload["survival"] = true
+		_session_new_record["survival"] = true
 		save_records()
 		_upload_in_background("survival", 1, records["survival"])
 		print("[LeaderboardManager] Survival模式新纪录! 波次: %d, 时间: %.2f秒" % [wave, completion_time])
@@ -72,6 +86,7 @@ func try_update_survival_record(wave: int, completion_time: float, death_count: 
 	if is_new_record:
 		records["survival"] = _create_survival_record(wave, completion_time, death_count)
 		_pending_upload["survival"] = true
+		_session_new_record["survival"] = true
 		save_records()
 		_upload_in_background("survival", 1, records["survival"])
 		return true
@@ -88,6 +103,7 @@ func try_update_multi_record(best_wave: int, death_count: int) -> bool:
 	if current == null or best_wave > current.get("best_wave", 0):
 		records["multi"] = _create_multi_record(best_wave, death_count)
 		_pending_upload["multi"] = true  # 标记需要上传
+		_session_new_record["multi"] = true
 		save_records()
 		_upload_in_background("multi", 2, records["multi"])
 		print("[LeaderboardManager] Multi模式新纪录! 波次: %d" % best_wave)
@@ -126,6 +142,21 @@ func is_uploading(mode_id: String) -> bool:
 ## 检查指定模式是否有待上传的记录
 func is_pending_upload(mode_id: String) -> bool:
 	return _pending_upload.get(mode_id, false)
+
+## 检查本局是否创建了新纪录
+func has_new_record_this_session(mode_id: String) -> bool:
+	return _session_new_record.get(mode_id, false)
+
+## 重置本局新纪录标志（在新局开始时调用）
+func reset_session_new_record() -> void:
+	_session_new_record["survival"] = false
+	_session_new_record["multi"] = false
+	_session_upload_result["survival"] = "none"
+	_session_upload_result["multi"] = "none"
+
+## 获取本局上传结果
+func get_session_upload_result(mode_id: String) -> String:
+	return _session_upload_result.get(mode_id, "none")
 
 ## 清除所有记录
 func clear_all_records() -> void:
@@ -276,6 +307,7 @@ func _upload_in_background(mode_id: String, type: int, data: Dictionary) -> void
 		return
 	
 	_uploading[mode_id] = true
+	_session_upload_result[mode_id] = "uploading"
 	
 	# 发出上传中信号
 	upload_state_changed.emit(mode_id, "uploading")
@@ -288,12 +320,14 @@ func _upload_in_background(mode_id: String, type: int, data: Dictionary) -> void
 	if success:
 		# 上传成功，清除待上传标记
 		_pending_upload[mode_id] = false
+		_session_upload_result[mode_id] = "success"
 		save_records()  # 保存更新后的状态
 		print("[LeaderboardManager] %s 模式上传完成，已清除待上传标记" % mode_id)
 		# 发出上传成功信号
 		upload_state_changed.emit(mode_id, "success")
 	else:
 		# 上传失败，保持待上传标记，下次启动时重试
+		_session_upload_result[mode_id] = "failed"
 		print("[LeaderboardManager] %s 模式上传失败，将在下次启动时重试" % mode_id)
 		# 发出上传失败信号
 		upload_state_changed.emit(mode_id, "failed")
