@@ -98,8 +98,16 @@ theme_override_fonts/font = ExtResource("6_x26nh")
 theme_override_font_sizes/font_size = 32
 text = "火线同盟"
 
+[node name="BestWaveHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_x26nh")
+theme_override_font_sizes/font_size = 32
+text = "完成波次"
+
 [node name="TimeHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
@@ -107,7 +115,7 @@ theme_override_font_sizes/font_size = 32
 text = "通关时间"
 
 [node name="DateHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")
@@ -115,7 +123,7 @@ theme_override_font_sizes/font_size = 32
 text = "完成时间"
 
 [node name="DeathHeader" type="Label" parent="bg_panel/board1panel/HeaderContainer"]
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("6_x26nh")

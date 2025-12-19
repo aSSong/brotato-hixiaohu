@@ -17,7 +17,7 @@ const CONTENT_FONT_SIZE: int = 24
 const CONTENT_FONT_COLOR: Color = Color(0.0, 0.0, 0.0, 1.0)
 
 # 表头列宽配置
-const COLUMN_WIDTHS_MODE1 = [150, 200, 150, 250, 250, 250]  # 排名, 名字, 楼层, 通关时间, 达成时间, 穿越次数
+const COLUMN_WIDTHS_MODE1 = [150, 200, 150, 150, 180, 240, 150]  # 排名, 英雄, 火线同盟, 完成波次, 通关时间, 完成时间, 穿越次数
 const COLUMN_WIDTHS_MODE2 = [150, 150, 200, 150, 250, 250]  # 排名, 楼层, 关键人物, 最佳波次, 完成时间, 穿越次数
 
 ## ==================== 节点引用 ====================
@@ -232,8 +232,13 @@ func _populate_survival_board() -> void:
 	if survival_list is not Array:
 		survival_list = []
 	
-	# 按通关时间排序（升序，时间越短越好）
-	survival_list.sort_custom(func(a, b): 
+	# 排序规则：bestwave 优先（降序），bestwave 相同时按完成时间（升序）
+	survival_list.sort_custom(func(a, b):
+		var wave_a = a.get("best_wave", 0)
+		var wave_b = b.get("best_wave", 0)
+		if wave_a != wave_b:
+			return wave_a > wave_b  # 波次高的在前
+		# 波次相同，按完成时间升序（时间短的在前）
 		return a.get("completion_time_seconds", INF) < b.get("completion_time_seconds", INF)
 	)
 	
@@ -253,11 +258,13 @@ func _create_survival_row(rank: int, record: Dictionary) -> HBoxContainer:
 	
 	var floor_id = int(record.get("floor_id", 0))
 	var death_count = int(record.get("total_death_count", 0))
+	var best_wave = int(record.get("best_wave", 0))
 	
 	var columns = [
 		_format_rank(rank),
 		record.get("player_name", "???"),
 		_format_floor(floor_id),
+		"Wave" + str(best_wave),
 		_format_time(record.get("completion_time_seconds", 0)),
 		_format_datetime(record.get("completed_at", "")),
 		str(death_count)
