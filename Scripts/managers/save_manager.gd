@@ -16,7 +16,8 @@ var user_data: Dictionary = {
 		"multi": 0
 	},
 	"display_mode": "fullscreen",  # 显示模式: "fullscreen" 或 "windowed"
-	"floor_version": 0  # 楼层版本，用于迁移逻辑控制（0: 旧版, 1: 迁移中, 2: 新版）
+	"floor_version": 0,  # 楼层版本，用于迁移逻辑控制（0: 旧版, 1: 迁移中, 2: 新版）
+	"tutorial_shown": false  # 是否已显示过教程（不再提示）
 }
 
 ## 初始化
@@ -82,6 +83,10 @@ func load_user_data() -> bool:
 		# 确保旧存档也有 floor_version 字段
 		if not user_data.has("floor_version"):
 			user_data["floor_version"] = 0
+		
+		# 确保旧存档也有 tutorial_shown 字段
+		if not user_data.has("tutorial_shown"):
+			user_data["tutorial_shown"] = false
 			
 		# 迁移旧版 floor_id（0-38 索引制）到新版（1-38 真实楼层号）
 		_migrate_legacy_floor_id()
@@ -127,7 +132,8 @@ func clear_save_data() -> void:
 		"floor_name": "",
 		"total_death_count": 0,
 		"best_waves": {"survival": 0, "multi": 0},
-		"display_mode": "fullscreen"
+		"display_mode": "fullscreen",
+		"tutorial_shown": false
 	}
 	if FileAccess.file_exists(SAVE_FILE_PATH):
 		DirAccess.remove_absolute(SAVE_FILE_PATH)
@@ -212,6 +218,22 @@ func _migrate_legacy_floor_id() -> void:
 		user_data["floor_version"] = 2
 		save_user_data()
 		print("[SaveManager] 存档已升级到最新楼层逻辑版本")
+
+## ==================== 教程显示设置 ====================
+
+## 设置教程是否已显示（不再提示）
+func set_tutorial_shown(shown: bool) -> void:
+	user_data["tutorial_shown"] = shown
+	save_user_data()
+	print("[SaveManager] 教程显示设置已保存: %s" % shown)
+
+## 获取教程是否已显示（不再提示）
+func get_tutorial_shown() -> bool:
+	return user_data.get("tutorial_shown", false)
+
+## 检查是否需要显示教程
+func should_show_tutorial() -> bool:
+	return not get_tutorial_shown()
 
 ## ==================== 显示模式设置 ====================
 

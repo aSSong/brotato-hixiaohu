@@ -5,6 +5,7 @@ extends Node2D
 
 var death_manager: DeathManager = null
 var death_ui: DeathUI = null
+var tutorial_ui: CanvasLayer = null
 var player: CharacterBody2D = null
 var floor_layer: TileMapLayer = null
 var current_mode: BaseGameMode = null
@@ -65,12 +66,54 @@ func _ready() -> void:
 	# 统一设置游戏流程监听
 	_setup_game_flow()
 	
+	# 显示教程界面（如果需要）
+	await _show_tutorial_if_needed()
+	
 	# 启动游戏计时器
 	if GameMain.current_session:
 		GameMain.current_session.start_timer()
 		print("[GameInitializer] 游戏计时器已启动")
 	
 	print("[GameInitializer] 游戏初始化完成")
+
+## 显示教程界面（如果需要）
+func _show_tutorial_if_needed() -> void:
+	# 检查是否需要显示教程
+	if not SaveManager.should_show_tutorial():
+		print("[GameInitializer] 用户已选择不再显示教程")
+		return
+	
+	# 加载教程UI场景
+	var tutorial_scene = load("res://scenes/UI/tutorial_ui.tscn")
+	if not tutorial_scene:
+		push_warning("[GameInitializer] 无法加载教程UI场景，跳过教程显示")
+		return
+	
+	tutorial_ui = tutorial_scene.instantiate()
+	
+	# 设置为暂停时可处理
+	tutorial_ui.process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# 添加到场景树（添加到root以确保在最上层）
+	get_tree().root.add_child(tutorial_ui)
+	
+	# 暂停游戏（显示教程时暂停）
+	get_tree().paused = true
+	
+	print("[GameInitializer] 教程UI已显示，等待玩家确认...")
+	
+	# 等待教程关闭信号
+	if tutorial_ui.has_signal("tutorial_closed"):
+		await tutorial_ui.tutorial_closed
+	else:
+		# 如果没有信号，等待节点被销毁
+		await tutorial_ui.tree_exited
+	
+	# 恢复游戏
+	get_tree().paused = false
+	tutorial_ui = null
+	
+	print("[GameInitializer] 教程已关闭，游戏正式开始")
 
 ## 创建死亡UI
 func _create_death_ui() -> void:
