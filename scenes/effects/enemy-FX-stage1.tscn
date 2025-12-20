@@ -6,6 +6,4 @@
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_ys847")
-animation = &"bmt-ring"
-frame = 7
-frame_progress = 1.0
+animation = &"jug-hit"
