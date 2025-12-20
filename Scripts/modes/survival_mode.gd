@@ -16,7 +16,7 @@ func _init() -> void:
 	#victory_keys = GameConfig.keys_required  # 从GameConfig读取胜利钥匙数
 	allow_revive = true  # 生存模式允许复活
 	initial_gold = 10  # 生存模式初始gold数量
-	initial_master_key = 3  # 生存模式初始masterkey数量
+	initial_master_key = 5  # 生存模式初始masterkey数量
 	spawn_indicator_delay = 0.5  # 敌人刷新预警延迟（秒）
 
 ## 注意：波次配置已由wave_system_v3从JSON文件（wave_config_id）加载，不再使用硬编码配置
