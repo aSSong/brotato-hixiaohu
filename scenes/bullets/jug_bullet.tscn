@@ -1,17 +1,46 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5bt6pl7kn26k"]
+[gd_scene load_steps=9 format=3 uid="uid://b5bt6pl7kn26k"]
 
 [ext_resource type="Script" uid="uid://cu8iudilpydhv" path="res://Scripts/bullets/enemy_bullet.gd" id="1_nmoed"]
+[ext_resource type="Texture2D" uid="uid://cakwqvo82wqvq" path="res://assets/bullet/jug-bullet.png" id="2_nmoed"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydcfg"]
+atlas = ExtResource("2_nmoed")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5dycc"]
+atlas = ExtResource("2_nmoed")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xd4x"]
+atlas = ExtResource("2_nmoed")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2c112"]
+atlas = ExtResource("2_nmoed")
+region = Rect2(128, 128, 128, 128)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_enemy_bullet"]
 animations = [{
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ydcfg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5dycc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xd4x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2c112")
+}],
 "loop": true,
 "name": &"default",
 "speed": 10.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_enemy_bullet"]
-radius = 127.72041
+radius = 75.041664
 
 [node name="jug_bullet" type="Area2D"]
 z_index = 15

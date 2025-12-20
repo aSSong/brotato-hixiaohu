@@ -35,11 +35,16 @@ var spread_angle: float = 0.0         # 散射角度（度），如60度 = -30°
 ## 发射位置
 var shoot_offset: Vector2 = Vector2(0, -30)  # 发射位置偏移（相对于敌人中心）
 
-## 发射特效配置
+## 发射特效配置（枪口特效）
 var fx_sprite_frames_path: String = ""  # 特效 SpriteFrames 资源路径
 var fx_animation_name: String = ""      # 特效动画名
 var fx_offset: Vector2 = Vector2.ZERO   # 特效偏移（相对于发射位置）
 var fx_scale: Vector2 = Vector2(1.0, 1.0) # 特效缩放
+
+## 击中特效配置
+var hit_fx_sprite_frames_path: String = ""  # 击中特效 SpriteFrames 资源路径
+var hit_fx_animation_name: String = ""      # 击中特效动画名
+var hit_fx_scale: Vector2 = Vector2(1.0, 1.0) # 击中特效缩放
 
 ## 发射动作配置
 var shoot_sprite_anim: String = ""      # SpriteFrames 发射动画名
@@ -50,6 +55,7 @@ var shoot_anim_player: String = ""      # AnimationPlayer 动画名
 var shoot_timer: float = 0.0          # 射击冷却计时器
 var bullet_scene: PackedScene = null
 var fx_sprite_frames: SpriteFrames = null
+var hit_fx_sprite_frames: SpriteFrames = null
 
 ## 多轮发射状态
 var current_round: int = 0            # 当前发射轮次
@@ -74,11 +80,16 @@ func _on_initialize() -> void:
 	# 发射位置
 	shoot_offset = config.get("shoot_offset", Vector2(0, -30))
 	
-	# 特效配置
+	# 枪口特效配置
 	fx_sprite_frames_path = config.get("fx_sprite_frames_path", "")
 	fx_animation_name = config.get("fx_animation_name", "")
 	fx_offset = config.get("fx_offset", Vector2.ZERO)
 	fx_scale = config.get("fx_scale", Vector2(1.0, 1.0))
+	
+	# 击中特效配置
+	hit_fx_sprite_frames_path = config.get("hit_fx_sprite_frames_path", "")
+	hit_fx_animation_name = config.get("hit_fx_animation_name", "")
+	hit_fx_scale = config.get("hit_fx_scale", Vector2(1.0, 1.0))
 	
 	# 动作配置
 	shoot_sprite_anim = config.get("shoot_sprite_anim", "")
@@ -93,11 +104,17 @@ func _on_initialize() -> void:
 	if not bullet_scene:
 		push_error("[ShootingBehavior] 无法加载子弹场景")
 	
-	# 加载特效资源
+	# 加载枪口特效资源
 	if fx_sprite_frames_path != "":
 		fx_sprite_frames = load(fx_sprite_frames_path) as SpriteFrames
 		if not fx_sprite_frames:
-			push_error("[ShootingBehavior] 无法加载特效资源: " + fx_sprite_frames_path)
+			push_error("[ShootingBehavior] 无法加载枪口特效资源: " + fx_sprite_frames_path)
+	
+	# 加载击中特效资源
+	if hit_fx_sprite_frames_path != "":
+		hit_fx_sprite_frames = load(hit_fx_sprite_frames_path) as SpriteFrames
+		if not hit_fx_sprite_frames:
+			push_error("[ShootingBehavior] 无法加载击中特效资源: " + hit_fx_sprite_frames_path)
 	
 	state = ShootState.IDLE
 	shoot_timer = 0.0
@@ -179,10 +196,19 @@ func _shoot_one_round() -> void:
 	if not bullet_scene or not enemy:
 		return
 	
-	var shoot_pos = enemy.global_position + shoot_offset
+	# 检查怪物是否朝右（翻转状态）
+	# 怪物默认朝左（flip_h = false），翻转后朝右（flip_h = true）
+	var is_facing_right = _is_enemy_facing_right()
 	
-	# 播放特效（每轮一次）
-	_play_fx_effect(shoot_pos)
+	# 计算发射位置（考虑朝向）
+	# 怪物朝左（默认）时，偏移X取反；怪物朝右时，偏移保持原值
+	var actual_shoot_offset = shoot_offset
+	if not is_facing_right:
+		actual_shoot_offset.x = -actual_shoot_offset.x
+	var shoot_pos = enemy.global_position + actual_shoot_offset
+	
+	# 播放枪口特效（每轮一次）
+	_play_fx_effect(shoot_pos, is_facing_right)
 	
 	# 计算散射角度
 	var angles: Array[float] = _calculate_spread_angles()
@@ -237,6 +263,11 @@ func _spawn_bullet(pos: Vector2, direction: Vector2) -> void:
 	else:
 		push_error("[ShootingBehavior] 子弹没有start或initialize_with_data方法")
 		bullet.queue_free()
+		return
+	
+	# 设置击中特效
+	if hit_fx_sprite_frames and hit_fx_animation_name != "" and bullet.has_method("set_hit_fx"):
+		bullet.set_hit_fx(hit_fx_sprite_frames, hit_fx_animation_name, hit_fx_scale)
 
 ## 播放发射动作
 func _play_shoot_animation() -> void:
@@ -259,8 +290,21 @@ func _play_shoot_animation() -> void:
 		# 默认使用 shoot 动画
 		enemy.play_skill_animation("shoot")
 
-## 播放发射特效（每轮一次）
-func _play_fx_effect(shoot_pos: Vector2) -> void:
+## 检查怪物是否朝右（翻转状态）
+## 怪物默认朝左（flip_h = false），翻转后朝右（flip_h = true）
+func _is_enemy_facing_right() -> bool:
+	if not enemy:
+		return false
+	
+	var sprite = enemy.get_node_or_null("AnimatedSprite2D")
+	if sprite:
+		return sprite.flip_h  # flip_h = true 表示朝右
+	return false
+
+## 播放枪口特效（每轮一次）
+## 特效默认朝右，怪物默认朝左
+## 特效绑定在敌人身上跟随移动
+func _play_fx_effect(_shoot_pos: Vector2, is_facing_right: bool = false) -> void:
 	if not enemy or not fx_sprite_frames or fx_animation_name == "":
 		return
 	
@@ -269,15 +313,25 @@ func _play_fx_effect(shoot_pos: Vector2) -> void:
 		push_error("[ShootingBehavior] 特效资源中没有动画: " + fx_animation_name)
 		return
 	
+	# 计算特效局部偏移（考虑朝向）
+	# 怪物朝左（默认）时，偏移X取反；怪物朝右时，偏移保持原值
+	var actual_offset = shoot_offset + fx_offset
+	if not is_facing_right:
+		actual_offset.x = -actual_offset.x
+	
 	# 创建特效节点
 	var fx_node = AnimatedSprite2D.new()
 	fx_node.sprite_frames = fx_sprite_frames
-	fx_node.global_position = shoot_pos + fx_offset
+	fx_node.position = actual_offset  # 使用局部坐标
 	fx_node.scale = fx_scale
 	fx_node.z_index = 10  # 在上层显示
 	
-	# 添加到场景树（作为顶层节点，不跟随敌人）
-	get_tree().root.add_child(fx_node)
+	# 特效默认朝右，怪物朝左时特效需要翻转
+	if not is_facing_right:
+		fx_node.flip_h = true
+	
+	# 添加到敌人节点（跟随敌人移动）
+	enemy.add_child(fx_node)
 	
 	# 播放动画
 	fx_node.play(fx_animation_name)

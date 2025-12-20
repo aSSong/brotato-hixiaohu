@@ -14,12 +14,20 @@ attack_range = 84.0
 skill_type = 2
 skill_config = {
 "bullet_damage": 5,
-"bullet_id": "basic",
 "bullet_round_interval": 0.5,
 "bullet_rounds": 3,
+"bullet_scene_path": "res://scenes/bullets/masquito_bullet.tscn",
 "bullet_speed": 600.0,
 "bullets_per_round": 1,
+"fx_animation_name": "mas-muzzle",
+"fx_offset": Vector2(48, 40),
+"fx_scale": Vector2(1, 1),
+"fx_sprite_frames_path": "res://resources/enemies/FX/enemy-FX-stage2.tres",
+"hit_fx_animation_name": "mas-hit",
+"hit_fx_scale": Vector2(1, 1),
+"hit_fx_sprite_frames_path": "res://resources/enemies/FX/enemy-FX-stage2.tres",
 "shoot_interval": 3.0,
+"shoot_offset": Vector2(60, 40),
 "shoot_range": 1000.0,
 "spread_angle": 0.0
 }
