@@ -44,6 +44,9 @@ var _anim_timer: float = 0.0
 var _current_frame_index: int = 0
 var _total_frames: int = 1
 
+## 生命周期累计（避免大量 create_timer 分配）
+var _age: float = 0.0
+
 ## ========== 移动相关 ==========
 
 ## 移动类型
@@ -93,14 +96,14 @@ func start_with_config(config: Dictionary) -> void:
 	
 	# 初始化移动
 	_init_movement()
+	_age = 0.0
 	
 	# 暴击效果
 	if is_critical:
 		#modulate = Color(1.5, 1.5, 1.5)
 		scale *= 1.2
 	
-	# 生命周期
-	get_tree().create_timer(life_time).timeout.connect(queue_free)
+	# 生命周期：在 _physics_process 中使用 _age 统一管理（避免大量 timer）
 
 ## ========== 旧版初始化方法（兼容） ==========
 
@@ -119,8 +122,8 @@ func start(pos: Vector2, _dir: Vector2, _speed: float, _hurt: int, _is_critical:
 	if is_critical:
 		#modulate = Color(1.5, 1.5, 1.5)
 		scale *= 1.2
-	
-	get_tree().create_timer(life_time).timeout.connect(queue_free)
+
+	_age = 0.0
 
 ## ========== 移动逻辑 ==========
 
@@ -153,6 +156,12 @@ func _init_movement() -> void:
 			_velocity = dir * speed
 
 func _physics_process(delta: float) -> void:
+	# 生命周期（统一用 age 计时，避免每颗子弹 create_timer）
+	_age += delta
+	if _age >= life_time:
+		queue_free()
+		return
+
 	# 1. 处理动画播放
 	if bullet_data and bullet_data.animation_speed > 0:
 		_update_animation(delta)
@@ -200,7 +209,7 @@ func _move_homing(delta: float) -> void:
 	var wobble_freq = movement_params.get("wobble_frequency", 10.0) # 扰动频率
 	
 	# 处理追踪延迟（先直飞一会）
-	if life_time - (get_tree().create_timer(life_time).time_left) < homing_delay:
+	if _age < homing_delay:
 		# 还在延迟期，只加速不转向
 		pass
 	elif is_instance_valid(homing_target):
@@ -250,7 +259,7 @@ func _move_wave(delta: float) -> void:
 ## 螺旋移动
 func _move_spiral(delta: float) -> void:
 	var spiral_speed = movement_params.get("spiral_speed", 360.0)
-	var spiral_radius = movement_params.get("spiral_radius", 20.0)
+	# var spiral_radius = movement_params.get("spiral_radius", 20.0) # 预留：未来用于半径螺旋轨迹
 	
 	# 旋转方向
 	dir = dir.rotated(deg_to_rad(spiral_speed * delta))
@@ -313,7 +322,7 @@ func _setup_appearance() -> void:
 
 ## ========== 碰撞处理 ==========
 
-func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+func _on_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int) -> void:
 	if not body.is_in_group("enemy"):
 		return
 	
