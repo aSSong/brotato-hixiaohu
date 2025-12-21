@@ -797,42 +797,15 @@ func _compute_benefited_weapon_indices(upgrade: UpgradeData) -> Array[int]:
 			if _shop_weapons[i] is BaseWeapon:
 				result.append(i)
 		return result
-	
-	# 2) 魔法/近战/远程：按结算类型匹配
-	var affected_calc_types: Array[int] = []
-	if _stats_affects_melee(stats):
-		affected_calc_types.append(WeaponData.CalculationType.MELEE)
-	if _stats_affects_ranged(stats):
-		affected_calc_types.append(WeaponData.CalculationType.RANGED)
-	if _stats_affects_magic(stats):
-		affected_calc_types.append(WeaponData.CalculationType.MAGIC)
-	
-	if not affected_calc_types.is_empty():
-		for i in range(min(_shop_weapons.size(), 6)):
-			var w = _shop_weapons[i]
-			if not (w is BaseWeapon) or not w.weapon_data:
-				continue
-			if affected_calc_types.has(w.weapon_data.calculation_type):
-				result.append(i)
-	
-	# 3) 异常类：对有特殊效果的武器有效（按 special_effects 匹配）
-	if _stats_affects_status(stats):
-		var required_effect_types: Array[String] = []
-		if not is_equal_approx(stats.burn_chance, 0.0):
-			required_effect_types.append("burn")
-		if not is_equal_approx(stats.freeze_chance, 0.0):
-			required_effect_types.append("freeze")
-		if not is_equal_approx(stats.poison_chance, 0.0):
-			required_effect_types.append("poison")
-		
-		for i in range(min(_shop_weapons.size(), 6)):
-			var w = _shop_weapons[i]
-			if not (w is BaseWeapon) or not w.weapon_data:
-				continue
-			if _weapon_has_special_effect(w.weapon_data, required_effect_types):
-				if not result.has(i):
-					result.append(i)
-	
+
+	# 精确匹配：逐武器判断该 stats 是否真的会影响它（参考 Behavior/Calculator 的真实使用逻辑）
+	for i in range(min(_shop_weapons.size(), 6)):
+		var w = _shop_weapons[i]
+		if not (w is BaseWeapon) or not w.weapon_data:
+			continue
+		if _weapon_benefits_from_stats(w.weapon_data, stats):
+			result.append(i)
+
 	return result
 
 func _stats_affects_melee(stats: CombatStats) -> bool:
@@ -890,6 +863,88 @@ func _weapon_has_special_effect(weapon_data: WeaponData, required_types: Array[S
 			var t = e.get("type", "")
 			if required_types.has(t):
 				return true
+	return false
+
+## 精确判定：某个 stats_modifier 是否会对该 weapon_data 产生实际影响
+func _weapon_benefits_from_stats(weapon_data: WeaponData, stats: CombatStats) -> bool:
+	if not weapon_data or not stats:
+		return false
+	
+	var calc_type = weapon_data.calculation_type
+	var behavior_type = weapon_data.behavior_type
+	var params: Dictionary = weapon_data.get_behavior_params()
+	
+	# ===== 结算类型相关（Damage/AttackSpeed/Range 走 CalculationType）=====
+	# 近战结算
+	if calc_type == WeaponData.CalculationType.MELEE:
+		if not is_equal_approx(stats.melee_damage_add, 0.0) or not is_equal_approx(stats.melee_damage_mult, 1.0):
+			return true
+		if not is_equal_approx(stats.melee_speed_add, 0.0) or not is_equal_approx(stats.melee_speed_mult, 1.0):
+			return true
+		if not is_equal_approx(stats.melee_range_add, 0.0) or not is_equal_approx(stats.melee_range_mult, 1.0):
+			return true
+	
+	# 远程结算
+	if calc_type == WeaponData.CalculationType.RANGED:
+		if not is_equal_approx(stats.ranged_damage_add, 0.0) or not is_equal_approx(stats.ranged_damage_mult, 1.0):
+			return true
+		if not is_equal_approx(stats.ranged_speed_add, 0.0) or not is_equal_approx(stats.ranged_speed_mult, 1.0):
+			return true
+		if not is_equal_approx(stats.ranged_range_add, 0.0) or not is_equal_approx(stats.ranged_range_mult, 1.0):
+			return true
+	
+	# 魔法结算
+	if calc_type == WeaponData.CalculationType.MAGIC:
+		if not is_equal_approx(stats.magic_damage_add, 0.0) or not is_equal_approx(stats.magic_damage_mult, 1.0):
+			return true
+		if not is_equal_approx(stats.magic_speed_add, 0.0) or not is_equal_approx(stats.magic_speed_mult, 1.0):
+			return true
+		if not is_equal_approx(stats.magic_range_add, 0.0) or not is_equal_approx(stats.magic_range_mult, 1.0):
+			return true
+	
+	# ===== 行为相关（某些属性只被特定 Behavior 读取）=====
+	# 远程穿透/额外弹药：只在 RangedBehavior 中读取（与 calculation_type 无关）
+	if behavior_type == WeaponData.BehaviorType.RANGED:
+		if stats.ranged_penetration != 0:
+			return true
+		if stats.ranged_projectile_count != 0:
+			return true
+	
+	# 近战击退：只在 MeleeBehavior 中读取，且要求武器本身有基础击退力度
+	if behavior_type == WeaponData.BehaviorType.MELEE:
+		var base_knockback = float(params.get("knockback_force", 0.0))
+		if base_knockback > 0.0:
+			if not is_equal_approx(stats.melee_knockback_add, 0.0) or not is_equal_approx(stats.melee_knockback_mult, 1.0):
+				return true
+	
+	# 魔法爆炸范围：只在 MagicBehavior 中读取，且要求武器本身启用爆炸并且有半径
+	if behavior_type == WeaponData.BehaviorType.MAGIC:
+		var has_explosion = bool(params.get("has_explosion_damage", true))
+		var base_radius = float(params.get("explosion_radius", 0.0))
+		if has_explosion and base_radius > 0.0:
+			if not is_equal_approx(stats.magic_explosion_radius_add, 0.0) or not is_equal_approx(stats.magic_explosion_radius_mult, 1.0):
+				return true
+	
+	# ===== 异常/特殊效果：只对带 special_effects 的武器生效 =====
+	if _stats_affects_status(stats):
+		var required_effect_types: Array[String] = []
+		# 如果升级直接改了某个异常触发率，只命中对应异常的武器
+		if not is_equal_approx(stats.burn_chance, 0.0):
+			required_effect_types.append("burn")
+		if not is_equal_approx(stats.freeze_chance, 0.0):
+			required_effect_types.append("freeze")
+		if not is_equal_approx(stats.poison_chance, 0.0):
+			required_effect_types.append("poison")
+		
+		# 进一步精细化：
+		# - 异常持续时间：只影响有“持续时间”的异常（burn/bleed/freeze/slow/poison），不影响 lifesteal
+		# - 异常概率/异常效果强度：影响所有带特殊效果的武器（lifesteal 也会受 status_chance_mult / status_effect_mult 影响）
+		if required_effect_types.is_empty() and not is_equal_approx(stats.status_duration_mult, 1.0):
+			required_effect_types = ["burn", "bleed", "freeze", "slow", "poison"]
+		
+		if _weapon_has_special_effect(weapon_data, required_effect_types):
+			return true
+	
 	return false
 
 ## WeaponData 本身不存 weapon_id，这里通过 weapon_name 反查 WeaponDatabase 的 key

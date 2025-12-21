@@ -1,9 +1,95 @@
-[gd_scene load_steps=5 format=3 uid="uid://cgi53yfp8jfnb"]
+[gd_scene load_steps=9 format=3 uid="uid://cgi53yfp8jfnb"]
 
 [ext_resource type="Script" uid="uid://5w5l80ry7ss5" path="res://Scripts/UI/weapon_compact.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://b3yui5wfldpre" path="res://assets/UI/common/bg-lilweapon-purple.png" id="1_tlojq"]
 [ext_resource type="Texture2D" uid="uid://cuthak4wn77qp" path="res://assets/weapon/Weapon_sword.png" id="2_ibirs"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="3_u03l2"]
+[ext_resource type="Texture2D" uid="uid://cahp6c3wvkfl1" path="res://assets/UI/shop_ui/sign-arrow_n.png" id="5_u03l2"]
+
+[sub_resource type="Animation" id="Animation_u03l2"]
+resource_name = "up"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("sign-up:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 1),
+"transitions": PackedFloat32Array(1, 1, 1.7411002),
+"update": 0,
+"values": [Vector2(118, 5), Vector2(118, 5), Vector2(118, -14.76)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("sign-up:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("sign-up:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+
+[sub_resource type="Animation" id="Animation_u8kec"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("sign-up:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(118, 5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("sign-up:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("sign-up:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j3tyx"]
+_data = {
+&"RESET": SubResource("Animation_u8kec"),
+&"up": SubResource("Animation_u03l2")
+}
 
 [node name="WeaponCompact" type="Control"]
 custom_minimum_size = Vector2(162, 133)
@@ -57,3 +143,22 @@ theme_override_fonts/font = ExtResource("3_u03l2")
 theme_override_font_sizes/font_size = 18
 text = "武器名"
 horizontal_alignment = 1
+
+[node name="sign-up" type="TextureRect" parent="bg-lilweapon"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -44.0
+offset_top = 5.0
+offset_right = 20.0
+offset_bottom = 69.0
+grow_horizontal = 0
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("5_u03l2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="bg-lilweapon"]
+libraries = {
+&"": SubResource("AnimationLibrary_j3tyx")
+}
