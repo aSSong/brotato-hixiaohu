@@ -58,6 +58,9 @@ var movement_params: Dictionary = {}
 ## 追踪目标
 var homing_target: Node2D = null
 
+## WaveSystem 引用缓存（用于复用 active_enemies，避免频繁 get_nodes_in_group 分配）
+var _wave_manager_cache: Node = null
+
 ## 波浪移动
 var wave_time: float = 0.0
 var wave_base_position: Vector2 = Vector2.ZERO
@@ -259,7 +262,7 @@ func _move_wave(delta: float) -> void:
 ## 螺旋移动
 func _move_spiral(delta: float) -> void:
 	var spiral_speed = movement_params.get("spiral_speed", 360.0)
-	# var spiral_radius = movement_params.get("spiral_radius", 20.0) # 预留：未来用于半径螺旋轨迹
+	# 预留：未来用于半径螺旋轨迹
 	
 	# 旋转方向
 	dir = dir.rotated(deg_to_rad(spiral_speed * delta))
@@ -269,18 +272,49 @@ func _move_spiral(delta: float) -> void:
 
 ## 查找追踪目标
 func _find_homing_target() -> void:
-	var enemies = get_tree().get_nodes_in_group("enemy")
-	var closest_dist = INF
+	var enemies = _get_homing_candidates()
+	var closest_dist: float = INF
 	homing_target = null
+
+	# 可选：限制寻敌半径，避免全场扫描（默认 INF = 不限制）
+	var search_range: float = float(movement_params.get("homing_search_range", INF))
+	var limit_by_range: bool = search_range < INF
 	
 	for enemy in enemies:
-		if not is_instance_valid(enemy) or enemy.get("is_dead"):
+		if not is_instance_valid(enemy):
+			continue
+		# 兼容：敌人脚本里有 is_dead 字段
+		if enemy.get("is_dead"):
 			continue
 		
-		var dist = global_position.distance_to(enemy.global_position)
+		if not (enemy is Node2D):
+			continue
+		var e := enemy as Node2D
+		var dist: float = global_position.distance_to(e.global_position)
+		if limit_by_range and dist > search_range:
+			continue
 		if dist < closest_dist:
 			closest_dist = dist
-			homing_target = enemy
+			homing_target = e
+
+
+## 获取追踪寻敌候选列表：优先 WaveSystemV3.active_enemies，回退到 group("enemy")
+func _get_homing_candidates() -> Array:
+	# 缓存 wave_manager
+	if _wave_manager_cache == null or not is_instance_valid(_wave_manager_cache):
+		var tree := get_tree()
+		if tree:
+			_wave_manager_cache = tree.get_first_node_in_group("wave_manager")
+
+	if _wave_manager_cache and is_instance_valid(_wave_manager_cache):
+		# WaveSystemV3 有 active_enemies 字段
+		if "active_enemies" in _wave_manager_cache:
+			var arr = _wave_manager_cache.get("active_enemies")
+			if arr is Array:
+				return arr
+
+	# 回退：从组里拿（会产生数组分配）
+	return get_tree().get_nodes_in_group("enemy")
 
 ## ========== 外观设置 ==========
 
