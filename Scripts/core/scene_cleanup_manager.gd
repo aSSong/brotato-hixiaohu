@@ -127,16 +127,12 @@ static func _cleanup_effects() -> void:
 				child.queue_free()
 
 	# 清空特效对象池（池内实例通常不在树上，不清会跨场景残留）
-	if CombatEffectManager:
-		if CombatEffectManager.has_method("clear_all_pools"):
-			CombatEffectManager.clear_all_pools()
-			print("[SceneCleanup] 已清空 CombatEffectManager 对象池")
+	CombatEffectManager.clear_all_pools()
+	print("[SceneCleanup] 已清空 CombatEffectManager 对象池")
 	
 	# 清空浮动文字对象池（池内实例不在树上，不清会跨场景残留）
-	if FloatingText:
-		if FloatingText.has_method("clear_pool"):
-			FloatingText.clear_pool()
-			print("[SceneCleanup] 已清空 FloatingText 对象池")
+	FloatingText.clear_pool()
+	print("[SceneCleanup] 已清空 FloatingText 对象池")
 	
 	# 清理可能残留的粒子特效（通过组）
 	var tree = Engine.get_main_loop() as SceneTree
