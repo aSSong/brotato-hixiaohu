@@ -23,6 +23,9 @@ var explosion_indicator_script: GDScript = null
 ## 当前正在施法的攻击列表
 var casting_attacks: Array = []
 
+## WaveSystem 缓存：优先使用 active_enemies 避免 get_nodes_in_group("enemy") 分配
+var _wave_manager_cache: Node = null
+
 ## 指示器颜色（可由武器配置覆盖，默认白色保留纹理原色）
 var indicator_color: Color = Color(1.0, 1.0, 1.0, 0.8)
 
@@ -333,8 +336,8 @@ func _execute_immediate_attack(target: Node2D, damage: int, radius: float) -> vo
 func _explode_at_position(pos: Vector2, radius: float, base_damage: int, exclude_target = null) -> void:
 	if not weapon:
 		return
-	
-	var enemies = weapon.get_tree().get_nodes_in_group("enemy")
+
+	var enemies = _get_explosion_candidates()
 	
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
@@ -344,16 +347,37 @@ func _explode_at_position(pos: Vector2, radius: float, base_damage: int, exclude
 		if enemy == exclude_target:
 			continue
 		
-		var distance = pos.distance_to(enemy.global_position)
+		if not (enemy is Node2D):
+			continue
+		var e := enemy as Node2D
+		var distance = pos.distance_to(e.global_position)
 		
 		if distance <= radius:
 			# 根据距离计算伤害衰减
 			var damage_mult = 1.0 - (distance / radius) * 0.5
 			var final_damage = int(base_damage * damage_mult * get_explosion_damage_multiplier())
 			
-			if enemy.has_method("enemy_hurt"):
-				enemy.enemy_hurt(final_damage)
-				apply_special_effects(enemy, final_damage)
+			if e.has_method("enemy_hurt"):
+				e.enemy_hurt(final_damage)
+				apply_special_effects(e, final_damage)
+
+
+## 爆炸伤害候选：优先使用 WaveSystemV3.active_enemies（无新数组分配），回退到 group("enemy")
+func _get_explosion_candidates() -> Array:
+	# 缓存 wave_manager
+	if _wave_manager_cache == null or not is_instance_valid(_wave_manager_cache):
+		var tree := weapon.get_tree() if weapon else null
+		if tree:
+			_wave_manager_cache = tree.get_first_node_in_group("wave_manager")
+
+	if _wave_manager_cache and is_instance_valid(_wave_manager_cache):
+		if "active_enemies" in _wave_manager_cache:
+			var arr = _wave_manager_cache.get("active_enemies")
+			if arr is Array:
+				return arr
+
+	# 回退：会创建数组
+	return weapon.get_tree().get_nodes_in_group("enemy")
 
 ## 创建爆炸特效
 func _create_explosion_effect(pos: Vector2) -> void:
