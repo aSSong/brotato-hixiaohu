@@ -4,6 +4,16 @@ class_name Enemy
 ## 调试显示开关（全局静态变量，按 R键 切换）
 static var debug_show_range: bool = false
 
+## ==================== 性能优化：软分离（邻近列表 + 低频更新） ====================
+## 目标：
+## - 避免每帧 get_nodes_in_group("enemy") 导致 O(N^2)
+## - 分离力按固定间隔刷新（默认 0.1s），其余帧复用缓存值
+const SEPARATION_UPDATE_INTERVAL: float = 0.10
+var _sep_time_acc: float = 0.0
+var _sep_cached: Vector2 = Vector2.ZERO
+var _separation_area: Area2D = null
+var _nearby_enemies: Array[Node2D] = []
+
 var dir = null
 var speed = 300
 var target = null
@@ -118,12 +128,66 @@ func _ready() -> void:
 	# 如果已经设置了敌人数据，应用它
 	if enemy_data != null:
 		_apply_enemy_data()
+
+	# 初始化软分离邻近检测（在应用缩放后创建，保证半径一致）
+	_setup_separation_area()
 	
 	# 播放默认走路动画
 	play_animation("walk")
 
+
+## 初始化软分离检测 Area2D（只追踪附近敌人）
+func _setup_separation_area() -> void:
+	# 防止重复创建
+	if _separation_area and is_instance_valid(_separation_area):
+		return
+
+	_separation_area = Area2D.new()
+	_separation_area.name = "SeparationArea"
+	_separation_area.monitoring = true
+	_separation_area.monitorable = true
+	# 不参与物理碰撞，仅用于检测
+	_separation_area.collision_layer = 0
+	# 使用与自身相同的 layer 来检测“同层敌人”
+	# 说明：很多项目里敌人之间不发生物理碰撞，collision_mask 不一定包含敌人层；用 collision_layer 更稳
+	_separation_area.collision_mask = collision_layer
+
+	var shape: CircleShape2D = CircleShape2D.new()
+	# 半径以“世界距离”为准；考虑节点缩放，做反向补偿
+	var s: float = maxf(absf(scale.x), 0.001)
+	shape.radius = separation_radius / s
+
+	var cs := CollisionShape2D.new()
+	cs.shape = shape
+	_separation_area.add_child(cs)
+
+	add_child(_separation_area)
+
+	# 连接邻近敌人进入/离开
+	if not _separation_area.body_entered.is_connected(_on_separation_body_entered):
+		_separation_area.body_entered.connect(_on_separation_body_entered)
+	if not _separation_area.body_exited.is_connected(_on_separation_body_exited):
+		_separation_area.body_exited.connect(_on_separation_body_exited)
+
+
+func _on_separation_body_entered(body: Node) -> void:
+	if body == self:
+		return
+	if body and is_instance_valid(body) and body is Node2D and body.is_in_group("enemy"):
+		var b: Node2D = body as Node2D
+		if not _nearby_enemies.has(b):
+			_nearby_enemies.append(b)
+
+
+func _on_separation_body_exited(body: Node) -> void:
+	if body and is_instance_valid(body) and body is Node2D:
+		var b: Node2D = body as Node2D
+		if _nearby_enemies.has(b):
+			_nearby_enemies.erase(b)
+
 ## 处理Buff Tick（DoT伤害）
-func _on_buff_tick(buff_id: String, tick_data: Dictionary) -> void:
+@warning_ignore("UNUSED_PARAMETER")
+func _on_buff_tick(_buff_id: String, tick_data: Dictionary) -> void:
 	SpecialEffects.apply_dot_damage(self, tick_data)
 
 ## Buff应用时的处理（应用shader效果）
@@ -147,7 +211,8 @@ func _apply_status_shader(buff_id: String) -> void:
 	sprite.material.set_shader_parameter("flash_opacity", color_config["shader_opacity"])
 
 ## 移除状态shader效果
-func _remove_status_shader(buff_id: String) -> void:
+@warning_ignore("UNUSED_PARAMETER")
+func _remove_status_shader(_buff_id: String) -> void:
 	if not $AnimatedSprite2D or not $AnimatedSprite2D.material:
 		return
 	
@@ -350,8 +415,12 @@ func _process(delta: float) -> void:
 		# 设置停止距离（小于攻击范围，确保攻击生效）
 		var min_distance = attack_range_value - 20.0  # 攻击范围 + 20像素缓冲
 		
-		# 计算分离力（防止敌人重叠）
-		var separation = _calculate_separation_force()
+		# 计算分离力（防止敌人重叠）——低频刷新，复用缓存值
+		_sep_time_acc += delta
+		if _sep_time_acc >= SEPARATION_UPDATE_INTERVAL:
+			_sep_time_acc = 0.0
+			_sep_cached = _calculate_separation_force()
+		var separation = _sep_cached
 		
 		if player_distance > min_distance:
 			dir = (target.global_position - self.global_position).normalized()
@@ -389,10 +458,16 @@ func _update_facing_direction() -> void:
 ## 计算软分离力（防止敌人完全重叠）
 func _calculate_separation_force() -> Vector2:
 	var separation_force = Vector2.ZERO
-	var enemies = get_tree().get_nodes_in_group("enemy")
-	
-	for other in enemies:
-		if other == self or not is_instance_valid(other):
+
+	# 清理无效引用，避免数组膨胀
+	var valid_nearby: Array[Node2D] = []
+	for other in _nearby_enemies:
+		if other and is_instance_valid(other) and not other.is_queued_for_deletion():
+			valid_nearby.append(other)
+	_nearby_enemies = valid_nearby
+
+	for other in _nearby_enemies:
+		if other == self:
 			continue
 		var to_other = other.global_position - global_position
 		var distance = to_other.length()
