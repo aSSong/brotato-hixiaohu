@@ -133,17 +133,19 @@ static func initialize_bullets() -> void:
 	# ========== 特殊子弹 ==========
 	
 	## 追踪导弹子弹
-	var ms_bullet = BulletData.new("ms_bullet", 1000.0, 8.0, "res://assets/weapon/missle/ms-bullet.png")
+	var ms_bullet = BulletData.new("ms_bullet", 1000.0, 5.0, "res://assets/weapon/missle/ms-bullet.png")
 	ms_bullet.bullet_name = "追踪导弹子弹"
 	ms_bullet.scale = Vector2(0.5, 0.5)
 	ms_bullet.movement_type = BulletData.MovementType.HOMING
 	ms_bullet.movement_params = {
-		"turn_speed": 8.0,        # 转向速度
+		# 注意：turn_speed 是“弧度/秒”，8.0 会非常灵活，容易小范围 S 型绕圈
+		# 这里调成更“平直+温和追踪”的手感：先直飞一段，再缓慢转向
+		"turn_speed": 2.5,        # 转向速度（rad/s）
 		"acceleration": 100.0,    # 加速度
 		"max_speed": 1200.0,      # 最大速度
-		"homing_delay": 0.2,      # 发射后延迟追踪
-		"wobble_amount": 15.0,    # 左右摆动幅度
-		"wobble_frequency": 8.0   # 摆动频率
+		"homing_delay": 0.45,     # 发射后延迟追踪（秒）
+		"wobble_amount": 3.0,     # 左右摆动幅度（度）
+		"wobble_frequency": 3.0   # 摆动频率
 	}
 	# 序列帧动画配置：横4竖4，10fps
 	ms_bullet.hframes = 4
@@ -168,12 +170,12 @@ static func initialize_bullets() -> void:
 	homing_bullet.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	homing_bullet.movement_type = BulletData.MovementType.HOMING
 	homing_bullet.movement_params = {
-		"turn_speed": 8.0,
+		"turn_speed": 2.5,
 		"acceleration": 100.0,
 		"max_speed": 1200.0,
-		"homing_delay": 0.2,
-		"wobble_amount": 15.0,
-		"wobble_frequency": 8.0
+		"homing_delay": 0.45,
+		"wobble_amount": 3.0,
+		"wobble_frequency": 3.0
 	}
 	homing_bullet.hframes = 4
 	homing_bullet.vframes = 1
@@ -183,18 +185,36 @@ static func initialize_bullets() -> void:
 	
 	
 	## 奥术飞弹子弹
-	var ag_bullet = BulletData.new("ag_bullet", 600.0, 8.0, "res://assets/weapon/arcane/ag-bullet.png")
+	var ag_bullet = BulletData.new("ag_bullet", 600.0, 5.0, "res://assets/weapon/arcane/ag-bullet.png")
 	ag_bullet.bullet_name = "奥术飞弹子弹"
 	ag_bullet.scale = Vector2(1.4, 1.4)
 	ag_bullet.movement_type = BulletData.MovementType.HOMING
 	ag_bullet.movement_params = {
-		"turn_speed": 8.0,        # 转向速度
+		"turn_speed": 2.8,        # 转向速度（rad/s）
 		"acceleration": 50.0,     # 加速度
 		"max_speed": 1200.0,      # 最大速度
-		"homing_delay": 0.2,      # 发射后延迟追踪
-		"wobble_amount": 15.0,    # 左右摆动幅度
-		"wobble_frequency": 8.0   # 摆动频率
+		"homing_delay": 0.35,     # 发射后延迟追踪
+		"wobble_amount": 2.0,     # 左右摆动幅度
+		"wobble_frequency": 3.0   # 摆动频率
 	}
+	
+#我已经帮你把追踪子弹参数调回“更平直 + 温和追踪”
+#在 Scripts/data/bullet_database.gd 里对这些追踪子弹做了调整：
+#ms_bullet
+#homing_bullet
+#ag_bullet
+#arcane_bullet
+#改动方向：
+#turn_speed：从 8.0 降到 2.5~2.8（注意它是 弧度/秒，8 太猛）
+#homing_delay：从 0.2 提到 0.35~0.45（先直飞更久）
+#wobble_amount / wobble_frequency：大幅降低（减少 S 型摆动）
+#如果还想更“直”
+#你可以再按口味微调（都在 movement_params）：
+#更直：继续降 turn_speed（比如 1.8），或把 wobble_amount 设为 0
+#更晚才开始追踪：加大 homing_delay（比如 0.6）
+#更稳不绕圈：把 max_speed 稍微降一点，或降 acceleration
+#你跑一局感受下，如果还偏“蛇形”，告诉我你最在意的是“更直飞”还是“更准追踪”，我再把参数收敛到你想要的手感区间。
+	
 	# 序列帧动画配置：横4竖4，17fps
 	ag_bullet.hframes = 4
 	ag_bullet.vframes = 4
@@ -219,12 +239,12 @@ static func initialize_bullets() -> void:
 	arcane_bullet.scale = Vector2(1.0, 1.0)
 	arcane_bullet.movement_type = BulletData.MovementType.HOMING
 	arcane_bullet.movement_params = {
-		"turn_speed": 8.0,
+		"turn_speed": 2.8,
 		"acceleration": 50.0,
 		"max_speed": 1200.0,
-		"homing_delay": 0.2,
-		"wobble_amount": 15.0,
-		"wobble_frequency": 8.0
+		"homing_delay": 0.35,
+		"wobble_amount": 2.0,
+		"wobble_frequency": 3.0
 	}
 	arcane_bullet.hframes = 10
 	arcane_bullet.vframes = 1
