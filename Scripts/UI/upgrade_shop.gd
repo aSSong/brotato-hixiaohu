@@ -42,6 +42,12 @@ var _cached_weapons_manager: Node = null
 var _cached_wave_manager: Node = null
 var _cached_player: Node = null
 
+## ===== 商店 hover 高亮：武器紧凑组件缓存 =====
+var _weapon_compacts: Array[WeaponCompact] = []
+var _shop_weapons: Array[BaseWeapon] = []
+var _currently_hovered_upgrade: UpgradeData = null
+var _hovered_option_ui: UpgradeOption = null
+
 ## 信号
 signal upgrade_purchased(upgrade: UpgradeData)
 signal shop_closed()
@@ -128,6 +134,47 @@ func _ready() -> void:
 	print("upgrade_container: ", upgrade_container, " refresh_button: ", refresh_button, " close_button: ", close_button)
 	print("weapon_container: ", weapon_container)
 
+func _process(_delta: float) -> void:
+	# 兜底：通过 viewport 获取当前鼠标悬停的控件，避免被子控件遮挡导致 hover 信号不触发
+	if not visible:
+		return
+	_poll_hovered_upgrade_option()
+
+func _poll_hovered_upgrade_option() -> void:
+	var hovered: Control = get_viewport().gui_get_hovered_control()
+	var option: UpgradeOption = null
+	
+	while hovered:
+		if hovered is UpgradeOption:
+			option = hovered as UpgradeOption
+			break
+		hovered = hovered.get_parent() as Control
+	
+	# 只认 UpgradeContainer 里的选项，避免误判到其他 UI
+	if option and upgrade_container:
+		var p: Node = option
+		var is_child_of_container := false
+		while p:
+			if p == upgrade_container:
+				is_child_of_container = true
+				break
+			p = p.get_parent()
+		if not is_child_of_container:
+			option = null
+	
+	var hovered_upgrade: UpgradeData = option.upgrade_data if option else null
+	
+	# 关键：UpgradeOption 节点会复用，购买/刷新后 upgrade_data 会变，但节点不变
+	# 因此需要同时比较 upgrade_data 引用，确保能及时刷新箭头
+	if option == _hovered_option_ui and hovered_upgrade == _currently_hovered_upgrade:
+		return
+	
+	_hovered_option_ui = option
+	if _hovered_option_ui and hovered_upgrade:
+		_on_upgrade_option_hover_entered(hovered_upgrade, _hovered_option_ui.position_index)
+	else:
+		_on_upgrade_option_hover_exited(-1)
+
 ## 缓存常用的管理器引用
 func _cache_managers() -> void:
 	var tree = get_tree()
@@ -193,11 +240,14 @@ func open_shop() -> void:
 	
 	# 更新武器列表显示
 	_update_weapon_list()
+	_clear_weapon_signups()
 	
 	print("升级商店已打开，选项数量: ", current_upgrades.size())
 
 ## 关闭商店
 func close_shop() -> void:
+	_clear_weapon_signups()
+	_currently_hovered_upgrade = null
 	hide()
 	shop_closed.emit()
 
@@ -209,6 +259,10 @@ func close_shop() -> void:
 ## 3. 复用UI节点，只更新数据，避免 queue_free 造成的空帧闪烁
 ## 4. 对非锁定选项，设置 scale.x=0 后更新数据，再播放翻入动画（Flip In）
 func generate_upgrades() -> void:
+	# 选项会刷新/复用，先清空当前高亮，避免残留
+	_clear_weapon_signups()
+	_currently_hovered_upgrade = null
+
 	# 1. 播放翻出动画（只对非锁定的选项）
 	# 锁定的选项保持原样，非锁定的翻出并隐藏（scale.x -> 0）
 	await _play_flip_out_animations()
@@ -296,6 +350,10 @@ func generate_upgrades() -> void:
 			option_ui.purchased.connect(_on_upgrade_purchased)
 		if option_ui.has_signal("lock_state_changed"):
 			option_ui.lock_state_changed.connect(_on_upgrade_lock_state_changed)
+		if option_ui.has_signal("hover_entered"):
+			option_ui.hover_entered.connect(_on_upgrade_option_hover_entered)
+		if option_ui.has_signal("hover_exited"):
+			option_ui.hover_exited.connect(_on_upgrade_option_hover_exited)
 	
 	# 清理多余节点
 	while upgrade_container.get_child_count() > SHOP_SLOTS:
@@ -309,7 +367,7 @@ func generate_upgrades() -> void:
 	# 4. 更新每个节点的数据和状态
 	for i in range(SHOP_SLOTS):
 		var option_ui = upgrade_container.get_child(i) as UpgradeOption
-		var upgrade_data = new_upgrades_list[i]
+		var slot_upgrade = new_upgrades_list[i]
 		var is_locked = locked_upgrades.has(i)
 		
 		option_ui.position_index = i
@@ -320,8 +378,8 @@ func generate_upgrades() -> void:
 		# 更新数据
 		# 注意：对于非锁定节点，此时 scale.x 应为 0（由 _play_flip_out_animations 设置）
 		# 所以即使数据变了，玩家也暂时看不到，直到翻入动画播放
-		if upgrade_data:
-			option_ui.set_upgrade_data(upgrade_data)
+		if slot_upgrade:
+			option_ui.set_upgrade_data(slot_upgrade)
 		
 		option_ui.set_lock_state(is_locked)
 		
@@ -522,6 +580,10 @@ func _on_upgrade_purchased(upgrade: UpgradeData) -> void:
 				# 隐藏节点，避免显示旧数据
 				purchased_option.visible = false
 
+	# 如果购买前鼠标正停在某个选项上，武器列表重建后需要恢复高亮
+	if _currently_hovered_upgrade:
+		_apply_weapon_signups_for_upgrade(_currently_hovered_upgrade)
+
 ## 刷新按钮
 func _on_refresh_button_pressed() -> void:
 	if GameMain.gold < refresh_cost:
@@ -531,6 +593,8 @@ func _on_refresh_button_pressed() -> void:
 	GameMain.remove_gold(refresh_cost)
 	refresh_cost *= 2  # 下次刷新费用x2
 	_update_refresh_cost_display()
+	_clear_weapon_signups()
+	_currently_hovered_upgrade = null
 	await generate_upgrades()
 
 ## 关闭按钮
@@ -585,6 +649,8 @@ func _update_weapon_list() -> void:
 	# 清空现有武器显示
 	for child in weapon_container.get_children():
 		child.queue_free()
+	_weapon_compacts.clear()
+	_shop_weapons.clear()
 	
 	# 使用缓存的 WeaponsManager
 	if not _cached_weapons_manager:
@@ -598,7 +664,13 @@ func _update_weapon_list() -> void:
 		return
 	
 	# 获取所有武器（按获得顺序）
-	var weapons = _cached_weapons_manager.get_all_weapons()
+	# 注意：get_all_weapons() 返回的是未类型化 Array，需要转换为 Array[BaseWeapon]
+	var weapons_raw: Array = _cached_weapons_manager.get_all_weapons()
+	var weapons: Array[BaseWeapon] = []
+	for w in weapons_raw:
+		if w is BaseWeapon:
+			weapons.append(w)
+	_shop_weapons = weapons
 	# print("[UpgradeShop] 找到武器管理器，武器数量: ", weapons.size())
 	
 	# 显示6个武器槽位
@@ -608,6 +680,8 @@ func _update_weapon_list() -> void:
 			
 		var compact = weapon_compact_scene.instantiate()
 		weapon_container.add_child(compact)
+		if compact is WeaponCompact:
+			_weapon_compacts.append(compact)
 		
 		if i < weapons.size() and weapons[i] is BaseWeapon:
 			# 有武器 - 显示武器信息
@@ -620,6 +694,11 @@ func _update_weapon_list() -> void:
 					compact.setup_weapon_from_data(weapon_data, weapon_level)
 				elif compact.has_method("setup_weapon"):
 					compact.setup_weapon(weapon_data.weapon_id, weapon_level)
+				
+				# 绑定 weapon_id（WeaponData 本身不存 id，这里通过 name 反查）
+				var wid = _get_weapon_id_from_data(weapon_data)
+				if compact.has_method("set_weapon_id"):
+					compact.set_weapon_id(wid)
 		else:
 			# 空槽位 - 显示"空缺"，不显示图片
 			if compact.has_method("set_weapon_name"):
@@ -628,8 +707,200 @@ func _update_weapon_list() -> void:
 				compact.set_weapon_texture(null)  # 不显示图片
 			if compact.has_method("set_quality_level"):
 				compact.set_quality_level(1)  # 灰色背景
+			if compact.has_method("set_weapon_id"):
+				compact.set_weapon_id("")
 	
 	print("[UpgradeShop] 武器列表已更新，当前武器数量: ", weapons.size())
+
+	# 武器列表重建后，如果仍在 hover 某个升级，恢复高亮
+	if _currently_hovered_upgrade:
+		_apply_weapon_signups_for_upgrade(_currently_hovered_upgrade)
+
+## ===== Hover 逻辑：高亮受益武器 =====
+
+func _on_upgrade_option_hover_entered(upgrade: UpgradeData, _position_index: int) -> void:
+	_currently_hovered_upgrade = upgrade
+	_apply_weapon_signups_for_upgrade(upgrade)
+
+func _on_upgrade_option_hover_exited(_position_index: int) -> void:
+	_currently_hovered_upgrade = null
+	_clear_weapon_signups()
+
+func _clear_weapon_signups() -> void:
+	for c in _weapon_compacts:
+		if c and is_instance_valid(c) and c.has_method("set_sign_up_active"):
+			c.set_sign_up_active(false)
+
+func _apply_weapon_signups_for_upgrade(upgrade: UpgradeData) -> void:
+	_clear_weapon_signups()
+	if not upgrade:
+		return
+	
+	var benefited_indices = _compute_benefited_weapon_indices(upgrade)
+	for idx in benefited_indices:
+		if idx >= 0 and idx < _weapon_compacts.size():
+			var c = _weapon_compacts[idx]
+			if c and is_instance_valid(c) and c.has_method("set_sign_up_active"):
+				c.set_sign_up_active(true)
+
+func _compute_benefited_weapon_indices(upgrade: UpgradeData) -> Array[int]:
+	var result: Array[int] = []
+	if not upgrade:
+		return result
+	
+	# 4) 武器升级类：指向对应武器
+	if upgrade.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP and upgrade.weapon_id != "":
+		# 规则：只指向“会被升级的那一把”
+		# - 若持有多把同种类且品质不一致：根据 upgrade.quality（目标等级）匹配当前等级 = quality-1
+		# - 若多把同品质：选择排序靠前的那一把
+		var desired_current_level = clamp(upgrade.quality - 1, 1, 4)
+		for i in range(min(_shop_weapons.size(), 6)):
+			var w = _shop_weapons[i]
+			if not (w is BaseWeapon) or not w.weapon_data:
+				continue
+			if _get_weapon_id_from_data(w.weapon_data) != upgrade.weapon_id:
+				continue
+			if w.weapon_level == desired_current_level:
+				result.append(i)
+				return result
+		
+		# 兜底：找不到精确匹配时，指向同种类里“低于目标等级的最高等级”且靠前优先
+		var best_idx := -1
+		var best_level := -1
+		for i in range(min(_shop_weapons.size(), 6)):
+			var w = _shop_weapons[i]
+			if not (w is BaseWeapon) or not w.weapon_data:
+				continue
+			if _get_weapon_id_from_data(w.weapon_data) != upgrade.weapon_id:
+				continue
+			if w.weapon_level < upgrade.quality and w.weapon_level > best_level and w.weapon_level < 5:
+				best_level = w.weapon_level
+				best_idx = i
+		if best_idx >= 0:
+			result.append(best_idx)
+		return result
+	
+	# 其他类型：根据 stats_modifier 判断（全局/结算/异常）
+	var stats: CombatStats = upgrade.stats_modifier
+	if not stats:
+		return result
+	
+	# 1) 全局攻击 / 全局攻速：所有武器都加（只要这类字段发生变化就全亮）
+	var affects_all := false
+	if not is_equal_approx(stats.global_damage_add, 0.0) or not is_equal_approx(stats.global_damage_mult, 1.0):
+		affects_all = true
+	if not is_equal_approx(stats.global_attack_speed_add, 0.0) or not is_equal_approx(stats.global_attack_speed_mult, 1.0):
+		affects_all = true
+	
+	if affects_all:
+		for i in range(min(_shop_weapons.size(), 6)):
+			if _shop_weapons[i] is BaseWeapon:
+				result.append(i)
+		return result
+	
+	# 2) 魔法/近战/远程：按结算类型匹配
+	var affected_calc_types: Array[int] = []
+	if _stats_affects_melee(stats):
+		affected_calc_types.append(WeaponData.CalculationType.MELEE)
+	if _stats_affects_ranged(stats):
+		affected_calc_types.append(WeaponData.CalculationType.RANGED)
+	if _stats_affects_magic(stats):
+		affected_calc_types.append(WeaponData.CalculationType.MAGIC)
+	
+	if not affected_calc_types.is_empty():
+		for i in range(min(_shop_weapons.size(), 6)):
+			var w = _shop_weapons[i]
+			if not (w is BaseWeapon) or not w.weapon_data:
+				continue
+			if affected_calc_types.has(w.weapon_data.calculation_type):
+				result.append(i)
+	
+	# 3) 异常类：对有特殊效果的武器有效（按 special_effects 匹配）
+	if _stats_affects_status(stats):
+		var required_effect_types: Array[String] = []
+		if not is_equal_approx(stats.burn_chance, 0.0):
+			required_effect_types.append("burn")
+		if not is_equal_approx(stats.freeze_chance, 0.0):
+			required_effect_types.append("freeze")
+		if not is_equal_approx(stats.poison_chance, 0.0):
+			required_effect_types.append("poison")
+		
+		for i in range(min(_shop_weapons.size(), 6)):
+			var w = _shop_weapons[i]
+			if not (w is BaseWeapon) or not w.weapon_data:
+				continue
+			if _weapon_has_special_effect(w.weapon_data, required_effect_types):
+				if not result.has(i):
+					result.append(i)
+	
+	return result
+
+func _stats_affects_melee(stats: CombatStats) -> bool:
+	return (not is_equal_approx(stats.melee_damage_add, 0.0)
+		or not is_equal_approx(stats.melee_damage_mult, 1.0)
+		or not is_equal_approx(stats.melee_speed_add, 0.0)
+		or not is_equal_approx(stats.melee_speed_mult, 1.0)
+		or not is_equal_approx(stats.melee_range_add, 0.0)
+		or not is_equal_approx(stats.melee_range_mult, 1.0)
+		or not is_equal_approx(stats.melee_knockback_add, 0.0)
+		or not is_equal_approx(stats.melee_knockback_mult, 1.0))
+
+func _stats_affects_ranged(stats: CombatStats) -> bool:
+	return (not is_equal_approx(stats.ranged_damage_add, 0.0)
+		or not is_equal_approx(stats.ranged_damage_mult, 1.0)
+		or not is_equal_approx(stats.ranged_speed_add, 0.0)
+		or not is_equal_approx(stats.ranged_speed_mult, 1.0)
+		or not is_equal_approx(stats.ranged_range_add, 0.0)
+		or not is_equal_approx(stats.ranged_range_mult, 1.0)
+		or stats.ranged_penetration != 0
+		or stats.ranged_projectile_count != 0)
+
+func _stats_affects_magic(stats: CombatStats) -> bool:
+	return (not is_equal_approx(stats.magic_damage_add, 0.0)
+		or not is_equal_approx(stats.magic_damage_mult, 1.0)
+		or not is_equal_approx(stats.magic_speed_add, 0.0)
+		or not is_equal_approx(stats.magic_speed_mult, 1.0)
+		or not is_equal_approx(stats.magic_range_add, 0.0)
+		or not is_equal_approx(stats.magic_range_mult, 1.0)
+		or not is_equal_approx(stats.magic_explosion_radius_add, 0.0)
+		or not is_equal_approx(stats.magic_explosion_radius_mult, 1.0))
+
+func _stats_affects_status(stats: CombatStats) -> bool:
+	# 只要涉及异常强度/概率/持续时间，或直接加异常触发/吸血，就认为是异常类
+	if not is_equal_approx(stats.lifesteal_percent, 0.0):
+		return true
+	if not is_equal_approx(stats.burn_chance, 0.0) or not is_equal_approx(stats.freeze_chance, 0.0) or not is_equal_approx(stats.poison_chance, 0.0):
+		return true
+	if not is_equal_approx(stats.status_duration_mult, 1.0) or not is_equal_approx(stats.status_effect_mult, 1.0) or not is_equal_approx(stats.status_chance_mult, 1.0):
+		return true
+	return false
+
+func _weapon_has_special_effect(weapon_data: WeaponData, required_types: Array[String]) -> bool:
+	if not weapon_data:
+		return false
+	if weapon_data.special_effects.is_empty():
+		return false
+	
+	# 没指定类型：只要有特殊效果就算
+	if required_types.is_empty():
+		return true
+	
+	for e in weapon_data.special_effects:
+		if e is Dictionary:
+			var t = e.get("type", "")
+			if required_types.has(t):
+				return true
+	return false
+
+## WeaponData 本身不存 weapon_id，这里通过 weapon_name 反查 WeaponDatabase 的 key
+func _get_weapon_id_from_data(weapon_data: WeaponData) -> String:
+	if not weapon_data:
+		return ""
+	for wid in WeaponDatabase.get_all_weapon_ids():
+		var d = WeaponDatabase.get_weapon(wid)
+		if d and d.weapon_name == weapon_data.weapon_name:
+			return wid
+	return ""
 
 ## ========== 新的商店刷新系统 ==========
 
@@ -750,12 +1021,12 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 		attempts += 1
 		
 		# Generate a unique salt for this attempt to prevent same-seed RNG in fast loops
-		var salt = randi()
+		var attempt_salt = randi()
 		
 		var upgrade: UpgradeData = null
 		
 		if is_weapon:
-			upgrade = _generate_weapon_upgrade(existing_upgrades, salt)
+			upgrade = _generate_weapon_upgrade(existing_upgrades, attempt_salt)
 		else:
 			# 获取当前波数和幸运值
 			var luck_value = _get_player_luck()
@@ -763,24 +1034,24 @@ func _generate_single_upgrade(existing_upgrades: Array[UpgradeData]) -> UpgradeD
 			# 根据幸运值决定品质
 			var quality = _get_quality_by_luck(luck_value, current_wave)
 			
-			upgrade = _generate_attribute_upgrade(quality, salt)
+			upgrade = _generate_attribute_upgrade(quality, attempt_salt)
 			# 如果指定品质生成失败（可能该品质没有对应升级），尝试保底使用白色品质
 			if upgrade == null:
-				upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, salt)
+				upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, attempt_salt)
 		
 		if upgrade == null:
 			# 如果生成失败，尝试切换类型
 			if is_weapon:
 				# 武器生成失败，尝试生成属性
-				var luck_value = _get_player_luck()
-				var quality = _get_quality_by_luck(luck_value, current_wave)
-				upgrade = _generate_attribute_upgrade(quality, salt)
+				var fallback_luck_value = _get_player_luck()
+				var fallback_quality = _get_quality_by_luck(fallback_luck_value, current_wave)
+				upgrade = _generate_attribute_upgrade(fallback_quality, attempt_salt)
 				# 保底策略
 				if upgrade == null:
-					upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, salt)
+					upgrade = _generate_attribute_upgrade(UpgradeData.Quality.WHITE, attempt_salt)
 			else:
 				# 属性生成失败，尝试生成武器
-				upgrade = _generate_weapon_upgrade(existing_upgrades, salt)
+				upgrade = _generate_weapon_upgrade(existing_upgrades, attempt_salt)
 			
 			if upgrade == null:
 				continue
@@ -923,12 +1194,18 @@ func _generate_weapon_level_up_upgrade(weapons_manager, salt: int = 0) -> Upgrad
 	
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
 	
-	# 获取当前最低等级的武器
-	var lowest_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
-	if not lowest_weapon:
+	# 获取“默认应该升级哪一把”的武器（优先升最高等级那把；若同等级则选靠前）
+	var chosen_weapon = null
+	if weapons_manager.has_method("get_best_weapon_for_level_up"):
+		chosen_weapon = weapons_manager.get_best_weapon_for_level_up(weapon_id)
+	elif weapons_manager.has_method("get_lowest_level_weapon_of_type"):
+		# 兼容旧逻辑
+		chosen_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
+	
+	if not chosen_weapon:
 		return null
 	
-	var current_level = lowest_weapon.weapon_level
+	var current_level = chosen_weapon.weapon_level
 	var target_level = current_level + 1  # 目标等级
 	
 	var upgrade = UpgradeData.new(
@@ -957,13 +1234,13 @@ func _generate_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
 	var total_weight: int = 0
 	
 	for upgrade_id in all_upgrade_ids:
-		var upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
-		if not upgrade_data or upgrade_data.quality != quality:
+		var base_upgrade_data = UpgradeDatabase.get_upgrade_data(upgrade_id)
+		if not base_upgrade_data or base_upgrade_data.quality != quality:
 			continue
 		
 		# 检查权重：权重必须>0才会出现在商店中（0、负数都会被跳过）
 		# 注意：int类型不能为null，未设置时默认值为0，也会被跳过
-		var weight = upgrade_data.weight
+		var weight = base_upgrade_data.weight
 		if weight <= 0:
 			continue
 		
@@ -996,27 +1273,27 @@ func _generate_attribute_upgrade(quality: int, salt: int = 0) -> UpgradeData:
 	if selected_upgrade_id == "":
 		selected_upgrade_id = quality_upgrades[-1]["id"]
 	
-	var upgrade_data = UpgradeDatabase.get_upgrade_data(selected_upgrade_id)
+	var selected_upgrade_data = UpgradeDatabase.get_upgrade_data(selected_upgrade_id)
 	
 	# 创建副本
 	var upgrade_copy = UpgradeData.new(
-		upgrade_data.upgrade_type,
-		upgrade_data.name,
-		upgrade_data.cost,
-		upgrade_data.icon_path,
-		upgrade_data.weapon_id
+		selected_upgrade_data.upgrade_type,
+		selected_upgrade_data.name,
+		selected_upgrade_data.cost,
+		selected_upgrade_data.icon_path,
+		selected_upgrade_data.weapon_id
 	)
-	upgrade_copy.description = upgrade_data.description
-	upgrade_copy.quality = upgrade_data.quality
-	upgrade_copy.actual_cost = upgrade_data.actual_cost
-	upgrade_copy.weight = upgrade_data.weight
-	upgrade_copy.attribute_changes = upgrade_data.attribute_changes.duplicate(true)
+	upgrade_copy.description = selected_upgrade_data.description
+	upgrade_copy.quality = selected_upgrade_data.quality
+	upgrade_copy.actual_cost = selected_upgrade_data.actual_cost
+	upgrade_copy.weight = selected_upgrade_data.weight
+	upgrade_copy.attribute_changes = selected_upgrade_data.attribute_changes.duplicate(true)
 	
 	# ⭐ 关键：复制stats_modifier（新属性系统）
-	if upgrade_data.stats_modifier:
-		upgrade_copy.stats_modifier = upgrade_data.stats_modifier.clone()
+	if selected_upgrade_data.stats_modifier:
+		upgrade_copy.stats_modifier = selected_upgrade_data.stats_modifier.clone()
 	
 	# 复制自定义值
-	upgrade_copy.custom_value = upgrade_data.custom_value
+	upgrade_copy.custom_value = selected_upgrade_data.custom_value
 	
 	return upgrade_copy

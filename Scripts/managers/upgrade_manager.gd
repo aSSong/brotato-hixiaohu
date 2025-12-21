@@ -19,7 +19,7 @@ static func apply_upgrade(upgrade: UpgradeData, tree: SceneTree) -> void:
 		UpgradeData.UpgradeType.NEW_WEAPON:
 			await _apply_new_weapon_upgrade(upgrade.weapon_id, tree)
 		UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
-			_apply_weapon_level_upgrade(upgrade.weapon_id, tree)
+			_apply_weapon_level_upgrade(upgrade, tree)
 		_:
 			# 使用新属性系统应用升级
 			_apply_attribute_upgrade(upgrade, tree)
@@ -53,13 +53,26 @@ static func _apply_new_weapon_upgrade(weapon_id: String, tree: SceneTree) -> voi
 	if weapons_manager and weapons_manager.has_method("add_weapon"):
 		await weapons_manager.add_weapon(weapon_id, 1)  # 新武器固定1级，必须等待完成
 
-static func _apply_weapon_level_upgrade(weapon_id: String, tree: SceneTree) -> void:
+static func _apply_weapon_level_upgrade(upgrade: UpgradeData, tree: SceneTree) -> void:
 	var weapons_manager = _get_weapons_manager(tree)
 	
-	if weapons_manager and weapons_manager.has_method("get_lowest_level_weapon_of_type"):
-		var weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
-		if weapon and weapon.has_method("upgrade_level"):
-			weapon.upgrade_level()
+	if not weapons_manager:
+		return
+	
+	var weapon = null
+	# 优先使用新规则：根据 upgrade.quality（目标等级）确定具体升级哪一把
+	if weapons_manager.has_method("get_weapon_to_upgrade"):
+		weapon = weapons_manager.get_weapon_to_upgrade(upgrade.weapon_id, upgrade.quality)
+	elif weapons_manager.has_method("get_lowest_level_weapon_of_type"):
+		# 兼容旧逻辑
+		weapon = weapons_manager.get_lowest_level_weapon_of_type(upgrade.weapon_id)
+	
+	if weapon and weapon.has_method("upgrade_level"):
+		var ok = weapon.upgrade_level()
+		if not ok:
+			push_warning("[UpgradeManager] 武器升级失败（可能已满级）: %s" % upgrade.weapon_id)
+	else:
+		push_warning("[UpgradeManager] 未找到可升级的目标武器: %s (target_level=%d)" % [upgrade.weapon_id, upgrade.quality])
 
 ## 应用属性升级（新系统）
 ## 

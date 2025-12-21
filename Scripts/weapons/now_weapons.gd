@@ -165,7 +165,7 @@ func get_lowest_level_weapon_of_type(weapon_id: String):
 	
 	var candidates = []
 	for weapon in get_all_weapons():
-		if weapon.weapon_data.weapon_name == target_data.weapon_name:
+		if _get_weapon_id(weapon.weapon_data) == weapon_id:
 			candidates.append(weapon)
 	
 	if candidates.is_empty():
@@ -188,6 +188,42 @@ func get_lowest_level_weapon_of_type(weapon_id: String):
 		return lowest_level_weapons[rng.randi_range(0, lowest_level_weapons.size() - 1)]
 	
 	return null
+
+## 获取“本次升级选项”真正会升级的那一把武器
+## 规则：
+## - target_level 表示升级后达到的等级（也就是 UpgradeData.quality）
+## - 优先选择当前等级 == target_level - 1 的武器
+## - 若有多把同等级：选择排序靠前（get_all_weapons 的顺序）
+func get_weapon_to_upgrade(weapon_id: String, target_level: int):
+	var desired_current_level = clamp(target_level - 1, 1, 4)
+	
+	# 1) 精确匹配：当前等级==desired_current_level
+	for weapon in get_all_weapons():
+		if weapon and weapon.weapon_data and _get_weapon_id(weapon.weapon_data) == weapon_id:
+			if weapon.weapon_level == desired_current_level:
+				return weapon
+	
+	# 2) 兜底：若没有精确匹配，选择“低于target_level的最高等级”，仍保持靠前优先
+	var best = null
+	var best_level = -1
+	for weapon in get_all_weapons():
+		if weapon and weapon.weapon_data and _get_weapon_id(weapon.weapon_data) == weapon_id:
+			if weapon.weapon_level < target_level and weapon.weapon_level > best_level and weapon.weapon_level < 5:
+				best = weapon
+				best_level = weapon.weapon_level
+	return best
+
+## 用于生成升级选项：选择“应该展示升级哪一把”的默认规则（直觉：优先升最高等级那把）
+## - 若有多把同品质/同等级：选择排序靠前的一把
+func get_best_weapon_for_level_up(weapon_id: String):
+	var best = null
+	var best_level = -1
+	for weapon in get_all_weapons():
+		if weapon and weapon.weapon_data and _get_weapon_id(weapon.weapon_data) == weapon_id:
+			if weapon.weapon_level < 5 and weapon.weapon_level > best_level:
+				best = weapon
+				best_level = weapon.weapon_level
+	return best
 
 ## 检查是否有武器达到最高等级
 func has_all_weapons_max_level() -> bool:

@@ -7,6 +7,11 @@ class_name WeaponCompact
 @onready var bg_lilweapon: TextureRect = $"bg-lilweapon"
 @onready var weapon_image: TextureRect = $"bg-lilweapon/weapon-image"
 @onready var weapon_name_label: Label = $"bg-lilweapon/weapon-name"
+@onready var sign_up: TextureRect = $"bg-lilweapon/sign-up"
+@onready var animation_player: AnimationPlayer = $"bg-lilweapon/AnimationPlayer"
+
+## 当前绑定的武器ID（来自 WeaponDatabase 的 key；空字符串表示空槽位）
+var weapon_id: String = ""
 
 ## 武器品质背景贴图（静态缓存）
 static var quality_bg_textures: Dictionary = {}
@@ -24,6 +29,35 @@ static func _init_quality_textures() -> void:
 
 func _ready() -> void:
 	_init_quality_textures()
+	_set_sign_up_active(false)
+
+## 设置当前绑定的武器ID（用于商店 hover 高亮）
+func set_weapon_id(id: String) -> void:
+	weapon_id = id
+
+func get_weapon_id() -> String:
+	return weapon_id
+
+## 控制“受益箭头”显示与动画
+## - active=true: 显示 sign-up 并播放 up 动画
+## - active=false: 隐藏 sign-up 并复位
+func set_sign_up_active(active: bool) -> void:
+	_set_sign_up_active(active)
+
+func _set_sign_up_active(active: bool) -> void:
+	if sign_up:
+		sign_up.visible = active
+	
+	if animation_player:
+		if active:
+			if animation_player.has_animation("up"):
+				animation_player.play("up")
+		else:
+			# 尽量复位到默认状态（该库里一般有 RESET）
+			if animation_player.has_animation("RESET"):
+				animation_player.play("RESET")
+			else:
+				animation_player.stop()
 
 ## 设置武器数据
 ## @param weapon_id: 武器ID

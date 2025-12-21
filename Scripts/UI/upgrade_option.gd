@@ -18,6 +18,10 @@ var position_index: int = -1  # 在商店中的位置索引（0-2）
 
 signal purchased(upgrade: UpgradeData)
 signal lock_state_changed(upgrade: UpgradeData, is_locked: bool, position_index: int)
+signal hover_entered(upgrade: UpgradeData, position_index: int)
+signal hover_exited(position_index: int)
+
+var _is_mouse_over: bool = false
 
 ## 品质背景纹理（静态缓存）
 static var quality_panel_textures: Dictionary = {}
@@ -46,6 +50,15 @@ static func _init_lock_textures() -> void:
 func _ready() -> void:
 	_init_quality_textures()
 	_init_lock_textures()
+	
+	# 允许子控件（购买/锁定按钮）正常接收鼠标事件
+	mouse_filter = Control.MOUSE_FILTER_PASS
+	
+	# Hover 事件（用于商店武器高亮提示）
+	if not mouse_entered.is_connected(_on_mouse_entered):
+		mouse_entered.connect(_on_mouse_entered)
+	if not mouse_exited.is_connected(_on_mouse_exited):
+		mouse_exited.connect(_on_mouse_exited)
 	
 	if buy_button:
 		buy_button.pressed.connect(_on_buy_button_pressed)
@@ -81,6 +94,19 @@ func set_upgrade_data(data: UpgradeData) -> void:
 		await get_tree().process_frame
 	
 	_initialize_ui()
+	
+	# 如果数据更新时鼠标仍停留在该卡片上，需要主动刷新 hover 的指向
+	if _is_mouse_over and upgrade_data:
+		hover_entered.emit(upgrade_data, position_index)
+
+func _on_mouse_entered() -> void:
+	_is_mouse_over = true
+	if upgrade_data:
+		hover_entered.emit(upgrade_data, position_index)
+
+func _on_mouse_exited() -> void:
+	_is_mouse_over = false
+	hover_exited.emit(position_index)
 
 ## 初始化 UI（在 @onready 变量初始化后调用）
 func _initialize_ui() -> void:
