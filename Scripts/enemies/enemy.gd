@@ -70,6 +70,9 @@ var buff_system: BuffSystem = null
 ## 是否正在flash（受伤时的白色闪烁）
 var is_flashing: bool = false
 
+## 性能优化：shader 状态是否需要更新（事件驱动，避免每帧检查）
+var _shader_needs_update: bool = false
+
 ## 信号：敌人死亡
 signal enemy_killed(enemy_ref: Enemy)
 
@@ -192,10 +195,12 @@ func _on_buff_tick(_buff_id: String, tick_data: Dictionary) -> void:
 
 ## Buff应用时的处理（应用shader效果）
 func _on_buff_applied(buff_id: String) -> void:
+	_shader_needs_update = true
 	_apply_status_shader(buff_id)
 
 ## Buff过期时的处理（移除shader效果）
 func _on_buff_expired(buff_id: String) -> void:
+	_shader_needs_update = true
 	_remove_status_shader(buff_id)
 
 ## 应用状态shader效果
@@ -263,34 +268,20 @@ func get_current_status_effect() -> String:
 	
 	return ""
 
-## 确保异常效果的shader持续应用（在_process中调用）
-func _ensure_status_shader_applied() -> void:
-	# 如果正在flash（受伤时的白色闪烁），不处理，等待flash完成
-	if is_flashing:
-		return
-	
+## 性能优化：应用当前状态的 shader 效果（仅在状态变化时调用）
+func _apply_current_status_shader() -> void:
 	if not $AnimatedSprite2D or not $AnimatedSprite2D.material:
 		return
 	
 	var current_status = get_current_status_effect()
 	if current_status != "":
-		# 检查当前shader是否匹配异常效果
-		var color_config = SpecialEffects.get_status_color_config(current_status)
-		var sprite = $AnimatedSprite2D
-		var current_color = sprite.material.get_shader_parameter("flash_color")
-		var current_opacity = sprite.material.get_shader_parameter("flash_opacity")
-		
-		# 如果shader不匹配，重新应用
-		if current_color != color_config["shader_color"] or abs(current_opacity - color_config["shader_opacity"]) > 0.01:
-			_apply_status_shader(current_status)
+		# 应用当前最高优先级的状态效果
+		_apply_status_shader(current_status)
 	else:
-		# 没有异常效果，确保shader是正常状态
+		# 没有异常效果，恢复原状
 		var sprite = $AnimatedSprite2D
-		var current_opacity = sprite.material.get_shader_parameter("flash_opacity")
-		# 只有在有shader效果时才恢复（避免频繁设置）
-		if current_opacity > 0.01:
-			sprite.material.set_shader_parameter("flash_color", Color(1.0, 1.0, 1.0, 1.0))
-			sprite.material.set_shader_parameter("flash_opacity", 0.0)
+		sprite.material.set_shader_parameter("flash_color", Color(1.0, 1.0, 1.0, 1.0))
+		sprite.material.set_shader_parameter("flash_opacity", 0.0)
 
 ## 初始化敌人（从敌人数据）
 func initialize(data: EnemyData) -> void:
@@ -375,8 +366,10 @@ func _process(delta: float) -> void:
 	if knockback_velocity.length() < 10.0:
 		knockback_velocity = Vector2.ZERO
 	
-	# 持续检查并应用异常效果的shader（确保在整个duration期间都保持）
-	_ensure_status_shader_applied()
+	# 性能优化：仅在 Buff 状态变化时更新 shader（事件驱动）
+	if _shader_needs_update and not is_flashing:
+		_apply_current_status_shader()
+		_shader_needs_update = false
 	
 	# 更新技能行为
 	for behavior in behaviors:
@@ -609,16 +602,6 @@ func enemy_flash():
 	
 	var sprite = $AnimatedSprite2D
 	
-	# 保存当前异常效果的shader颜色（如果有）
-	var current_status = get_current_status_effect()
-	var status_color = Color(1.0, 1.0, 1.0, 1.0)
-	var status_opacity = 0.0
-	
-	if current_status != "":
-		var color_config = SpecialEffects.get_status_color_config(current_status)
-		status_color = color_config["shader_color"]
-		status_opacity = color_config["shader_opacity"]
-	
 	# 标记正在flash
 	is_flashing = true
 	
@@ -626,19 +609,14 @@ func enemy_flash():
 	sprite.material.set_shader_parameter("flash_color", Color(1.0, 1.0, 1.0, 1.0))
 	sprite.material.set_shader_parameter("flash_opacity", 0.5)
 	
-	# 等待0.1秒
+	# 等待0.05秒
 	await get_tree().create_timer(0.05).timeout
-	
-	# 恢复异常效果的shader（如果有），否则恢复原状
-	if current_status != "":
-		sprite.material.set_shader_parameter("flash_color", status_color)
-		sprite.material.set_shader_parameter("flash_opacity", status_opacity)
-	else:
-		sprite.material.set_shader_parameter("flash_color", Color(1.0, 1.0, 1.0, 1.0))
-		sprite.material.set_shader_parameter("flash_opacity", 0.0)
 	
 	# 取消flash标记
 	is_flashing = false
+	
+	# 标记需要更新shader（下一帧会恢复正确的状态效果）
+	_shader_needs_update = true
 
 ## 设置无敌状态
 func set_invincible(value: bool) -> void:
