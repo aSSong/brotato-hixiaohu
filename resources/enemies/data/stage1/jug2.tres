@@ -20,14 +20,14 @@ skill_config = {
 "bullet_speed": 600.0,
 "bullets_per_round": 1,
 "fx_animation_name": "jug-muzzle",
-"fx_offset": Vector2(0, 0),
-"fx_scale": Vector2(0.5, 0.5),
+"fx_offset": Vector2(170, -30),
+"fx_scale": Vector2(0.8, 0.8),
 "fx_sprite_frames_path": "res://resources/enemies/FX/enemy-FX-stage1.tres",
 "hit_fx_animation_name": "jug-hit",
-"hit_fx_scale": Vector2(0.5, 0.5),
+"hit_fx_scale": Vector2(1, 1),
 "hit_fx_sprite_frames_path": "res://resources/enemies/FX/enemy-FX-stage1.tres",
 "shoot_interval": 3.0,
-"shoot_offset": Vector2(0, -30),
+"shoot_offset": Vector2(185, -30),
 "shoot_range": 800.0,
 "spread_angle": 0.0
 }
