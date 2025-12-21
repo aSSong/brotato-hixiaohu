@@ -1,3 +1,4 @@
+@warning_ignore("SHADOWED_VARIABLE")
 extends Control
 class_name FloatingText
 
@@ -14,7 +15,7 @@ var gravity: float = 800.0
 var start_scale: float = 0.1
 var peak_scale: float = 2.0
 var end_scale: float = 1.0
-var is_critical: bool = false
+var _is_critical: bool = false
 var initial_color: Color = Color.WHITE
 
 ## 当前的 Tween 引用（用于复用时取消）
@@ -52,6 +53,17 @@ static func initialize_pool(preheat_count: int = 50) -> void:
 		_pool.append(instance)
 	
 	print("[FloatingText] 对象池初始化完成，预热 %d 个实例" % preheat_count)
+
+## 清空对象池（场景切换/强制清理时调用）
+static func clear_pool() -> void:
+	# 清理池内实例（池内实例通常不在树上，但仍可能持有资源/引用）
+	for inst in _pool:
+		if is_instance_valid(inst):
+			inst.queue_free()
+	_pool.clear()
+	_active_count = 0
+	# 注意：_scene/_initialized 不重置，避免下次创建时重复 preload；如需彻底释放，可手动改这里
+	print("[FloatingText] 对象池已清空")
 
 ## 从池中获取实例
 static func _get_from_pool() -> FloatingText:
@@ -96,7 +108,7 @@ func _ready() -> void:
 		label.modulate = initial_color
 		label.modulate.a = 1.0
 		
-		if is_critical:
+		if _is_critical:
 			label.add_theme_font_size_override("font_size", 56)
 			peak_scale = 2.0
 			velocity.y -= 100
@@ -126,7 +138,7 @@ func _reset_state() -> void:
 	# 重置属性
 	text = ""
 	velocity = Vector2.ZERO
-	is_critical = false
+	_is_critical = false
 	initial_color = Color.WHITE
 	scale = Vector2(start_scale, start_scale)
 	
@@ -136,7 +148,7 @@ func _reset_state() -> void:
 ## 设置新的显示内容（复用时调用）
 func setup(_world_pos: Vector2, damage_text: String, color: Color, critical: bool) -> void:
 	text = damage_text
-	is_critical = critical
+	_is_critical = critical
 	initial_color = color
 	
 	# 设置初始速度
@@ -149,7 +161,7 @@ func setup(_world_pos: Vector2, damage_text: String, color: Color, critical: boo
 		label.modulate = initial_color
 		label.modulate.a = 1.0
 		
-		if is_critical:
+		if _is_critical:
 			label.add_theme_font_size_override("font_size", 56)
 			peak_scale = 2.0
 			velocity.y -= 100
