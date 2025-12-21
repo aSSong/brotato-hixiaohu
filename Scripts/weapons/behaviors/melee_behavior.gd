@@ -25,13 +25,17 @@ var is_attacking: bool = false
 var attack_timer: float = 0.0
 
 ## 已造成伤害的敌人列表（防止重复伤害）
-var damaged_enemies: Array = []
+var damaged_enemies: Dictionary = {}
+
+## 本次攻击的候选敌人列表（由上层传入，通常已是范围内候选）
+var _attack_candidates: Array = []
 
 func _on_initialize() -> void:
 	rotation_angle = 0.0
 	is_attacking = false
 	attack_timer = 0.0
 	damaged_enemies.clear()
+	_attack_candidates.clear()
 
 func get_behavior_type() -> int:
 	return WeaponData.BehaviorType.MELEE
@@ -104,6 +108,7 @@ func perform_attack(enemies: Array) -> void:
 	is_attacking = true
 	attack_timer = get_attack_interval()
 	damaged_enemies.clear()
+	_attack_candidates = enemies
 	
 	# 立即检查并造成伤害
 	_check_and_damage_enemies()
@@ -117,9 +122,8 @@ func _check_and_damage_enemies() -> void:
 	var hit_range = get_hit_range()
 	var knockback = get_knockback_force()
 	
-	# 获取所有敌人
-	var enemies = weapon.get_tree().get_nodes_in_group("enemy")
-	
+	# 使用上层传入的候选列表（通常已做范围筛选），避免全场 get_nodes_in_group 带来的分配与 O(N) 扫描
+	var enemies = _attack_candidates
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
 			continue
@@ -151,7 +155,7 @@ func _check_and_damage_enemies() -> void:
 				_apply_knockback(enemy, knockback)
 			
 			# 标记已伤害
-			damaged_enemies.append(enemy)
+			damaged_enemies[enemy] = true
 
 ## 应用击退效果
 func _apply_knockback(enemy: Node2D, force: float) -> void:
