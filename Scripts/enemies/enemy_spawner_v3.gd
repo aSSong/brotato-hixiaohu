@@ -17,6 +17,17 @@ var floor_layer: TileMapLayer = null
 var player: Node = null
 var wave_system: Node = null
 
+## ========== 性能优化：缓存 floor_layer.get_used_cells() ==========
+## 地图通常不变，反复 get_used_cells() 会产生大量分配；这里缓存一次并复用
+var _cached_used_cells: Array[Vector2i] = []
+var _used_cells_cache_valid: bool = false
+
+## 调试输出开关（默认关闭，避免后期刷屏导致卡顿）
+const DEBUG_LOG: bool = false
+func _dprint(msg) -> void:
+	if DEBUG_LOG and OS.is_debug_build():
+		print(msg)
+
 ## ========== 场景缓存 ==========
 ## 缓存已加载的敌人场景，避免重复加载
 var scene_cache: Dictionary = {}
@@ -39,6 +50,8 @@ func _ready() -> void:
 	floor_layer = get_tree().get_first_node_in_group("floor_layer")
 	if not floor_layer:
 		push_error("[EnemySpawner V3] 找不到floor_layer")
+	else:
+		_refresh_used_cells_cache()
 	
 	# 查找玩家
 	player = get_tree().get_first_node_in_group("player")
@@ -48,7 +61,18 @@ func _ready() -> void:
 	# 从当前模式获取预警延迟配置
 	_load_spawn_indicator_delay()
 	
-	print("[EnemySpawner V3] 初始化完成，预警延迟: ", spawn_indicator_delay, " 秒")
+	_dprint("[EnemySpawner V3] 初始化完成，预警延迟: %s 秒" % str(spawn_indicator_delay))
+
+## 刷新地面格子缓存（地图变化时可手动调用）
+func _refresh_used_cells_cache() -> void:
+	if not floor_layer:
+		_cached_used_cells = []
+		_used_cells_cache_valid = false
+		return
+	var cells: Array[Vector2i] = floor_layer.get_used_cells()
+	_cached_used_cells = cells
+	_used_cells_cache_valid = not _cached_used_cells.is_empty()
+	_dprint("[EnemySpawner V3] used_cells 已缓存: %d" % _cached_used_cells.size())
 
 ## 从当前模式加载预警延迟配置
 func _load_spawn_indicator_delay() -> void:
@@ -57,12 +81,12 @@ func _load_spawn_indicator_delay() -> void:
 		var mode = ModeRegistry.get_mode(mode_id)
 		if mode and "spawn_indicator_delay" in mode:
 			spawn_indicator_delay = mode.spawn_indicator_delay
-			print("[EnemySpawner V3] 从模式获取预警延迟: ", spawn_indicator_delay, " 秒 (模式: ", mode_id, ")")
+			_dprint("[EnemySpawner V3] 从模式获取预警延迟: %s 秒 (模式: %s)" % [str(spawn_indicator_delay), str(mode_id)])
 
 ## 设置波次系统
 func set_wave_system(system: Node) -> void:
 	wave_system = system
-	print("[EnemySpawner V3] 连接到波次系统")
+	_dprint("[EnemySpawner V3] 连接到波次系统")
 
 ## 生成一波敌人
 func spawn_wave(wave_config: Dictionary) -> void:
@@ -79,8 +103,8 @@ func spawn_wave(wave_config: Dictionary) -> void:
 	var hp_growth = wave_config.get("hp_growth", 0.0)
 	var damage_growth = wave_config.get("damage_growth", 0.0)
 	
-	print("[EnemySpawner V3] 开始生成第 ", wave_number, " 波")
-	print("[EnemySpawner V3] 刷新间隔: ", spawn_interval, " | HP成长: ", hp_growth * 100, "% | 伤害成长: ", damage_growth * 100, "%")
+	_dprint("[EnemySpawner V3] 开始生成第 %d 波" % int(wave_number))
+	_dprint("[EnemySpawner V3] 刷新间隔:%s | HP成长:%s%% | 伤害成长:%s%%" % [str(spawn_interval), str(hp_growth * 100.0), str(damage_growth * 100.0)])
 	
 	# 构建生成列表
 	var spawn_list = _build_spawn_list(wave_config)
@@ -119,14 +143,14 @@ func _build_spawn_list(config: Dictionary) -> Array:
 				var pos = int(spawn.get("position", list.size()))
 				pos = clamp(pos, 0, list.size())
 				list.insert(pos, enemy_id)
-			print("[EnemySpawner V3] 已插入 special_spawns: ", spawns.size())
+			_dprint("[EnemySpawner V3] 已插入 special_spawns: %d" % spawns.size())
 	
 	# 添加最后的敌人（BOSS放在最后，不参与打乱）
 	if config.has("last_enemy"):
 		for i in range(config.last_enemy.count):
 			list.append(config.last_enemy.id)
 	
-	print("[EnemySpawner V3] 生成列表：", list.size(), " 个敌人（含special_spawns/last_enemy）")
+	_dprint("[EnemySpawner V3] 生成列表：%d 个敌人（含special_spawns/last_enemy）" % list.size())
 	return list
 
 ## 异步生成敌人列表
@@ -155,7 +179,7 @@ func _spawn_enemies_async(spawn_list: Array, wave_number: int, spawn_interval: f
 		index += 1
 	
 	is_spawning = false
-	print("[EnemySpawner V3] 生成完成")
+	_dprint("[EnemySpawner V3] 生成完成")
 
 ## 创建预警图片
 func _create_spawn_indicator(pos: Vector2) -> Sprite2D:
@@ -193,15 +217,17 @@ func _spawn_enemy_with_indicator(enemy_id: String, is_last_in_wave: bool, wave_n
 func _find_spawn_position() -> Vector2:
 	if not floor_layer:
 		return Vector2.INF
-	
-	var used := floor_layer.get_used_cells()
-	if used.is_empty():
+
+	# 使用缓存的 used_cells，避免每次调用产生大数组分配
+	if not _used_cells_cache_valid:
+		_refresh_used_cells_cache()
+	if not _used_cells_cache_valid:
 		return Vector2.INF
 	
 	# 尝试多次找合适的位置
 	for attempt in max_spawn_attempts:
-		var cell := used[randi() % used.size()]
-		var world_pos := floor_layer.map_to_local(cell) * 6
+		var cell: Vector2i = _cached_used_cells[randi() % _cached_used_cells.size()]
+		var world_pos: Vector2 = floor_layer.map_to_local(cell) * 6.0
 		
 		# 检查是否在有效刷怪范围内（500 ~ 1200 像素）
 		if _is_valid_spawn_distance(world_pos):
@@ -232,7 +258,7 @@ func _get_enemy_scene(enemy_data: EnemyData) -> PackedScene:
 	var scene = load(scene_path) as PackedScene
 	if scene:
 		scene_cache[scene_path] = scene
-		print("[EnemySpawner V3] ✓ 缓存敌人场景: %s" % scene_path)
+		_dprint("[EnemySpawner V3] ✓ 缓存敌人场景: %s" % scene_path)
 	else:
 		push_error("[EnemySpawner V3] ✗ 无法加载场景: %s" % scene_path)
 		return fallback_enemy_scene
@@ -304,9 +330,7 @@ func _spawn_single_enemy_at_position(enemy_id: String, spawn_pos: Vector2, is_la
 	# 应用技能伤害成长（传递累积后的成长点数）
 	_apply_skill_damage_growth(enemy, damage_multiplier, damage_bonus)
 	
-	print("[EnemySpawner V3] 生成敌人：", enemy_id, " 波次:", wave_number, 
-		  " HP:", enemy.max_enemyHP, "(基础+", hp_bonus, ")×", hp_multiplier,
-		  " 伤害:", enemy.attack_damage, "(基础+", damage_bonus, ")×", damage_multiplier)
+	_dprint("[EnemySpawner V3] 生成敌人：%s 波次:%d HP:%d 伤害:%d" % [str(enemy_id), int(wave_number), int(enemy.max_enemyHP), int(enemy.attack_damage)])
 	return enemy
 
 ## 检查位置是否在有效刷怪范围内（最小距离 ~ 最大距离）
@@ -352,9 +376,9 @@ func clear_all_enemies() -> void:
 	for child in get_children():
 		if child is Enemy:
 			child.queue_free()
-	print("[EnemySpawner V3] 清理所有敌人")
+	_dprint("[EnemySpawner V3] 清理所有敌人")
 
 ## 清除场景缓存（用于热重载）
 func clear_scene_cache() -> void:
 	scene_cache.clear()
-	print("[EnemySpawner V3] 场景缓存已清除")
+	_dprint("[EnemySpawner V3] 场景缓存已清除")

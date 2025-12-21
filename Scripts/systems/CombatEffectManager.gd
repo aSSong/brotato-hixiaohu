@@ -22,6 +22,12 @@ enum EffectType {
 	ENEMY_HURT,     # 敌人受伤
 }
 
+## 调试输出开关（默认关闭，避免后期频繁特效导致 print 刷屏卡顿）
+const DEBUG_LOG: bool = false
+static func _dprint(msg) -> void:
+	if DEBUG_LOG and OS.is_debug_build():
+		print(msg)
+
 ## 预加载的特效场景字典（粒子和序列帧场景）
 static var effect_scenes: Dictionary = {}
 
@@ -40,7 +46,7 @@ static func initialize() -> void:
 	if not effect_scenes.is_empty():
 		return  # 已经初始化过了
 	
-	print("[CombatEffectManager] 开始预加载战斗特效...")
+	_dprint("[CombatEffectManager] 开始预加载战斗特效...")
 	
 	# 配置特效映射
 	_setup_effect_configs()
@@ -63,7 +69,7 @@ static func initialize() -> void:
 				var scene = load(particle_path)
 				if scene:
 					effect_scenes[particle_path] = scene
-					print("[CombatEffectManager] ✓ 预加载粒子: %s" % particle_path)
+					_dprint("[CombatEffectManager] ✓ 预加载粒子: %s" % particle_path)
 				else:
 					push_error("[CombatEffectManager] ✗ 加载失败: %s" % particle_path)
 		
@@ -90,11 +96,11 @@ static func initialize() -> void:
 				var scene = load(scene_path)
 				if scene:
 					effect_scenes[scene_path] = scene
-					print("[CombatEffectManager] ✓ 预加载序列帧: %s" % scene_path)
+					_dprint("[CombatEffectManager] ✓ 预加载序列帧: %s" % scene_path)
 				else:
 					push_error("[CombatEffectManager] ✗ 加载失败: %s" % scene_path)
 	
-	print("[CombatEffectManager] 预加载完成，共 %d 个特效场景" % effect_scenes.size())
+	_dprint("[CombatEffectManager] 预加载完成，共 %d 个特效场景" % effect_scenes.size())
 
 ## 设置特效配置
 static func _setup_effect_configs() -> void:
@@ -132,11 +138,11 @@ static func _setup_effect_configs() -> void:
 	# 敌人特效（序列帧动画 - 使用默认场景）
 	effect_configs["敌人_死亡"] = {
 		"particles": ["res://FX/gpu_particles_2d_enemy_dead.tscn"],
-		"animations": ["enemies_dead"]  # 简单格式：使用默认 animations.tscn
+		#"animations": ["enemies_dead"]  # 简单格式：使用默认 animations.tscn
 	}
 	effect_configs["敌人_受伤"] = {
 		"particles": [],
-		"animations": ["enemies_hurt"]  # 简单格式：使用默认 animations.tscn
+		#"animations": ["enemies_hurt"]  # 简单格式：使用默认 animations.tscn
 	}
 	effect_configs["敌人_自爆"] = {
 		#"particles": ["res://FX/gpu_particles_2d_enemy_dead.tscn"],
@@ -188,7 +194,7 @@ static func play_enemy_death(position: Vector2, scale: float = 1.0) -> void:
 		push_warning("[CombatEffectManager] 未找到敌人死亡特效配置")
 		return
 	
-	print("[CombatEffectManager] 播放敌人死亡特效，位置: %s" % position)
+	_dprint("[CombatEffectManager] 播放敌人死亡特效，位置: %s" % position)
 	var config = effect_configs[config_key]
 	_play_effect_config(config, position, scale)
 
@@ -199,7 +205,7 @@ static func play_enemy_explosion(position: Vector2, scale: float = 1.0) -> void:
 		push_warning("[CombatEffectManager] 未找到敌人自爆特效配置")
 		return
 	
-	print("[CombatEffectManager] 播放敌人自爆特效，位置: %s" % position)
+	_dprint("[CombatEffectManager] 播放敌人自爆特效，位置: %s" % position)
 	var config = effect_configs[config_key]
 	_play_effect_config(config, position, scale)
 
@@ -214,7 +220,8 @@ static func play_enemy_hurt(position: Vector2, scale: float = 1.0) -> void:
 	_play_effect_config(config, position, scale)
 
 ## 播放击中特效（预留接口）
-static func play_hit_effect(effect_type: EffectType, position: Vector2, scale: float = 1.0) -> void:
+@warning_ignore("unused_parameter")
+static func play_hit_effect(_effect_type: EffectType, _position: Vector2, _scale: float = 1.0) -> void:
 	# 未来实现
 	pass
 
@@ -465,7 +472,7 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 		if particle_path == "":
 			continue
 		
-		print("[CombatEffectManager] 尝试播放粒子特效: %s" % particle_path)
+		_dprint("[CombatEffectManager] 尝试播放粒子特效: %s" % particle_path)
 		# 从预加载的场景字典获取
 		if not effect_scenes.has(particle_path):
 			push_warning("[CombatEffectManager] 特效未预加载: %s" % particle_path)
@@ -476,7 +483,7 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 			push_error("[CombatEffectManager] 特效场景为空: %s" % particle_path)
 			continue
 		
-		print("[CombatEffectManager] 找到粒子场景，准备播放")
+		_dprint("[CombatEffectManager] 找到粒子场景，准备播放")
 		# 使用 animations.gd 的粒子特效方法
 		if GameMain.animation_scene_obj.has_method("run_particle_effect"):
 			GameMain.animation_scene_obj.run_particle_effect({
@@ -529,7 +536,7 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 			
 			# 使用支持自定义场景的播放方法
 			if GameMain.animation_scene_obj.has_method("run_animation_from_scene"):
-				print("[CombatEffectManager] 播放序列帧动画: %s, 场景: %s, 位置: %s" % [ani_name, scene_path, position])
+				_dprint("[CombatEffectManager] 播放序列帧动画: %s, 场景: %s, 位置: %s" % [ani_name, scene_path, position])
 				GameMain.animation_scene_obj.run_animation_from_scene({
 					"animation_scene": anim_scene,
 					"ani_name": ani_name,
@@ -538,7 +545,7 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 				})
 			else:
 				# 降级方案：实例化场景并播放
-				print("[CombatEffectManager] 使用降级方案播放序列帧动画: %s" % ani_name)
+				_dprint("[CombatEffectManager] 使用降级方案播放序列帧动画: %s" % ani_name)
 				var anim_instance = anim_scene.instantiate()
 				if anim_instance:
 					anim_instance.global_position = position
@@ -549,7 +556,7 @@ static func _play_effect_config(config: Dictionary, position: Vector2, scale: fl
 					# 自动查找 AnimatedSprite2D 节点
 					var animated_sprite = _find_animated_sprite_in_node(anim_instance)
 					if animated_sprite:
-						print("[CombatEffectManager] 找到 AnimatedSprite2D 节点，播放动画: %s" % ani_name)
+						#_dprint("[CombatEffectManager] 找到 AnimatedSprite2D 节点，播放动画: %s" % ani_name)
 						animated_sprite.play(ani_name)
 					else:
 						push_warning("[CombatEffectManager] 未找到 AnimatedSprite2D 节点")
