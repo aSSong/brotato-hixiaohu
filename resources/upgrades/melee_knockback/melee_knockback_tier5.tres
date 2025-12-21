@@ -13,8 +13,8 @@ melee_knockback_mult = 1.7
 [resource]
 script = ExtResource("1_iu0so")
 upgrade_type = 11
-name = "近战击退+70%"
-description = "近战武器击退效果提升70%"
+name = "击退+70%"
+description = "武器击退效果提升70%"
 cost = 48
 icon_path = "res://assets/upgrades/up-melee-kb.png"
 quality = 5
