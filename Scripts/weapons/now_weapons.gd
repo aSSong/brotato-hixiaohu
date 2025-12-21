@@ -247,6 +247,37 @@ func get_upgradeable_weapon_types() -> Array:
 				types[weapon_id] = weapon.weapon_data.weapon_name
 	return types.keys()
 
+## 获取可升级目标列表（按 weapon_id + 当前等级）
+## 用于商店生成“武器升级+1”选项时，允许同种武器不同等级都能出现对应升级
+## 返回格式：[{ "weapon_id": String, "current_level": int, "target_level": int }]
+func get_upgradeable_weapon_targets() -> Array:
+	var targets: Array = []
+	var seen := {}  # key: weapon_id + "_" + current_level
+	
+	for weapon in get_all_weapons():
+		if not weapon or not weapon.weapon_data:
+			continue
+		if weapon.weapon_level >= 5:
+			continue
+		
+		var wid = _get_weapon_id(weapon.weapon_data)
+		if wid == "":
+			continue
+		
+		var cur = int(weapon.weapon_level)
+		var key = wid + "_" + str(cur)
+		if seen.has(key):
+			continue
+		seen[key] = true
+		
+		targets.append({
+			"weapon_id": wid,
+			"current_level": cur,
+			"target_level": cur + 1
+		})
+	
+	return targets
+
 ## 辅助函数：从weapon_data获取weapon_id
 func _get_weapon_id(weapon_data: WeaponData) -> String:
 	# 通过weapon_name匹配

@@ -473,8 +473,13 @@ func _is_same_upgrade(upgrade1: UpgradeData, upgrade2: UpgradeData) -> bool:
 		return false
 	
 	# 武器类型：比较weapon_id
-	if upgrade1.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON or upgrade1.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+	if upgrade1.upgrade_type == UpgradeData.UpgradeType.NEW_WEAPON:
 		return upgrade1.weapon_id == upgrade2.weapon_id
+	
+	# 武器升级：weapon_id + 目标等级（quality）共同决定唯一性
+	# 这样同种武器不同等级（如 1->2 和 2->3）可以同时出现在商店里
+	if upgrade1.upgrade_type == UpgradeData.UpgradeType.WEAPON_LEVEL_UP:
+		return upgrade1.weapon_id == upgrade2.weapon_id and upgrade1.quality == upgrade2.quality
 	
 	# 属性类型：需要类型、品质、价格都相同才算重复
 	# 这样允许不同品质的相同属性类型共存（例如：攻击速度+3%白色 和 攻击速度+5%绿色）
@@ -1238,29 +1243,42 @@ func _generate_weapon_level_up_upgrade(weapons_manager, salt: int = 0) -> Upgrad
 	if not weapons_manager.has_method("get_upgradeable_weapon_types"):
 		return null
 	
-	var upgradeable_weapons = weapons_manager.get_upgradeable_weapon_types()
-	if upgradeable_weapons.is_empty():
-		return null
+	# 新规则：按 (weapon_id, 当前等级) 作为可升级目标
+	# 这样当玩家持有同种武器不同品质/等级时，对应的多个升级选项都有概率出现
+	var targets: Array = []
+	if weapons_manager.has_method("get_upgradeable_weapon_targets"):
+		targets = weapons_manager.get_upgradeable_weapon_targets()
 	
-	var rng = RandomNumberGenerator.new()
-	var current_wave = _get_current_wave()
-	rng.seed = hash(Time.get_ticks_msec() + current_wave + upgradeable_weapons.size() + salt)
-	var weapon_id = upgradeable_weapons[rng.randi_range(0, upgradeable_weapons.size() - 1)]
+	# 兼容旧接口：退化为只按 weapon_id
+	var weapon_id: String = ""
+	var current_level: int = 1
+	if not targets.is_empty():
+		var rng = RandomNumberGenerator.new()
+		var current_wave = _get_current_wave()
+		rng.seed = hash(Time.get_ticks_msec() + current_wave + targets.size() + salt)
+		var t = targets[rng.randi_range(0, targets.size() - 1)]
+		weapon_id = String(t.get("weapon_id", ""))
+		current_level = int(t.get("current_level", 1))
+	else:
+		var upgradeable_weapons = weapons_manager.get_upgradeable_weapon_types()
+		if upgradeable_weapons.is_empty():
+			return null
+		var rng = RandomNumberGenerator.new()
+		var current_wave = _get_current_wave()
+		rng.seed = hash(Time.get_ticks_msec() + current_wave + upgradeable_weapons.size() + salt)
+		weapon_id = upgradeable_weapons[rng.randi_range(0, upgradeable_weapons.size() - 1)]
+		# 旧逻辑：默认选择“应该升级哪一把”的武器来决定 current_level
+		var chosen_weapon = null
+		if weapons_manager.has_method("get_best_weapon_for_level_up"):
+			chosen_weapon = weapons_manager.get_best_weapon_for_level_up(weapon_id)
+		elif weapons_manager.has_method("get_lowest_level_weapon_of_type"):
+			chosen_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
+		if not chosen_weapon:
+			return null
+		current_level = int(chosen_weapon.weapon_level)
 	
 	var weapon_data = WeaponDatabase.get_weapon(weapon_id)
 	
-	# 获取“默认应该升级哪一把”的武器（优先升最高等级那把；若同等级则选靠前）
-	var chosen_weapon = null
-	if weapons_manager.has_method("get_best_weapon_for_level_up"):
-		chosen_weapon = weapons_manager.get_best_weapon_for_level_up(weapon_id)
-	elif weapons_manager.has_method("get_lowest_level_weapon_of_type"):
-		# 兼容旧逻辑
-		chosen_weapon = weapons_manager.get_lowest_level_weapon_of_type(weapon_id)
-	
-	if not chosen_weapon:
-		return null
-	
-	var current_level = chosen_weapon.weapon_level
 	var target_level = current_level + 1  # 目标等级
 	
 	var upgrade = UpgradeData.new(
