@@ -58,8 +58,8 @@
 	  "total_count": 30,
 	  "enemies": {
 		"creeper": 0.6,
-		"creeper_fast": 0.3,
-		"stapler": 0.1,
+		"creeper_fast": 0.35,
+		"stapler": 0.05,
 	  },
 	  "boss_config": {
 		"count": 1,
