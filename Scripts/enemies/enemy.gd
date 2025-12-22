@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Enemy
 
-const EnemyAIController = preload("res://Scripts/enemies/ai/enemy_ai_controller.gd")
+const EnemyAIControllerScript = preload("res://Scripts/enemies/ai/enemy_ai_controller.gd")
 
 ## 调试显示开关（全局静态变量，按 R键 切换）
 static var debug_show_range: bool = false
@@ -15,6 +15,9 @@ var _sep_time_acc: float = 0.0
 var _sep_cached: Vector2 = Vector2.ZERO
 var _separation_area: Area2D = null
 var _nearby_enemies: Array[Node2D] = []
+
+const drop_randf_range_min = 50
+const drop_randf_range_max = 250
 
 var dir = null
 var speed = 300
@@ -141,7 +144,7 @@ func _ready() -> void:
 	_setup_separation_area()
 	
 	# 初始化 AI 控制器（独立脚本，避免把 AI 逻辑塞进 enemy.gd）
-	ai_controller = EnemyAIController.new()
+	ai_controller = EnemyAIControllerScript.new()
 	ai_controller.name = "EnemyAIController"
 	add_child(ai_controller)
 	ai_controller.initialize(self)
@@ -424,7 +427,8 @@ func _process(delta: float) -> void:
 		move_and_slide()
 		
 		# 朝向修正：图片默认向左，当玩家在右侧时翻转
-		_update_facing_direction()
+		if not ai_controller or ai_controller.can_flip_towards_target():
+			_update_facing_direction()
 		
 		# 检查是否在攻击范围内（造成伤害）
 		if player_distance < attack_range_value:  # 接触距离
@@ -579,7 +583,7 @@ func enemy_dead():
 			var offset = Vector2.ZERO
 			if gold_drop_count > 1:
 				var angle = randf() * TAU  # 0 到 2π 的随机角度
-				var distance = randf_range(15.0, 35.0)  # 随机距离
+				var distance = randf_range(drop_randf_range_min, drop_randf_range_max)  # 随机距离
 				offset = Vector2(cos(angle), sin(angle)) * distance
 			
 			GameMain.drop_item_scene_obj.gen_drop_item({
