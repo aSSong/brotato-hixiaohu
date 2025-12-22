@@ -71,7 +71,8 @@ func _ready() -> void:
 		if wave100.has("special_spawns") and wave100.special_spawns.size() > 0:
 			print("   特殊刷怪: ", wave100.special_spawns.size(), " 个")
 			for spawn in wave100.special_spawns:
-				print("      位置 %d: %s" % [spawn.position, spawn.enemy_id])
+				var chance = spawn.get("spawn_chance", 1.0)
+				print("      位置 %d: %s (spawn_chance=%.2f)" % [int(spawn.get("position", 0)), str(spawn.get("enemy_id", "")), float(chance)])
 	
 	# 测试5：验证敌人数据库
 	print("\n测试5：验证敌人数据库...")

@@ -125,12 +125,16 @@ func _build_spawn_list(config: Dictionary) -> Array:
 	# 打乱顺序，让不同类型的敌人随机混合出现
 	list.shuffle()
 
-	# 插入特殊刷怪（基于刷怪序列的位置 position）
-	# JSON格式示例: { "position": 143, "enemy_id": "last_enemy" }
+	# 特殊刷怪（基于刷怪序列的位置 position）
+	# 重要：这里使用“替换”而不是“插入”，以保证本wave总怪物数量恒定不变。
+	# JSON格式示例: { "position": 143, "enemy_id": "monitor", "spawn_chance": 0.3 }
 	if config.has("special_spawns"):
 		var spawns = config.special_spawns
 		if spawns is Array and spawns.size() > 0:
-			# 按position升序插入，避免插入导致后续索引偏移不受控
+			var replaced_count := 0
+			var skipped_count := 0
+			
+			# 按position升序处理，避免配置者按序理解时产生偏差
 			spawns.sort_custom(func(a, b):
 				return int(a.get("position", 0)) < int(b.get("position", 0))
 			)
@@ -140,17 +144,36 @@ func _build_spawn_list(config: Dictionary) -> Array:
 				var enemy_id = str(spawn.get("enemy_id", ""))
 				if enemy_id.is_empty():
 					continue
-				var pos = int(spawn.get("position", list.size()))
-				pos = clamp(pos, 0, list.size())
-				list.insert(pos, enemy_id)
-			_dprint("[EnemySpawner V3] 已插入 special_spawns: %d" % spawns.size())
+				
+				# 没有普通敌人时无法替换（仍可依赖 last_enemy 在最后刷出）
+				if list.is_empty():
+					break
+				
+				# 默认100%刷新；支持 0~1 概率或 0~100 百分比
+				var chance := 1.0
+				if spawn.has("spawn_chance"):
+					chance = float(spawn.get("spawn_chance", 1.0))
+					if chance > 1.0 and chance <= 100.0:
+						chance = chance / 100.0
+					chance = clamp(chance, 0.0, 1.0)
+				
+				var pos = int(spawn.get("position", list.size() - 1))
+				pos = clamp(pos, 0, list.size() - 1)
+				
+				if randf() <= chance:
+					list[pos] = enemy_id  # 替换，不改变总数
+					replaced_count += 1
+				else:
+					skipped_count += 1
+			
+			_dprint("[EnemySpawner V3] special_spawns处理完成：替换=%d 跳过=%d 总配置=%d" % [replaced_count, skipped_count, spawns.size()])
 	
 	# 添加最后的敌人（BOSS放在最后，不参与打乱）
 	if config.has("last_enemy"):
 		for i in range(config.last_enemy.count):
 			list.append(config.last_enemy.id)
 	
-	_dprint("[EnemySpawner V3] 生成列表：%d 个敌人（含special_spawns/last_enemy）" % list.size())
+	_dprint("[EnemySpawner V3] 生成列表：%d 个敌人（含last_enemy；special_spawns为替换不增量）" % list.size())
 	return list
 
 ## 异步生成敌人列表

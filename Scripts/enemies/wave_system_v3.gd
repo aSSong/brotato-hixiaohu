@@ -272,10 +272,6 @@ func start_next_wave() -> void:
 		total_enemies_this_wave += enemy_group.count
 	total_enemies_this_wave += config.last_enemy.count
 	
-	# 如果有special_spawns，也需要计算进去
-	if config.has("special_spawns"):
-		total_enemies_this_wave += config.special_spawns.size()
-	
 	spawned_enemies_this_wave = 0
 	killed_enemies_this_wave = 0  # 重置击杀计数
 	failed_spawns_this_wave = 0

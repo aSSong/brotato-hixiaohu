@@ -32,6 +32,9 @@ static func load_config(config_id: String) -> Dictionary:
 	var content = file.get_as_text()
 	file.close()
 	
+	# 预处理：允许配置文件包含尾逗号/注释（避免因格式小问题导致整套波次回退）
+	content = _sanitize_json(content)
+	
 	# 解析JSON
 	var json = JSON.new()
 	var error = json.parse(content)
@@ -51,6 +54,77 @@ static func load_config(config_id: String) -> Dictionary:
 	
 	print("[WaveConfigLoader] 成功加载配置: ", config_id, " | 总波次: ", config_data.total_waves)
 	return config_data
+
+## ========== JSON 预处理（容错）==========
+## 支持：
+## 1) 去掉 // 行注释 与 /* */ 块注释（仅在字符串外生效）
+## 2) 去掉尾逗号：  { "a": 1, } / [1,2,]
+static func _sanitize_json(text: String) -> String:
+	var cleaned := text
+	cleaned = _strip_json_comments(cleaned)
+	cleaned = _strip_trailing_commas(cleaned)
+	return cleaned
+
+static func _strip_trailing_commas(text: String) -> String:
+	var re := RegEx.new()
+	# 匹配：逗号 + 可选空白 + 右花括号/右中括号
+	re.compile(",(\\s*[}\\]])")
+	return re.sub(text, "\\1", true)
+
+static func _strip_json_comments(text: String) -> String:
+	var parts: PackedStringArray = PackedStringArray()
+	var in_string := false
+	var escape := false
+	var i := 0
+	var n := text.length()
+	
+	while i < n:
+		var c := text[i]
+		
+		if in_string:
+			parts.append(c)
+			if escape:
+				escape = false
+			elif c == "\\":
+				escape = true
+			elif c == "\"":
+				in_string = false
+			i += 1
+			continue
+		
+		# 字符串开始
+		if c == "\"":
+			in_string = true
+			parts.append(c)
+			i += 1
+			continue
+		
+		# 注释开始（仅在字符串外）
+		if c == "/" and (i + 1) < n:
+			var next := text[i + 1]
+			# // 行注释：跳到行尾（保留换行）
+			if next == "/":
+				i += 2
+				while i < n and text[i] != "\n":
+					i += 1
+				continue
+			# /* */ 块注释：跳到结束标记
+			if next == "*":
+				i += 2
+				while (i + 1) < n and not (text[i] == "*" and text[i + 1] == "/"):
+					i += 1
+				# 吃掉 */
+				i = min(i + 2, n)
+				continue
+		
+		parts.append(c)
+		i += 1
+	
+	# 兼容：不同 Godot 版本里字符串拼接接口差异较大，这里用最稳妥的逐段拼接避免解析期报错
+	var result := ""
+	for s in parts:
+		result += s
+	return result
 
 ## 验证配置数据完整性
 static func _validate_config(config: Dictionary) -> bool:
