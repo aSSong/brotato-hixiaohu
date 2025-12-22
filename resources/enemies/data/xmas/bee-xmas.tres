@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://crn1jqst00myb"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_fhj45"]
+[ext_resource type="SpriteFrames" uid="uid://l81wolesjtae" path="res://resources/enemies/FX/enemy-FX-stage2.tres" id="2_5dt2u"]
+
+[resource]
+script = ExtResource("1_fhj45")
+enemy_name = "蜜蜂"
+description = "会冲锋攻击的敌人"
+scene_path = "res://scenes/enemies/prefabs/stage2/bee.tscn"
+max_hp = 80
+attack_damage = 7
+move_speed = 350.0
+attack_interval = 0.3
+attack_range = 70.0
+ai_type = 1
+ai_config = {
+"maxDistance": 800,
+"minDistance": 500,
+"repositionCooldown": 2,
+"retreatAngleVariance": 90
+}
+skill_type = 1
+skill_config = {
+"charge_distance": 1500.0,
+"charge_speed": 1200.0,
+"cooldown": 3.0,
+"extra_damage": 10,
+"indicator_animation": "bee-charging",
+"indicator_scale": 1.0,
+"indicator_sprite_frames": ExtResource("2_5dt2u"),
+"prepare_time": 0.3,
+"trigger_distance": 800.0
+}
+animations = {
+"attack": "",
+"hurt": "",
+"idle": "",
+"skill_execute": "charging",
+"skill_prepare": "charging",
+"walk": "walk"
+}

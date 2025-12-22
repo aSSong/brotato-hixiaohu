@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://ba8dcojlilqf8"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_x5w18"]
+
+[resource]
+script = ExtResource("1_x5w18")
+enemy_name = "精英敌人-蓝蘑菇"
+description = "强化的精英敌人"
+scene_path = "res://scenes/enemies/prefabs/stage2/bluemashroom.tscn"
+max_hp = 70
+attack_damage = 12
+move_speed = 400.0
+attack_interval = 0.3
+attack_range = 90.0
+shake_amount = 12.0

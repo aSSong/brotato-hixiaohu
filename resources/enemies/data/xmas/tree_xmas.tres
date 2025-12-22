@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://cbpycig4oil08"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_kneue"]
+
+[resource]
+script = ExtResource("1_kneue")
+enemy_name = "圣诞树"
+description = "会远程射击的敌人"
+scene_path = "res://scenes/enemies/prefabs/xmas/tree_xmas.tscn"
+max_hp = 150
+attack_damage = 6
+move_speed = 250.0
+attack_interval = 0.3
+attack_range = 84.0
+ai_type = 3
+ai_config = {
+"can_flip": false
+}
+skill_type = 2
+skill_config = {
+"bullet_damage": 3,
+"bullet_round_interval": 0.5,
+"bullet_rounds": 3,
+"bullet_scene_path": "res://scenes/bullets/tree_xmas_bullet.tscn",
+"bullet_speed": 800.0,
+"bullets_per_round": 3,
+"shoot_interval": 3.0,
+"shoot_offset": Vector2(0, -180),
+"shoot_range": 1000.0,
+"spread_angle": 60.0
+}
+animations = {
+"attack": "",
+"hurt": "",
+"idle": "",
+"skill_execute": "attack",
+"skill_prepare": "",
+"walk": "walk"
+}
+knockback_resistance = 1.0
+gold_drop_count = 15

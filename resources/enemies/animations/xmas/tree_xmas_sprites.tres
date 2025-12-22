@@ -1,0 +1,37 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://3thrhxrosvbo"]
+
+[ext_resource type="Texture2D" uid="uid://cfdexw58q1l8u" path="res://assets/enemy/xmas/tree-xmas-run-Sheet.png" id="1_8fcv7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8fcv7"]
+atlas = ExtResource("1_8fcv7")
+region = Rect2(0, 500, 400, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucaou"]
+atlas = ExtResource("1_8fcv7")
+region = Rect2(0, 0, 400, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_charp"]
+atlas = ExtResource("1_8fcv7")
+region = Rect2(400, 0, 400, 500)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8fcv7")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ucaou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_charp")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 1.0
+}]

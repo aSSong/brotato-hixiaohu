@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://b0lis4818l3vk"]
+
+[ext_resource type="Script" uid="uid://cu8iudilpydhv" path="res://Scripts/bullets/enemy_bullet.gd" id="1_k7gcw"]
+[ext_resource type="Texture2D" uid="uid://m71ft554bj4r" path="res://assets/bullet/tree-xmas-bullet.png" id="2_k7gcw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s5qfd"]
+atlas = ExtResource("2_k7gcw")
+region = Rect2(0, 0, 49, 49)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_enemy_bullet"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s5qfd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1jlo3"]
+radius = 37.831867
+
+[node name="tree_xmas_bullet" type="Area2D"]
+z_index = 15
+collision_layer = 4
+script = ExtResource("1_k7gcw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 25
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_enemy_bullet")
+autoplay = "default"
+offset = Vector2(0, -1.74)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 18
+rotation = 1.5707964
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("CircleShape2D_1jlo3")
+
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
