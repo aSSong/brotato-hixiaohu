@@ -14,6 +14,14 @@ enum EnemySkillType {
 	BOSS_SHOOTING  # Boss专属360度射击技能
 }
 
+## AI 行为类型枚举（仅影响“正常移动逻辑”，不影响技能行为与碰撞攻击机制）
+enum EnemyAIType {
+	MELEE,   # 近战追击（默认：保持原行为）
+	RANGED,  # 保持距离
+	ESCAPE,  # 受击逃离
+	STILL    # 静止不动
+}
+
 @export var enemy_name: String = "默认敌人"
 @export var description: String = ""
 
@@ -26,6 +34,15 @@ enum EnemySkillType {
 @export var move_speed: float = 300.0  # 移动速度
 @export var attack_interval: float = 1.0  # 攻击间隔（秒）
 @export var attack_range: float = 80.0  # 攻击范围
+
+## AI 行为配置
+## ai_config 字段由 ai_type 决定：
+## - MELEE: 无参数
+## - RANGED: minDistance/maxDistance/retreatAngleVariance/repositionCooldown
+## - ESCAPE: fleeSpeed/fleeDurationmin/fleeDurationmax/retreatAngleVariance/repositionCooldown
+## - STILL: 无参数
+@export var ai_type: EnemyAIType = EnemyAIType.MELEE
+@export var ai_config: Dictionary = {}
 
 ## 技能配置
 @export var skill_type: EnemySkillType = EnemySkillType.NONE

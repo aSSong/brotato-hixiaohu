@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Enemy
 
+const EnemyAIController = preload("res://Scripts/enemies/ai/enemy_ai_controller.gd")
+
 ## 调试显示开关（全局静态变量，按 R键 切换）
 static var debug_show_range: bool = false
 
@@ -63,6 +65,9 @@ var is_invincible: bool = false
 
 ## 技能行为列表
 var behaviors: Array[EnemyBehavior] = []
+
+## AI 控制器（负责 melee/ranged/escape/still 的移动/待机/逃跑）
+var ai_controller: EnemyAIController = null
 
 ## Buff系统（用于处理DoT等效果）
 var buff_system: BuffSystem = null
@@ -134,6 +139,12 @@ func _ready() -> void:
 
 	# 初始化软分离邻近检测（在应用缩放后创建，保证半径一致）
 	_setup_separation_area()
+	
+	# 初始化 AI 控制器（独立脚本，避免把 AI 逻辑塞进 enemy.gd）
+	ai_controller = EnemyAIController.new()
+	ai_controller.name = "EnemyAIController"
+	add_child(ai_controller)
+	ai_controller.initialize(self)
 	
 	# 播放默认走路动画
 	play_animation("walk")
@@ -393,20 +404,9 @@ func _process(delta: float) -> void:
 	
 	# 如果没有技能控制移动，执行正常移动逻辑
 	if not is_skill_controlling_movement and target:
-		# 检查冰冻状态（无法移动）
-		if is_frozen():
-			velocity = Vector2.ZERO
-			move_and_slide()
-			return
-		
-		## 计算到玩家距离
-		# 检查是否接触到玩家（造成伤害）
-		# 使用碰撞检测更准确，但如果使用距离检测，确保距离合理
+		# 计算到玩家距离（用于碰撞攻击/朝向）
 		var player_distance = global_position.distance_to(target.global_position)
 		var attack_range_value = enemy_data.attack_range if enemy_data else 80.0
-		
-		# 设置停止距离（小于攻击范围，确保攻击生效）
-		var min_distance = attack_range_value - 20.0  # 攻击范围 + 20像素缓冲
 		
 		# 计算分离力（防止敌人重叠）——低频刷新，复用缓存值
 		_sep_time_acc += delta
@@ -415,14 +415,11 @@ func _process(delta: float) -> void:
 			_sep_cached = _calculate_separation_force()
 		var separation = _sep_cached
 		
-		if player_distance > min_distance:
-			dir = (target.global_position - self.global_position).normalized()
-			# 应用减速效果
-			var current_speed = speed * get_slow_multiplier()
-			# 基础移动速度 + 击退速度 + 分离力
-			velocity = dir * current_speed + knockback_velocity + separation
+		# 委托 AI 控制器计算 velocity + 动画（保持碰撞攻击机制不变）
+		if ai_controller:
+			ai_controller.update_ai(delta, separation)
 		else:
-			# 距离足够近，停止追踪但仍应用分离力
+			# 兜底：仅应用分离力
 			velocity = separation
 		move_and_slide()
 		
@@ -515,6 +512,10 @@ func enemy_hurt(hurt, is_critical: bool = false):
 					return
 	
 	self.enemyHP -= hurt
+	
+	# ESCAPE AI：受击触发逃跑（不影响伤害结算与死亡逻辑）
+	if ai_controller:
+		ai_controller.on_hurt()
 	
 	# 确定伤害数字颜色
 	var text_color = Color(1.0, 1.0, 1.0, 1.0)  # 伤害数字
