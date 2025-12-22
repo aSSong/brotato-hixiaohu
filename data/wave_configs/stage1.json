@@ -1,5 +1,5 @@
 {
-  "config_id": "default",
+  "config_id": "stage1",
   "total_waves": 100,
   "waves": [
 	{
@@ -9,13 +9,20 @@
 	  "damage_growth": 0.0,
 	  "total_count": 15,
 	  "enemies": {
-		"creeper": 1.0,
+		"creeper": 1.0
 	  },
 	  "boss_config": {
 		"count": 1,
 		"enemy_id": "stapler",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 7,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 1
+		}
+	  ]
 	},
 	{
 	  "wave": 2,
@@ -25,13 +32,20 @@
 	  "total_count": 20,
 	  "enemies": {
 		"creeper": 0.7,
-		"creeper_fast": 0.3,
+		"creeper_fast": 0.3
 	  },
 	  "boss_config": {
 		"count": 1,
 		"enemy_id": "stapler",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 7,
+		  "enemy_id": "monitor",
+		  "spawn_chance": 1
+		}
+	  ]
 	},
 	{
 	  "wave": 3,
@@ -42,7 +56,7 @@
 	  "enemies": {
 		"creeper": 0.65,
 		"creeper_fast": 0.3,
-		"jug2": 0.05,
+		"jug2": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -59,7 +73,7 @@
 	  "enemies": {
 		"creeper": 0.6,
 		"creeper_fast": 0.35,
-		"stapler": 0.05,
+		"stapler": 0.05
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -76,7 +90,7 @@
 	  "enemies": {
 		"creeper": 0.6,
 		"creeper_fast": 0.25,
-		"jug2": 0.15,
+		"jug2": 0.15
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -113,7 +127,7 @@
 		"creeper_fast": 0.3,
 		"jug2": 0.1,
 		"jug3": 0.1,
-		"stapler": 0.1,
+		"stapler": 0.1
 	  },
 	  "boss_config": {
 		"count": 1,
@@ -2031,11 +2045,13 @@
 	  "special_spawns": [
 		{
 		  "position": 143,
-		  "enemy_id": "monitor"
+		  "enemy_id": "monitor",
+		  "spawn_chance": 0.3
 		},
 		{
 		  "position": 215,
-		  "enemy_id": "monitor"
+		  "enemy_id": "monitor",
+		  "spawn_chance": 0.3
 		}
 	  ]
 	}
