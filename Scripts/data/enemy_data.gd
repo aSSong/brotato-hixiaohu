@@ -40,7 +40,7 @@ enum EnemyAIType {
 ## - MELEE: 无参数
 ## - RANGED: minDistance/maxDistance/retreatAngleVariance/repositionCooldown
 ## - ESCAPE: fleeSpeed/fleeDurationmin/fleeDurationmax/retreatAngleVariance/repositionCooldown
-## - STILL: 无参数
+## - STILL: can_flip
 @export var ai_type: EnemyAIType = EnemyAIType.MELEE
 @export var ai_config: Dictionary = {}
 
