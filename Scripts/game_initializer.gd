@@ -324,16 +324,17 @@ func _on_wave_flow_step(wave_number: int) -> void:
 	flow_wave_number = wave_number
 	
 	print("[Flow] 波次 %d 结束，开始流程结算..." % wave_number)
-	
-	# 每波完成时更新记录（统一在此处处理，避免在多处重复）
-	SaveManager.try_update_best_wave(GameMain.current_mode_id, wave_number)
-	if GameMain.current_mode_id == "multi":
-		LeaderboardManager.try_update_multi_record(wave_number, SaveManager.get_total_death_count())
-	elif GameMain.current_mode_id == "survival":
-		# Survival 模式每波完成时也更新排行榜记录（wave 优先判定）
-		var elapsed_time = GameMain.current_session.get_elapsed_time() if GameMain.current_session else 0.0
-		var death_count = SaveManager.get_total_death_count()
-		LeaderboardManager.try_update_survival_record(wave_number, elapsed_time, death_count)
+
+	# 结束态保护：
+	# - 胜利流程里会 force_end_wave 清场，可能误触发 wave_completed
+	# - 退出/重开流程里 SceneCleanup 会清敌，可能误触发 wave_completed
+	# 这些情况下不应该写入/上传排行榜或最高波次。
+	if victory_triggered \
+	or GameState.current_state == GameState.State.GAME_VICTORY \
+	or GameState.current_state == GameState.State.GAME_OVER:
+		print("[FlowGuard] 忽略结束态的 wave_completed=%d（避免误写记录）" % wave_number)
+		_reset_flow_guard()
+		return
 	
 	# 1. 状态检查：如果玩家已经死了，等待复活而不是直接终止
 	if GameState.current_state == GameState.State.PLAYER_DEAD:
@@ -385,6 +386,28 @@ func _on_wave_flow_step(wave_number: int) -> void:
 			print("[Flow] 无法等待复活信号，终止流程")
 			_reset_flow_guard()
 			return
+
+	# 到这里说明本次 wave_completed 是“有效结算”（没有放弃、也不是结束态误触发）
+	# 每波完成时更新记录（统一在此处处理，避免在多处重复）
+	SaveManager.try_update_best_wave(GameMain.current_mode_id, wave_number)
+	if GameMain.current_mode_id == "multi":
+		LeaderboardManager.try_update_multi_record(wave_number, SaveManager.get_total_death_count())
+	elif GameMain.current_mode_id == "survival":
+		# Survival：wave 优先判定；但要防止 session 被 reset 后 elapsed_time 变 0，覆盖出错
+		if GameMain.current_session == null:
+			print("[FlowGuard] current_session 为空，跳过 survival 记录更新 wave=%d" % wave_number)
+		else:
+			var elapsed_time := GameMain.current_session.get_elapsed_time()
+			var death_count := SaveManager.get_total_death_count()
+			
+			# 计时器有效性检查：未启动/被重置时通常为 0
+			var timer_started := true
+			if "_timer_start_time" in GameMain.current_session:
+				timer_started = float(GameMain.current_session._timer_start_time) > 0.0
+			if (not timer_started) or elapsed_time <= 0.0:
+				print("[FlowGuard] elapsed_time 异常(%.2f, started=%s)，跳过 survival 记录更新 wave=%d" % [elapsed_time, str(timer_started), wave_number])
+			else:
+				LeaderboardManager.try_update_survival_record(wave_number, elapsed_time, death_count)
 
 	# 2. 进入清扫阶段（捡东西时间），也就是你想要的延迟
 	GameState.change_state(GameState.State.WAVE_CLEARING)
