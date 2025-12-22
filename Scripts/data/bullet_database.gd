@@ -133,7 +133,7 @@ static func initialize_bullets() -> void:
 	# ========== 特殊子弹 ==========
 	
 	## 追踪导弹子弹
-	var ms_bullet = BulletData.new("ms_bullet", 1000.0, 5.0, "res://assets/weapon/missle/ms-bullet.png")
+	var ms_bullet = BulletData.new("ms_bullet", 1000.0, 4.0, "res://assets/weapon/missle/ms-bullet.png")
 	ms_bullet.bullet_name = "追踪导弹子弹"
 	ms_bullet.scale = Vector2(0.5, 0.5)
 	ms_bullet.movement_type = BulletData.MovementType.HOMING
@@ -185,7 +185,7 @@ static func initialize_bullets() -> void:
 	
 	
 	## 奥术飞弹子弹
-	var ag_bullet = BulletData.new("ag_bullet", 600.0, 5.0, "res://assets/weapon/arcane/ag-bullet.png")
+	var ag_bullet = BulletData.new("ag_bullet", 600.0, 4.0, "res://assets/weapon/arcane/ag-bullet.png")
 	ag_bullet.bullet_name = "奥术飞弹子弹"
 	ag_bullet.scale = Vector2(1.4, 1.4)
 	ag_bullet.movement_type = BulletData.MovementType.HOMING
