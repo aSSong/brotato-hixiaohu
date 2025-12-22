@@ -25,6 +25,15 @@ func initialize(enemy_ref: Enemy) -> void:
 	_flee_dir = Vector2.ZERO
 	_escape_cooldown_left = 0.0
 
+## 是否允许根据目标进行朝向翻转（供 enemy.gd 调用）
+## 需求：STILL 类型支持 can_flip=false 时不随目标翻转
+func can_flip_towards_target() -> bool:
+	if not enemy or not enemy.enemy_data:
+		return true
+	if enemy.enemy_data.ai_type != EnemyData.EnemyAIType.STILL:
+		return true
+	return bool(enemy.enemy_data.ai_config.get("can_flip", true))
+
 ## 受击回调：仅 ESCAPE 类型会使用
 func on_hurt() -> void:
 	if not enemy or enemy.is_dead:
@@ -140,14 +149,11 @@ func _update_escape(
 	delta: float,
 	_player_distance: float,
 	_dir_to_player: Vector2,
-	dir_away: Vector2,
+	_dir_away: Vector2,
 	ai_config: Dictionary,
 	slow_mul: float
 ) -> Vector2:
 	var flee_speed: float = float(ai_config.get("fleeSpeed", 600.0))
-	var flee_duration_min: float = float(ai_config.get("fleeDurationmin", 1.5))
-	var flee_duration_max: float = float(ai_config.get("fleeDurationmax", 5.5))
-	var angle_variance_deg: float = float(ai_config.get("retreatAngleVariance", 30.0))
 	var reposition_cooldown: float = float(ai_config.get("repositionCooldown", 2.0))
 	
 	match _escape_state:
