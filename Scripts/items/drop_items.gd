@@ -8,9 +8,9 @@ var pickup_distance: float = 30.0  # 拾取距离
 
 ## 便当配置（拾取回血百分比按最大HP）
 const BENTO_HEAL_PERCENTS: Dictionary = {
-	"bento1": 0.01,
-	"bento2": 0.10,
-	"bento3": 0.30,
+	"bento1": 0.10,
+	"bento2": 0.50,
+	"bento3": 0.90,
 }
 
 ## 显示名称（非multi模式）
@@ -25,6 +25,13 @@ const BENTO_MULTI_SUFFIX: Dictionary = {
 	"bento1": "的健身餐",
 	"bento2": "的剩饭",
 	"bento3": "的豪华外卖",
+}
+
+## Label颜色
+const BENTO_LABEL_COLORS: Dictionary = {
+	"bento1": Color(0.2, 1.0, 0.2, 1.0),  # 绿
+	"bento2": Color(0.3, 0.6, 1.0, 1.0),  # 蓝
+	"bento3": Color(0.75, 0.35, 1.0, 1.0), # 紫
 }
 
 # 生成唯一ID用于追踪
@@ -137,6 +144,9 @@ func gen_drop_item(options):
 	if name_label:
 		if _is_bento(ani_name):
 			name_label.text = _get_bento_display_name(ani_name)
+			# 设置颜色：bento1/2/3 => 绿/蓝/紫
+			if BENTO_LABEL_COLORS.has(ani_name):
+				name_label.add_theme_color_override("font_color", BENTO_LABEL_COLORS[ani_name])
 			name_label.visible = true
 		else:
 			# masterkey / gold 都不显示
@@ -235,6 +245,5 @@ func _get_random_grave_player_name() -> String:
 		return ""
 	
 	# Godot4: Array.pick_random()
-	if names.has_method("pick_random"):
-		return names.pick_random()
-	return names[randi() % names.size()]
+	# 注意：Array 没有 has_method()，直接调用即可
+	return names.pick_random()

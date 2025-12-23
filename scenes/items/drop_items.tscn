@@ -14,7 +14,7 @@ collision_mask = 0
 script = ExtResource("1_65e0c")
 
 [node name="itemNameLabel" type="Label" parent="."]
-visible = false
+z_index = 11
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -23,8 +23,10 @@ offset_top = -98.0
 offset_right = 20.0
 offset_bottom = -75.0
 grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_fg1yu")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 32
 text = "不吃蛋挞非要吃葡萄皮的豪华外卖"
 
 [node name="all_animation" type="AnimatedSprite2D" parent="."]

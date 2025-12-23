@@ -12,7 +12,7 @@ shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_opacity = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kqpo7"]
-radius = 126.035706
+radius = 131.00381
 
 [node name="stapler" type="CharacterBody2D" groups=["enemy"]]
 z_index = 8

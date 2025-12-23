@@ -58,7 +58,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_5fvbu")
 }],
 "loop": true,
-"name": &"chagrging",
+"name": &"charging",
 "speed": 5.0
 }, {
 "frames": [{

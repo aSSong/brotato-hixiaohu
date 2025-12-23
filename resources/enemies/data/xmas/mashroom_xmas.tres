@@ -4,12 +4,21 @@
 
 [resource]
 script = ExtResource("1_x5w18")
-enemy_name = "精英敌人-蓝蘑菇"
+enemy_name = "圣诞蘑菇"
 description = "强化的精英敌人"
-scene_path = "res://scenes/enemies/prefabs/stage2/bluemashroom.tscn"
-max_hp = 70
+scene_path = "res://scenes/enemies/prefabs/xmas/mashroom_xmas.tscn"
+max_hp = 100
 attack_damage = 12
 move_speed = 400.0
 attack_interval = 0.3
 attack_range = 90.0
+ai_type = 2
+ai_config = {
+"fleeDurationmax": 3,
+"fleeDurationmin": 1,
+"fleeSpeed": 800,
+"repositionCooldown": 2,
+"retreatAngleVariance": 120
+}
 shake_amount = 12.0
+hp_growth_per_wave = 2.0

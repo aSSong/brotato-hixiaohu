@@ -11,7 +11,7 @@ scene_path = "res://scenes/enemies/prefabs/stage1/stapler.tscn"
 attack_damage = 6
 move_speed = 350.0
 attack_interval = 0.3
-attack_range = 103.0
+attack_range = 120.0
 ai_type = 1
 ai_config = {
 "maxDistance": 800,

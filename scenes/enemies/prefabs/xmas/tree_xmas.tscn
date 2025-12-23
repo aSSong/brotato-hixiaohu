@@ -26,16 +26,16 @@ modulate = Color(0, 0, 0, 0.45490196)
 z_index = 7
 z_as_relative = false
 position = Vector2(0, -21.857054)
-scale = Vector2(1.5833333, 1.6281683)
+scale = Vector2(2.233, 1.628)
 texture = ExtResource("2_uv4od")
-offset = Vector2(0, 147)
+offset = Vector2(0, 151.52)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = 1
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_flash")
 sprite_frames = ExtResource("4_k2bqr")
-animation = &"walk"
+animation = &"attack"
 autoplay = "walk"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
