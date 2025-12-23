@@ -38,5 +38,5 @@ animations = {
 "walk": "walk"
 }
 knockback_resistance = 1.0
-gold_drop_count = 15
+gold_drop_count = 20
 hp_growth_per_wave = 2.0
