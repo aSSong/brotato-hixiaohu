@@ -13,6 +13,13 @@ attack_damage = 7
 move_speed = 350.0
 attack_interval = 0.3
 attack_range = 70.0
+ai_type = 1
+ai_config = {
+"maxDistance": 800,
+"minDistance": 500,
+"repositionCooldown": 2,
+"retreatAngleVariance": 90
+}
 skill_type = 1
 skill_config = {
 "charge_distance": 1500.0,
