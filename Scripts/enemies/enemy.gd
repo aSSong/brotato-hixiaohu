@@ -20,10 +20,10 @@ const drop_randf_range_min = 50
 const drop_randf_range_max = 250
 
 ## tree-xmas（资源ID为 tree_xmas）专属掉落：便当概率（定义在脚本头部）
-const TREE_XMAS_BENTO1_CHANCE: float = 0.10
-const TREE_XMAS_BENTO2_CHANCE: float = 0.70
+const TREE_XMAS_BENTO1_CHANCE: float = 0.20
+const TREE_XMAS_BENTO2_CHANCE: float = 0.60
 const TREE_XMAS_BENTO3_CHANCE: float = 0.20
-const TREE_XMAS_ENEMY_IDS: Array[String] = ["mashroom_xmas"]
+const TREE_XMAS_ENEMY_IDS: Array[String] = ["mashroom_xmas","bee_xmas","tree_xmas"]
 
 var dir = null
 var speed = 300
