@@ -18,17 +18,7 @@
 	  },
 	  "special_spawns": [
 		{
-		  "position": 7,
-		  "enemy_id": "bee_xmas",
-		  "spawn_chance": 0.33
-		},
-		{
-		  "position": 8,
-		  "enemy_id": "tree_xmas",
-		  "spawn_chance": 0.1
-		},
-		{
-		  "position": 9,
+		  "position": 4,
 		  "enemy_id": "mashroom_xmas",
 		  "spawn_chance": 0.25
 		}
@@ -54,11 +44,6 @@
 		  "position": 10,
 		  "enemy_id": "bee_xmas",
 		  "spawn_chance": 0.33
-		},
-		{
-		  "position": 11,
-		  "enemy_id": "tree_xmas",
-		  "spawn_chance": 0.1
 		},
 		{
 		  "position": 12,
