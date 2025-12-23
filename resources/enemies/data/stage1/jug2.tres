@@ -22,7 +22,7 @@ skill_type = 2
 skill_config = {
 "bullet_damage": 3,
 "bullet_round_interval": 0.5,
-"bullet_rounds": 3,
+"bullet_rounds": 2,
 "bullet_scene_path": "res://scenes/bullets/jug_bullet.tscn",
 "bullet_speed": 600.0,
 "bullets_per_round": 1,
