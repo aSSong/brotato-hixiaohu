@@ -173,6 +173,9 @@ func _update_shooting(delta: float) -> void:
 	if not enemy:
 		return
 	
+	# 保持技能动画持续播放（防止非循环动画结束后停止）
+	_ensure_skill_animation_playing()
+	
 	# 检查是否已完成所有轮次
 	if current_round >= bullet_rounds:
 		_end_shooting()
@@ -269,26 +272,41 @@ func _spawn_bullet(pos: Vector2, direction: Vector2) -> void:
 	if hit_fx_sprite_frames and hit_fx_animation_name != "" and bullet.has_method("set_hit_fx"):
 		bullet.set_hit_fx(hit_fx_sprite_frames, hit_fx_animation_name, hit_fx_scale)
 
-## 播放发射动作
+## 播放发射动作（整个技能期间持续播放）
 func _play_shoot_animation() -> void:
 	if not enemy:
 		return
 	
-	# 播放 SpriteFrames 动画
-	if shoot_sprite_anim != "":
-		var sprite = enemy.get_node_or_null("AnimatedSprite2D")
-		if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(shoot_sprite_anim):
-			sprite.play(shoot_sprite_anim)
-	else:
-		# 默认使用 attack 动画
-		enemy.play_animation("attack")
+	# 优先使用 skill_execute 动画（通过 enemy_data.animations 映射）
+	# 这会在整个技能期间持续播放
+	enemy.play_animation("skill_execute")
 	
 	# 播放 AnimationPlayer 动画
 	if shoot_anim_player != "":
 		enemy.play_skill_animation(shoot_anim_player)
-	else:
-		# 默认使用 shoot 动画
-		enemy.play_skill_animation("shoot")
+
+## 确保技能动画持续播放（防止非循环动画结束后停止）
+func _ensure_skill_animation_playing() -> void:
+	if not enemy:
+		return
+	
+	var sprite = enemy.get_node_or_null("AnimatedSprite2D")
+	if not sprite:
+		return
+	
+	# 获取 skill_execute 对应的实际动画名
+	var anim_name = "skill_execute"
+	if enemy.enemy_data and enemy.enemy_data.animations.has("skill_execute"):
+		var mapped_name = enemy.enemy_data.animations.get("skill_execute", "")
+		if mapped_name != "" and mapped_name != null:
+			anim_name = mapped_name
+		else:
+			return  # 没有配置 skill_execute 动画
+	
+	# 检查动画是否已停止播放（非循环动画播放完毕）
+	if not sprite.is_playing() or sprite.animation != anim_name:
+		if sprite.sprite_frames and sprite.sprite_frames.has_animation(anim_name):
+			sprite.play(anim_name)
 
 ## 检查怪物是否朝右（翻转状态）
 ## 怪物默认朝左（flip_h = false），翻转后朝右（flip_h = true）
@@ -350,3 +368,7 @@ func _end_shooting() -> void:
 		enemy.stop_skill_animation()
 	
 	print("[ShootingBehavior] 射击结束，进入冷却 | 冷却时间:", shoot_interval, "秒")
+
+## 检查技能是否激活（用于外部判断，如 AI 控制器）
+func is_skill_active() -> bool:
+	return state == ShootState.SHOOTING

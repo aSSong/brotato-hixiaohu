@@ -203,11 +203,13 @@ func _randomized_dir(base_dir: Vector2, variance_deg: float) -> Vector2:
 	return base_dir.normalized().rotated(rad).normalized()
 
 func _set_velocity_and_anim(desired_velocity: Vector2, is_actively_moving: bool, separation: Vector2) -> void:
-	# 动画：移动=walk，停=idle（无idle则walk）
-	if is_actively_moving:
-		enemy.play_animation("walk")
-	else:
-		_play_idle_or_walk()
+	# 如果有技能正在控制动画，不覆盖动画
+	if not _is_skill_controlling_animation():
+		# 动画：移动=walk，停=idle（无idle则walk）
+		if is_actively_moving:
+			enemy.play_animation("walk")
+		else:
+			_play_idle_or_walk()
 	
 	# 速度叠加：保持与原逻辑尽量一致
 	# - 只有“主动移动”时叠加击退速度
@@ -222,5 +224,41 @@ func _play_idle_or_walk() -> void:
 		enemy.play_animation("idle")
 	else:
 		enemy.play_animation("walk")
+
+## 检查是否有技能正在控制动画
+## 遍历敌人的 behaviors，检查是否有技能激活
+func _is_skill_controlling_animation() -> bool:
+	if not enemy:
+		return false
+	
+	for behavior in enemy.behaviors:
+		if not is_instance_valid(behavior):
+			continue
+		
+		# 检查 ShootingBehavior
+		if behavior is ShootingBehavior:
+			var shooting = behavior as ShootingBehavior
+			if shooting.is_skill_active():
+				return true
+		
+		# 检查 BossShootingBehavior
+		if behavior is BossShootingBehavior:
+			var boss_shooting = behavior as BossShootingBehavior
+			if boss_shooting.is_skill_active():
+				return true
+		
+		# 检查 ChargingBehavior
+		if behavior is ChargingBehavior:
+			var charging = behavior as ChargingBehavior
+			if charging.is_charging_now():
+				return true
+		
+		# 检查 ExplodingBehavior
+		if behavior is ExplodingBehavior:
+			var exploding = behavior as ExplodingBehavior
+			if exploding.is_in_countdown():
+				return true
+	
+	return false
 
 

@@ -23,7 +23,7 @@ const drop_randf_range_max = 250
 const TREE_XMAS_BENTO1_CHANCE: float = 0.10
 const TREE_XMAS_BENTO2_CHANCE: float = 0.70
 const TREE_XMAS_BENTO3_CHANCE: float = 0.20
-const TREE_XMAS_ENEMY_IDS: Array[String] = ["tree_xmas", "tree-xmas"]
+const TREE_XMAS_ENEMY_IDS: Array[String] = ["mashroom_xmas"]
 
 var dir = null
 var speed = 300
@@ -402,7 +402,9 @@ func _process(delta: float) -> void:
 		if is_instance_valid(behavior):
 			if behavior is ChargingBehavior:
 				var charging = behavior as ChargingBehavior
-				if charging.is_charging_now():
+				# 冲刺技能：准备阶段与冲刺阶段都应阻止 AI 移动
+				# 否则 PREPARING 期间仍会执行 AI 走位，导致冲刺路线/表现被“移动逻辑”影响
+				if charging.state == ChargingBehavior.ChargeState.PREPARING or charging.is_charging_now():
 					is_skill_controlling_movement = true
 					break
 			elif behavior is BossShootingBehavior:

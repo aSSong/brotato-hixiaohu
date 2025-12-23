@@ -21,6 +21,7 @@ var charge_distance: float = 600.0  # 冲锋距离
 var cooldown: float = 3.0           # 冷却时间
 var extra_damage: int = 10          # 冲锋命中额外伤害
 var prepare_time: float = 0.3       # 准备时间
+var hit_range: float = 0.0          # 冲锋命中范围（0表示使用attack_range）
 
 ## 指示器
 var indicator_node: Node2D = null  # 可以是 Sprite2D 或 AnimatedSprite2D
@@ -38,6 +39,7 @@ var charge_start_pos: Vector2 = Vector2.ZERO
 var charge_direction: Vector2 = Vector2.ZERO
 var is_charging: bool = false
 var original_knockback_resistance: float = 0.0  # 保存原始击退抗性
+var has_hit_player: bool = false  # 本次冲锋是否已经命中玩家（防止多次伤害）
 
 func _on_initialize() -> void:
 	# 从配置中读取参数
@@ -47,6 +49,7 @@ func _on_initialize() -> void:
 	cooldown = config.get("cooldown", 3.0)
 	extra_damage = config.get("extra_damage", 10)
 	prepare_time = config.get("prepare_time", 0.3)
+	hit_range = config.get("hit_range", 0.0)  # 0表示使用attack_range
 	
 	# 加载指示器配置（支持拖拽资源）
 	# 优先使用动画帧，其次使用静态纹理
@@ -123,6 +126,7 @@ func _start_charge() -> void:
 	charge_start_pos = enemy.global_position
 	charge_direction = get_direction_to_player()
 	is_charging = true
+	has_hit_player = false  # 重置命中标志
 	_hide_indicator()
 	
 	# 冲锋期间完全无视击退
@@ -157,16 +161,17 @@ func _update_charge(_delta: float) -> void:
 		_end_charge()
 		return
 	
-	# 检查是否命中玩家
-	var player = get_player()
-	if player:
-		var player_distance = enemy.global_position.distance_to(player.global_position)
-		var attack_range_value = enemy.enemy_data.attack_range if enemy.enemy_data else 80.0
-		if player_distance < attack_range_value:
-			# 命中玩家，造成额外伤害
-			_hit_player_with_charge()
-			_end_charge()
-			return
+	# 检查是否命中玩家（穿过玩家继续冲刺，但只造成一次伤害）
+	if not has_hit_player:
+		var player = get_player()
+		if player:
+			var player_distance = enemy.global_position.distance_to(player.global_position)
+			# 使用配置的 hit_range，如果未配置则使用 attack_range
+			var check_range = hit_range if hit_range > 0 else (enemy.enemy_data.attack_range if enemy.enemy_data else 80.0)
+			if player_distance < check_range:
+				# 命中玩家，造成额外伤害，但不停止冲锋
+				_hit_player_with_charge()
+				has_hit_player = true  # 标记已命中，防止多次伤害
 	
 	# 应用冲锋速度（覆盖正常移动）
 	enemy.velocity = charge_velocity
