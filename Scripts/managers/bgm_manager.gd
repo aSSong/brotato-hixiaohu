@@ -10,8 +10,9 @@ var current_bgm: String = ""
 
 ## BGM资源路径
 const BGM_PATHS = {
-	"title": "res://audio/BGM_title.mp3",
-	"fight": "res://audio/BGM_fight.mp3"
+	"title2": "res://audio/BGM_title.mp3",
+	"fight": "res://audio/BGM_fight.mp3",
+	"title": "res://audio/jingle-bells-metal.mp3"
 }
 
 func _ready() -> void:
@@ -112,4 +113,3 @@ func get_current_bgm() -> String:
 ## 是否正在播放
 func is_playing() -> bool:
 	return audio_player.playing
-
