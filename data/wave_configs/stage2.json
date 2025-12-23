@@ -18,7 +18,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 2,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 3,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 4,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 2,
@@ -36,7 +53,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 6,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 7,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 8,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 3,
@@ -54,7 +88,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 9,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 10,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 11,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 4,
@@ -72,7 +123,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 13,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 14,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 15,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 5,
@@ -90,7 +158,24 @@
 		"count": 1,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 16,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 17,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 18,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 6,
@@ -109,7 +194,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 20,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 21,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 22,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 7,
@@ -129,7 +231,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 23,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 24,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 25,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 8,
@@ -150,7 +269,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 27,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 28,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 29,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 9,
@@ -171,7 +307,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 30,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 31,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 32,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 10,
@@ -192,7 +345,24 @@
 		"count": 1,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 34,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 35,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 36,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 11,
@@ -213,7 +383,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 37,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 38,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 39,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 12,
@@ -234,7 +421,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 41,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 42,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 43,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 13,
@@ -255,7 +459,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 44,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 45,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 46,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 14,
@@ -276,7 +497,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 48,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 49,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 50,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 15,
@@ -297,7 +535,24 @@
 		"count": 1,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 51,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 52,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 53,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 16,
@@ -318,7 +573,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 55,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 56,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 57,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 17,
@@ -339,7 +611,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 58,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 59,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 60,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 18,
@@ -360,7 +649,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 62,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 63,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 64,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 19,
@@ -381,7 +687,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 65,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 66,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 67,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 20,
@@ -402,7 +725,24 @@
 		"count": 1,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 69,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 70,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 71,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 21,
@@ -423,7 +763,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 72,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 73,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 74,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 22,
@@ -444,7 +801,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 76,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 77,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 78,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 23,
@@ -465,7 +839,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 79,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 80,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 81,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 24,
@@ -486,7 +877,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 83,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 84,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 85,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 25,
@@ -507,7 +915,24 @@
 		"count": 1,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 86,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 87,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 88,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 26,
@@ -528,7 +953,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 90,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 91,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 92,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 27,
@@ -549,7 +991,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 93,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 94,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 95,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 28,
@@ -570,7 +1029,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 97,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 98,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 99,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 29,
@@ -591,7 +1067,24 @@
 		"count": 1,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 100,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 101,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 102,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 30,
@@ -612,7 +1105,24 @@
 		"count": 2,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 104,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 105,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 106,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 31,
@@ -633,7 +1143,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 107,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 108,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 109,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 32,
@@ -654,7 +1181,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 111,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 112,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 113,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 33,
@@ -675,7 +1219,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 114,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 115,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 116,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 34,
@@ -696,7 +1257,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 118,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 119,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 120,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 35,
@@ -717,7 +1295,24 @@
 		"count": 2,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 121,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 122,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 123,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 36,
@@ -738,7 +1333,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 125,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 126,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 127,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 37,
@@ -759,7 +1371,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 128,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 129,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 130,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 38,
@@ -780,7 +1409,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 132,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 133,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 134,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 39,
@@ -801,7 +1447,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 135,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 136,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 137,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 40,
@@ -822,7 +1485,24 @@
 		"count": 2,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 139,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 140,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 141,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 41,
@@ -843,7 +1523,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 142,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 143,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 144,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 42,
@@ -864,7 +1561,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 146,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 147,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 148,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 43,
@@ -885,7 +1599,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 149,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 150,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 151,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 44,
@@ -906,7 +1637,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 153,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 154,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 155,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 45,
@@ -927,7 +1675,24 @@
 		"count": 2,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 156,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 157,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 158,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 46,
@@ -948,7 +1713,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 160,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 161,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 162,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 47,
@@ -969,7 +1751,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 163,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 164,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 165,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 48,
@@ -990,7 +1789,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 167,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 168,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 169,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 49,
@@ -1011,7 +1827,24 @@
 		"count": 2,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 170,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 171,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 172,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 50,
@@ -1032,7 +1865,24 @@
 		"count": 3,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 174,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 175,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 176,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 51,
@@ -1053,7 +1903,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 177,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 178,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 179,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 52,
@@ -1074,7 +1941,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 181,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 182,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 183,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 53,
@@ -1095,7 +1979,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 184,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 185,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 186,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 54,
@@ -1116,7 +2017,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 188,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 189,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 190,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 55,
@@ -1137,7 +2055,24 @@
 		"count": 3,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 191,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 192,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 193,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 56,
@@ -1158,7 +2093,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 195,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 196,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 197,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 57,
@@ -1179,7 +2131,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 198,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 199,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 200,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 58,
@@ -1200,7 +2169,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 202,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 203,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 204,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 59,
@@ -1221,7 +2207,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 205,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 206,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 207,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 60,
@@ -1241,7 +2244,24 @@
 		"count": 3,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 209,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 210,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 211,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 61,
@@ -1261,7 +2281,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 212,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 213,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 214,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 62,
@@ -1281,7 +2318,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 216,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 217,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 218,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 63,
@@ -1301,7 +2355,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 219,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 220,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 221,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 64,
@@ -1321,7 +2392,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 223,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 224,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 225,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 65,
@@ -1341,7 +2429,24 @@
 		"count": 3,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 226,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 227,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 228,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 66,
@@ -1361,7 +2466,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 230,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 231,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 232,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 67,
@@ -1381,7 +2503,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 233,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 234,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 235,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 68,
@@ -1401,7 +2540,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 237,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 238,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 239,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 69,
@@ -1421,7 +2577,24 @@
 		"count": 3,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 240,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 241,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 242,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 70,
@@ -1441,7 +2614,24 @@
 		"count": 4,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 244,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 245,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 246,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 71,
@@ -1461,7 +2651,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 247,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 248,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 249,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 72,
@@ -1481,7 +2688,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 251,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 252,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 253,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 73,
@@ -1501,7 +2725,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 254,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 255,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 256,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 74,
@@ -1521,7 +2762,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 258,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 259,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 260,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 75,
@@ -1541,7 +2799,24 @@
 		"count": 4,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 261,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 262,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 263,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 76,
@@ -1561,7 +2836,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 265,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 266,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 267,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 77,
@@ -1581,7 +2873,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 268,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 269,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 270,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 78,
@@ -1601,7 +2910,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 272,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 273,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 274,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 79,
@@ -1621,7 +2947,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 275,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 276,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 277,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 80,
@@ -1641,7 +2984,24 @@
 		"count": 4,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 279,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 280,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 281,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 81,
@@ -1661,7 +3021,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 282,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 283,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 284,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 82,
@@ -1681,7 +3058,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 286,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 287,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 288,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 83,
@@ -1701,7 +3095,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 289,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 290,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 291,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 84,
@@ -1721,7 +3132,24 @@
 		"count": 4,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 293,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 294,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 295,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 85,
@@ -1741,7 +3169,24 @@
 		"count": 4,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 296,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 297,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 298,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 86,
@@ -1761,7 +3206,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 300,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 301,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 302,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 87,
@@ -1781,7 +3243,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 303,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 304,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 305,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 88,
@@ -1801,7 +3280,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 307,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 308,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 309,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 89,
@@ -1821,7 +3317,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 310,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 311,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 312,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 90,
@@ -1841,7 +3354,24 @@
 		"count": 5,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 314,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 315,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 316,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 91,
@@ -1861,7 +3391,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 317,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 318,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 319,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 92,
@@ -1881,7 +3428,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 321,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 322,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 323,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 93,
@@ -1901,7 +3465,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 324,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 325,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 326,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 94,
@@ -1921,7 +3502,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 328,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 329,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 330,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 95,
@@ -1941,7 +3539,24 @@
 		"count": 5,
 		"enemy_id": "ent",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 331,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 332,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 333,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 96,
@@ -1961,7 +3576,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 335,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 336,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 337,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 97,
@@ -1981,7 +3613,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 338,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 339,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 340,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 98,
@@ -2001,7 +3650,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 342,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 343,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 344,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 99,
@@ -2021,7 +3687,24 @@
 		"count": 5,
 		"enemy_id": "mashroom_blue",
 		"spawn_at_end": true
-	  }
+	  },
+	  "special_spawns": [
+		{
+		  "position": 345,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 346,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 347,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
+		}
+	  ]
 	},
 	{
 	  "wave": 100,
@@ -2050,6 +3733,21 @@
 		{
 		  "position": 215,
 		  "enemy_id": "ent"
+		},
+		{
+		  "position": 349,
+		  "enemy_id": "bee_xmas",
+		  "spawn_chance": 0.33
+		},
+		{
+		  "position": 350,
+		  "enemy_id": "tree_xmas",
+		  "spawn_chance": 0.1
+		},
+		{
+		  "position": 351,
+		  "enemy_id": "mashroom_xmas",
+		  "spawn_chance": 0.25
 		}
 	  ]
 	}
