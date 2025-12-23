@@ -19,6 +19,12 @@ var _nearby_enemies: Array[Node2D] = []
 const drop_randf_range_min = 50
 const drop_randf_range_max = 250
 
+## tree-xmas（资源ID为 tree_xmas）专属掉落：便当概率（定义在脚本头部）
+const TREE_XMAS_BENTO1_CHANCE: float = 0.10
+const TREE_XMAS_BENTO2_CHANCE: float = 0.70
+const TREE_XMAS_BENTO3_CHANCE: float = 0.20
+const TREE_XMAS_ENEMY_IDS: Array[String] = ["tree_xmas", "tree-xmas"]
+
 var dir = null
 var speed = 300
 var target = null
@@ -574,9 +580,22 @@ func enemy_dead():
 		GameMain.drop_item_scene_obj.gen_drop_item({
 			"ani_name": "masterkey",
 			"position": self.global_position,
-			"scale": Vector2(4, 4)
+			"scale": Vector2(1, 1)
 		})
 	else:
+		# tree-xmas 专属：额外掉落便当（不影响原有金币掉落）
+		if TREE_XMAS_ENEMY_IDS.has(enemy_id):
+			var bento_type := _roll_tree_xmas_bento_type()
+			if not bento_type.is_empty():
+				var angle_b = randf() * TAU
+				var dist_b = randf_range(30.0, 90.0)
+				var offset_b = Vector2(cos(angle_b), sin(angle_b)) * dist_b
+				GameMain.drop_item_scene_obj.gen_drop_item({
+					"ani_name": bento_type,
+					"position": self.global_position + offset_b,
+					"scale": Vector2(1, 1)
+				})
+
 		# 掉落 gold，根据 gold_drop_count 掉落多个
 		for i in range(gold_drop_count):
 			# 添加随机偏移，防止多个金币重叠
@@ -589,7 +608,7 @@ func enemy_dead():
 			GameMain.drop_item_scene_obj.gen_drop_item({
 				"ani_name": "gold",
 				"position": self.global_position + offset,
-				"scale": Vector2(4, 4)
+				"scale": Vector2(1, 1)
 			})
 	
 	# 发送敌人死亡信号（在queue_free之前）
@@ -600,6 +619,20 @@ func enemy_dead():
 		CameraShake.shake(shake_duration, shake_amount)
 	
 	self.queue_free()
+
+## tree-xmas 掉落便当类型（按 10%/70%/20%）
+func _roll_tree_xmas_bento_type() -> String:
+	var total := TREE_XMAS_BENTO1_CHANCE + TREE_XMAS_BENTO2_CHANCE + TREE_XMAS_BENTO3_CHANCE
+	if total <= 0.0:
+		return ""
+	
+	var r := randf() * total
+	if r < TREE_XMAS_BENTO1_CHANCE:
+		return "bento1"
+	r -= TREE_XMAS_BENTO1_CHANCE
+	if r < TREE_XMAS_BENTO2_CHANCE:
+		return "bento2"
+	return "bento3"
 
 func enemy_flash():
 	if not $AnimatedSprite2D or not $AnimatedSprite2D.material:

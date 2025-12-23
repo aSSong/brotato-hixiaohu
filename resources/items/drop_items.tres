@@ -1,0 +1,71 @@
+[gd_resource type="SpriteFrames" load_steps=11 format=3 uid="uid://diw3ryvltjp70"]
+
+[ext_resource type="Texture2D" uid="uid://dgolpndj8hh1n" path="res://assets/items/nkey.png" id="1_mx7cu"]
+[ext_resource type="Texture2D" uid="uid://ddpc4iap2anta" path="res://assets/items/bento1.png" id="1_s6dxw"]
+[ext_resource type="Texture2D" uid="uid://bpbx1kxnk1um6" path="res://assets/items/bento2.png" id="2_kxrkc"]
+[ext_resource type="Texture2D" uid="uid://d0y4qqnoa48r2" path="res://assets/items/mkey.png" id="2_ry3o5"]
+[ext_resource type="Texture2D" uid="uid://d4dqlk6rigp2s" path="res://assets/items/bento3.png" id="3_tuu2c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_11mmd"]
+atlas = ExtResource("1_s6dxw")
+region = Rect2(0, 0, 141, 184)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rlsol"]
+atlas = ExtResource("2_kxrkc")
+region = Rect2(0, 0, 141, 184)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wp5w4"]
+atlas = ExtResource("3_tuu2c")
+region = Rect2(0, 0, 141, 184)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fg1yu"]
+atlas = ExtResource("1_mx7cu")
+region = Rect2(0, 0, 41, 87)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ic5u"]
+atlas = ExtResource("2_ry3o5")
+region = Rect2(0, 0, 45, 85)
+
+[resource]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_11mmd")
+}],
+"loop": true,
+"name": &"bento1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rlsol")
+}],
+"loop": true,
+"name": &"bento2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wp5w4")
+}],
+"loop": true,
+"name": &"bento3",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fg1yu")
+}],
+"loop": true,
+"name": &"gold",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ic5u")
+}],
+"loop": true,
+"name": &"masterkey",
+"speed": 1.0
+}]

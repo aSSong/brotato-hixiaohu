@@ -292,6 +292,8 @@ func _on_stop_area_entered(area: Area2D) -> void:
 		# 根据类型添加对应的物品
 		if item_type == "masterkey" or item_type == "master_key":
 			GameMain.add_master_key(1)
+		elif item_type == "bento1" or item_type == "bento2" or item_type == "bento3":
+			_apply_bento_heal(item_type)
 		else:
 			GameMain.add_gold(1)
 		
@@ -301,6 +303,29 @@ func _on_stop_area_entered(area: Area2D) -> void:
 		# 延迟删除物品，避免在碰撞检测期间删除
 		area.call_deferred("queue_free")
 	pass # Replace with function body.
+
+## 便当拾取回血（按最大HP百分比）
+func _apply_bento_heal(item_type: String) -> void:
+	var percent := 0.0
+	match item_type:
+		"bento1":
+			percent = 0.01
+		"bento2":
+			percent = 0.10
+		"bento3":
+			percent = 0.30
+		_:
+			return
+	
+	var heal_amount: int = max(1, int(ceil(max_hp * percent)))
+	var old_hp: int = now_hp
+	now_hp = min(now_hp + heal_amount, max_hp)
+	var actual_heal: int = now_hp - old_hp
+	
+	if actual_heal > 0:
+		if SpecialEffects:
+			SpecialEffects.show_heal_floating_text(self, actual_heal)
+		hp_changed.emit(now_hp, max_hp)
 
 ## 选择职业
 func chooseClass(class_id: String) -> void:
