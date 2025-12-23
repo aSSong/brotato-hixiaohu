@@ -406,6 +406,10 @@ func _exit_tree() -> void:
 func is_in_countdown() -> bool:
 	return state == ExplodeState.COUNTDOWN
 
+## 检查技能是否激活（倒数或爆炸中）- 供 AI 控制器查询
+func is_skill_active() -> bool:
+	return state == ExplodeState.COUNTDOWN or state == ExplodeState.EXPLODED
+
 ## 检查敌人是否无敌（供Enemy类查询）
 func is_enemy_invincible() -> bool:
 	return is_invincible

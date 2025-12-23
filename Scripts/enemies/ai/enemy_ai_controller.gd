@@ -253,10 +253,10 @@ func _is_skill_controlling_animation() -> bool:
 			if charging.is_charging_now():
 				return true
 		
-		# 检查 ExplodingBehavior
+		# 检查 ExplodingBehavior（倒数或爆炸中都需要控制动画）
 		if behavior is ExplodingBehavior:
 			var exploding = behavior as ExplodingBehavior
-			if exploding.is_in_countdown():
+			if exploding.is_skill_active():
 				return true
 	
 	return false
