@@ -1,0 +1,249 @@
+[gd_scene load_steps=5 format=3 uid="uid://bje5tw7713aew"]
+
+[ext_resource type="Texture2D" uid="uid://by7fwqoe2sm6" path="res://assets/UI/rescue/bg-rescue-01.png" id="1_2titl"]
+[ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="2_56t5j"]
+[ext_resource type="Texture2D" uid="uid://6gpv8tvqmnsy" path="res://assets/UI/shop_ui/btn-shop-buy-01.png" id="3_3jp2w"]
+[ext_resource type="Texture2D" uid="uid://o5ymn337opim" path="res://assets/UI/rescue/btn-close-01.png" id="4_obpua"]
+
+[node name="BestrecordUi" type="CanvasLayer"]
+
+[node name="panel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bg" type="TextureRect" parent="panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -594.5
+offset_top = -304.0
+offset_right = 594.5
+offset_bottom = 304.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_2titl")
+
+[node name="titleLabel" type="RichTextLabel" parent="panel"]
+custom_minimum_size = Vector2(400, 85)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -204.0
+offset_top = -263.0
+offset_right = 196.0
+offset_bottom = -188.0
+grow_horizontal = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("2_56t5j")
+theme_override_font_sizes/normal_font_size = 60
+text = "🏆最佳纪录"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 161
+
+[node name="MarginContainer" type="MarginContainer" parent="panel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -298.0
+offset_top = -157.0
+offset_right = 402.0
+offset_bottom = 158.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="panel/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 18
+
+[node name="ch1-Container" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ch1-title-Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-Container"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 36
+text = "Chapter I 纪录："
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ch1-context-Container" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="ch1recordLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 36
+text = "123分11秒48"
+vertical_alignment = 1
+
+[node name="ch1stateLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 16
+text = "上传中"
+vertical_alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+texture_normal = ExtResource("3_3jp2w")
+texture_pressed = ExtResource("3_3jp2w")
+texture_hover = ExtResource("3_3jp2w")
+texture_disabled = ExtResource("3_3jp2w")
+texture_focused = ExtResource("3_3jp2w")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container/TextureButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 28
+text = "上传"
+
+[node name="ch1-time-Container" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="timetitleLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-time-Container"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 16
+text = "达成时间："
+
+[node name="ch1-archived-time" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-time-Container"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 16
+text = "2024年12月24日12时48分"
+
+[node name="spacer" type="Control" parent="panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ch2-Container" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ch2-title-Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-Container"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 36
+text = "Chapter I 纪录："
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ch2-context-Container" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="ch2recordLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 36
+text = "WAVE 60"
+vertical_alignment = 1
+
+[node name="ch2stateLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 16
+text = "上传中"
+vertical_alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+texture_normal = ExtResource("3_3jp2w")
+texture_pressed = ExtResource("3_3jp2w")
+texture_hover = ExtResource("3_3jp2w")
+texture_disabled = ExtResource("3_3jp2w")
+texture_focused = ExtResource("3_3jp2w")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container/TextureButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 28
+text = "上传"
+
+[node name="ch2-time-Container" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="timetitleLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-time-Container"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 16
+text = "达成时间："
+
+[node name="ch2-archived-time" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-time-Container"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 16
+text = "2024年12月24日12时48分"
+
+[node name="close" type="TextureButton" parent="panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 460.0
+offset_top = -251.0
+offset_right = 510.0
+offset_bottom = -205.0
+grow_horizontal = 0
+texture_normal = ExtResource("4_obpua")
+texture_pressed = ExtResource("4_obpua")
+texture_hover = ExtResource("4_obpua")
+texture_disabled = ExtResource("4_obpua")
+texture_focused = ExtResource("4_obpua")

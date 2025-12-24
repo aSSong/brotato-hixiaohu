@@ -41,13 +41,41 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -255.0
+offset_top = -371.0
+offset_right = 255.0
+offset_bottom = 194.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="recordbtn" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="recordLabel" type="RichTextLabel" parent="VBoxContainer/recordbtn"]
+custom_minimum_size = Vector2(319, 58)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 offset_left = -20.0
 offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("6_oaxod")
+theme_override_font_sizes/normal_font_size = 45
+text = "🏆最佳纪录    "
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="cut1btn" type="TextureButton" parent="VBoxContainer"]
 layout_mode = 2
@@ -216,6 +244,7 @@ texture_pressed = ExtResource("9_bxq6r")
 texture_hover = ExtResource("9_bxq6r")
 texture_disabled = ExtResource("8_insag")
 
+[connection signal="pressed" from="VBoxContainer/recordbtn" to="." method="_on_cut_1_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/cut1btn" to="." method="_on_cut_1_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/cut2btn" to="." method="_on_cut_2_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/stuffbtn" to="." method="_on_stuffbtn_pressed"]
