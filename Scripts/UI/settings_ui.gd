@@ -3,6 +3,12 @@ extends Control
 @onready var fullscreen_btn: TextureButton = $DisplayModeContainer/FullscreenBtn
 @onready var window_btn: TextureButton = $DisplayModeContainer/WindowBtn
 
+# 最佳纪录界面场景
+const BESTRECORD_UI_SCENE = preload("res://scenes/UI/bestrecord_ui.tscn")
+
+# 当前打开的最佳纪录界面实例
+var _bestrecord_ui_instance: CanvasLayer = null
+
 func _ready() -> void:
 	# 根据当前窗口模式设置按钮状态
 	_update_display_mode_buttons()
@@ -45,6 +51,17 @@ func _set_windowed_size() -> void:
 	# 居中显示
 	var window_pos = (screen_size - window_size) / 2
 	DisplayServer.window_set_position(window_pos)
+
+## 打开最佳纪录界面（弹窗）
+func _on_recordbtn_pressed() -> void:
+	# 如果已经有一个实例存在，先关闭它
+	if _bestrecord_ui_instance != null and is_instance_valid(_bestrecord_ui_instance):
+		_bestrecord_ui_instance.queue_free()
+	
+	# 创建新实例
+	_bestrecord_ui_instance = BESTRECORD_UI_SCENE.instantiate()
+	add_child(_bestrecord_ui_instance)
+	print("[SettingsUI] 打开最佳纪录界面")
 
 func _on_cut_1_btn_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/UI/cutscene_playback_1.tscn")

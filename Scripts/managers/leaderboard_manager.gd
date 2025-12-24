@@ -361,6 +361,29 @@ func force_upload_all() -> void:
 		_pending_upload["multi"] = true
 		_upload_in_background("multi", 2, records["multi"])
 
+## 手动触发上传指定模式的记录（用于 UI 中的上传按钮）
+## mode_id: "survival" 或 "multi"
+func manual_upload(mode_id: String) -> void:
+	var record: Dictionary
+	var type: int
+	
+	if mode_id == "survival":
+		record = records.get("survival", {})
+		type = 1
+	elif mode_id == "multi":
+		record = records.get("multi", {})
+		type = 2
+	else:
+		push_error("[LeaderboardManager] 无效的模式ID: %s" % mode_id)
+		return
+	
+	if record.is_empty():
+		push_warning("[LeaderboardManager] 没有可上传的 %s 记录" % mode_id)
+		return
+	
+	print("[LeaderboardManager] 手动上传 %s 模式记录..." % mode_id)
+	_upload_in_background(mode_id, type, record)
+
 ## ==================== 私有方法 ====================
 
 ## 创建 Survival 模式记录

@@ -1,11 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://bje5tw7713aew"]
+[gd_scene load_steps=7 format=3 uid="uid://bje5tw7713aew"]
 
 [ext_resource type="Texture2D" uid="uid://by7fwqoe2sm6" path="res://assets/UI/rescue/bg-rescue-01.png" id="1_2titl"]
+[ext_resource type="Script" uid="uid://dj24bxhxoxqfp" path="res://Scripts/UI/bestrecord_ui.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://r4drbwadpmy8" path="res://assets/UI/common/bg-maintitle-02.png" id="2_3jp2w"]
 [ext_resource type="FontFile" uid="uid://dc6bkofr1if2e" path="res://assets/fonts/CangErYuYangTiW05-2.ttf" id="2_56t5j"]
 [ext_resource type="Texture2D" uid="uid://6gpv8tvqmnsy" path="res://assets/UI/shop_ui/btn-shop-buy-01.png" id="3_3jp2w"]
 [ext_resource type="Texture2D" uid="uid://o5ymn337opim" path="res://assets/UI/rescue/btn-close-01.png" id="4_obpua"]
 
 [node name="BestrecordUi" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="bg" type="TextureRect" parent="."]
+self_modulate = Color(0.27204677, 0.2720468, 0.2720468, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_3jp2w")
 
 [node name="panel" type="Control" parent="."]
 layout_mode = 3
@@ -15,9 +27,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -20.0
-offset_top = -20.0
+offset_top = -56.0
 offset_right = 20.0
-offset_bottom = 20.0
+offset_bottom = -15.999756
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -61,10 +73,10 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = -298.0
-offset_top = -157.0
-offset_right = 402.0
-offset_bottom = 158.0
+offset_left = -298.33334
+offset_top = -172.50012
+offset_right = 401.66666
+offset_bottom = 245.49988
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="panel/MarginContainer"]
@@ -72,11 +84,20 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 18
 
-[node name="ch1-Container" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
+[node name="serverPing" type="Label" parent="panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_56t5j")
+theme_override_font_sizes/font_size = 18
+text = "服务器连接失败"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ch1-Container2" type="HBoxContainer" parent="panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="ch1-title-Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-Container"]
+[node name="ch1-title-Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-Container2"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_56t5j")
 theme_override_font_sizes/font_size = 36
@@ -95,7 +116,8 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_fonts/font = ExtResource("2_56t5j")
 theme_override_font_sizes/font_size = 36
-text = "123分11秒48"
+text = "WAVE 20  / 123分11秒48"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="ch1stateLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container"]
@@ -106,7 +128,7 @@ theme_override_font_sizes/font_size = 16
 text = "上传中"
 vertical_alignment = 1
 
-[node name="TextureButton" type="TextureButton" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container"]
+[node name="ch1-upload" type="TextureButton" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container"]
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 texture_normal = ExtResource("3_3jp2w")
@@ -117,7 +139,7 @@ texture_focused = ExtResource("3_3jp2w")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container/TextureButton"]
+[node name="Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch1-context-Container/ch1-upload"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -162,7 +184,7 @@ alignment = 1
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_56t5j")
 theme_override_font_sizes/font_size = 36
-text = "Chapter I 纪录："
+text = "Chapter II 纪录："
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -178,6 +200,7 @@ theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_fonts/font = ExtResource("2_56t5j")
 theme_override_font_sizes/font_size = 36
 text = "WAVE 60"
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="ch2stateLabel" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container"]
@@ -188,7 +211,8 @@ theme_override_font_sizes/font_size = 16
 text = "上传中"
 vertical_alignment = 1
 
-[node name="TextureButton" type="TextureButton" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container"]
+[node name="ch2-upload" type="TextureButton" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container"]
+visible = false
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 texture_normal = ExtResource("3_3jp2w")
@@ -199,7 +223,7 @@ texture_focused = ExtResource("3_3jp2w")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container/TextureButton"]
+[node name="Label" type="Label" parent="panel/MarginContainer/VBoxContainer/ch2-context-Container/ch2-upload"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

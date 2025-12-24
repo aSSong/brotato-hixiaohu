@@ -117,3 +117,42 @@ func save_leaderboard_data(type: int, data: String) -> Dictionary:
 	if res.has("error"):
 		return {error = res["error"]}
 	return {success = true}
+
+## Ping 服务器检测连接状态
+## 返回: bool - true 表示连接成功，false 表示连接失败
+func ping_server() -> bool:
+	var ping_client = HTTPClient.new()
+	
+	# 连接到主机
+	var error = ping_client.connect_to_host(HOST)
+	if error != OK:
+		return false
+	
+	# 等待连接（最多3秒）
+	var start_time = Time.get_ticks_msec()
+	while ping_client.get_status() == HTTPClient.STATUS_CONNECTING or ping_client.get_status() == HTTPClient.STATUS_RESOLVING:
+		ping_client.poll()
+		await get_tree().process_frame
+		if Time.get_ticks_msec() - start_time > 3000:
+			return false
+	
+	# 检查连接状态
+	if ping_client.get_status() != HTTPClient.STATUS_CONNECTED:
+		return false
+	
+	# 发送简单的 HEAD 请求
+	error = ping_client.request(HTTPClient.METHOD_HEAD, "/", [])
+	if error != OK:
+		return false
+	
+	# 等待响应
+	start_time = Time.get_ticks_msec()
+	while ping_client.get_status() == HTTPClient.STATUS_REQUESTING:
+		ping_client.poll()
+		await get_tree().process_frame
+		if Time.get_ticks_msec() - start_time > 3000:
+			return false
+	
+	# 任何响应都表示服务器可达
+	var response_code = ping_client.get_response_code()
+	return response_code > 0
