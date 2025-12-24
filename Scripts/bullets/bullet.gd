@@ -346,7 +346,8 @@ func _setup_appearance() -> void:
 			_anim_timer = 0.0
 	
 	# 新增：加载挂载特效（如拖尾、旋转光圈等）
-	if bullet_data.trail_effect_path != "":
+	# 检查拖尾效果是否启用
+	if bullet_data.trail_effect_path != "" and SaveManager.get_trail_enabled():
 		var effect_scene = load(bullet_data.trail_effect_path)
 		if effect_scene:
 			var effect_instance = effect_scene.instantiate()

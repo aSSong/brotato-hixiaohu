@@ -271,6 +271,7 @@ texture_hover = ExtResource("9_bxq6r")
 texture_disabled = ExtResource("8_insag")
 
 [connection signal="pressed" from="VBoxContainer/recordbtn" to="." method="_on_recordbtn_pressed"]
+[connection signal="pressed" from="VBoxContainer/videobtn" to="." method="_on_videobtn_pressed"]
 [connection signal="pressed" from="VBoxContainer/stuffbtn2" to="." method="_on_stuffbtn_pressed"]
 [connection signal="pressed" from="VBoxContainer/cut1btn" to="." method="_on_cut_1_btn_pressed"]
 [connection signal="pressed" from="VBoxContainer/cut2btn" to="." method="_on_cut_2_btn_pressed"]

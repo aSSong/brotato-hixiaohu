@@ -5,6 +5,11 @@ extends Node
 
 const SAVE_FILE_PATH = "user://user_save.dat"
 
+## ==================== 性能设置缓存（避免频繁字典查找） ====================
+## 这些变量在加载存档或设置变更时同步更新，供高频调用直接访问
+var shake_enabled_cache: bool = true
+var trail_enabled_cache: bool = true
+
 ## 用户数据字典
 var user_data: Dictionary = {
 	"player_name": "",
@@ -17,7 +22,9 @@ var user_data: Dictionary = {
 	},
 	"display_mode": "fullscreen",  # 显示模式: "fullscreen" 或 "windowed"
 	"floor_version": 0,  # 楼层版本，用于迁移逻辑控制（0: 旧版, 1: 迁移中, 2: 新版）
-	"tutorial_shown": false  # 是否已显示过教程（不再提示）
+	"tutorial_shown": false,  # 是否已显示过教程（不再提示）
+	"shake_enabled": true,  # 震屏效果开关（怪物死亡时）
+	"trail_enabled": true   # 子弹拖尾效果开关
 }
 
 ## 初始化
@@ -87,9 +94,19 @@ func load_user_data() -> bool:
 		# 确保旧存档也有 tutorial_shown 字段
 		if not user_data.has("tutorial_shown"):
 			user_data["tutorial_shown"] = false
+		
+		# 确保旧存档也有 shake_enabled 字段
+		if not user_data.has("shake_enabled"):
+			user_data["shake_enabled"] = true
+		
+		# 确保旧存档也有 trail_enabled 字段
+		if not user_data.has("trail_enabled"):
+			user_data["trail_enabled"] = true
 			
 		# 迁移旧版 floor_id（0-38 索引制）到新版（1-38 真实楼层号）
 		_migrate_legacy_floor_id()
+		# 同步性能设置缓存
+		_sync_performance_cache()
 		print("[SaveManager] 用户数据已加载: %s" % user_data)
 		return true
 	else:
@@ -277,3 +294,32 @@ func _set_windowed_size() -> void:
 	var window_pos = (screen_size - window_size) / 2
 	DisplayServer.window_set_position(window_pos)
 	print("[SaveManager] 窗口大小: %dx%d" % [window_size.x, window_size.y])
+
+## ==================== 视频性能设置 ====================
+
+## 同步性能设置缓存（加载存档时调用）
+func _sync_performance_cache() -> void:
+	shake_enabled_cache = user_data.get("shake_enabled", true)
+	trail_enabled_cache = user_data.get("trail_enabled", true)
+
+## 设置震屏效果开关
+func set_shake_enabled(enabled: bool) -> void:
+	user_data["shake_enabled"] = enabled
+	shake_enabled_cache = enabled  # 同步更新缓存
+	save_user_data()
+	print("[SaveManager] 震屏效果设置已保存: %s" % enabled)
+
+## 获取震屏效果开关（使用缓存，高频调用优化）
+func get_shake_enabled() -> bool:
+	return shake_enabled_cache
+
+## 设置子弹拖尾效果开关
+func set_trail_enabled(enabled: bool) -> void:
+	user_data["trail_enabled"] = enabled
+	trail_enabled_cache = enabled  # 同步更新缓存
+	save_user_data()
+	print("[SaveManager] 子弹拖尾效果设置已保存: %s" % enabled)
+
+## 获取子弹拖尾效果开关（使用缓存，高频调用优化）
+func get_trail_enabled() -> bool:
+	return trail_enabled_cache

@@ -52,6 +52,10 @@ func _process(delta: float) -> void:
 		shake_amount = 0.0
 
 func shake(duration: float = 0.3, amount: float = 10.0) -> void:
+	# 检查震屏效果是否启用
+	if not SaveManager.get_shake_enabled():
+		return
+	
 	# 如果摄像机还没有找到，尝试再次查找
 	if camera == null:
 		find_camera()

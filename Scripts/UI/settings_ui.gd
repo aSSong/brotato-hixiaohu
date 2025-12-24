@@ -5,9 +5,13 @@ extends Control
 
 # 最佳纪录界面场景
 const BESTRECORD_UI_SCENE = preload("res://scenes/UI/bestrecord_ui.tscn")
+# 视频设置界面场景
+const VIDEOSET_UI_SCENE = preload("res://scenes/UI/videoset_ui.tscn")
 
 # 当前打开的最佳纪录界面实例
 var _bestrecord_ui_instance: CanvasLayer = null
+# 当前打开的视频设置界面实例
+var _videoset_ui_instance: CanvasLayer = null
 
 func _ready() -> void:
 	# 根据当前窗口模式设置按钮状态
@@ -62,6 +66,17 @@ func _on_recordbtn_pressed() -> void:
 	_bestrecord_ui_instance = BESTRECORD_UI_SCENE.instantiate()
 	add_child(_bestrecord_ui_instance)
 	print("[SettingsUI] 打开最佳纪录界面")
+
+## 打开视频设置界面（弹窗）
+func _on_videobtn_pressed() -> void:
+	# 如果已经有一个实例存在，先关闭它
+	if _videoset_ui_instance != null and is_instance_valid(_videoset_ui_instance):
+		_videoset_ui_instance.queue_free()
+	
+	# 创建新实例
+	_videoset_ui_instance = VIDEOSET_UI_SCENE.instantiate()
+	add_child(_videoset_ui_instance)
+	print("[SettingsUI] 打开视频设置界面")
 
 func _on_cut_1_btn_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/UI/cutscene_playback_1.tscn")
