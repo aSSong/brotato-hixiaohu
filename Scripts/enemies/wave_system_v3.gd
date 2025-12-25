@@ -83,16 +83,21 @@ func _ready() -> void:
 	
 	# 保护：避免同时存在旧 WaveManager 和 V3 导致 get_first_node_in_group("wave_manager") 随机取错
 	_ensure_single_wave_manager_in_group()
-	
+
+	# 注意：ModeRegistry 是 Autoload，存在 ready 时序问题；这里延后到下一帧读取模式配置更稳。
+	call_deferred("_initialize_from_mode")
+
+## 延后初始化：从当前模式读取 wave_config_id 并加载波次配置
+func _initialize_from_mode() -> void:
 	# 从当前模式获取配置ID（如果有）
 	var mode_id = GameMain.current_mode_id
 	if mode_id and not mode_id.is_empty():
 		var mode = ModeRegistry.get_mode(mode_id)
-		if mode and "wave_config_id" in mode:
-			wave_config_id = mode.wave_config_id
+		if mode:
+			wave_config_id = str(mode.wave_config_id)
 			print("[WaveSystem V3] 从模式获取配置ID: ", wave_config_id, " (模式: ", mode_id, ")")
 		else:
-			print("[WaveSystem V3] 模式 ", mode_id, " 没有 wave_config_id，使用默认配置")
+			push_warning("[WaveSystem V3] 模式 %s 不存在或ModeRegistry未就绪，使用默认配置: %s" % [str(mode_id), str(wave_config_id)])
 	else:
 		print("[WaveSystem V3] 未设置模式ID，使用默认配置: ", wave_config_id)
 	
@@ -272,21 +277,19 @@ func _convert_wave_config(wave_data: Dictionary) -> Dictionary:
 		}
 		config["spawn_phases"] = [phase]
 		
-		# 处理BOSS配置 - 作为额外的phase
-		var boss_config = wave_data.get("boss_config", {})
-		var boss_count = boss_config.get("count", 1)
-		var boss_id = boss_config.get("enemy_id", "last_enemy")
-		if boss_count > 0:
-			var boss_phase = {
-				"spawn_per_time": 1,
-				"spawn_interval": spawn_interval,
-				"total_count": boss_count,
-				"enemy_types": {boss_id: 1.0}
-			}
-			config["spawn_phases"].append(boss_phase)
+		# 处理BOSS配置：保持为独立字段，交给 EnemySpawnerV3 在所有phase后统一刷新
+		var boss_cfg = wave_data.get("boss_config", {})
+		var boss_count: int = int(boss_cfg.get("count", 0))
+		if boss_count < 0:
+			boss_count = 0
+		var boss_id: String = str(boss_cfg.get("enemy_id", ""))
+		config["boss_config"] = {
+			"count": boss_count,
+			"enemy_id": boss_id
+		}
 		
 		# 计算总敌人数
-		config["total_enemies"] = total_count + boss_count
+		config["total_enemies"] = int(total_count) + boss_count
 		
 		# special_spawns保持不变
 		if wave_data.has("special_spawns"):

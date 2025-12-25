@@ -97,8 +97,9 @@ func _load_spawn_indicator_delay() -> void:
 	var mode_id = GameMain.current_mode_id
 	if mode_id and not mode_id.is_empty():
 		var mode = ModeRegistry.get_mode(mode_id)
-		if mode and "spawn_indicator_delay" in mode:
-			spawn_indicator_delay = mode.spawn_indicator_delay
+		# mode 是 BaseGameMode 对象，不要用 `"xxx" in mode`（那是给 Dictionary 用的）
+		if mode:
+			spawn_indicator_delay = float(mode.spawn_indicator_delay)
 			_dprint("[EnemySpawner V3] 从模式获取预警延迟: %s 秒 (模式: %s)" % [str(spawn_indicator_delay), str(mode_id)])
 
 ## 设置波次系统
