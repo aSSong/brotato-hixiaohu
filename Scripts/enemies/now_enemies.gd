@@ -48,7 +48,8 @@ func _ready() -> void:
 	print("[now_enemies] 使用新的波次系统 V3")
 	
 	# 等待一下再开始第一波
-	await get_tree().create_timer(1.0).timeout
+	# 暂停（死亡UI等）期间不推进计时（保持一致的暂停语义）
+	await get_tree().create_timer(1.0, false).timeout
 	wave_system.start_game()
 
 ## 获取波次管理器（供外部访问，保持兼容性）

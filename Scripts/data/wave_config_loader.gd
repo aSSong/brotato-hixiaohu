@@ -155,26 +155,92 @@ static func _validate_config(config: Dictionary) -> bool:
 
 ## 验证单个波次配置
 static func _validate_wave(wave: Dictionary, wave_number: int) -> bool:
-	# 必需字段
-	var required_fields = ["wave", "spawn_interval", "hp_growth", "damage_growth", "total_count", "enemies"]
+	# 兼容两种格式：
+	# 1) 旧格式：{wave, spawn_interval, hp_growth, damage_growth, total_count, enemies, boss_config?, special_spawns?}
+	# 2) 新 Phase 格式：{wave, base_config?, spawn_phases, boss_config?, special_spawns?}
+	if not wave.has("wave"):
+		push_error("[WaveConfigLoader] 波次 %d 缺少字段: wave" % wave_number)
+		return false
+	
+	# ========== 新 Phase 格式 ==========
+	if wave.has("spawn_phases"):
+		if not (wave.spawn_phases is Array):
+			push_error("[WaveConfigLoader] 波次 %d spawn_phases 必须是数组" % wave_number)
+			return false
+		if wave.spawn_phases.is_empty():
+			push_error("[WaveConfigLoader] 波次 %d spawn_phases 不能为空" % wave_number)
+			return false
+		
+		# base_config 可选，但若存在必须是 Dictionary
+		if wave.has("base_config") and not (wave.base_config is Dictionary):
+			push_error("[WaveConfigLoader] 波次 %d base_config 必须是字典" % wave_number)
+			return false
+		
+		# 校验每个 phase
+		for p_idx in range(wave.spawn_phases.size()):
+			var phase = wave.spawn_phases[p_idx]
+			if not (phase is Dictionary):
+				push_error("[WaveConfigLoader] 波次 %d phase[%d] 必须是字典" % [wave_number, p_idx])
+				return false
+			
+			# enemy_types 必须存在且为字典（否则刷怪无意义）
+			if not phase.has("enemy_types") or not (phase.enemy_types is Dictionary):
+				push_error("[WaveConfigLoader] 波次 %d phase[%d] 缺少 enemy_types 或类型错误" % [wave_number, p_idx])
+				return false
+			if (phase.enemy_types as Dictionary).is_empty():
+				push_error("[WaveConfigLoader] 波次 %d phase[%d] enemy_types 不能为空" % [wave_number, p_idx])
+				return false
+			
+			# total_count 允许缺省（由上层给默认），但若存在应为非负数
+			var total_count = int(phase.get("total_count", 0))
+			if total_count < 0:
+				push_error("[WaveConfigLoader] 波次 %d phase[%d] total_count 不能为负数" % [wave_number, p_idx])
+				return false
+			
+			# 概率/权重和提示（允许不为1或100；EnemySpawnerV3 会按权重总和归一化抽取）
+			var sum := 0.0
+			for enemy_id in phase.enemy_types:
+				sum += float(phase.enemy_types[enemy_id])
+			# 仅提示：既不接近 1，也不接近 100，且不是 0
+			if sum > 0.0 and abs(sum - 1.0) > 0.01 and abs(sum - 100.0) > 0.01:
+				push_warning("[WaveConfigLoader] 波次 %d phase[%d] enemy_types 权重和异常(不接近1或100)：%s" % [wave_number, p_idx, str(sum)])
+		
+		# boss_config 可选：若存在，允许 count=0 或 enemy_id=""
+		if wave.has("boss_config"):
+			if not (wave.boss_config is Dictionary):
+				push_error("[WaveConfigLoader] 波次 %d boss_config 必须是字典" % wave_number)
+				return false
+			var bc = wave.boss_config
+			var bc_count = int(bc.get("count", 0))
+			if bc_count < 0:
+				push_error("[WaveConfigLoader] 波次 %d boss_config.count 不能为负数" % wave_number)
+				return false
+		
+		# special_spawns 可选：若存在应为数组
+		if wave.has("special_spawns") and not (wave.special_spawns is Array):
+			push_error("[WaveConfigLoader] 波次 %d special_spawns 必须是数组" % wave_number)
+			return false
+		
+		return true
+	
+	# ========== 旧格式 ==========
+	var required_fields = ["spawn_interval", "hp_growth", "damage_growth", "total_count", "enemies"]
 	for field in required_fields:
 		if not wave.has(field):
-			push_error("[WaveConfigLoader] 波次 ", wave_number, " 缺少字段: ", field)
+			push_error("[WaveConfigLoader] 波次 %d 缺少字段: %s" % [wave_number, field])
 			return false
 	
 	# 验证敌人配比
-	if not wave.enemies is Dictionary:
-		push_error("[WaveConfigLoader] 波次 ", wave_number, " enemies 必须是字典")
+	if not (wave.enemies is Dictionary):
+		push_error("[WaveConfigLoader] 波次 %d enemies 必须是字典" % wave_number)
 		return false
 	
-	# 验证配比总和（允许一定误差）
+	# 验证配比总和（允许一定误差；这里仅提示，刷怪侧会按权重总和归一化）
 	var total_ratio = 0.0
 	for enemy_id in wave.enemies:
-		total_ratio += wave.enemies[enemy_id]
-	
-	# 如果没有boss_config或special_spawns，配比总和应该接近1.0
-	if abs(total_ratio - 1.0) > 0.01 and not wave.has("special_spawns"):
-		push_warning("[WaveConfigLoader] 波次 ", wave_number, " 敌人配比总和不为1.0: ", total_ratio)
+		total_ratio += float(wave.enemies[enemy_id])
+	if total_ratio > 0.0 and abs(total_ratio - 1.0) > 0.01 and abs(total_ratio - 100.0) > 0.01 and not wave.has("special_spawns"):
+		push_warning("[WaveConfigLoader] 波次 %d enemies 权重和异常(不接近1或100)：%s" % [wave_number, str(total_ratio)])
 	
 	return true
 
