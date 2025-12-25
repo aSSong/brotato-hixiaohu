@@ -466,6 +466,21 @@ func on_enemy_spawn_failed(enemy_id: String = "") -> void:
 	
 	push_warning("[WaveSystem V3] 敌人生成失败计入进度：%s (%d/%d)" % [enemy_id, spawned_enemies_this_wave, total_enemies_this_wave])
 
+## 敌人“跳过生成”的回调（用于安全规则：例如生成瞬间离玩家太近则取消）
+## 计入 spawned + killed，但不计入 failed_spawns（避免把“策略跳过”当成生成失败统计）
+func on_enemy_spawn_skipped(enemy_id: String = "", reason: String = "") -> void:
+	if current_state != WaveState.SPAWNING and current_state != WaveState.FIGHTING:
+		return
+	
+	spawned_enemies_this_wave += 1
+	killed_enemies_this_wave += 1
+	enemy_killed.emit(current_wave, killed_enemies_this_wave, total_enemies_this_wave)
+	
+	if reason == "":
+		push_warning("[WaveSystem V3] 敌人跳过生成计入进度：%s (%d/%d)" % [enemy_id, spawned_enemies_this_wave, total_enemies_this_wave])
+	else:
+		push_warning("[WaveSystem V3] 敌人跳过生成计入进度：%s (%s) (%d/%d)" % [enemy_id, reason, spawned_enemies_this_wave, total_enemies_this_wave])
+
 ## 所有Phase刷怪完成的回调（由生成器调用）
 func on_all_phases_complete() -> void:
 	all_phases_complete = true

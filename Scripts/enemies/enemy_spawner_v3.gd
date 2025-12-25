@@ -44,6 +44,10 @@ var spawn_indicator_delay: float = 0.5  # 默认预警延迟，会从模式配�
 const SPAWN_MIN_DISTANCE: float = 500.0   # 最小距离：敌人不会在玩家 500 像素内刷新
 const SPAWN_MAX_DISTANCE: float = 1200.0  # 最大距离：敌人不会在玩家 1200 像素外刷新
 
+## 生成瞬间二次安全距离：
+## 预警期间玩家可能冲到刷新点附近；若生成瞬间距离过近（Boss与special_spawns除外）则直接跳过该怪并计入已刷+已杀。
+const SPAWN_CANCEL_DISTANCE_NEAR_PLAYER: float = 100.0
+
 var max_spawn_attempts: int = 30
 
 ## ========== 状态 ==========
@@ -55,6 +59,9 @@ var current_phase_index: int = 0
 var global_spawn_index: int = 0  # 整个wave的累计刷怪序号
 var phase_enemy_lists: Array = []  # 每个phase的敌人列表
 var _stop_spawning: bool = false  # 用于中断刷怪循环
+
+# special_spawns 对应的全局索引（这些怪物不受“过近取消生成”规则影响）
+var _special_spawn_global_indices: Dictionary = {}
 
 func _ready() -> void:
 	# 查找地图
@@ -119,6 +126,7 @@ func spawn_wave_phases(wave_config: Dictionary, ws: WaveSystemV3) -> void:
 	
 	# 预构建所有phase的敌人列表
 	phase_enemy_lists.clear()
+	_special_spawn_global_indices.clear()
 	for phase in phases:
 		var enemy_list = _build_phase_enemy_list(phase)
 		phase_enemy_lists.append(enemy_list)
@@ -258,6 +266,7 @@ func _apply_special_spawns(special_spawns: Array) -> void:
 			var phase_idx = mapping[0]
 			var local_idx = mapping[1]
 			phase_enemy_lists[phase_idx][local_idx] = enemy_id
+			_special_spawn_global_indices[pos] = true
 			replaced_count += 1
 		else:
 			skipped_count += 1
@@ -434,6 +443,8 @@ func _spawn_batch_with_indicators(
 	
 	for i in range(enemy_ids.size()):
 		var enemy_id = enemy_ids[i]
+		var planned_global_index: int = int(global_spawn_index) + int(i)
+		var is_special := _special_spawn_global_indices.has(planned_global_index)
 		var spawn_pos = _find_spawn_position()
 		if spawn_pos == Vector2.INF:
 			push_warning("[EnemySpawner V3] 无法找到合适位置：", enemy_id)
@@ -447,7 +458,8 @@ func _spawn_batch_with_indicators(
 			"pos": spawn_pos,
 			"indicator": indicator,
 			"enemy_id": enemy_id,
-			"is_last": is_last_batch and (i == enemy_ids.size() - 1)
+			"is_last": is_last_batch and (i == enemy_ids.size() - 1),
+			"is_special": is_special
 		})
 	
 	# 等待预警延迟
@@ -458,6 +470,15 @@ func _spawn_batch_with_indicators(
 	for data in spawn_data:
 		if is_instance_valid(data.indicator):
 			data.indicator.queue_free()
+		
+		# 生成瞬间二次安全检查：普通怪（非 special）如果离玩家太近则直接跳过
+		if (not bool(data.get("is_special", false))) and _should_cancel_spawn_due_to_player_proximity(data.pos):
+			if wave_system and wave_system.has_method("on_enemy_spawn_skipped"):
+				wave_system.on_enemy_spawn_skipped(str(data.enemy_id), "too_close_to_player")
+			elif wave_system and wave_system.has_method("on_enemy_spawn_failed"):
+				# 兼容兜底：若没有 skipped 接口，至少计入进度避免卡死
+				wave_system.on_enemy_spawn_failed(str(data.enemy_id))
+			continue
 		
 		var enemy = _spawn_single_enemy_at_position(
 			data.enemy_id,
@@ -473,6 +494,12 @@ func _spawn_batch_with_indicators(
 			wave_system.on_enemy_spawned(enemy)
 		elif wave_system and wave_system.has_method("on_enemy_spawn_failed"):
 			wave_system.on_enemy_spawn_failed(data.enemy_id)
+
+## 生成瞬间是否应取消（玩家距离过近）
+func _should_cancel_spawn_due_to_player_proximity(spawn_pos: Vector2) -> bool:
+	if not player or not is_instance_valid(player):
+		return false
+	return spawn_pos.distance_to(player.global_position) < SPAWN_CANCEL_DISTANCE_NEAR_PLAYER
 
 ## 等待场上敌人数量低于指定值
 func _wait_for_enemy_count_below(threshold: int) -> void:
