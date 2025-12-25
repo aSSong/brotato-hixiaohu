@@ -108,9 +108,10 @@ func _on_initialize() -> void:
 		if not fx_sprite_frames:
 			push_error("[BossShootingBehavior] 无法加载特效资源: " + fx_sprite_frames_path)
 	
-	state = SkillState.IDLE
+	# 刷新创建时默认进入冷却，避免Boss生成后立刻放技能
+	state = SkillState.COOLDOWN
 	state_timer = 0.0
-	cooldown_timer = 0.0
+	cooldown_timer = skill_cooldown
 
 func _on_update(delta: float) -> void:
 	if not enemy or enemy.is_dead:

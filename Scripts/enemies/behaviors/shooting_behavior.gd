@@ -117,7 +117,9 @@ func _on_initialize() -> void:
 			push_error("[ShootingBehavior] 无法加载击中特效资源: " + hit_fx_sprite_frames_path)
 	
 	state = ShootState.IDLE
-	shoot_timer = 0.0
+	# 刷新创建时默认进入冷却，避免怪物生成后立刻放技能
+	# 只有冷却结束后才允许第一次触发射击
+	shoot_timer = shoot_interval
 
 func _on_update(delta: float) -> void:
 	if not enemy or enemy.is_dead:

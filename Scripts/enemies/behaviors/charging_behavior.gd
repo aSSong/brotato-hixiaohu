@@ -68,8 +68,9 @@ func _on_initialize() -> void:
 	else:
 		indicator_scale = Vector2(scale_value, scale_value)
 	
-	state = ChargeState.IDLE
-	state_timer = 0.0
+	# 刷新创建时默认进入冷却，避免怪物生成后立刻触发冲锋
+	state = ChargeState.COOLDOWN
+	state_timer = cooldown
 	is_charging = false
 	_hide_indicator()
 
