@@ -665,6 +665,10 @@ func set_invincible(value: bool) -> void:
 ## 应用击退（考虑击退抗性）
 ## @param knockback_force 击退力向量
 func apply_knockback(knockback_force: Vector2) -> void:
+	# STILL 类型（树等）不应被任何方式推动坐标：不吃击退
+	if enemy_data and enemy_data.ai_type == EnemyData.EnemyAIType.STILL:
+		return
+	
 	# 根据击退抗性减少击退力
 	var resistance_multiplier = 1.0 - knockback_resistance
 	knockback_velocity += knockback_force * resistance_multiplier

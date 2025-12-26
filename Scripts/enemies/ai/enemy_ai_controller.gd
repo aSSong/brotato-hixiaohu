@@ -48,13 +48,27 @@ func on_hurt() -> void:
 func update_ai(delta: float, separation: Vector2) -> void:
 	if not enemy or enemy.is_dead:
 		return
+	
+	# STILL 类型（树等）坐标应始终不变：不受分离力/击退/AI 影响
+	# 注意：冰冻分支在下面会处理动画；这里优先硬锁位置
+	if enemy.enemy_data and enemy.enemy_data.ai_type == EnemyData.EnemyAIType.STILL:
+		# 动画保持 idle/walk 的既有规则（不强行覆盖技能动画）
+		if not _is_skill_controlling_animation():
+			_play_idle_or_walk()
+		enemy.knockback_velocity = Vector2.ZERO
+		enemy.velocity = Vector2.ZERO
+		return
+
 	if not enemy.target or not is_instance_valid(enemy.target):
 		_set_velocity_and_anim(Vector2.ZERO, false, separation)
 		return
 	
 	# 冰冻：完全不动（保持与原逻辑一致）
 	if enemy.is_frozen():
-		_set_velocity_and_anim(Vector2.ZERO, false, separation)
+		# 冰冻应完全静止：不叠加击退/分离（否则会出现“冰冻也被推着走”的副作用）
+		if not _is_skill_controlling_animation():
+			_play_idle_or_walk()
+		enemy.velocity = Vector2.ZERO
 		return
 	
 	var player_pos: Vector2 = enemy.target.global_position
