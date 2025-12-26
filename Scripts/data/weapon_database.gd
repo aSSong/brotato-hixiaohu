@@ -151,7 +151,7 @@ static func initialize_weapons() -> void:
 		{
 			"damage": 2,
 			"attack_speed": 0.3,
-			"range": 800.0,
+			"range": 1000.0,
 			"bullet_id": "mg_bullet",  # 使用机枪专属子弹（带枪口和击中特效）
 			"pierce_count": 0,
 			"projectile_count": 1,
