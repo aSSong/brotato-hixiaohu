@@ -61,6 +61,9 @@ enum MovementType {
 ## SPIRAL: {"spiral_speed": 360.0, "spiral_radius": 20.0}
 @export var movement_params: Dictionary = {}
 
+## 击退设置
+@export var knockback_force: float = 0.0  # 击退力度（0 = 无击退）
+
 ## 碰撞设置
 @export var collision_radius: float = 8.0
 @export var destroy_on_hit: bool = true  # 命中后是否销毁
@@ -98,6 +101,8 @@ func duplicate_data() -> BulletData:
 	copy.muzzle_effect_ani_name = muzzle_effect_ani_name
 	copy.muzzle_effect_scale = muzzle_effect_scale
 	copy.muzzle_effect_offset = muzzle_effect_offset
+	# 击退
+	copy.knockback_force = knockback_force
 	# 其他
 	copy.movement_type = movement_type
 	copy.movement_params = movement_params.duplicate()

@@ -378,6 +378,9 @@ func _on_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int
 	if body.has_method("enemy_hurt"):
 		body.enemy_hurt(hurt, is_critical)
 	
+	# 应用击退效果
+	_apply_knockback(body)
+	
 	# 应用特殊效果（传参执行，无回调）
 	_apply_effects_to_target(body)
 	
@@ -413,6 +416,40 @@ func _play_hit_effect() -> void:
 		global_position,
 		bullet_data.hit_effect_scale
 	)
+
+## 应用击退效果
+func _apply_knockback(enemy: Node2D) -> void:
+	if not bullet_data:
+		return
+	
+	# 获取基础击退力
+	var base_knockback = bullet_data.knockback_force
+	if base_knockback <= 0:
+		return
+	
+	# 计算最终击退力（受玩家属性加成影响）
+	var final_knockback = base_knockback
+	if player_stats:
+		final_knockback = DamageCalculator.calculate_knockback(base_knockback, player_stats)
+	
+	if final_knockback <= 0:
+		return
+	
+	# 计算击退方向（从子弹飞行方向）
+	var knockback_dir = dir.normalized()
+	
+	# 应用击退
+	if enemy is CharacterBody2D:
+		if enemy.has_method("apply_knockback"):
+			# 优先使用 apply_knockback 方法（会自动应用击退抗性）
+			enemy.apply_knockback(knockback_dir * final_knockback)
+		elif "knockback_velocity" in enemy:
+			# 备用方案：手动考虑击退抗性
+			var resistance = enemy.knockback_resistance if "knockback_resistance" in enemy else 0.0
+			var resistance_multiplier = 1.0 - resistance
+			enemy.knockback_velocity += knockback_dir * final_knockback * resistance_multiplier
+		elif "velocity" in enemy:
+			enemy.velocity += knockback_dir * final_knockback
 
 ## 应用特效到目标
 func _apply_effects_to_target(target: Node) -> void:
