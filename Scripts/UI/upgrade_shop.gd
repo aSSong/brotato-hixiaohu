@@ -914,6 +914,14 @@ func _weapon_benefits_from_stats(weapon_data: WeaponData, stats: CombatStats) ->
 			return true
 		if stats.ranged_projectile_count != 0:
 			return true
+		
+		# 击退：子弹系统支持 knockback_force 时，远程武器也会受击退加成影响
+		# 生效条件：该武器使用的子弹配置 knockback_force > 0
+		if (not is_equal_approx(stats.melee_knockback_add, 0.0) or not is_equal_approx(stats.melee_knockback_mult, 1.0)):
+			var bullet_id = String(params.get("bullet_id", "normal_bullet"))
+			var bullet_data = BulletDatabase.get_bullet(bullet_id)
+			if bullet_data and bullet_data.knockback_force > 0.0:
+				return true
 	
 	# 近战击退：只在 MeleeBehavior 中读取，且要求武器本身有基础击退力度
 	if behavior_type == WeaponData.BehaviorType.MELEE:
