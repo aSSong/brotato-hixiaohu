@@ -23,6 +23,7 @@ static func initialize_bullets() -> void:
 	## 霰弹枪子弹
 	var sg_bullet = BulletData.new("sg_bullet", 1500.0, 1.5, "res://assets/weapon/shotgun/sg-bullet.png")
 	sg_bullet.bullet_name = "霰弹枪子弹"
+	sg_bullet.knockback_force = 80.0  # 子弹有击退效果
 	sg_bullet.scale = Vector2(0.8, 0.8)
 	sg_bullet.movement_type = BulletData.MovementType.STRAIGHT
 	sg_bullet.movement_params = {
@@ -57,6 +58,7 @@ static func initialize_bullets() -> void:
 	# 机枪子弹（基于 fast_bullet 参数，带枪口和击中特效）
 	var mg_bullet = BulletData.new("mg_bullet", 3000.0, 2.5, "res://assets/weapon/machinegun/mg-bullet.png")
 	mg_bullet.bullet_name = "机枪子弹"
+	mg_bullet.knockback_force = 80.0  # 子弹有击退效果
 	mg_bullet.scale = Vector2(0.3, 0.3)
 	mg_bullet.movement_type = BulletData.MovementType.STRAIGHT
 	mg_bullet.movement_params = {
@@ -81,6 +83,7 @@ static func initialize_bullets() -> void:
 	
 	var ls_bullet = BulletData.new("ls_bullet", 1500.0, 4.0, "res://assets/weapon/lighitningspear/ls-bullet.png")
 	ls_bullet.bullet_name = "闪电长矛子弹"
+	ls_bullet.knockback_force = 300.0  # 子弹有击退效果
 	ls_bullet.scale = Vector2(1.0, 1.0)
 	ls_bullet.movement_type = BulletData.MovementType.STRAIGHT
 	ls_bullet.movement_params = {
@@ -135,6 +138,7 @@ static func initialize_bullets() -> void:
 	## 追踪导弹子弹
 	var ms_bullet = BulletData.new("ms_bullet", 1000.0, 4.0, "res://assets/weapon/missle/ms-bullet.png")
 	ms_bullet.bullet_name = "追踪导弹子弹"
+	mg_bullet.knockback_force = 200.0  # 子弹有击退效果
 	ms_bullet.scale = Vector2(0.5, 0.5)
 	ms_bullet.movement_type = BulletData.MovementType.HOMING
 	ms_bullet.movement_params = {
