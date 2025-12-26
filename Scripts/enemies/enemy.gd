@@ -57,8 +57,8 @@ var gold_drop_count: int = 1
 var stop_distance: float = 100.0  # 可以设置为略大于攻击范围
 
 ## 软分离配置（防止敌人完全重叠）
-var separation_radius: float = 60.0  # 分离检测半径
-var separation_strength: float = 120.0  # 分离力度
+var separation_radius: float = 200.0  # 分离检测半径
+var separation_strength: float = 200.0  # 分离力度
 
 ## 是否为本波最后一个敌人（用于掉落masterKey）
 var is_last_enemy_in_wave: bool = false
