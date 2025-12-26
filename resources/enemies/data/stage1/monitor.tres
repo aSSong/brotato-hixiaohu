@@ -41,3 +41,4 @@ animations = {
 }
 scale = Vector2(1.5, 1.5)
 knockback_resistance = 1.0
+hp_growth_per_wave = 25.0

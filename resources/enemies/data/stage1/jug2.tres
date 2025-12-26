@@ -39,3 +39,5 @@ skill_config = {
 "spread_angle": 0.0
 }
 knockback_resistance = 0.5
+gold_drop_count = 2
+hp_growth_per_wave = 3.0
