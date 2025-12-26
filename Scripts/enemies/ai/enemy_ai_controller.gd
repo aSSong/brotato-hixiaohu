@@ -212,12 +212,12 @@ func _set_velocity_and_anim(desired_velocity: Vector2, is_actively_moving: bool,
 			_play_idle_or_walk()
 	
 	# 速度叠加：保持与原逻辑尽量一致
-	# - 只有“主动移动”时叠加击退速度
-	# - 停止时仅保留分离力（原逻辑也如此）
+	# - 主动移动：追击/走位速度 + 击退 + 软分离
+	# - 停止/待机：仍然需要响应击退（推开敌人），但不应主动移动
 	if is_actively_moving:
 		enemy.velocity = desired_velocity + enemy.knockback_velocity + separation
 	else:
-		enemy.velocity = separation
+		enemy.velocity = enemy.knockback_velocity + separation
 
 func _play_idle_or_walk() -> void:
 	if enemy.enemy_data and enemy.enemy_data.animations.get("idle", "") != "":
