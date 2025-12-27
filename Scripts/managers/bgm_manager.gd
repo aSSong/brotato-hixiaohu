@@ -12,7 +12,7 @@ var current_bgm: String = ""
 const BGM_PATHS = {
 	"title2": "res://audio/BGM_title.mp3",
 	"fight": "res://audio/BGM_fight.mp3",
-	"title": "res://audio/jingle-bells-metal.mp3"
+	"title": "res://audio/Keybattle_theme.mp3"
 }
 
 func _ready() -> void:
