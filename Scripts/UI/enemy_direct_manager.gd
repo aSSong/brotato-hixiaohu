@@ -14,6 +14,9 @@ const ENEMY_DIRECT_CONFIG: Dictionary = {
 	"mashroom_xmas": {
 		"portrait": preload("res://assets/UI/enemydirect_ui/partrit_mashroom_xmas.png")
 	},
+	"tree_xmas": {
+		"portrait": preload("res://assets/UI/enemydirect_ui/partrit_tree_xmas.png")
+	},
 }
 
 const REFRESH_INTERVAL: float = 0.033  #刷新时间间隔
