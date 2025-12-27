@@ -8,13 +8,13 @@ script = ExtResource("2_gfim5")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-melee_range_mult = 1.5
+melee_range_mult = 1.45
 
 [resource]
 script = ExtResource("1_x8265")
 upgrade_type = 9
-name = "近战范围+50%"
-description = "近战武器攻击范围提升50%"
+name = "近战范围+45%"
+description = "近战武器攻击范围提升45%"
 cost = 48
 icon_path = "res://assets/upgrades/up-melee-range.png"
 quality = 5

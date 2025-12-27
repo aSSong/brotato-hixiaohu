@@ -11,8 +11,8 @@ crit_damage = 0.0
 
 [resource]
 script = ExtResource("1_gpobx")
-name = "HP上限+50"
-description = "增加50点最大生命值"
+name = "HP上限+40"
+description = "增加40点最大生命值"
 cost = 48
 icon_path = "res://assets/upgrades/up-maxhp.png"
 quality = 5

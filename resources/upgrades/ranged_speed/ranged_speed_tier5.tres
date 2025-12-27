@@ -8,13 +8,13 @@ script = ExtResource("2_76jvk")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-ranged_speed_mult = 1.5
+ranged_speed_mult = 1.45
 
 [resource]
 script = ExtResource("1_3i8p2")
 upgrade_type = 14
-name = "远程速度+50%"
-description = "远程武器攻击速度提升50%"
+name = "远程速度+45%"
+description = "远程武器攻击速度提升45%"
 cost = 48
 icon_path = "res://assets/upgrades/up-range-speed.png"
 quality = 5

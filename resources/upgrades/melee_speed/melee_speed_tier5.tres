@@ -8,13 +8,13 @@ script = ExtResource("2_1i0nv")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-melee_speed_mult = 1.5
+melee_speed_mult = 1.45
 
 [resource]
 script = ExtResource("1_uyq8m")
 upgrade_type = 10
-name = "近战速度+50%"
-description = "近战武器攻击速度提升50%"
+name = "近战速度+45%"
+description = "近战武器攻击速度提升45%"
 cost = 48
 icon_path = "res://assets/upgrades/up-melee-speed.png"
 quality = 5

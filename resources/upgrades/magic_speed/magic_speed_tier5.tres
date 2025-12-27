@@ -8,13 +8,13 @@ script = ExtResource("2_3pb6w")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-magic_speed_mult = 1.5
+magic_speed_mult = 1.45
 
 [resource]
 script = ExtResource("1_rrt25")
 upgrade_type = 17
-name = "魔法速度+50%"
-description = "魔法武器攻击速度提升50%（冷却降低）"
+name = "魔法速度+45%"
+description = "魔法武器攻击速度提升45%（冷却降低）"
 cost = 48
 icon_path = "res://assets/upgrades/up-magic-speed.png"
 quality = 5

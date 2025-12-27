@@ -8,13 +8,13 @@ script = ExtResource("2_2epn8")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-ranged_damage_mult = 1.35
+ranged_damage_mult = 1.3
 
 [resource]
 script = ExtResource("1_4uoby")
 upgrade_type = 12
-name = "远程伤害+35%"
-description = "远程武器伤害提升35%"
+name = "远程伤害+30%"
+description = "远程武器伤害提升30%"
 cost = 48
 icon_path = "res://assets/upgrades/up-range-damage.png"
 quality = 5
