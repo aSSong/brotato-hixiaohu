@@ -8,6 +8,7 @@ enemy_name = "射击敌人"
 description = "会远程射击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage1/jug.tscn"
 max_hp = 25
+attack_damage = 8
 move_speed = 250.0
 attack_interval = 0.3
 attack_range = 182.0

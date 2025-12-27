@@ -8,8 +8,9 @@ script = ExtResource("1_5erm1")
 enemy_name = "红色订书机"
 description = "会冲锋攻击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage1/stapler_red.tscn"
-attack_damage = 6
-move_speed = 450.0
+max_hp = 80
+attack_damage = 15
+move_speed = 500.0
 attack_interval = 0.3
 attack_range = 130.0
 ai_type = 1
@@ -29,7 +30,7 @@ skill_config = {
 "indicator_scale": 1.5,
 "indicator_sprite_frames": ExtResource("2_fkceg"),
 "prepare_time": 0.5,
-"trigger_distance": 1000.0
+"trigger_distance": 1200.0
 }
 animations = {
 "attack": "",
@@ -42,3 +43,4 @@ animations = {
 knockback_resistance = 0.7
 gold_drop_count = 2
 hp_growth_per_wave = 3.0
+damage_growth_per_wave = 0.5

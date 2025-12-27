@@ -8,14 +8,14 @@ enemy_name = "监视器"
 description = "这是一只监视器怪"
 scene_path = "res://scenes/enemies/prefabs/stage1/monitor.tscn"
 max_hp = 150
-attack_damage = 10
+attack_damage = 15
 move_speed = 400.0
 attack_interval = 0.3
 attack_range = 219.0
 skill_type = 4
 skill_config = {
 "bullet_count": 12,
-"bullet_damage": 8,
+"bullet_damage": 15,
 "bullet_round_interval": 0.5,
 "bullet_rounds": 3,
 "bullet_scene_path": "res://scenes/bullets/monitor_bullet.tscn",
@@ -42,3 +42,4 @@ animations = {
 scale = Vector2(1.5, 1.5)
 knockback_resistance = 1.0
 hp_growth_per_wave = 25.0
+damage_growth_per_wave = 1.0

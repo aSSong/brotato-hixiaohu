@@ -8,28 +8,28 @@ script = ExtResource("1_script")
 enemy_name = "订书机"
 description = "会冲锋攻击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage1/stapler.tscn"
-attack_damage = 6
+attack_damage = 10
 move_speed = 350.0
 attack_interval = 0.3
 attack_range = 120.0
 ai_type = 1
 ai_config = {
-"maxDistance": 800,
-"minDistance": 500,
+"maxDistance": 1200,
+"minDistance": 800,
 "repositionCooldown": 2,
 "retreatAngleVariance": 90
 }
 skill_type = 1
 skill_config = {
 "charge_distance": 1400.0,
-"charge_speed": 1000.0,
+"charge_speed": 1800.0,
 "cooldown": 3.0,
 "extra_damage": 10,
 "indicator_animation": "stapler-charging",
 "indicator_scale": 1.5,
 "indicator_sprite_frames": ExtResource("2_fx"),
 "prepare_time": 0.3,
-"trigger_distance": 800.0
+"trigger_distance": 1200.0
 }
 animations = {
 "attack": "",

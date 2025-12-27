@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://c1ke8cvug5xky"]
 
-[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_2twvj"]
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_i1j6p"]
 
 [resource]
-script = ExtResource("1_2twvj")
+script = ExtResource("1_i1j6p")
 enemy_name = "射击敌人"
 description = "会远程射击的敌人"
 scene_path = "res://scenes/enemies/prefabs/stage1/jug.tscn"
 max_hp = 25
-move_speed = 250.0
+move_speed = 400.0
 attack_interval = 0.3
 attack_range = 182.0
 skill_type = 2
