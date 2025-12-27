@@ -8,13 +8,13 @@ script = ExtResource("2_bwovv")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-magic_explosion_radius_mult = 1.5
+magic_explosion_radius_mult = 1.25
 
 [resource]
 script = ExtResource("1_qwi6m")
 upgrade_type = 18
-name = "爆炸范围+50%"
-description = "魔法武器爆炸范围提升50%"
+name = "爆炸范围+25%"
+description = "魔法武器爆炸范围提升25%"
 cost = 24
 icon_path = "res://assets/upgrades/up-magic-explode.png"
 quality = 4
