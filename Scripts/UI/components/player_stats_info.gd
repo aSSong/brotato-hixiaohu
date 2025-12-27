@@ -113,7 +113,12 @@ func _on_stats_changed(stats: CombatStats) -> void:
 	# 战斗属性
 	crit_chance_label.text = "暴击率: %.1f%%" % (stats.crit_chance * 100)
 	crit_damage_label.text = "暴击伤害: %.1f%%" % (stats.crit_damage * 100)
-	damage_reduction_label.text = "防御力: %.0f" % stats.damage_reduction
+	var a := max(0.0, stats.damage_reduction)
+	var k := DamageCalculator.DAMAGE_REDUCTION_K
+	var b := 0.0
+	if a > 0.0:
+		b = a / (a + k)
+	damage_reduction_label.text = "防御力：%.0f（%.1f%%）" % [a, b * 100.0]
 	
 	# 异常效果系数
 	if status_duration_mult_label:
