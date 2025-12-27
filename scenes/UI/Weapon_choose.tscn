@@ -329,7 +329,9 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/background = ExtResource("8_g7k44")
 theme_override_styles/fill = ExtResource("9_fp288")
-max_value = 1000.0
+min_value = 100.0
+max_value = 1800.0
+value = 100.0
 show_percentage = false
 
 [node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon1Panel/Weapon1Container/Weapon1Content/Weapon1Stats/RangeSection/RangeBar"]
@@ -544,7 +546,9 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/background = ExtResource("8_g7k44")
 theme_override_styles/fill = ExtResource("9_fp288")
-max_value = 1000.0
+min_value = 200.0
+max_value = 1800.0
+value = 200.0
 show_percentage = false
 
 [node name="RangeValue" type="Label" parent="MainContent/WeaponDetailSection/Weapon2Panel/Weapon2Container/Weapon2Content/Weapon2Stats/RangeSection/RangeBar"]
