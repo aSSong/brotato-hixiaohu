@@ -9,7 +9,7 @@ class_name DamageCalculator
 ## 
 ## 计算公式：
 ##   武器伤害 = 基础伤害 × 等级倍数 × (1 + Σadd) × Πmult
-##   最终伤害 = 武器伤害 - 防御 × (1 - 减伤%)
+##   防御后伤害 = (原始伤害 - 防御力) × (减伤值 / (减伤值 + K))
 ## 
 ## 使用示例（新版 - 推荐）：
 ##   var damage = DamageCalculator.calculate_damage_by_calc_type(
@@ -20,6 +20,10 @@ class_name DamageCalculator
 ##   var damage = DamageCalculator.calculate_weapon_damage(
 ##       10, 3, WeaponData.WeaponType.MELEE, player_stats
 ##   )
+
+## ========== 常量 ==========
+## 点数减伤K值（用于伤害结算公式）
+const DAMAGE_REDUCTION_K: float = 100.0
 
 ## ========== 新版方法（使用 CalculationType）==========
 
@@ -182,7 +186,7 @@ static func calculate_weapon_damage(
 ## 
 ## 应用公式：
 ##   1. 固定减伤：伤害 - 防御力（最少1点）
-##   2. 百分比减伤：伤害 × (1 - 减伤%)（最少1点）
+##   2. 点数减伤：伤害 × (减伤值 / (减伤值 + K))（最少1点）
 ## 
 ## @param raw_damage 原始伤害
 ## @param defender_stats 防御方的战斗属性
@@ -203,8 +207,12 @@ static func calculate_defense_reduction(
 	# 1. 固定减伤（防御力）
 	damage = max(1.0, damage - float(defender_stats.defense))
 	
-	# 2. 百分比减伤
-	damage = damage * (1.0 - defender_stats.damage_reduction)
+	# 2. 点数减伤（damage_reduction 现在是“点数”，不是百分比）
+	var reduction_value: float = max(0.0, defender_stats.damage_reduction)
+	var mult := 0.0
+	if reduction_value > 0.0:
+		mult = reduction_value / (reduction_value + DAMAGE_REDUCTION_K)
+	damage = damage * mult
 	
 	# 保险：只要触发伤害（原始伤害 > 0），最终伤害最小为1
 	return int(max(1.0, damage))

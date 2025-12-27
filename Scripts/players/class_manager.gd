@@ -174,6 +174,9 @@ func _create_skill_modifier_legacy(skill_name: String, params: Dictionary) -> At
 		
 		"护盾":
 			var damage_reduction = params.get("damage_reduction", 0.0)
+			# 兼容旧配置：以前是百分比(0~1)，现在是点数
+			if damage_reduction > 0.0 and damage_reduction <= 1.0:
+				damage_reduction *= 100.0
 			modifier.stats_delta.damage_reduction = damage_reduction
 		
 		_:

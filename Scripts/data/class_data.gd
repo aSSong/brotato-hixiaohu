@@ -150,7 +150,8 @@ func sync_to_base_stats() -> void:
 	base_stats.crit_damage = crit_damage
 	
 	# 减伤（注意：旧系统是乘数，新系统是减免比例）
-	base_stats.damage_reduction = 1.0 - damage_reduction_multiplier
+	# damage_reduction 现为“点数”，为了兼容旧字段：把旧的比例(0~1)转换为点数（×100）
+	base_stats.damage_reduction = (1.0 - damage_reduction_multiplier) * 100.0
 	
 	# 全局武器属性
 	base_stats.global_damage_mult = attack_multiplier

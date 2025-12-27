@@ -27,7 +27,7 @@ class_name CombatStats
 # ========== 通用战斗属性 ==========
 @export var crit_chance: float = 0.0  ## 暴击率（0-1）
 @export var crit_damage: float = 1.5  ## 暴击伤害倍数
-@export var damage_reduction: float = 0.0  ## 受伤减免（0-1，如0.2表示减伤20%）
+@export var damage_reduction: float = 0.0  ## 受伤减免（点数，非百分比；结算见 DamageCalculator.calculate_defense_reduction）
 
 # ========== 全局武器属性 ==========
 @export var global_damage_add: float = 0.0  ## 全局伤害加成（加法层）

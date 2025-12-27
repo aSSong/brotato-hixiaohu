@@ -113,7 +113,7 @@ func _on_stats_changed(stats: CombatStats) -> void:
 	# 战斗属性
 	crit_chance_label.text = "暴击率: %.1f%%" % (stats.crit_chance * 100)
 	crit_damage_label.text = "暴击伤害: %.1f%%" % (stats.crit_damage * 100)
-	damage_reduction_label.text = "减伤: %.1f%%" % (stats.damage_reduction * 100)
+	damage_reduction_label.text = "防御力: %.0f" % stats.damage_reduction
 	
 	# 异常效果系数
 	if status_duration_mult_label:
@@ -126,12 +126,13 @@ func _on_stats_changed(stats: CombatStats) -> void:
 	# 全局武器属性
 	global_damage_mult_label.text = "全局伤害: ×%.2f" % stats.global_damage_mult
 	global_attack_speed_mult_label.text = "全局攻速: ×%.2f" % stats.global_attack_speed_mult
+	melee_knockback_mult_label.text = "击退: ×%.2f" % stats.melee_knockback_mult
 	
 	# 近战武器属性
 	melee_damage_mult_label.text = "近战伤害: ×%.2f" % stats.melee_damage_mult
 	melee_speed_mult_label.text = "近战攻速: ×%.2f" % stats.melee_speed_mult
 	melee_range_mult_label.text = "近战范围: ×%.2f" % stats.melee_range_mult
-	melee_knockback_mult_label.text = "近战击退: ×%.2f" % stats.melee_knockback_mult
+
 	
 	# 远程武器属性
 	ranged_damage_mult_label.text = "远程伤害: ×%.2f" % stats.ranged_damage_mult

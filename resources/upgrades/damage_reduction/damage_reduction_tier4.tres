@@ -8,13 +8,13 @@ script = ExtResource("2_x1srt")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-damage_reduction = 0.21999999999999997
+damage_reduction = 22.0
 
 [resource]
 script = ExtResource("1_kq7w8")
 upgrade_type = 5
-name = "减伤+21%"
-description = "受到的伤害降低21%"
+name = "防御力+22"
+description = "增加22点防御力"
 cost = 24
 icon_path = "res://assets/upgrades/up-defense.png"
 quality = 4

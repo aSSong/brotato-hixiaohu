@@ -9,12 +9,12 @@ script = ExtResource("3_ey6g7")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-damage_reduction = 0.5
+damage_reduction = 50.0
 
 [resource]
 script = ExtResource("2_1e7qe")
 name = "新手光环"
-description = "受到的伤害减少50%"
+description = "临时增加50点防御力"
 icon = ExtResource("1_tckqi")
 cooldown = 30.0
 stats_modifier = SubResource("Resource_fmo1s")

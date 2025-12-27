@@ -85,7 +85,8 @@ func _create_shield():
 	skill.duration = 5.0
 	
 	var stats = StatsModifier.new()
-	stats.damage_reduction = 0.5
+	# damage_reduction 现为“点数”
+	stats.damage_reduction = 50.0
 	skill.stats_modifier = stats
 	
 	_save(skill, "shield")

@@ -31,6 +31,7 @@ func _run():
 	var hp_max_values: Array = [5, 10, 20, 30, 50]
 	var move_speed_values: Array = [5, 10, 15, 25, 40]
 	var luck_values: Array = [5, 10, 20, 30, 50]
+	# damage_reduction 现为“点数”，这里沿用旧梯度（0.95/0.90...表示受伤×系数），最终换算为点数： (1 - 系数) * 100
 	var damage_reduction_values: Array = [0.95, 0.90, 0.85, 0.78, 0.65]
 	
 	# === 辅助函数：创建干净的 Stats ===
@@ -111,13 +112,13 @@ func _run():
 		var percentage: int = int((1.0 - damage_reduction_values[tier]) * 100)
 		var damage_reduction_upgrade = UpgradeData.new(
 			UpgradeData.UpgradeType.DAMAGE_REDUCTION,
-			"减伤+%d%%" % percentage,
+			"减伤+%d" % percentage,
 			base_cost * tier_multipliers[tier],
 			"res://assets/skillicon/10.png"
 		)
-		damage_reduction_upgrade.description = "受到的伤害降低%d%%" % percentage
+		damage_reduction_upgrade.description = "增加%d点减伤值" % percentage
 		var stats = create_clean_stats.call()
-		stats.damage_reduction = 1.0 - damage_reduction_values[tier]
+		stats.damage_reduction = float(percentage)
 		damage_reduction_upgrade.stats_modifier = stats
 		damage_reduction_upgrade.quality = tier_qualities[tier]
 		damage_reduction_upgrade.set_base_attribute_cost()

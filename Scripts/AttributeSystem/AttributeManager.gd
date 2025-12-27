@@ -124,7 +124,7 @@ func _log_stats_diff(old_stats: CombatStats, new_stats: CombatStats) -> void:
 	if not is_equal_approx(old_stats.crit_damage, new_stats.crit_damage):
 		diffs.append("CritDamage: %.1f%% -> %.1f%% (%+.1f%%)" % [old_stats.crit_damage * 100, new_stats.crit_damage * 100, (new_stats.crit_damage - old_stats.crit_damage) * 100])
 	if not is_equal_approx(old_stats.damage_reduction, new_stats.damage_reduction):
-		diffs.append("DamageReduction: %.1f%% -> %.1f%% (%+.1f%%)" % [old_stats.damage_reduction * 100, new_stats.damage_reduction * 100, (new_stats.damage_reduction - old_stats.damage_reduction) * 100])
+		diffs.append("DamageReduction: %.0f -> %.0f (%+.0f)" % [old_stats.damage_reduction, new_stats.damage_reduction, (new_stats.damage_reduction - old_stats.damage_reduction)])
 		
 	# 全局属性
 	if not is_equal_approx(old_stats.global_damage_mult, new_stats.global_damage_mult):
