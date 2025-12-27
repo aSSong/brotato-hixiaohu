@@ -8,13 +8,13 @@ script = ExtResource("2_m7kg5")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-melee_knockback_mult = 1.7
+melee_knockback_mult = 1.3
 
 [resource]
 script = ExtResource("1_iu0so")
 upgrade_type = 11
-name = "击退+70%"
-description = "武器击退效果提升70%"
+name = "击退+30%"
+description = "武器击退效果提升30%"
 cost = 48
 icon_path = "res://assets/upgrades/up-melee-kb.png"
 quality = 5
