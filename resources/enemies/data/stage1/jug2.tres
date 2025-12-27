@@ -11,13 +11,6 @@ max_hp = 25
 move_speed = 250.0
 attack_interval = 0.3
 attack_range = 182.0
-ai_type = 1
-ai_config = {
-"maxDistance": 800,
-"minDistance": 500,
-"repositionCooldown": 2,
-"retreatAngleVariance": 90
-}
 skill_type = 2
 skill_config = {
 "bullet_damage": 3,

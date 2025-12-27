@@ -1,16 +1,17 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://dg7dljb2o0am"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://yb8ckisunfby"]
 
-[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_k6v0q"]
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_e2f64"]
 
 [resource]
-script = ExtResource("1_k6v0q")
-enemy_name = "射击敌人"
+script = ExtResource("1_e2f64")
+enemy_name = "绿水桶"
 description = "会远程射击的敌人"
-scene_path = "res://scenes/enemies/prefabs/stage1/jug.tscn"
+scene_path = "res://scenes/enemies/prefabs/stage1/jug_green.tscn"
 max_hp = 25
-move_speed = 250.0
+attack_damage = 10
+move_speed = 350.0
 attack_interval = 0.3
-attack_range = 182.0
+attack_range = 220.0
 ai_type = 1
 ai_config = {
 "maxDistance": 800,
@@ -20,24 +21,24 @@ ai_config = {
 }
 skill_type = 2
 skill_config = {
-"bullet_damage": 3,
+"bullet_damage": 8,
 "bullet_round_interval": 0.5,
-"bullet_rounds": 2,
+"bullet_rounds": 3,
 "bullet_scene_path": "res://scenes/bullets/jug_bullet.tscn",
-"bullet_speed": 600.0,
+"bullet_speed": 800.0,
 "bullets_per_round": 1,
 "fx_animation_name": "jug-muzzle",
-"fx_offset": Vector2(170, -30),
-"fx_scale": Vector2(0.8, 0.8),
+"fx_offset": Vector2(175, -35),
+"fx_scale": Vector2(1, 1),
 "fx_sprite_frames_path": "res://resources/enemies/FX/enemy-FX-stage1.tres",
 "hit_fx_animation_name": "jug-hit",
 "hit_fx_scale": Vector2(1, 1),
 "hit_fx_sprite_frames_path": "res://resources/enemies/FX/enemy-FX-stage1.tres",
 "shoot_interval": 3.0,
-"shoot_offset": Vector2(185, -30),
-"shoot_range": 800.0,
+"shoot_offset": Vector2(185, -35),
+"shoot_range": 1500.0,
 "spread_angle": 0.0
 }
 knockback_resistance = 0.5
 gold_drop_count = 2
-hp_growth_per_wave = 3.0
+hp_growth_per_wave = 8.0
