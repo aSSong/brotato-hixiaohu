@@ -8,13 +8,13 @@ script = ExtResource("2_status_chance_5")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-status_chance_mult = 1.18
+status_chance_mult = 1.3
 
 [resource]
 script = ExtResource("1_status_chance_5")
-name = "异常概率加成+18%"
-description = "异常状态触发概率提升18%"
-cost = -1692
+name = "异常概率加成+30%"
+description = "异常状态触发概率提升30%"
+cost = 48
 icon_path = "res://assets/upgrades/up-se-chance.png"
 quality = 5
 actual_cost = 48

@@ -8,12 +8,12 @@ script = ExtResource("2_status_duration_3")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-status_duration_mult = 1.08
+status_duration_mult = 1.2
 
 [resource]
 script = ExtResource("1_status_duration_3")
-name = "异常持续时间+8%"
-description = "异常状态持续时间提升8%"
+name = "异常持续时间+20%"
+description = "异常状态持续时间提升20%"
 cost = 12
 icon_path = "res://assets/upgrades/up-se-time.png"
 quality = 3

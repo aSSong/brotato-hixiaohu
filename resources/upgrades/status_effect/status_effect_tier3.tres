@@ -8,12 +8,12 @@ script = ExtResource("2_status_effect_3")
 max_hp = 0
 speed = 0.0
 crit_damage = 0.0
-status_effect_mult = 1.08
+status_effect_mult = 1.2
 
 [resource]
 script = ExtResource("1_status_effect_3")
-name = "异常效果加成+8%"
-description = "异常状态伤害和效果强度提升8%"
+name = "异常效果加成+20%"
+description = "异常状态伤害和效果强度提升20%"
 cost = 12
 icon_path = "res://assets/upgrades/up-se-damage.png"
 quality = 3
