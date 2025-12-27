@@ -3,6 +3,13 @@ extends Control
 @onready var fullscreen_btn: TextureButton = $DisplayModeContainer/FullscreenBtn
 @onready var window_btn: TextureButton = $DisplayModeContainer/WindowBtn
 
+@onready var volume_label: Label = $Volume/volumeLabel
+@onready var volume_slider: HSlider = $Volume/VolumeControls/VolumeSlider
+@onready var volume_minus_btn: Button = $Volume/VolumeControls/MinusBtn
+@onready var volume_plus_btn: Button = $Volume/VolumeControls/PlusBtn
+
+var _is_syncing_volume_ui: bool = false
+
 # 最佳纪录界面场景
 const BESTRECORD_UI_SCENE = preload("res://scenes/UI/bestrecord_ui.tscn")
 # 视频设置界面场景
@@ -16,6 +23,25 @@ var _videoset_ui_instance: CanvasLayer = null
 func _ready() -> void:
 	# 根据当前窗口模式设置按钮状态
 	_update_display_mode_buttons()
+	_init_volume_ui()
+
+func _init_volume_ui() -> void:
+	var linear := 1.0
+	if SaveManager and SaveManager.has_method("get_master_volume_linear"):
+		linear = float(SaveManager.get_master_volume_linear())
+
+	var percent := int(round(clamp(linear, 0.0, 1.0) * 100.0))
+	_is_syncing_volume_ui = true
+	if volume_slider and volume_slider.has_method("set_value_no_signal"):
+		volume_slider.set_value_no_signal(percent)
+	else:
+		volume_slider.value = percent
+	_is_syncing_volume_ui = false
+	_update_volume_label(percent)
+
+func _update_volume_label(percent: int) -> void:
+	if volume_label:
+		volume_label.text = "%d%%" % percent
 
 ## 更新显示模式按钮状态
 func _update_display_mode_buttons() -> void:
@@ -37,6 +63,39 @@ func _on_window_btn_pressed() -> void:
 	_set_windowed_size()
 	SaveManager.set_display_mode("windowed")
 	print("[SettingsUI] 切换到窗口模式")
+
+func _apply_volume_percent(percent: int) -> void:
+	percent = clamp(percent, 0, 100)
+	if SaveManager and SaveManager.has_method("set_master_volume_linear"):
+		SaveManager.set_master_volume_linear(percent / 100.0)
+	_update_volume_label(percent)
+
+func _on_volume_slider_value_changed(value: float) -> void:
+	if _is_syncing_volume_ui:
+		return
+	_apply_volume_percent(int(round(value)))
+
+func _on_volume_minus_pressed() -> void:
+	var new_value := int(round(volume_slider.value)) - 10
+	new_value = clamp(new_value, 0, 100)
+	_is_syncing_volume_ui = true
+	if volume_slider.has_method("set_value_no_signal"):
+		volume_slider.set_value_no_signal(new_value)
+	else:
+		volume_slider.value = new_value
+	_is_syncing_volume_ui = false
+	_apply_volume_percent(new_value)
+
+func _on_volume_plus_pressed() -> void:
+	var new_value := int(round(volume_slider.value)) + 10
+	new_value = clamp(new_value, 0, 100)
+	_is_syncing_volume_ui = true
+	if volume_slider.has_method("set_value_no_signal"):
+		volume_slider.set_value_no_signal(new_value)
+	else:
+		volume_slider.value = new_value
+	_is_syncing_volume_ui = false
+	_apply_volume_percent(new_value)
 
 ## 根据屏幕分辨率设置窗口大小
 func _set_windowed_size() -> void:

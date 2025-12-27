@@ -10,6 +10,9 @@ const SAVE_FILE_PATH = "user://user_save.dat"
 var shake_enabled_cache: bool = true
 var trail_enabled_cache: bool = true
 
+## 主音量缓存（0.0 - 1.0）
+var master_volume_cache: float = 1.0
+
 ## 用户数据字典
 var user_data: Dictionary = {
 	"player_name": "",
@@ -24,7 +27,8 @@ var user_data: Dictionary = {
 	"floor_version": 0,  # 楼层版本，用于迁移逻辑控制（0: 旧版, 1: 迁移中, 2: 新版）
 	"tutorial_shown": false,  # 是否已显示过教程（不再提示）
 	"shake_enabled": true,  # 震屏效果开关（怪物死亡时）
-	"trail_enabled": true   # 子弹拖尾效果开关
+	"trail_enabled": true,  # 子弹拖尾效果开关
+	"master_volume": 1.0    # 主音量（线性 0.0-1.0）
 }
 
 ## 初始化
@@ -32,6 +36,8 @@ func _ready() -> void:
 	load_user_data()
 	# 应用保存的显示模式设置
 	apply_display_mode()
+	# 应用保存的主音量
+	apply_master_volume()
 	print("[SaveManager] 存档管理器初始化完成")
 
 ## 保存用户数据
@@ -102,11 +108,20 @@ func load_user_data() -> bool:
 		# 确保旧存档也有 trail_enabled 字段
 		if not user_data.has("trail_enabled"):
 			user_data["trail_enabled"] = true
+
+		# 确保旧存档也有 master_volume 字段
+		if not user_data.has("master_volume"):
+			user_data["master_volume"] = 1.0
+		else:
+			# JSON 加载可能将数字解析为浮点，顺便做个夹取
+			user_data["master_volume"] = clamp(float(user_data["master_volume"]), 0.0, 1.0)
 			
 		# 迁移旧版 floor_id（0-38 索引制）到新版（1-38 真实楼层号）
 		_migrate_legacy_floor_id()
 		# 同步性能设置缓存
 		_sync_performance_cache()
+		# 同步主音量缓存
+		_sync_master_volume_cache()
 		print("[SaveManager] 用户数据已加载: %s" % user_data)
 		return true
 	else:
@@ -301,6 +316,47 @@ func _set_windowed_size() -> void:
 func _sync_performance_cache() -> void:
 	shake_enabled_cache = user_data.get("shake_enabled", true)
 	trail_enabled_cache = user_data.get("trail_enabled", true)
+
+## 同步主音量缓存（加载存档时调用）
+func _sync_master_volume_cache() -> void:
+	master_volume_cache = float(user_data.get("master_volume", 1.0))
+	if master_volume_cache < 0.0:
+		master_volume_cache = 0.0
+	elif master_volume_cache > 1.0:
+		master_volume_cache = 1.0
+
+## 设置主音量（线性 0.0-1.0）
+func set_master_volume_linear(volume: float) -> void:
+	if volume < 0.0:
+		volume = 0.0
+	elif volume > 1.0:
+		volume = 1.0
+	user_data["master_volume"] = volume
+	master_volume_cache = volume
+	save_user_data()
+	apply_master_volume()
+	print("[SaveManager] 主音量已保存: %s" % volume)
+
+## 获取主音量（线性 0.0-1.0）
+func get_master_volume_linear() -> float:
+	return master_volume_cache
+
+## 应用保存的主音量到 Master 总线
+func apply_master_volume() -> void:
+	var bus_idx: int
+	bus_idx = AudioServer.get_bus_index("Master")
+	if bus_idx < 0:
+		return
+
+	var v: float = master_volume_cache
+	if v < 0.0:
+		v = 0.0
+	elif v > 1.0:
+		v = 1.0
+	var db: float = -80.0
+	if v > 0.0001:
+		db = float(linear_to_db(v))
+	AudioServer.set_bus_volume_db(bus_idx, db)
 
 ## 设置震屏效果开关
 func set_shake_enabled(enabled: bool) -> void:

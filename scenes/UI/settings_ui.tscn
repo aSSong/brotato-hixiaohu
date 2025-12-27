@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b7r7uwpt3gfoh"]
+[gd_scene load_steps=19 format=3 uid="uid://b7r7uwpt3gfoh"]
 
 [ext_resource type="Script" uid="uid://jbcf1cx5oed3" path="res://Scripts/UI/settings_ui.gd" id="1_u4aqc"]
 [ext_resource type="Texture2D" uid="uid://r4drbwadpmy8" path="res://assets/UI/common/bg-maintitle-02.png" id="1_xretj"]
@@ -14,6 +14,54 @@
 [ext_resource type="Texture2D" uid="uid://bj7cc881qichs" path="res://assets/UI/settings_ui/btn-radio-unchoos.png" id="10_nkr38"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_display"]
+
+[sub_resource type="DPITexture" id="DPITexture_3nybb"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><circle cx=\"8\" cy=\"8\" r=\"7\" fill=\"#fefefe\" fill-opacity=\".75\"/></svg>
+"
+base_scale = 2.0
+
+[sub_resource type="DPITexture" id="DPITexture_nkr38"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><circle cx=\"8\" cy=\"8\" r=\"7\" fill=\"#fefefe\"/></svg>
+"
+base_scale = 2.0
+
+[sub_resource type="DPITexture" id="DPITexture_y2kxa"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"4\" height=\"8\"><path fill=\"#fff\" fill-opacity=\".25\" d=\"M1 0h2v16H1z\"/></svg>
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3nybb"]
+content_margin_left = 0.0
+content_margin_top = 12.0
+content_margin_right = 0.0
+content_margin_bottom = 12.0
+bg_color = Color(0.16007765, 0.32272613, 0, 0.47000003)
+skew = Vector2(0.41, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nkr38"]
+content_margin_left = 0.0
+content_margin_top = 12.0
+content_margin_right = 0.0
+content_margin_bottom = 12.0
+bg_color = Color(0.40584272, 0.940525, 0.025840001, 1)
+skew = Vector2(0.41, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 6
 
 [node name="SettingsUi" type="Control"]
 layout_mode = 3
@@ -34,188 +82,19 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_xretj")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -255.0
-offset_top = -371.0
-offset_right = 255.0
-offset_bottom = 194.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 20
-
-[node name="recordbtn" type="TextureButton" parent="VBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_u4aqc")
-texture_pressed = ExtResource("3_m547k")
-texture_hover = ExtResource("4_insag")
-texture_disabled = ExtResource("5_bxq6r")
-
-[node name="recordLabel" type="RichTextLabel" parent="VBoxContainer/recordbtn"]
-custom_minimum_size = Vector2(319, 58)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_fonts/normal_font = ExtResource("6_oaxod")
-theme_override_font_sizes/normal_font_size = 45
-text = "🏆最佳纪录    "
-scroll_active = false
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="videobtn" type="TextureButton" parent="VBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_u4aqc")
-texture_pressed = ExtResource("3_m547k")
-texture_hover = ExtResource("4_insag")
-texture_disabled = ExtResource("5_bxq6r")
-
-[node name="videolabal" type="Label" parent="VBoxContainer/videobtn"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -159.5
-offset_top = -22.5
-offset_right = 159.5
-offset_bottom = 35.500015
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_oaxod")
-theme_override_font_sizes/font_size = 45
-text = "视频&性能"
-horizontal_alignment = 1
-
-[node name="stuffbtn2" type="TextureButton" parent="VBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_u4aqc")
-texture_pressed = ExtResource("3_m547k")
-texture_hover = ExtResource("4_insag")
-texture_disabled = ExtResource("5_bxq6r")
-
-[node name="stufflabal" type="Label" parent="VBoxContainer/stuffbtn2"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -159.5
-offset_top = -22.5
-offset_right = 159.5
-offset_bottom = 35.500015
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_oaxod")
-theme_override_font_sizes/font_size = 45
-text = "创作人员"
-horizontal_alignment = 1
-
-[node name="cut1btn" type="TextureButton" parent="VBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_u4aqc")
-texture_pressed = ExtResource("3_m547k")
-texture_hover = ExtResource("4_insag")
-texture_disabled = ExtResource("5_bxq6r")
-
-[node name="cut1labal" type="Label" parent="VBoxContainer/cut1btn"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -159.5
-offset_top = -22.5
-offset_right = 159.5
-offset_bottom = 35.500015
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_oaxod")
-theme_override_font_sizes/font_size = 45
-text = "Chapter 1 动画"
-horizontal_alignment = 1
-
-[node name="cut2btn" type="TextureButton" parent="VBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_u4aqc")
-texture_pressed = ExtResource("3_m547k")
-texture_hover = ExtResource("4_insag")
-texture_disabled = ExtResource("5_bxq6r")
-
-[node name="cut2labal" type="Label" parent="VBoxContainer/cut2btn"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -159.5
-offset_top = -22.5
-offset_right = 159.5
-offset_bottom = 35.500015
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_oaxod")
-theme_override_font_sizes/font_size = 45
-text = "Chapter 2 动画"
-horizontal_alignment = 1
-
-[node name="filesbtn" type="TextureButton" parent="VBoxContainer"]
-layout_mode = 2
-texture_normal = ExtResource("2_u4aqc")
-texture_pressed = ExtResource("3_m547k")
-texture_hover = ExtResource("4_insag")
-texture_disabled = ExtResource("5_bxq6r")
-
-[node name="fileslabal" type="Label" parent="VBoxContainer/filesbtn"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -159.5
-offset_top = -22.5
-offset_right = 159.5
-offset_bottom = 35.500015
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_oaxod")
-theme_override_font_sizes/font_size = 45
-text = "修改信息"
-horizontal_alignment = 1
-
 [node name="DisplayModeContainer" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -222.0
+offset_top = -324.0
 offset_right = 200.0
-offset_bottom = -172.0
+offset_bottom = -274.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
 [node name="panel-switch" type="TextureRect" parent="DisplayModeContainer"]
 layout_mode = 1
@@ -255,6 +134,255 @@ button_group = SubResource("ButtonGroup_display")
 texture_normal = ExtResource("10_nkr38")
 texture_pressed = ExtResource("9_3nybb")
 
+[node name="Volume" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -342.0
+offset_top = -178.0
+offset_right = 58.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="volumeText" type="Label" parent="Volume"]
+layout_mode = 0
+offset_left = 75.0
+offset_right = 189.0
+offset_bottom = 54.0
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 38
+text = "音量："
+vertical_alignment = 1
+
+[node name="volumeLabel" type="Label" parent="Volume"]
+layout_mode = 0
+offset_left = 382.89
+offset_top = -28.82
+offset_right = 458.89
+offset_bottom = 24.18
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 28
+text = "70%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VolumeControls" type="HBoxContainer" parent="Volume"]
+layout_mode = 0
+offset_left = 194.0
+offset_top = 1.0
+offset_right = 626.0
+offset_bottom = 54.0
+theme_override_constants/separation = 10
+
+[node name="MinusBtn" type="Button" parent="Volume/VolumeControls"]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "-"
+
+[node name="VolumeSlider" type="HSlider" parent="Volume/VolumeControls"]
+custom_minimum_size = Vector2(320, 46)
+layout_mode = 2
+theme_override_icons/grabber = SubResource("DPITexture_3nybb")
+theme_override_icons/grabber_highlight = SubResource("DPITexture_nkr38")
+theme_override_icons/tick = SubResource("DPITexture_y2kxa")
+theme_override_styles/slider = SubResource("StyleBoxFlat_3nybb")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_nkr38")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_nkr38")
+value = 50.0
+rounded = true
+tick_count = 10
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="PlusBtn" type="Button" parent="Volume/VolumeControls"]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "+"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -512.0
+offset_top = -48.0
+offset_right = 512.0
+offset_bottom = 317.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="recordbtn" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="recordLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer/recordbtn"]
+custom_minimum_size = Vector2(319, 58)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("6_oaxod")
+theme_override_font_sizes/normal_font_size = 45
+text = "🏆最佳纪录    "
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="cut1btn" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="cut1labal" type="Label" parent="VBoxContainer/HBoxContainer/cut1btn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "Chapter 1 动画"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="videobtn" type="TextureButton" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="videolabal" type="Label" parent="VBoxContainer/HBoxContainer2/videobtn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "视频&性能"
+horizontal_alignment = 1
+
+[node name="cut2btn" type="TextureButton" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="cut2labal" type="Label" parent="VBoxContainer/HBoxContainer2/cut2btn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "Chapter 2 动画"
+horizontal_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="filesbtn" type="TextureButton" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="fileslabal" type="Label" parent="VBoxContainer/HBoxContainer3/filesbtn"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "修改信息"
+horizontal_alignment = 1
+
+[node name="stuffbtn2" type="TextureButton" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+texture_normal = ExtResource("2_u4aqc")
+texture_pressed = ExtResource("3_m547k")
+texture_hover = ExtResource("4_insag")
+texture_disabled = ExtResource("5_bxq6r")
+
+[node name="stufflabal" type="Label" parent="VBoxContainer/HBoxContainer3/stuffbtn2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = -22.5
+offset_right = 159.5
+offset_bottom = 35.500015
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_oaxod")
+theme_override_font_sizes/font_size = 45
+text = "创作人员"
+horizontal_alignment = 1
+
 [node name="backbtn" type="TextureButton" parent="."]
 layout_mode = 1
 anchors_preset = 2
@@ -270,12 +398,15 @@ texture_pressed = ExtResource("9_bxq6r")
 texture_hover = ExtResource("9_bxq6r")
 texture_disabled = ExtResource("8_insag")
 
-[connection signal="pressed" from="VBoxContainer/recordbtn" to="." method="_on_recordbtn_pressed"]
-[connection signal="pressed" from="VBoxContainer/videobtn" to="." method="_on_videobtn_pressed"]
-[connection signal="pressed" from="VBoxContainer/stuffbtn2" to="." method="_on_stuffbtn_pressed"]
-[connection signal="pressed" from="VBoxContainer/cut1btn" to="." method="_on_cut_1_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/cut2btn" to="." method="_on_cut_2_btn_pressed"]
-[connection signal="pressed" from="VBoxContainer/filesbtn" to="." method="_on_filesbtn_pressed"]
 [connection signal="pressed" from="DisplayModeContainer/FullscreenBtn" to="." method="_on_fullscreen_btn_pressed"]
 [connection signal="pressed" from="DisplayModeContainer/WindowBtn" to="." method="_on_window_btn_pressed"]
+[connection signal="pressed" from="Volume/VolumeControls/MinusBtn" to="." method="_on_volume_minus_pressed"]
+[connection signal="value_changed" from="Volume/VolumeControls/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="pressed" from="Volume/VolumeControls/PlusBtn" to="." method="_on_volume_plus_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/recordbtn" to="." method="_on_recordbtn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/cut1btn" to="." method="_on_cut_1_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/videobtn" to="." method="_on_videobtn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/cut2btn" to="." method="_on_cut_2_btn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/filesbtn" to="." method="_on_filesbtn_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/stuffbtn2" to="." method="_on_stuffbtn_pressed"]
 [connection signal="pressed" from="backbtn" to="." method="_on_backbtn_pressed"]
