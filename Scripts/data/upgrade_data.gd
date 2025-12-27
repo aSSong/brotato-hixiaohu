@@ -48,6 +48,11 @@ enum UpgradeType {
 	
 	# 拾取属性
 	KEY_PICKUP_RANGE,  # 钥匙拾取范围
+	
+	# 异常相关（不走旧 attribute_changes，主要由 stats_modifier 驱动）
+	STATUS_CHANCE,     # 异常触发概率系数
+	STATUS_DURATION,   # 异常持续时间系数
+	STATUS_EFFECT,     # 异常效果强度系数（含伤害/治疗/吸血等）
 }
 
 @export var upgrade_type: UpgradeType = UpgradeType.HP_MAX

@@ -12,6 +12,7 @@ status_effect_mult = 1.25
 
 [resource]
 script = ExtResource("1_status_effect_4")
+upgrade_type = 22
 name = "异常效果加成+25%"
 description = "异常状态伤害和效果强度提升25%"
 cost = 24

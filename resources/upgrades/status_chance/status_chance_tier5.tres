@@ -12,6 +12,7 @@ status_chance_mult = 1.3
 
 [resource]
 script = ExtResource("1_status_chance_5")
+upgrade_type = 20
 name = "异常概率加成+30%"
 description = "异常状态触发概率提升30%"
 cost = 48

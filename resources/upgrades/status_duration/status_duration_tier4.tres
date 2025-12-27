@@ -12,6 +12,7 @@ status_duration_mult = 1.25
 
 [resource]
 script = ExtResource("1_status_duration_4")
+upgrade_type = 21
 name = "异常持续时间+25%"
 description = "异常状态持续时间提升25%"
 cost = 24
