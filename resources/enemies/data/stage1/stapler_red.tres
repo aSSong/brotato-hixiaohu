@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://duptk0ybdsuew"]
+
+[ext_resource type="Script" uid="uid://cetr5271em67h" path="res://Scripts/data/enemy_data.gd" id="1_5erm1"]
+[ext_resource type="SpriteFrames" uid="uid://donirp2d2xano" path="res://resources/enemies/FX/enemy-FX-stage1.tres" id="2_fkceg"]
+
+[resource]
+script = ExtResource("1_5erm1")
+enemy_name = "红色订书机"
+description = "会冲锋攻击的敌人"
+scene_path = "res://scenes/enemies/prefabs/stage1/stapler_red.tscn"
+attack_damage = 6
+move_speed = 450.0
+attack_interval = 0.3
+attack_range = 130.0
+ai_type = 1
+ai_config = {
+"maxDistance": 1200,
+"minDistance": 800,
+"repositionCooldown": 2,
+"retreatAngleVariance": 90
+}
+skill_type = 1
+skill_config = {
+"charge_distance": 1600.0,
+"charge_speed": 1800.0,
+"cooldown": 3.0,
+"extra_damage": 10,
+"indicator_animation": "stapler-charging",
+"indicator_scale": 1.5,
+"indicator_sprite_frames": ExtResource("2_fkceg"),
+"prepare_time": 0.5,
+"trigger_distance": 1000.0
+}
+animations = {
+"attack": "",
+"hurt": "",
+"idle": "",
+"skill_execute": "charging",
+"skill_prepare": "pre_charging",
+"walk": "walk"
+}
+knockback_resistance = 0.7
+gold_drop_count = 2
+hp_growth_per_wave = 3.0
